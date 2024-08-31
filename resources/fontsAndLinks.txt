@@ -1,0 +1,9 @@
+## Fonts list
+1. Noto Sans
+
+## Example webpages list
+1. https://langeek.co/
+2. https://membean.com/
+
+# email sender
+1. https://react.email/docs/integrations/resend

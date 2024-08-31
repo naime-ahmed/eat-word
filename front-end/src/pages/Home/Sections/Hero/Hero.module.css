@@ -1,0 +1,28 @@
+.heroContainer {
+  margin-top: 68px;
+  max-width: 100%;
+  height: calc(100vh - 68px);
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+.heroContainer > div {
+  width: 50%;
+  overflow-wrap: break-word;
+}
+.heroTextContainer {
+  display: flex;
+  justify-content: center;
+  align-items: start;
+  flex-direction: column;
+}
+
+.heroImageContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.heroImageContainer img {
+  max-width: 600px;
+}
