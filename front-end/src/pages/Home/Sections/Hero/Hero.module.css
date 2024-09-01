@@ -1,7 +1,8 @@
+/* CSS for Hero Container */
 .heroContainer {
   margin-top: 68px;
-  max-width: 100%;
-  height: calc(100vh - 68px);
+  width: 1250px;
+  height: calc(100vh - 168px);
   display: flex;
   justify-content: space-around;
   align-items: center;
@@ -10,6 +11,7 @@
   width: 50%;
   overflow-wrap: break-word;
 }
+/* CSS for hero text container */
 .heroTextContainer {
   display: flex;
   justify-content: center;
@@ -17,12 +19,127 @@
   flex-direction: column;
 }
 
+.heroTextContainer h1 {
+  font-size: 60px;
+  color: #e6e6e6;
+}
+.heroTextContainer p {
+  font-size: 20px;
+  color: #d4d5d6;
+  margin: 20px 0 30px 0;
+}
+
+.callToAction {
+  padding: 9px 20px;
+  margin-top: 8px;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  font-size: 17px;
+  font-weight: 600;
+  border-radius: 30px;
+  border: 2px solid #4989f7;
+  background: transparent;
+  color: #e6e6e6;
+  transition: all 0.2s ease;
+}
+.callToAction:hover {
+  background-color: #4989f7;
+}
+
+/* CSS for hero graphics container */
 .heroImageContainer {
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  text-align: end;
 }
 
 .heroImageContainer img {
-  max-width: 600px;
+  max-width: 520px;
+}
+
+/* Responsive design for 5 different devices */
+
+/* Extra Small Devices (phones) - Up to 576px wide: */
+@media (max-width: 599.98px) {
+  /* CSS rules for extra small devices */
+  .heroContainer {
+    max-width: 340px;
+    flex-direction: column-reverse;
+  }
+  .heroContainer > div {
+    width: 100%;
+  }
+  .heroImageContainer {
+    text-align: center;
+  }
+
+  .heroTextContainer h1 {
+    font-size: 34px;
+  }
+  .heroTextContainer p {
+    font-size: 16px;
+    margin: 16px 0 26px 0;
+  }
+  .heroImageContainer img {
+    max-width: 305px;
+  }
+}
+
+/* Small Devices (tablets) - 576px to 767px wide: */
+@media (min-width: 600px) and (max-width: 767.98px) {
+  /* CSS rules for small devices */
+  .heroContainer {
+    max-width: 560px;
+  }
+  .heroTextContainer h1 {
+    font-size: 38px;
+  }
+  .heroTextContainer p {
+    font-size: 16px;
+    margin: 18px 0 28px 0;
+  }
+  .heroImageContainer img {
+    max-width: 300px;
+  }
+}
+
+/* Medium Devices (laptops) - 768px to 991px wide: */
+@media (min-width: 768px) and (max-width: 999.98px) {
+  /* CSS rules for medium devices */
+  .heroContainer {
+    max-width: 750px;
+  }
+  .heroTextContainer h1 {
+    font-size: 42px;
+  }
+  .heroTextContainer p {
+    font-size: 17px;
+    margin: 20px 0 30px 0;
+  }
+  .heroImageContainer img {
+    max-width: 380px;
+  }
+}
+
+/* Large Devices (desktops) - 1000px to 1199px wide: */
+@media (min-width: 1000px) and (max-width: 1199.98px) {
+  .heroContainer {
+    max-width: 950px;
+  }
+  .heroTextContainer h1 {
+    font-size: 48px;
+  }
+  .heroTextContainer p {
+    font-size: 18px;
+    margin: 20px 0 30px 0;
+  }
+  .heroImageContainer img {
+    max-width: 420px;
+  }
+}
+
+/* Extra Large Devices (large desktops) - 1200px and above: */
+@media (min-width: 1200px) and (max-width: 1400px) {
+  .heroContainer {
+    max-width: 1150px;
+  }
 }

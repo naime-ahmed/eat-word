@@ -5,13 +5,15 @@ import style from "./Hero.module.css";
 const Hero = () => {
   return (
     <div className={style.heroContainer}>
-      <div>
-        <h1>Your Words Your Mastery</h1>
+      <div className={style.heroTextContainer}>
+        <h1>
+          Your Words <br /> Your Mastery
+        </h1>
         <p>
-          Personalize your vocabulary journey with AI powered insights. Crafted
-          just for you
+          Personalize your vocabulary journey with <br /> AI powered insights.
+          Crafted just for you.
         </p>
-        <button>Get start for free</button>
+        <button className={style.callToAction}>Get start for free</button>
       </div>
       <div className={style.heroImageContainer}>
         <img src={wordCloud} alt="word cloud in shape of world" />
