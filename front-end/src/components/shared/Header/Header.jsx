@@ -59,19 +59,29 @@ const Header = () => {
 
           <ul className={styles.navLinks}>
             <li>
-              <Link to="/">Home</Link>
+              <Link to="/" onClick={handleSidebarToggle}>
+                Home
+              </Link>
             </li>
             <li>
-              <Link to="/myspace">My Space</Link>
+              <Link to="/myspace" onClick={handleSidebarToggle}>
+                My Space
+              </Link>
             </li>
             <li>
-              <Link to="/magic">Magic Tools</Link>
+              <Link to="/magic" onClick={handleSidebarToggle}>
+                Magic Tools
+              </Link>
             </li>
             <li>
-              <Link to="/about">About</Link>
+              <Link to="/about" onClick={handleSidebarToggle}>
+                About
+              </Link>
             </li>
             <li>
-              <Link to="/login">Login</Link>
+              <Link to="/login" onClick={handleSidebarToggle}>
+                Login
+              </Link>
             </li>
           </ul>
         </div>
