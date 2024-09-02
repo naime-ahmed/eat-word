@@ -1,0 +1,177 @@
+/* CSS for baseTheoryContainer */
+.baseTheoryContainer {
+  margin-top: 100px;
+  width: 1250px;
+}
+
+/* CSS for heading */
+.baseTheoryHeading {
+  text-align: center;
+}
+.baseTheoryHeading h1 {
+  font-size: 44px;
+  color: #e6e6e6;
+}
+.baseTheoryHeading h1 > span {
+  color: #4989f7;
+}
+.baseTheoryHeading p {
+  margin-top: 20px;
+  color: #d4d5d6;
+  font-size: 20px;
+}
+
+/* CSS for Cards */
+.baseTheoryCardsContainer {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 40px;
+  padding: 20px;
+  margin-top: 30px;
+}
+.baseTheoryCardsContainer > div {
+  padding: 45px;
+  border-radius: 10px;
+  min-height: 400px;
+}
+.spacedRepetition {
+  background: linear-gradient(0deg, rgba(0, 8, 255, 0) 2%, rgb(14, 0, 44) 98%);
+}
+.activeRecall {
+  background: linear-gradient(
+    0deg,
+    rgba(0, 8, 255, 0) 2%,
+    rgba(44, 0, 41, 1) 98%
+  );
+}
+.contextualLearning {
+  background: linear-gradient(
+    0deg,
+    rgba(0, 8, 255, 0) 2%,
+    rgba(44, 0, 42, 1) 98%
+  );
+}
+.fewMoreThings {
+  background: linear-gradient(0deg, rgba(0, 8, 255, 0) 2%, rgb(14, 0, 44) 98%);
+}
+.baseTheoryCardsContainer > div > div > img {
+  max-width: 80px;
+}
+.baseTheoryCardsContainer > div > h2 {
+  font-size: 34px;
+  margin: 10px 0;
+  font-weight: 800;
+  color: #e6e6e6;
+}
+.baseTheoryCardsContainer > div > p {
+  font-size: 18px;
+  text-align: justify;
+  color: #d4d5d6;
+}
+
+/* CSS for responsive device */
+/* @media (max-width: 800px) {
+  .baseTheoryCardsContainer {
+    grid-template-columns: 1fr;
+  }
+} */
+
+/* Extra Small Devices (phones) - Up to 576px wide: */
+@media (max-width: 599.98px) {
+  .baseTheoryContainer {
+    max-width: 340px;
+  }
+  .baseTheoryCardsContainer {
+    grid-template-columns: 1fr;
+  }
+  .baseTheoryHeading h1 {
+    font-size: 28px;
+  }
+  .baseTheoryHeading p {
+    font-size: 16px;
+  }
+  .baseTheoryCardsContainer > div {
+    padding: 35px;
+  }
+  .baseTheoryCardsContainer > div > h2 {
+    font-size: 24px;
+  }
+  .baseTheoryCardsContainer > div > p {
+    font-size: 16px;
+    text-align: left;
+  }
+}
+
+/* Small Devices (tablets) - 576px to 767px wide: */
+@media (min-width: 600px) and (max-width: 767.98px) {
+  .baseTheoryContainer {
+    max-width: 560px;
+  }
+  .baseTheoryCardsContainer {
+    grid-template-columns: 1fr;
+  }
+  .baseTheoryHeading h1 {
+    font-size: 28px;
+  }
+  .baseTheoryHeading p {
+    font-size: 16px;
+  }
+  .baseTheoryCardsContainer > div {
+    padding: 45px;
+  }
+  .baseTheoryCardsContainer > div > h2 {
+    font-size: 24px;
+  }
+  .baseTheoryCardsContainer > div > p {
+    font-size: 16px;
+  }
+}
+
+/* Medium Devices (laptops) - 768px to 991px wide: */
+@media (min-width: 768px) and (max-width: 999.98px) {
+  .baseTheoryContainer {
+    max-width: 750px;
+  }
+  .baseTheoryHeading h1 {
+    font-size: 34px;
+  }
+  .baseTheoryHeading p {
+    font-size: 17px;
+  }
+  .baseTheoryCardsContainer > div {
+    padding: 35px;
+  }
+  .baseTheoryCardsContainer > div > h2 {
+    font-size: 24px;
+  }
+  .baseTheoryCardsContainer > div > p {
+    font-size: 16px;
+  }
+}
+
+/* Large Devices (desktops) - 1000px to 1199px wide: */
+@media (min-width: 1000px) and (max-width: 1199.98px) {
+  .baseTheoryContainer {
+    max-width: 950px;
+  }
+  .baseTheoryHeading h1 {
+    font-size: 38px;
+  }
+  .baseTheoryHeading p {
+    font-size: 18px;
+  }
+  .baseTheoryCardsContainer > div > h2 {
+    font-size: 26px;
+  }
+  .baseTheoryCardsContainer > div > p {
+    font-size: 17px;
+  }
+}
+
+/* Extra Large Devices (large desktops) - 1200px and above: */
+@media (min-width: 1200px) and (max-width: 1400px) {
+  .baseTheoryContainer {
+    max-width: 1150px;
+  }
+}
