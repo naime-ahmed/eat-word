@@ -58,12 +58,13 @@ const BaseTheory = () => {
           <div>
             <img src={fewMoreThings} alt="spaced Repetition" />
           </div>
-          <h2>Few things to consider</h2>
+          <h2>Where to find words?</h2>
           <p>
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sequi,
-            aspernatur eos. Cum maiores ipsa nihil, eum, voluptas fugit
-            voluptate quis rem vitae iste, corporis quidem esse ipsam deserunt
-            veritatis temporibus?
+            You might be wondering where to find the words you need to learn.
+            It’s simple: while reading a newspaper, watching a movie or series,
+            or scrolling through social media, whenever you come across a word
+            you don’t understand, note it down. This system will help you
+            remember it for good.
           </p>
         </div>
       </div>
