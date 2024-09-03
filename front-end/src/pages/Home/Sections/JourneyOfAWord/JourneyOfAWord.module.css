@@ -1,0 +1,146 @@
+/* CSS for journey of a words container */
+.JourneyOfAWordContainer {
+  width: 1250px;
+  margin-top: 30px;
+}
+
+/* CSS for word journey head line */
+.JourneyOfAWordHeading {
+  text-align: center;
+}
+.JourneyOfAWordHeading h1 {
+  font-size: 44px;
+  color: #e6e6e6;
+}
+.JourneyOfAWordHeading h1 > span {
+  color: #4989f7;
+}
+.JourneyOfAWordHeading p {
+  margin-top: 20px;
+  color: #d4d5d6;
+  font-size: 20px;
+}
+
+/* CSS for journey of a word Path */
+.JourneyOfAWordPath {
+  margin-top: 50px;
+  display: grid;
+  grid-template-areas:
+    "item0 svg0"
+    "svg1 item1"
+    "item2 svg2"
+    "svg3 item3"
+    "item4 svg4"
+    "svg5 item5";
+  column-gap: 120px;
+  row-gap: 101px;
+  justify-content: center;
+  color: #d4d5d6;
+  font-size: 18px;
+}
+.card0 {
+  grid-area: item0;
+  flex-direction: row-reverse;
+}
+
+.card0 > div:first-child {
+  border: 2px solid #baefff;
+}
+.card1 {
+  grid-area: item1;
+}
+.card1 > div:first-child {
+  border: 2px solid #58d9a2;
+}
+.card2 {
+  grid-area: item2;
+  flex-direction: row-reverse;
+}
+.card2 > div:first-child {
+  border: 2px solid #2286c1;
+}
+.card3 {
+  grid-area: item3;
+}
+.card3 > div:first-child {
+  border: 2px solid #ff2c63;
+}
+.card4 {
+  grid-area: item4;
+  flex-direction: row-reverse;
+  font-size: 17px;
+}
+.card4 > div:first-child {
+  border: 2px solid #3bb54a;
+}
+.card5 {
+  grid-area: item5;
+  font-size: 17px;
+}
+.card5 > div:first-child {
+  border: 2px solid #fdb4ba;
+}
+.JourneyOfAWordPath > div {
+  max-width: 450px;
+  padding: 20px;
+  display: flex;
+  gap: 20px;
+  align-items: center;
+}
+.JourneyOfAWordPath > div > div:first-child {
+  border-radius: 50%;
+}
+.JourneyOfAWordPath > div > div > img {
+  max-width: 80px;
+  margin: 20px;
+}
+
+.dashBorder0 {
+  grid-area: svg0;
+}
+
+.dashBorder1 {
+  grid-area: svg1;
+  position: relative;
+}
+.dashBorder1 > svg {
+  position: absolute;
+  left: 380px;
+  bottom: 78px;
+}
+.dashBorder2 {
+  grid-area: svg2;
+  position: relative;
+}
+.dashBorder2 > svg {
+  position: absolute;
+  left: -110px;
+  bottom: 80px;
+}
+.dashBorder3 {
+  grid-area: svg3;
+  position: relative;
+}
+.dashBorder3 > svg {
+  position: absolute;
+  left: 380px;
+  bottom: 78px;
+}
+.dashBorder4 {
+  grid-area: svg4;
+  position: relative;
+}
+.dashBorder4 > svg {
+  position: absolute;
+  left: -110px;
+  bottom: 80px;
+}
+.dashBorder5 {
+  grid-area: svg5;
+  position: relative;
+}
+.dashBorder5 > svg {
+  position: absolute;
+  left: 380px;
+  bottom: 78px;
+}
