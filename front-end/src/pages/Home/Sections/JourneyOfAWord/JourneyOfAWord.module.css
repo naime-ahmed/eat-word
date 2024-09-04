@@ -104,6 +104,8 @@
   position: relative;
 }
 .dashBorder1 > svg {
+  width: 182px;
+  height: 182px;
   position: absolute;
   left: 380px;
   bottom: 78px;
@@ -113,6 +115,8 @@
   position: relative;
 }
 .dashBorder2 > svg {
+  width: 182px;
+  height: 182px;
   position: absolute;
   left: -110px;
   bottom: 80px;
@@ -122,6 +126,8 @@
   position: relative;
 }
 .dashBorder3 > svg {
+  width: 182px;
+  height: 182px;
   position: absolute;
   left: 380px;
   bottom: 78px;
@@ -131,6 +137,8 @@
   position: relative;
 }
 .dashBorder4 > svg {
+  width: 182px;
+  height: 182px;
   position: absolute;
   left: -110px;
   bottom: 80px;
@@ -140,7 +148,204 @@
   position: relative;
 }
 .dashBorder5 > svg {
+  width: 182px;
+  height: 182px;
   position: absolute;
   left: 380px;
   bottom: 78px;
+}
+
+/* Responsive style for all devices */
+@media (max-width: 599.98px) {
+  .JourneyOfAWordContainer {
+    width: 340px;
+  }
+  .JourneyOfAWordHeading h1 {
+    font-size: 28px;
+  }
+  .JourneyOfAWordHeading p {
+    font-size: 16px;
+  }
+  .JourneyOfAWordPath {
+    column-gap: 10px;
+    row-gap: 60px;
+    font-size: 14px;
+  }
+  .JourneyOfAWordPath > div {
+    padding: 0;
+    gap: 5px;
+  }
+  .JourneyOfAWordPath > div > div > img {
+    max-width: 30px;
+    margin: 5px;
+  }
+  .card4,
+  .card5 {
+    font-size: 12px;
+  }
+  .dashBorder1 > svg {
+    left: 100px;
+    bottom: 30px;
+    rotate: 15deg;
+  }
+  .dashBorder3 > svg {
+    left: 100px;
+    bottom: 60px;
+    rotate: 15deg;
+  }
+  .dashBorder5 > svg {
+    left: 98px;
+    bottom: 84px;
+    rotate: 25deg;
+  }
+  .dashBorder2 > svg {
+    left: -15px;
+    bottom: 35px;
+    rotate: -15deg;
+  }
+  .dashBorder4 > svg {
+    left: -25px;
+    bottom: 90px;
+    rotate: -22deg;
+  }
+
+  .dashBorder1 > svg,
+  .dashBorder2 > svg,
+  .dashBorder3 > svg,
+  .dashBorder4 > svg {
+    width: 72px;
+    height: 72px;
+  }
+  .dashBorder4 > svg {
+    width: 82px;
+    height: 82px;
+  }
+  .dashBorder5 > svg {
+    width: 92px;
+    height: 92px;
+  }
+}
+
+@media (min-width: 600px) and (max-width: 767.98px) {
+  .JourneyOfAWordContainer {
+    width: 560px;
+  }
+  .JourneyOfAWordHeading h1 {
+    font-size: 34px;
+  }
+  .JourneyOfAWordHeading p {
+    font-size: 17px;
+  }
+  .JourneyOfAWordPath {
+    column-gap: 10px;
+    row-gap: 110px;
+    font-size: 16px;
+  }
+  .JourneyOfAWordPath > div {
+    padding: 0;
+    gap: 10px;
+  }
+  .JourneyOfAWordPath > div > div > img {
+    max-width: 60px;
+    margin: 10px;
+  }
+  .card4,
+  .card5 {
+    font-size: 15px;
+  }
+  .dashBorder1 > svg,
+  .dashBorder3 > svg,
+  .dashBorder5 > svg {
+    left: 160px;
+    bottom: -10;
+    rotate: 15deg;
+  }
+  .dashBorder2 > svg {
+    left: -10px;
+    bottom: 75px;
+    rotate: -15deg;
+  }
+  .dashBorder4 > svg {
+    left: -10px;
+    bottom: 95px;
+    rotate: -15deg;
+  }
+
+  .dashBorder1 > svg,
+  .dashBorder2 > svg,
+  .dashBorder3 > svg,
+  .dashBorder4 > svg,
+  .dashBorder5 > svg {
+    width: 102px;
+    height: 102px;
+  }
+}
+@media (min-width: 768px) and (max-width: 999.98px) {
+  /* CSS rules for medium devices */
+  .JourneyOfAWordContainer {
+    width: 750px;
+  }
+  .JourneyOfAWordHeading h1 {
+    font-size: 34px;
+  }
+  .JourneyOfAWordHeading p {
+    font-size: 17px;
+  }
+  .JourneyOfAWordPath {
+    column-gap: 60px;
+    row-gap: 61px;
+    font-size: 16px;
+  }
+  .JourneyOfAWordPath > div > div > img {
+    max-width: 60px;
+    margin: 10px;
+  }
+  .card4,
+  .card5 {
+    font-size: 15px;
+  }
+  .dashBorder1 > svg,
+  .dashBorder3 > svg,
+  .dashBorder5 > svg {
+    left: 260px;
+    bottom: 20;
+  }
+  .dashBorder2 > svg {
+    left: -60px;
+    bottom: 75px;
+  }
+  .dashBorder4 > svg {
+    left: -60px;
+    bottom: 90px;
+  }
+
+  .dashBorder1 > svg,
+  .dashBorder2 > svg,
+  .dashBorder3 > svg,
+  .dashBorder4 > svg,
+  .dashBorder5 > svg {
+    width: 122px;
+    height: 122px;
+  }
+}
+
+@media (min-width: 1000px) and (max-width: 1249.98px) {
+  .JourneyOfAWordContainer {
+    width: 950px;
+  }
+  .JourneyOfAWordHeading h1 {
+    font-size: 38px;
+  }
+  .JourneyOfAWordHeading p {
+    font-size: 18px;
+  }
+  .JourneyOfAWordPath {
+    column-gap: 110px;
+    row-gap: 91px;
+  }
+  .dashBorder1 > svg,
+  .dashBorder3 > svg,
+  .dashBorder5 > svg {
+    left: 340px;
+  }
 }

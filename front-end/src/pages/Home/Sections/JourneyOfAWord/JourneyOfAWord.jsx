@@ -35,7 +35,7 @@ const JourneyOfAWord = () => {
           <div>
             <img src={imgForShortMemo} alt="image of short time memory" />
           </div>
-          <div>Now it's living in your short time memory</div>
+          <div>Now it&#39;s living in your short time memory</div>
         </div>
         <div className={style.card3}>
           <div>
@@ -53,8 +53,8 @@ const JourneyOfAWord = () => {
             <img src={imgForTestOnSelf} alt="image of test on self" />
           </div>
           <div>
-            Each week, test yourself on all the words you've learned. Mark any
-            forgotten words in red, then start next week mission.
+            Each week, test yourself on all the words you&#39;ve learned. Mark
+            any forgotten words in red, then start next week mission.
           </div>
         </div>
         <div className={style.card5}>
@@ -62,8 +62,8 @@ const JourneyOfAWord = () => {
             <img src={imgForLongMemo} alt="image of long time memory" />
           </div>
           <div>
-            Successfully remembering words in your self-test indicates they're
-            now part of your long-term memory.
+            Successfully remembering words in your self-test indicates
+            they&#39;re now part of your long-term memory.
           </div>
         </div>
         <div className={style.dashBorder0}>
@@ -87,8 +87,6 @@ const JourneyOfAWord = () => {
         </div>
         <div className={style.dashBorder1}>
           <svg
-            width="182"
-            height="182"
             viewBox="0 0 182 182"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
@@ -106,8 +104,6 @@ const JourneyOfAWord = () => {
         </div>
         <div className={style.dashBorder2}>
           <svg
-            width="182"
-            height="182"
             viewBox="0 0 182 181"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
@@ -126,8 +122,6 @@ const JourneyOfAWord = () => {
 
         <div className={style.dashBorder3}>
           <svg
-            width="182"
-            height="182"
             viewBox="0 0 182 182"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
@@ -146,8 +140,6 @@ const JourneyOfAWord = () => {
 
         <div className={style.dashBorder4}>
           <svg
-            width="182"
-            height="182"
             viewBox="0 0 182 181"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
@@ -165,8 +157,6 @@ const JourneyOfAWord = () => {
         </div>
         <div className={style.dashBorder5}>
           <svg
-            width="182"
-            height="182"
             viewBox="0 0 182 182"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
