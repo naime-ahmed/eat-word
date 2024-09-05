@@ -15,6 +15,31 @@ const Testimonials = () => {
     speed: 2000,
     autoplaySpeed: 2000,
     cssEase: "linear",
+
+    responsive: [
+      {
+        breakpoint: 1200,
+        settings: {
+          slidesToShow: 3,
+          slidesToScroll: 1,
+        },
+      },
+      {
+        breakpoint: 1000,
+        settings: {
+          slidesToShow: 2,
+          slidesToScroll: 1,
+        },
+      },
+      {
+        breakpoint: 600,
+        settings: {
+          speed: 2500,
+          slidesToShow: 1,
+          slidesToScroll: 1,
+        },
+      },
+    ],
   };
   useEffect(() => {
     fetch("/DB/testimonials.json")

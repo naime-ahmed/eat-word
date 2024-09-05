@@ -26,3 +26,46 @@
   background-color: rgb(206, 214, 255);
   /* background: linear-gradient(135deg, #ff9a9e, #fecfef); */
 }
+
+/* CSS for make the section responsive*/
+@media (max-width: 599.98px) {
+  .testimonialContainer {
+    max-width: 300px;
+  }
+
+  .testimonialContainer h1 {
+    font-size: 28px;
+  }
+}
+
+@media (min-width: 600px) and (max-width: 767.98px) {
+  .testimonialContainer {
+    max-width: 500px;
+  }
+  .testimonialContainer h1 {
+    font-size: 28px;
+  }
+}
+@media (min-width: 768px) and (max-width: 999.98px) {
+  .testimonialContainer {
+    max-width: 680px;
+  }
+  .testimonialContainer h1 {
+    font-size: 34px;
+  }
+}
+
+@media (min-width: 1000px) and (max-width: 1199.98px) {
+  .testimonialContainer {
+    max-width: 950px;
+  }
+  .testimonialContainer h1 {
+    font-size: 38px;
+  }
+}
+
+@media (min-width: 1200px) and (max-width: 1400px) {
+  .testimonialContainer {
+    max-width: 1150px;
+  }
+}
