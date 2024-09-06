@@ -1,0 +1,52 @@
+/* CSS for Footer container */
+.footerContainer {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: rgb(0, 0, 22);
+}
+
+/* CSS for footer top part */
+.footerTop {
+  width: 1250px;
+  padding: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: #dadada;
+}
+.footerTop > div > ul > li {
+  list-style: none;
+  margin: 10px 0;
+}
+.footerTop > div > ul > li > a {
+  text-decoration: none;
+  color: #dadada;
+}
+.footerTop > div > ul > li > a:hover {
+  color: #fff;
+  text-decoration: underline;
+}
+.brand img {
+  width: 200px;
+}
+.brand p {
+  margin-top: 10px;
+}
+.contactInfo p {
+  margin: 18px 0;
+}
+
+.email {
+  margin-left: 5px;
+  color: #9dacff;
+}
+/* CSS for footer lower part */
+.copyright {
+  text-align: center;
+  width: 100%;
+  background-color: rgb(20, 20, 20);
+  color: #fff;
+}
