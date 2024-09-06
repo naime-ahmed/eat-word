@@ -17,6 +17,10 @@
   justify-content: space-between;
   color: #dadada;
 }
+.footerTop div {
+  flex: 1 1 22%; /* 22% for 4 columns with space between */
+  margin: 10px;
+}
 .footerTop > div > ul > li {
   list-style: none;
   margin: 10px 0;
@@ -49,4 +53,34 @@
   width: 100%;
   background-color: rgb(20, 20, 20);
   color: #fff;
+}
+
+/* CSS to make the footer responsive for all devices */
+@media (max-width: 771px) {
+  .footerTop {
+    max-width: 340px;
+    flex-direction: column;
+    align-items: start;
+  }
+}
+@media (min-width: 768px) and (max-width: 999.98px) {
+  .footerTop {
+    max-width: 750px;
+  }
+  .brand img {
+    width: 150px;
+  }
+}
+
+@media (min-width: 1000px) and (max-width: 1199.98px) {
+  .footerTop {
+    max-width: 950px;
+  }
+}
+
+@media (min-width: 1200px) and (max-width: 1400px) {
+  /* CSS for Hero Container */
+  .footerTop {
+    max-width: 1150px;
+  }
 }
