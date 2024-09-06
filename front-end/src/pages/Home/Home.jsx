@@ -1,3 +1,4 @@
+import Footer from "../../components/shared/Footer/Footer";
 import Header from "../../components/shared/Header/Header";
 import style from "./Home.module.css";
 import BaseTheory from "./Sections/BaseTheory/BaseTheory";
@@ -15,6 +16,7 @@ const Home = () => {
       <BaseTheory />
       <JourneyOfAWord />
       <Testimonials />
+      <Footer />
     </div>
   );
 };
