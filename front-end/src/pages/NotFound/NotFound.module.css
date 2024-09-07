@@ -3,9 +3,15 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  background-color: rgb(7, 0, 26);
+  color: #e6e6e6;
 }
 .errorPage > div {
   display: flex;
   flex-direction: column;
   gap: 30px;
+}
+.errorPage > div > p > a {
+  margin-left: 10px;
+  color: rgb(88, 88, 255);
 }
