@@ -64,3 +64,19 @@
   text-align: center;
   margin-top: 5px;
 }
+
+/* CSS for mobile devices */
+@media (max-width: 599.98px) {
+  .formContainer > form > div:not(:nth-last-child(-n + 2)) > input {
+    width: 280px;
+    height: 35px;
+  }
+  .submitBtn button {
+    width: 280px;
+    height: 35px;
+  }
+
+  .termsBox label {
+    font-size: 14.5px;
+  }
+}
