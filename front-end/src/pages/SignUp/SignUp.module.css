@@ -1,0 +1,66 @@
+/* CSS for signUp container */
+.signUpContainer {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #0b152e;
+}
+
+/* CSS for form container */
+.formContainer {
+  background-color: #4989f7;
+  padding: 30px;
+  border-radius: 5px;
+}
+.formContainer h2 {
+  text-align: center;
+  color: #000e31;
+}
+
+/* CSS for form inputs */
+.formContainer > form > div {
+  margin: 10px 0;
+}
+.formContainer > form > div:not(:nth-last-child(-n + 2)) > label {
+  font-size: 16px;
+}
+
+.formContainer > form > div:not(:last-child) > span {
+  color: rgb(202, 14, 102);
+}
+
+.formContainer > form > div:not(:nth-last-child(-n + 2)) > input {
+  width: 300px;
+  height: 35px;
+  background-color: #ebe9ff;
+  padding: 5px;
+  margin-top: 5px;
+  font-size: 15px;
+  border: 1px solid #ddd;
+  border-radius: 3px;
+  outline: none;
+}
+.formContainer > form > div:not(:nth-last-child(-n + 2)) > input:focus {
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.2);
+}
+
+.termsBox label {
+  margin-left: 3px;
+}
+.submitBtn button {
+  width: 300px;
+  height: 35px;
+  border: none;
+  border-radius: 3px;
+  font-size: 16px;
+  font-weight: 600;
+  background-color: rgb(4, 4, 201);
+  color: #fff;
+  cursor: pointer;
+}
+.submitBtn p {
+  text-align: center;
+  margin-top: 5px;
+}
