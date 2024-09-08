@@ -79,7 +79,7 @@ const Header = () => {
               </Link>
             </li>
             <li>
-              <Link to="/login" onClick={handleSidebarToggle}>
+              <Link to="/signIn" onClick={handleSidebarToggle}>
                 Login
               </Link>
             </li>
