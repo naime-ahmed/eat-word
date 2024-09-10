@@ -48,6 +48,11 @@ const SignUp = () => {
   }
   return (
     <div className={style.signUpContainer}>
+      <div className={style.backToHomeButton}>
+        <Link to="/">
+          <i className="fa fa-long-arrow-left" aria-hidden="true"></i> Back Home
+        </Link>
+      </div>
       <div className={style.formContainer}>
         <h2>Welcome Back</h2>
         <form onSubmit={handelSubmit}>

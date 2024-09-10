@@ -6,8 +6,23 @@
   align-items: center;
   justify-content: center;
   background-color: #0b152e;
+  position: relative;
 }
-
+/* CSS for back hom e button */
+.backToHomeButton {
+  position: absolute;
+  left: 100px;
+  top: 100px;
+}
+.backToHomeButton a {
+  padding: 6px 12px;
+  background-color: #4989f7;
+  color: #fff;
+  text-decoration: none;
+  font-size: 16px;
+  border-radius: 5px;
+  cursor: pointer;
+}
 /* CSS for form container */
 .formContainer {
   background-color: #4989f7;
