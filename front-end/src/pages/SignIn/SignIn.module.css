@@ -80,9 +80,13 @@
 
 /* CSS for mobile devices */
 @media (max-width: 599.98px) {
-  .formContainer > form > div:not(:nth-last-child(-n + 2)) > input {
+  .formContainer > form > div:not(:nth-last-child(-n + 1)) > input {
     width: 280px;
     height: 35px;
+  }
+  .backToHomeButton {
+    left: 50px;
+    top: 50px;
   }
   .submitBtn button {
     width: 280px;
