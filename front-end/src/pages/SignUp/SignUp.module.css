@@ -52,14 +52,25 @@
   color: #f8fafc;
 }
 .submitBtn button {
+  border-radius: 4px;
   width: 300px;
   height: 35px;
-  border-radius: 3px;
+  border-radius: 4px;
   font-size: 16px;
   font-weight: 600;
-  background-color: rgb(18, 18, 119);
-  border: 1px solid rgb(23, 23, 187);
+  border: transparent;
+  background: dodgerblue;
   color: #f8fafc;
+  cursor: pointer;
+  transition: button 0.3s ease-in-out;
+}
+.submitBtn button:hover {
+  background: rgb(2, 0, 36);
+  background: linear-gradient(
+    90deg,
+    rgba(30, 144, 255, 1) 0%,
+    rgba(0, 212, 255, 1) 100%
+  );
   cursor: pointer;
 }
 .submitBtn p {
