@@ -5,18 +5,18 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: #0b152e;
+  background-color: #020817;
 }
 
 /* CSS for form container */
 .formContainer {
-  background-color: #4989f7;
+  border: 2px solid #121926;
   padding: 30px;
-  border-radius: 5px;
+  border-radius: 10px;
 }
 .formContainer h2 {
   text-align: center;
-  color: #000e31;
+  color: #f8fafc;
 }
 
 /* CSS for form inputs */
@@ -25,6 +25,7 @@
 }
 .formContainer > form > div:not(:nth-last-child(-n + 2)) > label {
   font-size: 16px;
+  color: #f8fafc;
 }
 
 .formContainer > form > div:not(:last-child) > span {
@@ -34,7 +35,7 @@
 .formContainer > form > div:not(:nth-last-child(-n + 2)) > input {
   width: 300px;
   height: 35px;
-  background-color: #ebe9ff;
+  background-color: #c4c0f1;
   padding: 5px;
   margin-top: 5px;
   font-size: 15px;
@@ -48,23 +49,27 @@
 
 .termsBox label {
   margin-left: 3px;
+  color: #f8fafc;
 }
 .submitBtn button {
   width: 300px;
   height: 35px;
-  border: none;
   border-radius: 3px;
   font-size: 16px;
   font-weight: 600;
-  background-color: rgb(4, 4, 201);
-  color: #fff;
+  background-color: rgb(18, 18, 119);
+  border: 1px solid rgb(23, 23, 187);
+  color: #f8fafc;
   cursor: pointer;
 }
 .submitBtn p {
   text-align: center;
   margin-top: 5px;
+  color: #f8fafc;
 }
-
+.submitBtn p a {
+  color: rgb(69, 69, 184);
+}
 /* CSS for mobile devices */
 @media (max-width: 599.98px) {
   .formContainer > form > div:not(:nth-last-child(-n + 2)) > input {
