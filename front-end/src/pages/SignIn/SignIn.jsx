@@ -1,35 +1,35 @@
-import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import {
+  resetForm,
+  setUserErrors,
+  updateUser,
+} from "../../features/userSignIn/userSignInSlice";
 import style from "./SignIn.module.css";
 
-const SignUp = () => {
-  const [newUser, setNewUser] = useState({
-    email: "",
-    password: "",
-    captcha: "",
-  });
-
-  const [newUserErrors, setNewUserError] = useState({});
+const SignIn = () => {
+  const { user, userErrors } = useSelector((state) => state.signIn);
+  const dispatch = useDispatch();
 
   function handleChange(event) {
     const name = event.target.name;
     let value = event.target.value;
-    setNewUser({ ...newUser, [name]: value });
+    dispatch(updateUser({ name, value }));
   }
 
   function validateFrom() {
     let errors = {};
-    if (!newUser.email || !/\S+@\S+\.\S+/.test(newUser.email)) {
+    if (!user.email || !/\S+@\S+\.\S+/.test(user.email)) {
       errors.email = "Valid email is required";
     }
-    if (!newUser.password) {
+    if (!user.password) {
       errors.password = "password required";
     }
-    if (!newUser.captcha || newUser.captcha !== "8") {
+    if (!user.captcha || user.captcha !== "8") {
       errors.captcha = "Captcha failed!";
     }
 
-    setNewUserError(errors);
+    dispatch(setUserErrors(errors));
     return Object.keys(errors).length === 0;
   }
 
@@ -37,13 +37,9 @@ const SignUp = () => {
     event.preventDefault();
 
     if (validateFrom()) {
-      console.log(newUser);
+      console.log(user);
       // Reset the form to default values
-      setNewUser({
-        email: "",
-        password: "",
-        captcha: "",
-      });
+      dispatch(resetForm());
     }
   }
   return (
@@ -66,11 +62,11 @@ const SignUp = () => {
               id="email"
               placeholder="Enter email"
               onChange={handleChange}
-              value={newUser.email}
+              value={user.email}
               required
             />
-            {newUserErrors.email && (
-              <p style={{ color: "#821131" }}>{newUserErrors.email}</p>
+            {userErrors.email && (
+              <p style={{ color: "#821131" }}>{userErrors.email}</p>
             )}
           </div>
 
@@ -84,11 +80,11 @@ const SignUp = () => {
               id="password"
               placeholder="Enter password"
               onChange={handleChange}
-              value={newUser.password}
+              value={user.password}
               required
             />
-            {newUserErrors.password && (
-              <p style={{ color: "#821131" }}>{newUserErrors.password}</p>
+            {userErrors.password && (
+              <p style={{ color: "#821131" }}>{userErrors.password}</p>
             )}
           </div>
           <div>
@@ -101,11 +97,11 @@ const SignUp = () => {
               id="captcha"
               placeholder="Answer"
               onChange={handleChange}
-              value={newUser.captcha}
+              value={user.captcha}
               required
             />
-            {newUserErrors.captcha && (
-              <p style={{ color: "#821131" }}>{newUserErrors.captcha}</p>
+            {userErrors.captcha && (
+              <p style={{ color: "#821131" }}>{userErrors.captcha}</p>
             )}
           </div>
           <div className={style.submitBtn}>
@@ -121,4 +117,4 @@ const SignUp = () => {
   );
 };
 
-export default SignUp;
+export default SignIn;
