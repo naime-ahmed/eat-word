@@ -1,18 +1,15 @@
-import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import {
+  resetNewUserForm,
+  setUserNewErrors,
+  updateNewUser,
+} from "../../features/userSignUp/userSignUpSlice";
 import style from "./SignUp.module.css";
 
 const SignUp = () => {
-  const [newUser, setNewUser] = useState({
-    fName: "",
-    email: "",
-    password: "",
-    surePass: "",
-    captcha: "",
-    agree: false,
-  });
-
-  const [newUserErrors, setNewUserError] = useState({});
+  const { newUser, newUserErrors } = useSelector((state) => state.signUp);
+  const dispatch = useDispatch();
 
   function handleChange(event) {
     const name = event.target.name;
@@ -22,7 +19,7 @@ const SignUp = () => {
       value = event.target.checked;
     }
 
-    setNewUser({ ...newUser, [name]: value });
+    dispatch(updateNewUser({ name, value }));
   }
 
   function validateFrom() {
@@ -43,7 +40,7 @@ const SignUp = () => {
     }
     if (!newUser.agree) errors.agree = "You must agree to continue";
 
-    setNewUserError(errors);
+    dispatch(setUserNewErrors(errors));
     return Object.keys(errors).length === 0;
   }
 
@@ -53,14 +50,7 @@ const SignUp = () => {
     if (validateFrom()) {
       console.log(newUser);
       // Reset the form to default values
-      setNewUser({
-        fName: "",
-        email: "",
-        password: "",
-        surePass: "",
-        captcha: "",
-        agree: false,
-      });
+      dispatch(resetNewUserForm());
     }
   }
   return (
