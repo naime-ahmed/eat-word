@@ -5,7 +5,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: #0b152e;
+  background-color: #020817;
   position: relative;
 }
 /* CSS for back hom e button */
@@ -25,31 +25,37 @@
 }
 /* CSS for form container */
 .formContainer {
-  background-color: #4989f7;
+  border: 3px solid #1e293b;
   padding: 30px;
-  border-radius: 5px;
+  border-radius: 10px;
 }
 .formContainer h2 {
   text-align: center;
-  color: #000e31;
+  color: #f8fafc;
 }
 
 /* CSS for form inputs */
 .formContainer > form > div {
   margin: 10px 0;
 }
-.formContainer > form > div:not(:nth-last-child(-n + 1)) > label {
+.formContainer > form > div:not(:last-child) > label {
   font-size: 16px;
+  color: #f8fafc;
 }
 
 .formContainer > form > div:not(:last-child) > span {
-  color: rgb(202, 14, 102);
+  color: #ff2865;
+}
+
+.formContainer > form > div:not(:last-child) > p {
+  font-size: 14px;
+  color: #ff2865;
 }
 
 .formContainer > form > div:not(:nth-last-child(-n + 1)) > input {
   width: 300px;
   height: 35px;
-  background-color: #ebe9ff;
+  background-color: #c4c0f1;
   padding: 5px;
   margin-top: 5px;
   font-size: 15px;
@@ -62,22 +68,35 @@
 }
 
 .submitBtn button {
+  border-radius: 4px;
   width: 300px;
   height: 35px;
-  border: none;
-  margin-top: 10px;
-  border-radius: 3px;
+  margin-top: 15px;
+  border-radius: 4px;
   font-size: 16px;
   font-weight: 600;
-  background-color: rgb(4, 4, 201);
-  color: #fff;
+  border: transparent;
+  background: dodgerblue;
+  color: #f8fafc;
   cursor: pointer;
+  transition: button 0.3s ease-in-out;
+}
+.submitBtn button:hover {
+  background: rgb(2, 0, 36);
+  background: linear-gradient(
+    90deg,
+    rgba(30, 144, 255, 1) 0%,
+    rgba(0, 212, 255, 1) 100%
+  );
 }
 .submitBtn p {
   text-align: center;
   margin-top: 5px;
+  color: #f8fafc;
 }
-
+.submitBtn p a {
+  color: rgb(72, 72, 236);
+}
 /* CSS for mobile devices */
 @media (max-width: 599.98px) {
   .formContainer > form > div:not(:nth-last-child(-n + 1)) > input {

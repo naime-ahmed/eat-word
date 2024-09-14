@@ -65,9 +65,7 @@ const SignIn = () => {
               value={user.email}
               required
             />
-            {userErrors.email && (
-              <p style={{ color: "#821131" }}>{userErrors.email}</p>
-            )}
+            {userErrors.email && <p>{userErrors.email}</p>}
           </div>
 
           <div>
@@ -83,9 +81,7 @@ const SignIn = () => {
               value={user.password}
               required
             />
-            {userErrors.password && (
-              <p style={{ color: "#821131" }}>{userErrors.password}</p>
-            )}
+            {userErrors.password && <p>{userErrors.password}</p>}
           </div>
           <div>
             <label htmlFor="captcha">What is 3 + 5?</label>
@@ -100,9 +96,7 @@ const SignIn = () => {
               value={user.captcha}
               required
             />
-            {userErrors.captcha && (
-              <p style={{ color: "#821131" }}>{userErrors.captcha}</p>
-            )}
+            {userErrors.captcha && <p>{userErrors.captcha}</p>}
           </div>
           <div className={style.submitBtn}>
             <button type="submit">Submit</button>
