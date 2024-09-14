@@ -2,51 +2,61 @@
   {
     "name": "Alice Johnson",
     "review": "Your Words made learning new vocabulary fun and easy. I feel much more confident in my communication skills now.",
-    "profession": "Teacher"
+    "profession": "Teacher",
+    "image": "https://i.ibb.co.com/h8CmsVz/download.jpg"
   },
   {
     "name": "Michael Davis",
     "review": "I love how simple and effective Your Words is. The AI suggestions save me so much time!",
-    "profession": "Marketing Specialist"
+    "profession": "Marketing Specialist",
+    "image": "https://i.ibb.co.com/jg5xZ14/download.jpg"
   },
   {
     "name": "Sophie Lee",
     "review": "The spaced repetition feature is amazing. I can remember new words without much effort. Highly recommend it!",
-    "profession": "Student"
+    "profession": "Student",
+    "image": "https://i.ibb.co.com/JnPLMLJ/images.jpg"
   },
   {
     "name": "James",
     "review": "Your Words is the perfect tool for anyone who wants to improve their vocabulary quickly and efficiently.",
-    "profession": "Software Developer"
+    "profession": "Software Developer",
+    "image": "https://i.ibb.co.com/ngtZkws/download.jpg"
   },
   {
     "name": "Emily Brown",
     "review": "This app is a game-changer for language learners. I can easily track and review words I want to remember.",
-    "profession": "Translator"
+    "profession": "Translator",
+    "image": "https://i.ibb.co.com/h8CmsVz/download.jpg"
   },
   {
     "name": "David Clark",
     "review": "The active recall feature helps me practice words regularly, and I can see real improvement in my vocabulary.",
-    "profession": "Content Writer"
+    "profession": "Content Writer",
+    "image": "https://i.ibb.co.com/jg5xZ14/download.jpg"
   },
   {
     "name": "Olivia Harris",
     "review": "Your Words made my vocabulary building process so much smoother. The context examples are really helpful.",
-    "profession": "Journalist"
+    "profession": "Journalist",
+    "image": "https://i.ibb.co.com/JnPLMLJ/images.jpg"
   },
   {
     "name": "Chris Martinez",
     "review": "The AI-powered suggestions are great. It helps me quickly understand and memorize new words with ease.",
-    "profession": "Entrepreneur"
+    "profession": "Entrepreneur",
+    "image": "https://i.ibb.co.com/h8CmsVz/download.jpg"
   },
   {
     "name": "Isabella Thompson",
     "review": "I've tried many vocabulary apps, but Your Words is by far the best. The interface is intuitive and user-friendly.",
-    "profession": "Librarian"
+    "profession": "Librarian",
+    "image": "https://i.ibb.co.com/JnPLMLJ/images.jpg"
   },
   {
     "name": "Ethan Miller",
     "review": "Your Words has been a fantastic resource for expanding my vocabulary. The design makes learning enjoyable.",
-    "profession": "Engineer"
+    "profession": "Engineer",
+    "image": "https://i.ibb.co.com/ngtZkws/download.jpg"
   }
 ]
