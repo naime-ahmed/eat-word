@@ -6,6 +6,7 @@
   padding: 10px;
   z-index: 100;
   transition: all 0.3s ease;
+  border-bottom: 1.5px solid #121926;
 }
 
 .navBar {
@@ -20,7 +21,6 @@
 }
 
 .sticky {
-  padding: 15px 20px;
   background: rgba(11, 21, 46, 0.25);
 
   box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
@@ -73,7 +73,7 @@
 }
 .navLinks li:last-child a {
   margin: 0;
-  padding: 3px 25px 8px 25px;
+  padding: 3px 25px 6px 25px;
   border-radius: 30px;
   font-size: 17px;
   background-color: #4d87f6;
@@ -83,7 +83,7 @@
 .navLinks li:last-child:hover a {
   background-color: transparent;
   border: 1px solid #4d87f6;
-  padding: 3px 24px 8px 24px;
+  padding: 3px 24px 6px 24px;
 }
 
 .navLinks li a::before {
