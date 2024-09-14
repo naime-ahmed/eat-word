@@ -1,71 +1,105 @@
-/* Global styling for slick-slide class */
-:global(.slick-slide) {
-  padding: 0 10px;
+.testimonialsContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 500px;
+  width: 100%;
 }
 
-/* CSS for testimonials container */
-.testimonialContainer {
-  width: 1250px;
-  margin: 100px 0;
+.testimonialsMarquee {
+  display: flex;
+  max-width: 100vw;
+  overflow: hidden;
+  padding: 1.25rem 0;
+  position: relative;
 }
-.testimonialContainer h1 {
-  margin-bottom: 40px;
-  font-size: 44px;
-  color: #e6e6e6;
-  text-align: center;
+
+.marqueeItems {
+  display: flex;
+  width: max-content;
+  animation: marquee var(--duration, 30s) linear infinite;
+}
+
+.marqueeItems:hover {
+  animation-play-state: paused;
+}
+
+.testimonialItem {
+  padding: 0 0.625rem; /* Equivalent to 2.5 in Tailwind */
+  height: 100%;
 }
 
 .testimonialCard {
-  min-height: 150px;
-  padding: 15px;
-  background-color: white;
-  border-radius: 8px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  transition: transform 0.3s ease-in-out;
-  margin: 0 10px;
-  background-color: rgb(206, 214, 255);
-  /* background: linear-gradient(135deg, #ff9a9e, #fecfef); */
+  width: 28rem;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background-color: #011627;
+  border-radius: 1rem; /* Equivalent to rounded-2xl */
+  border: 1px solid #081f49;
+  padding: 1.5rem 2rem;
 }
 
-/* CSS for make the section responsive*/
-@media (max-width: 599.98px) {
-  .testimonialContainer {
-    max-width: 300px;
-  }
+.testimonialText {
+  font-weight: 400;
+  color: #f8fafc;
+  padding-bottom: 1rem;
+}
 
-  .testimonialContainer h1 {
-    font-size: 28px;
+.testimonialProfile {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-top: auto;
+}
+
+.profileImage {
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 50%;
+}
+
+.profileInfo {
+  display: flex;
+  flex-direction: column;
+  font-size: 0.875rem;
+}
+
+.profileName {
+  color: white;
+}
+
+.profileTitle {
+  color: rgba(255, 255, 255, 0.75);
+}
+
+/* Marquee animation */
+@keyframes marquee {
+  to {
+    transform: translateX(-50%);
   }
 }
 
-@media (min-width: 600px) and (max-width: 767.98px) {
-  .testimonialContainer {
-    max-width: 500px;
-  }
-  .testimonialContainer h1 {
-    font-size: 28px;
+/* CSS for small devices */
+@media (min-width: 1000px) and (max-width: 1199.98px) {
+  .testimonialCard {
+    width: 22rem;
+    padding: 1rem 1.5rem;
   }
 }
 @media (min-width: 768px) and (max-width: 999.98px) {
-  .testimonialContainer {
-    max-width: 680px;
-  }
-  .testimonialContainer h1 {
-    font-size: 34px;
+  .testimonialCard {
+    width: 18rem;
+    padding: 0.8rem 1.2rem;
   }
 }
-
-@media (min-width: 1000px) and (max-width: 1199.98px) {
-  .testimonialContainer {
-    max-width: 950px;
+@media (max-width: 767.98px) {
+  .testimonialCard {
+    width: 15rem;
+    padding: 0.5rem 0.8rem;
   }
-  .testimonialContainer h1 {
-    font-size: 38px;
-  }
-}
-
-@media (min-width: 1200px) and (max-width: 1400px) {
-  .testimonialContainer {
-    max-width: 1150px;
+  .testimonialText {
+    font-size: 15px;
   }
 }
