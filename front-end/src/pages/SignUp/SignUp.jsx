@@ -86,9 +86,7 @@ const SignUp = () => {
               value={newUser.email}
               required
             />
-            {newUserErrors.email && (
-              <p style={{ color: "#821131" }}>{newUserErrors.email}</p>
-            )}
+            {newUserErrors.email && <p>{newUserErrors.email}</p>}
           </div>
 
           <div>
@@ -104,9 +102,7 @@ const SignUp = () => {
               value={newUser.password}
               required
             />
-            {newUserErrors.password && (
-              <p style={{ color: "#821131" }}>{newUserErrors.password}</p>
-            )}
+            {newUserErrors.password && <p>{newUserErrors.password}</p>}
           </div>
           <div>
             <label htmlFor="surePass">Confirm Password</label>
@@ -121,9 +117,7 @@ const SignUp = () => {
               value={newUser.surePass}
               required
             />
-            {newUserErrors.surePass && (
-              <p style={{ color: "#821131" }}>{newUserErrors.surePass}</p>
-            )}
+            {newUserErrors.surePass && <p>{newUserErrors.surePass}</p>}
           </div>
           <div>
             <label htmlFor="captcha">What is 3 + 5?</label>
@@ -138,9 +132,7 @@ const SignUp = () => {
               value={newUser.captcha}
               required
             />
-            {newUserErrors.captcha && (
-              <p style={{ color: "#821131" }}>{newUserErrors.captcha}</p>
-            )}
+            {newUserErrors.captcha && <p>{newUserErrors.captcha}</p>}
           </div>
           <div className={style.termsBox}>
             <input
@@ -150,11 +142,12 @@ const SignUp = () => {
               checked={newUser.agree}
               onChange={handleChange}
             />
-            <label htmlFor="terms">I agree to the terms and conditions.</label>{" "}
+            <label htmlFor="terms">
+              I agree to the <Link to="/signUp">terms</Link> and{" "}
+              <Link to="/signUp">conditions</Link>.
+            </label>{" "}
             <span>&#8727;</span>
-            {newUserErrors.agree && (
-              <p style={{ color: "#821131" }}>{newUserErrors.agree}</p>
-            )}
+            {newUserErrors.agree && <p>{newUserErrors.agree}</p>}
           </div>
           <div className={style.submitBtn}>
             <button type="submit">Submit</button>

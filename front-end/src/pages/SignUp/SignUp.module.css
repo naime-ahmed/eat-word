@@ -23,13 +23,17 @@
 .formContainer > form > div {
   margin: 10px 0;
 }
+.formContainer > form > div:not(:last-child) > p {
+  font-size: 14px;
+  color: #ff2865;
+}
 .formContainer > form > div:not(:nth-last-child(-n + 2)) > label {
   font-size: 16px;
   color: #f8fafc;
 }
 
 .formContainer > form > div:not(:last-child) > span {
-  color: rgb(202, 14, 102);
+  color: #ff2865;
 }
 
 .formContainer > form > div:not(:nth-last-child(-n + 2)) > input {
@@ -51,6 +55,9 @@
   margin-left: 3px;
   color: #f8fafc;
 }
+.termsBox label a {
+  color: rgb(73, 73, 228);
+}
 .submitBtn button {
   border-radius: 4px;
   width: 300px;
@@ -71,7 +78,6 @@
     rgba(30, 144, 255, 1) 0%,
     rgba(0, 212, 255, 1) 100%
   );
-  cursor: pointer;
 }
 .submitBtn p {
   text-align: center;
@@ -79,7 +85,7 @@
   color: #f8fafc;
 }
 .submitBtn p a {
-  color: rgb(69, 69, 184);
+  color: rgb(74, 74, 231);
 }
 /* CSS for mobile devices */
 @media (max-width: 599.98px) {
