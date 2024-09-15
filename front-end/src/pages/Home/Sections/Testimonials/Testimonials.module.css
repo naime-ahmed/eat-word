@@ -1,8 +1,27 @@
 .testimonialsContainer {
+  width: 100%;
+  height: 600px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 40px;
+}
+.testimonialHead {
+  text-align: center;
+}
+.testimonialHead h1 {
+  font-size: 44px;
+  color: #f8fafc;
+}
+.testimonialHead p {
+  margin-top: 20px;
+  font-size: 20px;
+  color: #d4d5d6;
+}
+.testimonialsCardContainer {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 500px;
   width: 100%;
 }
 
