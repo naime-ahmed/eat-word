@@ -143,8 +143,7 @@ const SignUp = () => {
               onChange={handleChange}
             />
             <label htmlFor="terms">
-              I agree to the <Link to="/signUp">terms</Link> and{" "}
-              <Link to="/signUp">conditions</Link>.
+              I agree to the <Link to="/tac">terms and conditions</Link>.
             </label>{" "}
             <span>&#8727;</span>
             {newUserErrors.agree && <p>{newUserErrors.agree}</p>}
