@@ -97,7 +97,7 @@ const TermsAndConditions = () => {
 
         <p>
           If you have any questions about these Terms and Conditions, please
-          contact us at <Link to="/contactUs">Contact Us</Link>.
+          contact us at <Link to="/contact">Contact Us</Link>.
         </p>
       </div>
       <Footer />
