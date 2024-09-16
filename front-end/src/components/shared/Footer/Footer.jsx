@@ -23,7 +23,7 @@ const Footer = () => {
               <Link to="/">Blog</Link>
             </li>
             <li>
-              <Link to="/">Contact Us</Link>
+              <Link to="/contact">Contact Us</Link>
             </li>
           </ul>
         </div>
@@ -37,10 +37,10 @@ const Footer = () => {
               <Link to="/">FAQ</Link>
             </li>
             <li>
-              <Link to="/">Privacy Policy</Link>
+              <Link to="/privacyPolicy">Privacy Policy</Link>
             </li>
             <li>
-              <Link to="/">Terms of Service</Link>
+              <Link to="/tac">Terms of Service</Link>
             </li>
           </ul>
         </div>
