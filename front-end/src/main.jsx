@@ -4,10 +4,13 @@ import { Provider } from "react-redux";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import store from "./app/store";
 import "./index.css";
+import Contact from "./pages/Contact/Contact";
 import Home from "./pages/Home/Home";
 import NotFound from "./pages/NotFound/NotFound";
+import PrivacyPolicy from "./pages/PrivacyPolicy/PrivacyPolicy";
 import SignIn from "./pages/SignIn/SignIn";
 import SignUp from "./pages/SignUp/SignUp";
+import TermsAndConditions from "./pages/TermsAndConditions/TermsAndConditions";
 
 const router = createBrowserRouter([
   {
@@ -23,6 +26,22 @@ const router = createBrowserRouter([
   {
     path: "/signIn",
     element: <SignIn />,
+    errorElement: <NotFound />,
+  },
+  {
+    path: "/contact",
+    element: <Contact />,
+    errorElement: <NotFound />,
+  },
+  {
+    path: "/tac",
+    element: <TermsAndConditions />,
+    errorElement: <NotFound />,
+  },
+  {
+    path: "/privacyPolicy",
+    element: <PrivacyPolicy />,
+    errorElement: <NotFound />,
   },
 ]);
 
