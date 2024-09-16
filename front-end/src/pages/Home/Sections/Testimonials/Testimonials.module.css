@@ -4,10 +4,10 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
-  gap: 40px;
 }
 .testimonialHead {
   text-align: center;
+  margin-bottom: 30px;
 }
 .testimonialHead h1 {
   font-size: 44px;
@@ -17,108 +17,4 @@
   margin-top: 20px;
   font-size: 20px;
   color: #d4d5d6;
-}
-.testimonialsCardContainer {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-}
-
-.testimonialsMarquee {
-  display: flex;
-  max-width: 100vw;
-  overflow: hidden;
-  padding: 1.25rem 0;
-  position: relative;
-}
-
-.marqueeItems {
-  display: flex;
-  width: max-content;
-  animation: marquee var(--duration, 30s) linear infinite;
-}
-
-.marqueeItems:hover {
-  animation-play-state: paused;
-}
-
-.testimonialItem {
-  padding: 0 0.625rem; /* Equivalent to 2.5 in Tailwind */
-  height: 100%;
-}
-
-.testimonialCard {
-  width: 28rem;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  background-color: #011627;
-  border-radius: 1rem; /* Equivalent to rounded-2xl */
-  border: 1px solid #081f49;
-  padding: 1.5rem 2rem;
-}
-
-.testimonialText {
-  font-weight: 400;
-  color: #f8fafc;
-  padding-bottom: 1rem;
-}
-
-.testimonialProfile {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  margin-top: auto;
-}
-
-.profileImage {
-  width: 2.25rem;
-  height: 2.25rem;
-  border-radius: 50%;
-}
-
-.profileInfo {
-  display: flex;
-  flex-direction: column;
-  font-size: 0.875rem;
-}
-
-.profileName {
-  color: white;
-}
-
-.profileTitle {
-  color: rgba(255, 255, 255, 0.75);
-}
-
-/* Marquee animation */
-@keyframes marquee {
-  to {
-    transform: translateX(-50%);
-  }
-}
-
-/* CSS for small devices */
-@media (min-width: 1000px) and (max-width: 1199.98px) {
-  .testimonialCard {
-    width: 22rem;
-    padding: 1rem 1.5rem;
-  }
-}
-@media (min-width: 768px) and (max-width: 999.98px) {
-  .testimonialCard {
-    width: 18rem;
-    padding: 0.8rem 1.2rem;
-  }
-}
-@media (max-width: 767.98px) {
-  .testimonialCard {
-    width: 15rem;
-    padding: 0.5rem 0.8rem;
-  }
-  .testimonialText {
-    font-size: 15px;
-  }
 }
