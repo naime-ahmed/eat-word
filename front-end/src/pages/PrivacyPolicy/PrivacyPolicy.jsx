@@ -76,7 +76,7 @@ const PrivacyPolicy = () => {
         <p>
           As a user, you have the right to access, correct, or delete your
           personal information at any time. You can manage your account settings
-          or reach out to us at <Link to="/contactUs">Contact</Link> for
+          or reach out to us at <Link to="/contact">Contact</Link> for
           assistance.
         </p>
 
@@ -91,7 +91,7 @@ const PrivacyPolicy = () => {
         <h2>11. Contact Us</h2>
         <p>
           If you have any questions about this Privacy Policy, please contact us
-          at <Link to="/contactUs">Contact</Link>.
+          at <Link to="/contact">Contact</Link>.
         </p>
       </div>
       <Footer />
