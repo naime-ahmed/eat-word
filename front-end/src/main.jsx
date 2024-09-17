@@ -4,6 +4,7 @@ import { Provider } from "react-redux";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import store from "./app/store";
 import "./index.css";
+import About from "./pages/About/About";
 import Contact from "./pages/Contact/Contact";
 import Home from "./pages/Home/Home";
 import NotFound from "./pages/NotFound/NotFound";
@@ -26,6 +27,11 @@ const router = createBrowserRouter([
   {
     path: "/signIn",
     element: <SignIn />,
+    errorElement: <NotFound />,
+  },
+  {
+    path: "/about",
+    element: <About />,
     errorElement: <NotFound />,
   },
   {
