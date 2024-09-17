@@ -15,12 +15,12 @@
 .marqueOne {
   display: flex;
   width: max-content;
-  animation: marquee 30s linear infinite;
+  animation: marquee 50s linear infinite;
 }
 .marqueTwo {
   display: flex;
   width: max-content;
-  animation: marquee 15s linear infinite;
+  animation: marquee 25s linear infinite;
 }
 
 .marqueOne:hover,
