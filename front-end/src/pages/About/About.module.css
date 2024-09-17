@@ -1,0 +1,115 @@
+/* CSS for about us page */
+.aboutUsPage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: #020817;
+  color: aliceblue;
+}
+
+/* CSS for about us container */
+.aboutUsContainer {
+  max-width: 1250px;
+  margin: 100px 0;
+}
+
+.aboutUsContainer > div {
+  min-height: 450px;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  margin: 30px 0;
+}
+.aboutUsContainer > div > div {
+  flex: 1;
+  max-width: 50%;
+}
+.aboutUsContainer > div > div > img {
+  max-width: 400px;
+}
+/* CSS for text part */
+.aboutUsContainer > div > div > h1 {
+  font-size: 34px;
+  margin-bottom: 20px;
+}
+
+/* CSS for image part */
+.aboutSWImg,
+.aboutMotiveMark,
+.aboutFutureImg {
+  text-align: center;
+}
+.aboutMotiveMark P {
+  font-size: 250px;
+}
+
+.aboutFutureImg img {
+  border-radius: 20px;
+}
+
+/* CSS for small devices */
+@media (min-width: 1200px) and (max-width: 1400px) {
+  .aboutUsContainer {
+    max-width: 1150px;
+  }
+}
+
+@media (min-width: 1000px) and (max-width: 1199.98px) {
+  .aboutUsContainer {
+    max-width: 950px;
+  }
+}
+
+@media (min-width: 821px) and (max-width: 999.98px) {
+  .aboutUsContainer {
+    max-width: 750px;
+  }
+  .aboutUsContainer > div > div > img {
+    max-width: 300px;
+  }
+  .aboutUsContainer > div > div > h1 {
+    font-size: 26px;
+    margin-bottom: 20px;
+  }
+}
+
+@media (min-width: 600px) and (max-width: 820.99px) {
+  .aboutUsContainer > div {
+    flex-direction: column;
+    margin: 30px 100px;
+  }
+
+  .aboutUsContainer > div:first-child {
+    flex-direction: column-reverse;
+  }
+  .aboutUsContainer > div:last-child {
+    margin-top: 100px;
+    flex-direction: column-reverse;
+  }
+  .aboutUsContainer > div > div {
+    max-width: 100%;
+  }
+}
+@media (max-width: 599.99px) {
+  .aboutUsContainer > div {
+    flex-direction: column;
+    margin: 10px;
+  }
+  .aboutUsContainer > div > div > img {
+    max-width: 280px;
+  }
+  .aboutUsContainer > div > div > h1 {
+    font-size: 24px;
+    margin-bottom: 20px;
+  }
+  .aboutUsContainer > div:first-child {
+    flex-direction: column-reverse;
+  }
+  .aboutUsContainer > div:last-child {
+    margin-top: 100px;
+    flex-direction: column-reverse;
+  }
+  .aboutUsContainer > div > div {
+    max-width: 100%;
+  }
+}
