@@ -7,12 +7,12 @@ import style from "./BaseTheory.module.css";
 const BaseTheory = () => {
   return (
     <div className={style.baseTheoryContainer}>
+      <div className={style.gradientLine}></div>
+      <div className={style.gradientBackground}></div>
       <div className={style.baseTheoryHeading}>
-        <h1>
-          The Motivation behind <span>Your Words</span>
-        </h1>
+        <h1>Base of Eat Word</h1>
         <p>
-          Your Words is designed to help you learn vocabulary through three
+          Eat Word is designed to help you learn vocabulary through three
           scientifically <br /> proven concepts, making the learning process
           easy, fast, and effective.
         </p>
