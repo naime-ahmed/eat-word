@@ -6,9 +6,6 @@ import imgForListWord from "../../../../assets/wordListDownCardIcon.png";
 import imgForFindWord from "../../../../assets/wordSearchCardIcon.png";
 import style from "./JourneyOfAWord.module.css";
 
-//topDiv bg:linear-gradient(90deg,transparent,rgba(2,132,199,.65) 50%,transparent)
-// BotDiv bg: conic-gradient(from 90deg at 50% 50%,#00000000 50%,#09090b 50%),radial-gradient(hsla(0,0%,78%,.05) 0,transparent 70%)
-
 const JourneyOfAWord = () => {
   return (
     <div className={style.JourneyOfAWordContainer}>
