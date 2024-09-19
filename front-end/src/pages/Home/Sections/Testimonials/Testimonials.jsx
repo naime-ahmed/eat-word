@@ -4,6 +4,8 @@ import styles from "./Testimonials.module.css";
 const Testimonials = () => {
   return (
     <div className={styles.testimonialsContainer}>
+      <div className={styles.gradientLine}></div>
+      <div className={styles.gradientBackground}></div>
       <div className={styles.testimonialHead}>
         <h1>Words of Praise</h1>
         <p>

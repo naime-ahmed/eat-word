@@ -1,17 +1,72 @@
 .testimonialsContainer {
   width: 100%;
   height: 600px;
+  margin-top: 100px;
   display: flex;
   flex-direction: column;
   justify-content: center;
+  position: relative;
 }
+
+/* CSS for gradient bg */
+.gradientLine {
+  position: absolute;
+  top: -0.5px; /* Adjust as needed */
+  left: 50%;
+  height: 1px; /* Use a suitable value if 'h-px' doesn't translate directly */
+  width: 80%; /* Equivalent to w-4/5 */
+  max-width: 500px;
+  transform: translate(-50%, -50%) translateZ(0); /* Combine transform functions */
+  pointer-events: none; /* Equivalent to pointer-events-none */
+  user-select: none; /* Equivalent to user-select-none */
+  background: linear-gradient(
+    90deg,
+    rgba(0, 0, 0, 0) 0%,
+    rgba(2, 132, 199, 0.65) 50%,
+    rgba(0, 0, 0, 0) 100%
+  );
+}
+
+.gradientBackground {
+  position: absolute;
+  top: -1px; /* Adjust as necessary */
+  left: 50%;
+  height: 200px; /* Equivalent to h-[200px] */
+  width: 100%; /* Equivalent to w-full */
+  max-width: 300px; /* Base style */
+  transform: translate(-50%, -50%) translateZ(0); /* Combine transformation functions */
+  pointer-events: none; /* Equivalent to pointer-events-none */
+  user-select: none; /* Equivalent to user-select-none */
+  background: conic-gradient(
+      from 90deg at 50% 50%,
+      rgb(0 0 0 / 0%) 50%,
+      #020817 50%
+    ),
+    radial-gradient(rgb(62 73 219 / 23%) 0%, transparent 70%);
+}
+
+/* Optional media query for responsive max-width */
+@media (min-width: 768px) {
+  /* Assuming md is for medium devices */
+  .gradientBackground {
+    max-width: 600px; /* Changes max width on medium devices and up */
+  }
+}
+
 .testimonialHead {
   text-align: center;
-  margin-bottom: 30px;
+  margin-bottom: 40px 0;
 }
 .testimonialHead h1 {
   font-size: 44px;
-  color: #f8fafc;
+
+  /** TEXT GRADIENT */
+  color: #ffffff;
+  background-image: -webkit-linear-gradient(90deg, #ffffff 38%, #0037ff 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  text-fill-color: transparent;
+  -webkit-text-fill-color: transparent;
 }
 .testimonialHead p {
   margin-top: 20px;
