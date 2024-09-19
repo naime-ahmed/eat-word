@@ -5,7 +5,7 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background-color: rgb(0, 0, 22);
+  background-color: rgb(0, 0, 0);
 }
 
 /* CSS for footer top part */
@@ -51,7 +51,7 @@
 .copyright {
   text-align: center;
   width: 100%;
-  background-color: rgb(20, 20, 20);
+  background-color: rgb(2, 0, 27);
   color: #fff;
 }
 
