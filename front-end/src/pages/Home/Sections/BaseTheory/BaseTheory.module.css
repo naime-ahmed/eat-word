@@ -2,19 +2,67 @@
 .baseTheoryContainer {
   margin-top: 100px;
   width: 1250px;
+  position: relative;
+}
+
+/* CSS for gradient bg */
+.gradientLine {
+  position: absolute;
+  top: -0.5px;
+  left: 50%;
+  height: 1px;
+  width: 80%;
+  max-width: 500px;
+  transform: translate(-50%, -50%) translateZ(0);
+  pointer-events: none;
+  user-select: none;
+  background: linear-gradient(
+    90deg,
+    rgba(0, 0, 0, 0) 0%,
+    rgba(2, 132, 199, 0.65) 50%,
+    rgba(0, 0, 0, 0) 100%
+  );
+}
+
+.gradientBackground {
+  position: absolute;
+  top: -1px;
+  left: 50%;
+  height: 200px;
+  width: 100%;
+  max-width: 300px;
+  transform: translate(-50%, -50%) translateZ(0);
+  pointer-events: none;
+  user-select: none;
+  background: conic-gradient(
+      from 90deg at 50% 50%,
+      rgb(0 0 0 / 0%) 50%,
+      #020817 50%
+    ),
+    radial-gradient(rgb(62 73 219 / 23%) 0%, transparent 70%);
+}
+/* Optional media query for responsive max-width */
+@media (min-width: 768px) {
+  .gradientBackground {
+    max-width: 600px;
+  }
 }
 
 /* CSS for heading */
 .baseTheoryHeading {
   text-align: center;
+  margin-top: 40px;
 }
 .baseTheoryHeading h1 {
   font-size: 44px;
-  color: #e6e6e6;
+  color: #ffffff;
+  background-image: -webkit-linear-gradient(90deg, #ffffff 38%, #0037ff 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  text-fill-color: transparent;
+  -webkit-text-fill-color: transparent;
 }
-.baseTheoryHeading h1 > span {
-  color: #4989f7;
-}
+
 .baseTheoryHeading p {
   margin-top: 20px;
   color: #d4d5d6;
@@ -34,27 +82,10 @@
   padding: 45px;
   border-radius: 10px;
   min-height: 400px;
+  background-color: #06122c4b;
+  border: 2px solid rgba(209, 199, 253, 0.164);
 }
-.spacedRepetition {
-  background: linear-gradient(0deg, rgba(0, 8, 255, 0) 2%, rgb(14, 0, 44) 98%);
-}
-.activeRecall {
-  background: linear-gradient(
-    0deg,
-    rgba(0, 8, 255, 0) 2%,
-    rgba(44, 0, 41, 1) 98%
-  );
-}
-.contextualLearning {
-  background: linear-gradient(
-    0deg,
-    rgba(0, 8, 255, 0) 2%,
-    rgba(44, 0, 42, 1) 98%
-  );
-}
-.fewMoreThings {
-  background: linear-gradient(0deg, rgba(0, 8, 255, 0) 2%, rgb(14, 0, 44) 98%);
-}
+
 .baseTheoryCardsContainer > div > div > img {
   max-width: 80px;
 }
@@ -69,13 +100,6 @@
   text-align: justify;
   color: #d4d5d6;
 }
-
-/* CSS for responsive device */
-/* @media (max-width: 800px) {
-  .baseTheoryCardsContainer {
-    grid-template-columns: 1fr;
-  }
-} */
 
 /* Extra Small Devices (phones) - Up to 576px wide: */
 @media (max-width: 599.98px) {
@@ -95,7 +119,7 @@
     padding: 35px;
   }
   .baseTheoryCardsContainer > div > h2 {
-    font-size: 24px;
+    font-size: 22px;
   }
   .baseTheoryCardsContainer > div > p {
     font-size: 16px;
