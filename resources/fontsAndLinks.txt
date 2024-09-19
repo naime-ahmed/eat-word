@@ -4,6 +4,26 @@
 ## Example webpages list
 1. https://langeek.co/
 2. https://membean.com/
+3. https://www.wordclouds.com/
+
+## Design motivation
+1. https://www.ui-layout.com/get-started
+2. https://www.banglublogs.com/
+3. https://lunarui.dev/components/react/
+4. https://uiverse.io/
+5. https://www.landingfolio.com/
+6. https://joincobalt.com/?ref=landingfolio
 
 # email sender
 1. https://react.email/docs/integrations/resend
+
+# Tools
+1. https://angrytools.com/gradient/
+
+# Text editor package
+1. https://tiptap.dev/
+
+## Primary color
+base: #020817
+base content: #F8FAFC
+sub base content/border: #121926;
