@@ -39,9 +39,9 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  background-color: #011627;
-  border-radius: 1rem; /* Equivalent to rounded-2xl */
-  border: 1px solid #081f49;
+  border-radius: 10px;
+  background-color: #06122c4b;
+  border: 1px solid rgba(209, 199, 253, 0.164);
   padding: 1.5rem 2rem;
 }
 
