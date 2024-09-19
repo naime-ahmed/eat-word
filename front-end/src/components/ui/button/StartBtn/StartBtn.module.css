@@ -87,3 +87,9 @@
   height: 220px;
   opacity: 1;
 }
+/* Responsive style*/
+@media (max-width: 599.98px) {
+  .animatedButton {
+    padding: 10px 25px;
+  }
+}
