@@ -8,6 +8,7 @@ const Footer = () => {
       <div className={style.footerTop}>
         <div className={style.brand}>
           <img src={logo} alt="your words logo" />
+          <p>Eat Word</p>
           <p>Empower Your Vocabulary</p>
         </div>
         <div className={style.quickLinks}>
@@ -48,12 +49,12 @@ const Footer = () => {
           <h3>Contact Us</h3>
           <p>
             Email:
-            <Link className={style.email} to="mailto:support@yourwords.com">
-              support@yourwords.com
+            <Link className={style.email} to="mailto:naime2molla@gmail.com">
+              support@eatword.com
             </Link>
           </p>
           <p>Phone: +8801926537994</p>
-          <p>Address: Meghna, Cumilla, Bangladesh</p>
+          <p>Address: 2^#, Orion, Mars</p>
         </div>
       </div>
       <div className={style.copyright}>
