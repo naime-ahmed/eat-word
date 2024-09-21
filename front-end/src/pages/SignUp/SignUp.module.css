@@ -30,17 +30,13 @@
   color: #ff2865;
 }
 
-.formContainer > form > div:not(:last-child) > span {
-  color: #ff2865;
-}
-
 .inputField {
   width: 300px;
   /* height: 35px; */
   border: 0;
-  border-bottom: 2px solid #9b9b9b;
+  border-bottom: 2px solid #1e293b;
   outline: 0;
-  font-size: 1rem;
+  font-size: 15px;
   color: #fff;
   padding: 7px 0;
   background: transparent;
@@ -51,7 +47,7 @@
 }
 
 .inputField:placeholder-shown ~ .formLabel {
-  font-size: 1rem;
+  font-size: 15px;
   cursor: text;
   top: 20px;
 }
@@ -61,29 +57,38 @@
   top: 0;
   display: block;
   transition: 0.2s;
-  font-size: 1rem;
-  color: #9b9b9b;
+  font-size: 15px;
+  color: #8d8d8d;
 }
 .inputField:focus ~ .formLabel {
   position: absolute;
   top: 0;
   display: block;
   transition: 0.2s;
-  font-size: 1rem;
-  color: #11998e;
-  font-weight: 700;
+  font-size: 15px;
+  color: #9aa4ff;
+  font-weight: 500;
 }
 
 .inputField:focus {
   padding-bottom: 6px;
-  font-weight: 600;
+  font-weight: 500;
   border-width: 3px;
-  border-image: linear-gradient(to right, #11998e, #38ef7d);
+  border-image: linear-gradient(to left, #1735b8, #2fa5e9);
   border-image-slice: 1;
 }
 .inputField:required,
 .inputField:invalid {
   box-shadow: none;
+}
+/* set chrome auto-fill bg color */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+  transition: background-color 5000s;
+  -webkit-text-fill-color: rgb(255, 255, 255) !important;
+  caret-color: rgb(255, 255, 255) !important;
 }
 
 .termsBox label {
