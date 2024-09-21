@@ -1,5 +1,5 @@
 /* CSS for signUp container */
-.signUpContainer {
+.signInContainer {
   width: 100vw;
   height: 100vh;
   display: flex;
@@ -36,42 +36,86 @@
 
 /* CSS for form inputs */
 .formContainer > form > div {
-  margin: 10px 0;
+  position: relative;
+  padding: 15px 0 0;
+  margin-top: 10px;
 }
-.formContainer > form > div:not(:last-child) > label {
-  font-size: 16px;
-  color: #f8fafc;
-}
-
-.formContainer > form > div:not(:last-child) > span {
-  color: #ff2865;
-}
-
 .formContainer > form > div:not(:last-child) > p {
   font-size: 14px;
   color: #ff2865;
 }
 
-.formContainer > form > div:not(:nth-last-child(-n + 1)) > input {
+.inputField {
   width: 300px;
-  height: 35px;
-  background-color: #c4c0f1;
-  padding: 5px;
-  margin-top: 5px;
+  /* height: 35px; */
+  border: 0;
+  border-bottom: 2px solid #1e293b;
+  outline: 0;
   font-size: 15px;
-  border: 1px solid #ddd;
-  border-radius: 3px;
-  outline: none;
+  color: #fff;
+  padding: 7px 0;
+  background: transparent;
+  transition: border-color 0.2s;
 }
-.formContainer > form > div:not(:nth-last-child(-n + 1)) > input:focus {
-  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.2);
+.inputField::placeholder {
+  color: transparent;
 }
 
+.inputField:placeholder-shown ~ .formLabel {
+  font-size: 15px;
+  cursor: text;
+  top: 20px;
+}
+
+.formLabel {
+  position: absolute;
+  top: 0;
+  display: block;
+  transition: 0.2s;
+  font-size: 15px;
+  color: #8d8d8d;
+}
+.inputField:focus ~ .formLabel {
+  position: absolute;
+  top: 0;
+  display: block;
+  transition: 0.2s;
+  font-size: 15px;
+  color: #9aa4ff;
+  font-weight: 500;
+}
+
+.inputField:focus {
+  padding-bottom: 6px;
+  font-weight: 500;
+  border-width: 3px;
+  border-image: linear-gradient(to left, #1735b8, #2fa5e9);
+  border-image-slice: 1;
+}
+.inputField:required,
+.inputField:invalid {
+  box-shadow: none;
+}
+/* set chrome auto-fill bg color */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+  transition: background-color 5000s;
+  -webkit-text-fill-color: rgb(255, 255, 255) !important;
+  caret-color: rgb(255, 255, 255) !important;
+}
+
+.termsBox label {
+  margin-left: 3px;
+  color: #f8fafc;
+}
+.termsBox label a {
+  color: rgb(73, 73, 228);
+}
 .submitBtn button {
-  border-radius: 4px;
   width: 300px;
   height: 35px;
-  margin-top: 15px;
   border-radius: 4px;
   font-size: 16px;
   font-weight: 600;
@@ -95,11 +139,11 @@
   color: #f8fafc;
 }
 .submitBtn p a {
-  color: rgb(72, 72, 236);
+  color: rgb(74, 74, 231);
 }
 /* CSS for mobile devices */
 @media (max-width: 599.98px) {
-  .formContainer > form > div:not(:nth-last-child(-n + 1)) > input {
+  .inputField {
     width: 280px;
     height: 35px;
   }

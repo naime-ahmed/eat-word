@@ -43,7 +43,7 @@ const SignIn = () => {
     }
   }
   return (
-    <div className={style.signUpContainer}>
+    <div className={style.signInContainer}>
       <div className={style.backToHomeButton}>
         <Link to="/">
           <i className="fa fa-long-arrow-left" aria-hidden="true"></i> Back Home
@@ -53,9 +53,6 @@ const SignIn = () => {
         <h2>Welcome Back</h2>
         <form onSubmit={handelSubmit}>
           <div>
-            <label htmlFor="email">Your email</label>
-            <span>&#8727;</span>
-            <br />
             <input
               type="email"
               name="email"
@@ -63,15 +60,16 @@ const SignIn = () => {
               placeholder="Enter email"
               onChange={handleChange}
               value={user.email}
+              className={style.inputField}
               required
             />
+            <label htmlFor="email" className={style.formLabel}>
+              Your email
+            </label>
             {userErrors.email && <p>{userErrors.email}</p>}
           </div>
 
           <div>
-            <label htmlFor="password">your password</label>
-            <span>&#8727;</span>
-            <br />
             <input
               type="password"
               name="password"
@@ -79,14 +77,15 @@ const SignIn = () => {
               placeholder="Enter password"
               onChange={handleChange}
               value={user.password}
+              className={style.inputField}
               required
             />
+            <label htmlFor="password" className={style.formLabel}>
+              your password
+            </label>
             {userErrors.password && <p>{userErrors.password}</p>}
           </div>
           <div>
-            <label htmlFor="captcha">What is 3 + 5?</label>
-            <span>&#8727;</span>
-            <br />
             <input
               type="number"
               name="captcha"
@@ -94,8 +93,12 @@ const SignIn = () => {
               placeholder="Answer"
               onChange={handleChange}
               value={user.captcha}
+              className={style.inputField}
               required
             />
+            <label htmlFor="captcha" className={style.formLabel}>
+              What is 3 + 5?
+            </label>
             {userErrors.captcha && <p>{userErrors.captcha}</p>}
           </div>
           <div className={style.submitBtn}>
