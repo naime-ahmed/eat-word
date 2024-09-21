@@ -59,9 +59,6 @@ const SignUp = () => {
         <h2>Create Your Account</h2>
         <form onSubmit={handelSubmit}>
           <div>
-            <label htmlFor="fName">Your full name </label>
-            <span>&#8727;</span>
-            <br />
             <input
               type="text"
               name="fName"
@@ -69,14 +66,15 @@ const SignUp = () => {
               placeholder="Enter Full Name"
               onChange={handleChange}
               value={newUser.fName}
+              className={style.inputField}
               required
             />
+            <label htmlFor="fName" className={style.formLabel}>
+              Your full name
+            </label>
             {newUserErrors.fName && <p>{newUserErrors.fName}</p>}
           </div>
           <div>
-            <label htmlFor="email">Your email</label>
-            <span>&#8727;</span>
-            <br />
             <input
               type="email"
               name="email"
@@ -84,15 +82,16 @@ const SignUp = () => {
               placeholder="Enter email"
               onChange={handleChange}
               value={newUser.email}
+              className={style.inputField}
               required
             />
+            <label htmlFor="email" className={style.formLabel}>
+              Your email
+            </label>
             {newUserErrors.email && <p>{newUserErrors.email}</p>}
           </div>
 
           <div>
-            <label htmlFor="password">your password</label>
-            <span>&#8727;</span>
-            <br />
             <input
               type="password"
               name="password"
@@ -100,14 +99,15 @@ const SignUp = () => {
               placeholder="Enter password"
               onChange={handleChange}
               value={newUser.password}
+              className={style.inputField}
               required
             />
+            <label htmlFor="password" className={style.formLabel}>
+              your password
+            </label>
             {newUserErrors.password && <p>{newUserErrors.password}</p>}
           </div>
           <div>
-            <label htmlFor="surePass">Confirm Password</label>
-            <span>&#8727;</span>
-            <br />
             <input
               type="password"
               name="surePass"
@@ -115,14 +115,15 @@ const SignUp = () => {
               placeholder="confirm password"
               onChange={handleChange}
               value={newUser.surePass}
+              className={style.inputField}
               required
             />
+            <label htmlFor="surePass" className={style.formLabel}>
+              Confirm Password
+            </label>
             {newUserErrors.surePass && <p>{newUserErrors.surePass}</p>}
           </div>
           <div>
-            <label htmlFor="captcha">What is 3 + 5?</label>
-            <span>&#8727;</span>
-            <br />
             <input
               type="number"
               name="captcha"
@@ -130,8 +131,12 @@ const SignUp = () => {
               placeholder="Answer"
               onChange={handleChange}
               value={newUser.captcha}
+              className={style.inputField}
               required
             />
+            <label htmlFor="captcha" className={style.formLabel}>
+              What is 3 + 5?
+            </label>
             {newUserErrors.captcha && <p>{newUserErrors.captcha}</p>}
           </div>
           <div className={style.termsBox}>
@@ -144,8 +149,7 @@ const SignUp = () => {
             />
             <label htmlFor="terms">
               I agree to the <Link to="/tac">terms and conditions</Link>.
-            </label>{" "}
-            <span>&#8727;</span>
+            </label>
             {newUserErrors.agree && <p>{newUserErrors.agree}</p>}
           </div>
           <div className={style.submitBtn}>
