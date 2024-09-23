@@ -6,7 +6,6 @@
   padding: 10px;
   z-index: 100;
   transition: all 0.3s ease;
-  border-bottom: 1.5px solid #121926;
 }
 
 .navBar {
@@ -14,22 +13,19 @@
   height: 100%;
   max-width: 1250px;
   /* width: 100%; */
+  padding: 10px;
   margin: 0 auto;
   display: flex;
   align-items: center;
   justify-content: space-between;
-}
-
-.sticky {
-  background: rgba(11, 21, 46, 0.25);
-
+  border: 1px solid rgba(75, 103, 173, 0.363);
+  border-radius: 6px;
   box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
   backdrop-filter: blur(5.6px);
   -webkit-backdrop-filter: blur(5.6px);
-  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
 }
 
-.sticky .navLinks li a {
+.sticky .navLinks li a:not(:last-child) {
   color: #e6e6e6;
   transition: all 0.4s ease;
 }
@@ -56,15 +52,12 @@
   align-items: center;
 }
 
-.navLinks li {
+.navLinks li:not(:last-child) {
   margin: 0 5px;
   list-style: none;
 }
-.navLinks li:last-child {
-  margin-right: 0;
-}
 
-.navLinks li a {
+.navLinks li:not(:last-child) a {
   position: relative;
   font-size: 18px;
   font-weight: 500;
@@ -72,26 +65,12 @@
   text-decoration: none;
   padding: 6px 12px;
 }
-.navLinks li:last-child a {
-  margin: 0;
-  padding: 3px 25px 6px 25px;
-  border-radius: 30px;
-  font-size: 17px;
-  background-color: #4d87f6;
-  box-sizing: border-box;
-  transition: background-color 0.2s ease;
-}
-.navLinks li:last-child:hover a {
-  background-color: transparent;
-  border: 1px solid #4d87f6;
-  padding: 3px 24px 6px 24px;
-}
 
-.navLinks li a::before {
+.navLinks li:not(:last-child) a::before {
   content: "";
   position: absolute;
   left: 50%;
-  bottom: 6px;
+  bottom: 0;
   transform: translateX(-50%);
   height: 2px;
   width: 2px;
@@ -100,12 +79,8 @@
   opacity: 0;
   transition: all 0.4s ease;
 }
-.navLinks li:last-child a::before {
-  height: 0px;
-  width: 0px;
-}
 
-.navLinks li:hover a::before {
+.navLinks li:not(:last-child):hover a::before {
   opacity: 1;
   width: 45px;
 }
@@ -165,12 +140,12 @@
     padding-top: 30px;
   }
 
-  .navLinks li a {
+  .navLinks li:not(:last-child) a {
     display: block;
     margin-top: 20px;
   }
   .navLinks li:last-child {
-    margin-top: 30px;
+    margin-top: 20px;
   }
 }
 
