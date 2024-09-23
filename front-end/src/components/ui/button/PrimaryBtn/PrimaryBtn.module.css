@@ -1,0 +1,22 @@
+.btn {
+  padding: 9px 18px;
+  border-radius: 4px;
+  background-image: linear-gradient(
+    to left,
+    #0a4bae,
+    #0059b6,
+    #0066be,
+    #0073c4,
+    #0c80c9
+  );
+  color: #e6e6e6;
+  border: none;
+  outline: none;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+}
+.btn > a {
+  text-decoration: none;
+  color: #e6e6e6;
+}
