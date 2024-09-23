@@ -44,7 +44,14 @@
   border: 1px solid rgba(209, 199, 253, 0.164);
   padding: 1.5rem 2rem;
 }
-
+.testimonialCard:hover {
+  background-color: #091c464b;
+  cursor: default;
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+}
 .testimonialText {
   font-weight: 400;
   color: #f8fafc;
