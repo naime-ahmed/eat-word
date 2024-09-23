@@ -1,5 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import PrimaryBtn from "../../components/ui/button/PrimaryBtn/PrimaryBtn";
 import {
   resetForm,
   setUserErrors,
@@ -45,9 +46,12 @@ const SignIn = () => {
   return (
     <div className={style.signInContainer}>
       <div className={style.backToHomeButton}>
-        <Link to="/">
-          <i className="fa fa-long-arrow-left" aria-hidden="true"></i> Back Home
-        </Link>
+        <PrimaryBtn>
+          <Link to="/">
+            <i className="fa fa-long-arrow-left" aria-hidden="true"></i> Back
+            Home
+          </Link>
+        </PrimaryBtn>
       </div>
       <div className={style.formContainer}>
         <h2>Welcome Back</h2>
