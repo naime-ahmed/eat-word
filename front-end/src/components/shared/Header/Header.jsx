@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import logo from "../../../assets/logo.png";
+import PrimaryBtn from "../../ui/button/PrimaryBtn/PrimaryBtn";
 import styles from "./Header.module.css";
 
 const Header = () => {
@@ -79,9 +80,11 @@ const Header = () => {
               </Link>
             </li>
             <li>
-              <Link to="/signIn" onClick={handleSidebarToggle}>
-                Login
-              </Link>
+              <PrimaryBtn handleClick={handleSidebarToggle}>
+                <Link to="/signIn">
+                  Sing In <i className="fa-solid fa-arrow-right-to-bracket"></i>
+                </Link>
+              </PrimaryBtn>
             </li>
           </ul>
         </div>
