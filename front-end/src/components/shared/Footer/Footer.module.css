@@ -1,86 +1,185 @@
 /* CSS for Footer container */
 .footerContainer {
   width: 100%;
+  min-height: 30rem;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background-color: rgb(0, 0, 0);
+  position: relative;
+  overflow: hidden;
 }
 
-/* CSS for footer top part */
-.footerTop {
+/* CSS Footer contents */
+.footerContentContainer {
   width: 1250px;
-  padding: 30px;
+  min-height: 300px;
   display: flex;
-  align-items: center;
   justify-content: space-between;
-  color: #dadada;
-}
-.footerTop div {
-  flex: 1 1 22%; /* 22% for 4 columns with space between */
-  margin: 10px;
-}
-.footerTop > div > ul > li {
-  list-style: none;
-  margin: 10px 0;
-}
-.footerTop > div > ul > li > a {
-  text-decoration: none;
-  color: #dadada;
-}
-.footerTop > div > ul > li > a:hover {
-  color: #fff;
-  text-decoration: underline;
-}
-.brand img {
-  width: 200px;
-}
-.brand p {
-  margin-top: 10px;
-}
-.contactInfo p {
-  margin: 18px 0;
+  align-items: center;
+  padding: 20px;
+  background: rgba(145, 160, 226, 0.164);
+  border-radius: 16px;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(8.9px);
+  -webkit-backdrop-filter: blur(8.9px);
+  border: 1px solid rgba(165, 165, 165, 0.7);
+  border-bottom: 3px solid rgba(165, 165, 165, 0.8);
 }
 
-.email {
-  margin-left: 5px;
-  color: #9dacff;
+.footerLeft {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 90px;
 }
-/* CSS for footer lower part */
-.copyright {
-  text-align: center;
+
+.footerBrand h1 {
+  font-size: 68px;
+  font-weight: 900;
+  color: #425bff;
+  background-image: -webkit-linear-gradient(
+    0deg,
+    #425bff 0%,
+    #8023fa 58%,
+    #ff21e5 100%
+  );
+  background-clip: text;
+  -webkit-background-clip: text;
+  text-fill-color: transparent;
+  -webkit-text-fill-color: transparent;
+}
+.footerBrand p {
+  font-size: 1.2rem;
+  font-weight: 500;
+  color: #b6c1ff;
+}
+.copyrightText {
+  color: rgb(255, 255, 255);
+  font-size: 16px;
+}
+
+.footerRight {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.footerSocials a {
+  display: block;
+  text-decoration: none;
+  font-size: 80px;
+  color: #fdc8ff;
+}
+.footerSocials a:first-child {
+  margin-bottom: 20px;
+}
+.footerImportantLinks a {
+  text-decoration: none;
+  font-size: 1.3rem;
+  color: #ffffff;
+}
+.footerImportantLinks a:not(:last-child) {
+  margin-right: 25px;
+}
+/* CSS for footer glow*/
+.footerGlow {
+  position: absolute;
   width: 100%;
-  background-color: rgb(2, 0, 27);
-  color: #fff;
+  content: "";
+  background: linear-gradient(45deg, #1a63ff, #8113ff 50%, #f70aff);
+  filter: blur(15vh);
+  height: 30vh;
+  bottom: -20vh;
 }
 
 /* CSS to make the footer responsive for all devices */
-@media (max-width: 771px) {
-  .footerTop {
-    max-width: 340px;
+
+@media (max-width: 599.98px) {
+  .footerContentContainer {
     flex-direction: column;
-    align-items: start;
+    max-width: 330px;
+    gap: 50px;
+    padding: 20px;
+    margin-bottom: 30px;
+  }
+  .footerBrand h1 {
+    font-size: 44px;
+  }
+  .footerBrand p {
+    display: 1rem;
+  }
+  .copyrightText {
+    margin-top: 30px;
+    font-size: 14px;
+  }
+  .footerSocials a {
+    font-size: 54px;
+  }
+  .footerImportantLinks a {
+    font-size: 1rem;
   }
 }
+@media (min-width: 600px) and (max-width: 767.98px) {
+  .footerContentContainer {
+    max-width: 560px;
+  }
+  .footerLeft {
+    gap: 60px;
+  }
+  .footerBrand h1 {
+    font-size: 44px;
+  }
+  .footerBrand p {
+    font-size: 1rem;
+  }
+  .copyrightText {
+    font-size: 14px;
+  }
+  .footerSocials a {
+    font-size: 54px;
+  }
+  .footerImportantLinks a {
+    font-size: 1rem;
+  }
+}
+
 @media (min-width: 768px) and (max-width: 999.98px) {
-  .footerTop {
+  .footerContentContainer {
     max-width: 750px;
   }
-  .brand img {
-    width: 150px;
+  .footerLeft {
+    gap: 60px;
+  }
+  .footerBrand h1 {
+    font-size: 54px;
+  }
+  .footerBrand p {
+    font-size: 1rem;
+  }
+  .copyrightText {
+    font-size: 14px;
+  }
+  .footerSocials a {
+    font-size: 54px;
+  }
+  .footerImportantLinks a {
+    font-size: 1rem;
   }
 }
 
 @media (min-width: 1000px) and (max-width: 1199.98px) {
-  .footerTop {
+  .footerContentContainer {
     max-width: 950px;
   }
 }
 
 @media (min-width: 1200px) and (max-width: 1400px) {
   /* CSS for Hero Container */
-  .footerTop {
+  .footerContentContainer {
     max-width: 1150px;
   }
 }

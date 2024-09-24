@@ -1,65 +1,61 @@
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import logo from "../../../assets/logo.png";
 import style from "./Footer.module.css";
 
 const Footer = () => {
+  const [isMobile, setIsMobile] = useState(false);
+
+  // Function to update state based on window size
+  const handleResize = () => {
+    setIsMobile(window.innerWidth < 600);
+  };
+
+  // Set up resize event listener
+  useEffect(() => {
+    handleResize(); // Check initial size on mount
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize); // Clean up listener
+    };
+  }, []);
+
   return (
     <div className={style.footerContainer}>
-      <div className={style.footerTop}>
-        <div className={style.brand}>
-          <img src={logo} alt="your words logo" />
-          <p>Eat Word</p>
-          <p>Empower Your Vocabulary</p>
+      <div className={style.footerContentContainer}>
+        <div className={style.footerLeft}>
+          <div className={style.footerBrand}>
+            <h1>Eat Word</h1>
+            <p>Empower Your Language</p>
+          </div>
+          {!isMobile && (
+            <div className={style.copyrightText}>
+              <p>© 2024 Eat Word. All Rights Reserved.</p>
+            </div>
+          )}
         </div>
-        <div className={style.quickLinks}>
-          <h3>Quick Links</h3>
-          <ul>
-            <li>
-              <Link to="/">Pricing</Link>
-            </li>
-            <li>
-              <Link to="/">Features</Link>
-            </li>
-            <li>
-              <Link to="/">Blog</Link>
-            </li>
-            <li>
-              <Link to="/contact">Contact Us</Link>
-            </li>
-          </ul>
-        </div>
-        <div className={style.learnMore}>
-          <h3>Learn More</h3>
-          <ul>
-            <li>
-              <Link to="/about">About Us</Link>
-            </li>
-            <li>
-              <Link to="/">FAQ</Link>
-            </li>
-            <li>
-              <Link to="/privacyPolicy">Privacy Policy</Link>
-            </li>
-            <li>
-              <Link to="/tac">Terms of Service</Link>
-            </li>
-          </ul>
-        </div>
-        <div className={style.contactInfo}>
-          <h3>Contact Us</h3>
-          <p>
-            Email:
-            <Link className={style.email} to="mailto:naime2molla@gmail.com">
-              support@eatword.com
+        <div className={style.footerRight}>
+          <div className={style.footerSocials}>
+            <Link>
+              <Link to="/" className="fa-brands fa-x-twitter"></Link>
             </Link>
-          </p>
-          <p>Phone: +8801926537994</p>
-          <p>Address: 2^#, Orion, Mars</p>
+            <Link>
+              <Link to="/" className="fa-brands fa-linkedin"></Link>
+            </Link>
+          </div>
+          <div className={style.footerImportantLinks}>
+            <Link to="/contact">Contact Us</Link>
+            <Link to="/privacyPolicy">Privacy Policy</Link>
+          </div>
+          {isMobile && (
+            <div className={style.copyrightText}>
+              <p>© 2024 Eat Word. All Rights Reserved.</p>
+            </div>
+          )}
         </div>
       </div>
-      <div className={style.copyright}>
-        <p>© 2024 Your Words. All Rights Reserved.</p>
-      </div>
+
+      <div className={style.footerGlow}></div>
     </div>
   );
 };
