@@ -25,7 +25,7 @@
   -webkit-backdrop-filter: blur(5.6px);
 }
 
-.sticky .navLinks li a:not(:last-child) {
+.sticky .navLinks li:not(:last-child) a {
   color: #e6e6e6;
   transition: all 0.4s ease;
 }
@@ -102,18 +102,30 @@
 
   .menu {
     position: fixed;
-    height: 100vh;
-    width: 320px;
+    height: 50vh;
+    min-height: 400px;
+    width: 300px;
     left: -100%;
     top: 0;
     padding: 20px;
-    background-color: #010718;
     z-index: 100;
     transition: all 0.4s ease;
+    background: rgba(1, 0, 31, 0.95);
+    border-radius: 10px;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(50px);
+    -webkit-backdrop-filter: blur(50px);
+    border: 1px solid rgba(54, 56, 136, 0.5);
   }
 
   .active .menu {
     left: 0;
+  }
+  .active .navBar {
+    border: none;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0);
+    backdrop-filter: blur(0);
+    -webkit-backdrop-filter: blur(0);
   }
 
   .active .navLogo a {
