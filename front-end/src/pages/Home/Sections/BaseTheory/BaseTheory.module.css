@@ -75,7 +75,6 @@
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 40px;
-  padding: 20px;
   margin-top: 30px;
 }
 .baseTheoryCardsContainer > div {
