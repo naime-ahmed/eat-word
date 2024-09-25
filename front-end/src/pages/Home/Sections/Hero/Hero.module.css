@@ -113,8 +113,9 @@
 .subtitleContainer {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 1rem;
+  gap: 2rem;
   width: 72%;
+  max-width: 1250px;
   margin-left: auto;
   margin-right: auto;
   margin-top: -20px;
@@ -125,7 +126,7 @@
   justify-content: center;
 }
 .subtitleContainer > div > div {
-  width: 85%;
+  width: 100%;
   padding: 15px;
   background: rgba(78, 126, 248, 0.04);
   border-radius: 10px;
