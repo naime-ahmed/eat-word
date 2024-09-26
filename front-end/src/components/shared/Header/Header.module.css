@@ -52,7 +52,7 @@
   align-items: center;
 }
 
-.navLinks li:not(:last-child) {
+.navLinks li {
   margin: 0 5px;
   list-style: none;
 }
