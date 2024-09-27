@@ -17,7 +17,4 @@ function errorHandler(err, req, res, next) {
   
 }
 
-module.exports = {
-  notFoundHandler,
-  errorHandler,
-};
+export { errorHandler, notFoundHandler };
