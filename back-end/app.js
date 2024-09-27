@@ -1,4 +1,5 @@
 // external imports
+import cookieParser from 'cookie-parser';
 import dotenv from "dotenv";
 import express from "express";
 
@@ -17,6 +18,8 @@ connectDb();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+// parse cookies
+app.use(cookieParser(process.env.COOKIE_SECRET));
 
 app.get("/", (req, res) =>{
     res.send({
