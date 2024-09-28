@@ -1,10 +1,13 @@
 // external imports
 import bcrypt from "bcrypt";
+import ms from "ms";
 
 // internal imports
-import User from "../models/People";
-import { generateAccessToken, generateRefreshToken } from "../utils/tokenUtils";
-
+import User from "../../models/People.js";
+import {
+  generateAccessToken,
+  generateRefreshToken,
+} from "../../utils/tokenUtils.js";
 
 // register user
 async function addUser(req, res, next) {
@@ -29,20 +32,21 @@ async function addUser(req, res, next) {
     const refreshToken = generateRefreshToken(savedUser);
 
     // Store refresh token in HTTP-only cookie
+    const refreshTokenExpiry = ms(process.env.JWT_REFRESH_TOKEN_EXPIRY);
+
     res.cookie(process.env.COOKIE_NAME, refreshToken, {
       httpOnly: true,
-      secure: process.env.NODE_ENB === 'production',
-      sameSite: 'strict',
+      secure: process.env.NODE_ENB === "production",
+      sameSite: "strict",
       signed: true,
-      maxAge: process.env.JWT_REFRESH_TOKEN_EXPIRY,
-    })
+      maxAge: refreshTokenExpiry,
+    });
 
     // Send success response with token
     res.status(201).json({
       message: "Registration successful",
-      accessToken,  // Send token to client
+      accessToken, // Send token to client
     });
-
   } catch (err) {
     // Log the error for further investigation
     console.error("Error during user registration:", err);
@@ -54,22 +58,4 @@ async function addUser(req, res, next) {
   }
 }
 
-// remove user
-async function removeUser(req, res, next) {
-  try {
-    const user = await User.findByIdAndDelete({
-      _id: req.params.id,
-    });
-
-    res.status(200).json({
-      message: "user has removed successfully",
-    });
-  } catch {
-    res.status(500).json({ message: "Could not delete the user!" });
-  }
-}
-
-module.exports = {
-  addUser,
-  removeUser,
-};
+export { addUser };

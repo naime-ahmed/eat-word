@@ -1,0 +1,58 @@
+Start MongoDB Shell:
+
+1. Launch the shell using the command: mongosh
+
+2. Show Databases:
+To display all databases: show dbs
+
+3. Switch Database:
+To use or switch to a specific database: use <databaseName>
+
+3. Show Current Database:
+To display the current database in use: db
+
+4. Show Collections:
+To list all collections in the current database: show collections
+
+5. Insert Documents:
+To insert a single document:
+db.collectionName.insertOne({ field: value })
+
+To insert multiple documents:
+db.collectionName.insertMany([{ field1: value1 }, { field2: value2 }])
+
+6. Find Documents:
+To retrieve all documents from a collection:
+db.collectionName.find()
+To find documents with specific criteria:
+db.collectionName.find({ field: value })
+
+7. Update Documents:
+To update a single document:
+db.collectionName.updateOne({ query }, { $set: { field: newValue } })
+
+8. To update multiple documents:
+db.collectionName.updateMany({ query }, { $set: { field: newValue } })
+
+9. Delete Documents:
+To delete a single document:
+db.collectionName.deleteOne({ query })
+
+10. To delete multiple documents:
+db.collectionName.deleteMany({ query })
+
+11. Show Document Count:
+To get the count of documents in a collection:
+db.collectionName.countDocuments()
+
+12. Show Database Stats:
+To get statistics about the current database:
+db.stats()
+
+13. Show Collection Stats:
+To get statistics about a collection:
+db.collectionName.stats()
+
+14. Exit the Shell:
+To leave the MongoDB shell:
+exit
