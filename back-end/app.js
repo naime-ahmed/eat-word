@@ -9,8 +9,7 @@ import {
   errorHandler,
   notFoundHandler,
 } from "./middlewares/common/errorHandler.js";
-import deleteUser from "./router/usersRouter/deleteRouter.js";
-import signUpRouter from "./router/usersRouter/signUpRouter.js";
+import usersRouter from './router/usersRouter.js';
 
 const app = express();
 dotenv.config();
@@ -25,8 +24,8 @@ app.use(express.urlencoded({ extended: true }));
 // parse cookies
 app.use(cookieParser(process.env.COOKIE_SECRET));
 
-app.use("/signUp", signUpRouter);
-app.use("/deleteUser", deleteUser);
+// handler users
+app.use("/users", usersRouter);
 
 app.get("/", (req, res) => {
   res.send({
