@@ -38,7 +38,7 @@ export async function verifyAndRotateRefreshToken(req, res, next) {
   res.cookie(process.env.COOKIE_NAME, newRefreshToken, {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
-    sameSite: "strict",
+    sameSite: "none",
     signed: true,
     maxAge: refreshTokenExpiry,
   });
