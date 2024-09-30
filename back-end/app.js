@@ -9,7 +9,7 @@ import {
   errorHandler,
   notFoundHandler,
 } from "./middlewares/common/errorHandler.js";
-import usersRouter from './router/usersRouter.js';
+import usersRouter from "./router/usersRouter.js";
 
 const app = express();
 dotenv.config();
