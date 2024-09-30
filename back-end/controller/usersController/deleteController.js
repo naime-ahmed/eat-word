@@ -1,10 +1,10 @@
 // internal imports
-import User from "../../models/People.js";
+import Users from "../../models/People.js";
 
 // remove user
 async function removeUser(req, res, next) {
   try {
-    const user = await User.findByIdAndDelete(req.params.id);
+    const user = await Users.findByIdAndDelete(req.params.id);
 
     // Check if user was found and deleted
     if (!user) {
