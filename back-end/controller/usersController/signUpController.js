@@ -3,7 +3,7 @@ import bcrypt from "bcrypt";
 import ms from "ms";
 
 // internal imports
-import User from "../../models/People.js";
+import Users from "../../models/People.js";
 import {
   generateAccessToken,
   generateRefreshToken,
@@ -13,7 +13,7 @@ import {
 async function addUser(req, res, next) {
   try {
     // Check if the email is already registered
-    const existingUser = await User.findOne({ email: req.body.email });
+    const existingUser = await Users.findOne({ email: req.body.email });
     if (existingUser) {
       return res.status(400).json({ message: "Email is already registered" });
     }
@@ -37,7 +37,7 @@ async function addUser(req, res, next) {
     res.cookie(process.env.COOKIE_NAME, refreshToken, {
       httpOnly: true,
       secure: process.env.NODE_ENB === "production",
-      sameSite: "strict",
+      sameSite: "none",
       signed: true,
       maxAge: refreshTokenExpiry,
     });
