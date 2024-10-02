@@ -26,6 +26,7 @@
 }
 .aboutUsContainer > div > div > img {
   max-width: 400px;
+  border-radius: 10px;
 }
 /* CSS for text part */
 .aboutUsContainer > div > div > h1 {
@@ -34,7 +35,7 @@
 }
 
 /* CSS for image part */
-.aboutSWImg,
+.aboutEWImg,
 .aboutMotiveMark,
 .aboutFutureImg {
   text-align: center;
