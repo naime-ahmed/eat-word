@@ -26,7 +26,7 @@ const Footer = () => {
         <div className={style.footerLeft}>
           <div className={style.footerBrand}>
             <h1>Eat Word</h1>
-            <p>Empower Your Language</p>
+            <p>Elevate Your Language</p>
           </div>
           {!isMobile && (
             <div className={style.copyrightText}>
