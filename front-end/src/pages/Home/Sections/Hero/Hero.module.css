@@ -1,6 +1,7 @@
 .container {
   margin-top: 168px;
-  min-height: 100vh;
+  height: 100vh;
+  max-height: 940px;
   width: calc(100vw - 50px);
   overflow: hidden;
 }
