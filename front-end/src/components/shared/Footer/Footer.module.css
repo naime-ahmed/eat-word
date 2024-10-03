@@ -91,9 +91,9 @@
   width: 100%;
   content: "";
   background: linear-gradient(45deg, #1a63ff, #8113ff 50%, #f70aff);
-  filter: blur(15vh);
-  height: 30vh;
-  bottom: -20vh;
+  filter: blur(126px);
+  height: 252px;
+  bottom: -168px;
 }
 
 /* CSS to make the footer responsive for all devices */
