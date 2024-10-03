@@ -1,5 +1,6 @@
 .testimonialsContainer {
   width: 100%;
+  max-width: 1840px;
   height: 600px;
   margin: 100px 0;
   display: flex;
