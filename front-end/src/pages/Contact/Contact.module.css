@@ -106,12 +106,12 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: #00279265;
+  background-color: #000cb82f;
   border-radius: 50%;
 }
 .contactInfo > div > div > i {
   font-size: 22px;
-  color: #085cf8;
+  color: #00076b;
 }
 
 /* CSS for small devices */
