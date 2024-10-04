@@ -135,7 +135,7 @@ const Contact = () => {
             <div>
               <i className="fa-solid fa-paper-plane"></i>
             </div>
-            <p>Email: support@yourwords.com</p>
+            <p>Email: support@eatwords.com</p>
           </div>
         </div>
       </div>
