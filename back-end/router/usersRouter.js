@@ -20,6 +20,6 @@ router.post("/sign-in", signIn);
 router.post("/sign-out", signOut);
 
 // delete user
-router.delete("/delete-me/:id", removeUser);
+router.delete("/delete-me", removeUser);
 
 export default router;
