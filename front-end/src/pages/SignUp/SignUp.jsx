@@ -5,12 +5,18 @@ import {
   setUserNewErrors,
   updateNewUser,
 } from "../../features/userSignUp/userSignUpSlice";
+import { useSignUpUserMutation } from "../../services/users";
 import style from "./SignUp.module.css";
 
 const SignUp = () => {
+  // state of new user
   const { newUser, newUserErrors } = useSelector((state) => state.signUp);
   const dispatch = useDispatch();
 
+  // use the singUp mutation
+  const [singUpUser, { isLoading, isError, error }] = useSignUpUserMutation();
+
+  // handle the form field change
   function handleChange(event) {
     const name = event.target.name;
     let value = event.target.value;
@@ -22,6 +28,7 @@ const SignUp = () => {
     dispatch(updateNewUser({ name, value }));
   }
 
+  // validate the provided data
   function validateFrom() {
     let errors = {};
     if (!newUser.fName) errors.fName = "Full name is required";
@@ -44,13 +51,30 @@ const SignUp = () => {
     return Object.keys(errors).length === 0;
   }
 
-  function handelSubmit(event) {
+  // request sever to create user
+  async function handelSubmit(event) {
     event.preventDefault();
 
     if (validateFrom()) {
-      console.log(newUser);
-      // Reset the form to default values
-      dispatch(resetNewUserForm());
+      try {
+        const formData = {
+          name: newUser.fName,
+          email: newUser.email,
+          password: newUser.password,
+        };
+
+        const result = await singUpUser(formData).unwrap();
+
+        console.log("sign-up successful", result);
+
+        // Reset the form to default values
+        dispatch(resetNewUserForm());
+      } catch (error) {
+        console.error("sing-up failed", error);
+        // handle the error
+      }
+    } else {
+      // handle error
     }
   }
   return (
@@ -153,10 +177,14 @@ const SignUp = () => {
             {newUserErrors.agree && <p>{newUserErrors.agree}</p>}
           </div>
           <div className={style.submitBtn}>
-            <button type="submit">Submit</button>
+            <button type="submit" disabled={isLoading}>
+              {" "}
+              {isLoading ? "submitting..." : "Submit"}
+            </button>
+            {isError && <p>{error.message}</p>}
             <br />
             <p>
-              Have an account? <Link to="/signIn">long in</Link>
+              Have an account? <Link to="/signIn">Sign in</Link>
             </p>
           </div>
         </form>
