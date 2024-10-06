@@ -1,5 +1,6 @@
 // external imports
 import cookieParser from "cookie-parser";
+import cors from "cors";
 import dotenv from "dotenv";
 import express from "express";
 
@@ -9,6 +10,7 @@ import {
   errorHandler,
   notFoundHandler,
 } from "./middlewares/common/errorHandler.js";
+import authRouter from "./router/authRouter.js";
 import usersRouter from "./router/usersRouter.js";
 
 const app = express();
@@ -23,6 +25,17 @@ app.use(express.urlencoded({ extended: true }));
 
 // parse cookies
 app.use(cookieParser(process.env.COOKIE_SECRET));
+
+// Enable CORS for all routes
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+    credentials: true,
+  })
+);
+
+// handle authentication
+app.use("/auth", authRouter);
 
 // handler users
 app.use("/users", usersRouter);
