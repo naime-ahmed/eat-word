@@ -3,7 +3,7 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 // define user signUp, signIn, signOut services
 export const usersApi = createApi({
     reducerPath: 'usersApi',
-    baseQuery: fetchBaseQuery({baseUrl: `${import.meta.env.VITE_EAT_WORD_BASE_URL}/users`}),
+    baseQuery: fetchBaseQuery({baseUrl: `${import.meta.env.VITE_EAT_WORD_BASE_URL}/auth`}),
     tagTypes:['User'],
     endpoints:(builder) => ({
         signUpUser: builder.mutation({
@@ -40,4 +40,4 @@ export const usersApi = createApi({
 });
 
 // hooks for components to signup users
-export const {useSignUpUserMutation, useSingInUserMutation, useSingOutUserMutation} = usersApi;
+export const {useSignUpUserMutation, useSingInUserMutation, useSingOutUserMutation, useDeleteUserMutation} = usersApi;
