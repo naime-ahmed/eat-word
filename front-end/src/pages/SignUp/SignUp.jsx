@@ -1,11 +1,13 @@
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import Swal from "sweetalert2";
 import {
   resetNewUserForm,
   setUserNewErrors,
   updateNewUser,
 } from "../../features/userSignUp/userSignUpSlice";
-import { useSignUpUserMutation } from "../../services/users";
+import { useSignUpUserMutation } from "../../services/auth.js";
+
 import style from "./SignUp.module.css";
 
 const SignUp = () => {
@@ -65,16 +67,27 @@ const SignUp = () => {
 
         const result = await singUpUser(formData).unwrap();
 
-        console.log("sign-up successful", result);
-
         // Reset the form to default values
         dispatch(resetNewUserForm());
+        // save access token into local-storage
+        localStorage.setItem("access-token", result.accessToken);
+
+        // inform the user success result
+        Swal.fire({
+          title: result.data.message,
+          icon: "success",
+          confirmButtonText: "got it",
+        });
       } catch (error) {
         console.error("sing-up failed", error);
-        // handle the error
+        // show the error to user
+        Swal.fire({
+          title: "Unable to create account!",
+          text: error.data?.message || "An unexpected error occurred",
+          icon: "error",
+          confirmButtonText: "ok",
+        });
       }
-    } else {
-      // handle error
     }
   }
   return (
@@ -181,7 +194,7 @@ const SignUp = () => {
               {" "}
               {isLoading ? "submitting..." : "Submit"}
             </button>
-            {isError && <p>{error.message}</p>}
+            {isError && <p style={{ margin: "0 19px" }}>{error.message}</p>}
             <br />
             <p>
               Have an account? <Link to="/signIn">Sign in</Link>
