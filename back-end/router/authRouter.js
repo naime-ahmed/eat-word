@@ -2,6 +2,7 @@
 import express from "express";
 
 // internal imports
+import { refreshTokenController } from "../controller/authController/refreshTokenController.js";
 import { signIn } from "../controller/authController/signInController.js";
 import { signOut } from "../controller/authController/signOutController.js";
 import { addUser } from "../controller/authController/signUpController.js";
@@ -21,5 +22,8 @@ router.post("/sign-out", signOut);
 
 // delete user
 router.delete("/delete-me", removeUser);
+
+// validate refresh token
+router.get("/refresh-token", refreshTokenController);
 
 export default router;
