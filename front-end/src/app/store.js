@@ -1,15 +1,15 @@
 import { configureStore } from "@reduxjs/toolkit";
 import signInReducers from '../features/userSignIn/userSignInSlice';
 import signUpReducers from "../features/userSignUp/userSignUpSlice";
-import { usersApi } from "../services/users";
+import { authApi } from "../services/auth.js";
 
 const store = configureStore({
     reducer: {
         signIn: signInReducers,
         signUp: signUpReducers,
-        [usersApi.reducerPath]: usersApi.reducer,
+        [authApi.reducerPath]: authApi.reducer,
     },
-    middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(usersApi.middleware),
+    middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(authApi.middleware),
     devTools: import.meta.env.NODE_ENV !== 'production',
 })
 
