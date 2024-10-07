@@ -1,23 +1,30 @@
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import Swal from "sweetalert2";
 import PrimaryBtn from "../../components/ui/button/PrimaryBtn/PrimaryBtn";
 import {
   resetForm,
   setUserErrors,
   updateUser,
 } from "../../features/userSignIn/userSignInSlice";
+import { useSignInUserMutation } from "../../services/auth.js";
 import style from "./SignIn.module.css";
 
 const SignIn = () => {
   const { user, userErrors } = useSelector((state) => state.signIn);
   const dispatch = useDispatch();
 
+  // use the sing-in mutation
+  const [signInUser, { isLoading, isError, error }] = useSignInUserMutation();
+
+  // handle the form field change
   function handleChange(event) {
     const name = event.target.name;
     let value = event.target.value;
     dispatch(updateUser({ name, value }));
   }
 
+  // validate the provided data
   function validateFrom() {
     let errors = {};
     if (!user.email || !/\S+@\S+\.\S+/.test(user.email)) {
@@ -34,13 +41,41 @@ const SignIn = () => {
     return Object.keys(errors).length === 0;
   }
 
-  function handelSubmit(event) {
+  // request server to sign-in user
+  async function handelSubmit(event) {
     event.preventDefault();
 
     if (validateFrom()) {
-      console.log(user);
-      // Reset the form to default values
-      dispatch(resetForm());
+      try {
+        const formData = {
+          email: user.email,
+          password: user.password,
+        };
+
+        const result = await signInUser(formData).unwrap();
+        console.log("res", result);
+        // Reset the form to default values
+        dispatch(resetForm());
+
+        // save access token into local-storage
+        localStorage.setItem("access-token", result.accessToken);
+
+        // inform the user
+        Swal.fire({
+          title: result.message,
+          icon: "success",
+          confirmButtonText: "Got it",
+        });
+      } catch (error) {
+        console.error("sing-in failed", error);
+        // show the error to user
+        Swal.fire({
+          title: "Unable to sign in",
+          text: error.data?.message || "An unexpected error occurred",
+          icon: "error",
+          confirmButtonText: "ok",
+        });
+      }
     }
   }
   return (
@@ -106,7 +141,11 @@ const SignIn = () => {
             {userErrors.captcha && <p>{userErrors.captcha}</p>}
           </div>
           <div className={style.submitBtn}>
-            <button type="submit">Submit</button>
+            <button type="submit" disabled={isLoading}>
+              {" "}
+              {isLoading ? "submitting..." : "Submit"}
+            </button>
+            {isError && <p style={{ margin: "0 19px" }}>{error.message}</p>}
             <br />
             <p>
               New here? <Link to="/signUp">Create account</Link>
