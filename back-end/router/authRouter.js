@@ -13,7 +13,7 @@ import { verifyAccessToken } from "../middlewares/validate/verifyAccessToken.js"
 const router = express.Router();
 
 // check is the user is valid or not
-router.get("/", verifyAccessToken, isUserValid);
+router.post("/", verifyAccessToken, isUserValid);
 
 // sing up user
 router.post("/sign-up", addUser);
@@ -28,6 +28,6 @@ router.post("/sign-out", signOut);
 router.delete("/delete-me", removeUser);
 
 // validate refresh token
-router.get("/refresh-token", refreshTokenController);
+router.post("/refresh-token", refreshTokenController);
 
 export default router;
