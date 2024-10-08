@@ -74,7 +74,7 @@ const SignUp = () => {
 
         // inform the user success result
         Swal.fire({
-          title: result.data.message,
+          title: result.message,
           icon: "success",
           confirmButtonText: "got it",
         });
