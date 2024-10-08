@@ -1,5 +1,6 @@
 ## Fonts list
 1. Noto Sans
+2. Inter regular
 
 ## Example webpages list
 1. https://langeek.co/
@@ -13,6 +14,7 @@
 4. https://uiverse.io/
 5. https://www.landingfolio.com/
 6. https://joincobalt.com/?ref=landingfolio
+7. https://eldoraui.site/
 
 # email sender
 1. https://react.email/docs/integrations/resend
