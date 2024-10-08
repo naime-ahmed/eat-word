@@ -1,17 +1,20 @@
 import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import PrimaryBtn from "../../components/ui/button/PrimaryBtn/PrimaryBtn";
+import { setUser } from "../../features/auth/authSlice.js";
 import {
   resetForm,
   setUserErrors,
   updateUser,
 } from "../../features/userSignIn/userSignInSlice";
 import { useSignInUserMutation } from "../../services/auth.js";
+import { parseJwt } from "../../utils/parseJWT.js";
 import style from "./SignIn.module.css";
 
 const SignIn = () => {
   const { user, userErrors } = useSelector((state) => state.signIn);
+  const navigate = useNavigate();
   const dispatch = useDispatch();
 
   // use the sing-in mutation
@@ -66,6 +69,8 @@ const SignIn = () => {
           icon: "success",
           confirmButtonText: "Got it",
         });
+        dispatch(setUser(parseJwt(result.accessToken)));
+        navigate("/");
       } catch (error) {
         console.error("sing-in failed", error);
         // show the error to user
