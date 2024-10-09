@@ -4,13 +4,14 @@ import ms from "ms";
 // Internal imports
 import User from "../../models/People.js";
 import {
+  generateAccessToken,
   generateRefreshToken,
   verifyRefreshToken,
 } from "../../utils/tokenUtils.js";
 
 export async function refreshTokenController(req, res) {
-  const refreshToken = req.cookies[process.env.COOKIE_NAME];
-
+  // console.log(req.signedCookies[process.env.COOKIE_NAME]);
+  const refreshToken = req.signedCookies[process.env.COOKIE_NAME];
   if (!refreshToken) {
     return res.status(401).json({ message: "No refresh token provided" });
   }
@@ -34,14 +35,15 @@ export async function refreshTokenController(req, res) {
 
   res.cookie(process.env.COOKIE_NAME, newRefreshToken, {
     httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: "none",
     signed: true,
     maxAge: refreshTokenExpiry,
   });
 
   // Return new access token to frontend
   res.status(200).json({
+    id: user._id,
+    email: user.email,
+    role: user.role,
     accessToken: newAccessToken,
   });
 }
