@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import {
   resetNewUserForm,
@@ -8,11 +8,14 @@ import {
 } from "../../features/userSignUp/userSignUpSlice";
 import { useSignUpUserMutation } from "../../services/auth.js";
 
+import { setUser } from "../../features/auth/authSlice.js";
+import { parseJwt } from "../../utils/parseJWT.js";
 import style from "./SignUp.module.css";
 
 const SignUp = () => {
   // state of new user
   const { newUser, newUserErrors } = useSelector((state) => state.signUp);
+  const navigate = useNavigate();
   const dispatch = useDispatch();
 
   // use the singUp mutation
@@ -71,6 +74,10 @@ const SignUp = () => {
         dispatch(resetNewUserForm());
         // save access token into local-storage
         localStorage.setItem("access-token", result.accessToken);
+
+        // update isAuth state
+        dispatch(setUser(parseJwt(result.accessToken)));
+        navigate("/");
 
         // inform the user success result
         Swal.fire({
