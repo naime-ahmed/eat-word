@@ -10,6 +10,7 @@ export const authApi = createApi({
             query: (userData) => ({
                 url: '/sign-up',
                 method: 'POST',
+                credentials: "include",
                 body: userData,
             }),
             invalidatesTags: ['User']
@@ -18,6 +19,7 @@ export const authApi = createApi({
             query: (signInData) =>({
                 url: '/sign-in',
                 method: 'POST',
+                credentials: "include",
                 body: signInData
             }),
             providesTags: ['User'],
@@ -25,6 +27,7 @@ export const authApi = createApi({
         signOutUser: builder.mutation({
             query: () =>({
                 url: '/sign-out',
+                credentials: "include",
                 method: 'POST',
             }),
             invalidatesTags: ['User']
@@ -32,6 +35,7 @@ export const authApi = createApi({
         deleteUser: builder.mutation({
             query: () => ({
                 url:'/delete-me',
+                credentials: "include",
                 method: 'DELETE',
             }),
             invalidatesTags: ['User']
