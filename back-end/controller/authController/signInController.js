@@ -37,8 +37,6 @@ async function signIn(req, res, next) {
     // Store refresh token in HTTP-only cookie
     res.cookie(process.env.COOKIE_NAME, refreshToken, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "none",
       signed: true,
       maxAge: refreshTokenExpiry,
     });
