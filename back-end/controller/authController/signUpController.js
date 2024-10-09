@@ -36,8 +36,6 @@ async function addUser(req, res, next) {
 
     res.cookie(process.env.COOKIE_NAME, refreshToken, {
       httpOnly: true,
-      secure: process.env.NODE_ENB === "production",
-      sameSite: "none",
       signed: true,
       maxAge: refreshTokenExpiry,
     });
