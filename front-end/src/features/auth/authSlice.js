@@ -25,6 +25,7 @@ export const checkAuthentication = (token) => async (dispatch) => {
     try {
         const response = await fetch(`${import.meta.env.VITE_EAT_WORD_BASE_URL}/auth`, {
             method: "POST",
+            credentials: "include",
             headers: {
                 authorization: `Bearer ${token}`,
             }
@@ -41,13 +42,19 @@ export const checkAuthentication = (token) => async (dispatch) => {
                 // Call the refresh token endpoint if access token expired
                 const refreshResponse = await fetch(`${import.meta.env.VITE_EAT_WORD_BASE_URL}/auth/refresh-token`, {
                     method: "POST",
-                    credentials: "include"
+                     // necessary to include cookies in cross-origin requests
+                    credentials: "include",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
                 });
 
                 if (refreshResponse.ok) {
                     const refreshedData = await refreshResponse.json();
-                    localStorage.setItem("access-token", refreshedData.accessToken); // Store new access token
-                    dispatch(setUser(refreshedData)); // Update user in Redux
+                    const { accessToken, ...dataWithoutToken } = refreshedData;
+                    localStorage.setItem("access-token", accessToken);
+
+                    dispatch(setUser(dataWithoutToken)); // Update user in Redux
                 } else {
                     dispatch(signOutUser()); // If refresh token fails, log out
                     const err = await refreshResponse.json();
