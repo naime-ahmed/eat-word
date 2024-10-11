@@ -5,23 +5,30 @@ const authSlice = createSlice({
     initialState: {
         isAuthenticated: false,
         user: null,
+        isLoading: false,
     },
     reducers: {
         setUser: (state, action) => {
             state.isAuthenticated = true,
             state.user = action.payload;
+            state.isLoading = false
         },
         signOutUser: (state) => {
             state.isAuthenticated = false,
             state.user = null;
+            state.isLoading = false
+        },
+        setLoading: (state, action) => {
+            state.isLoading = action.payload;
         }
     }
 })
 
-export const {setUser, signOutUser} = authSlice.actions;
+export const {setUser, signOutUser, setLoading} = authSlice.actions;
 
 // check if user is authenticated or not
 export const checkAuthentication = (token) => async (dispatch) => {
+    dispatch(setLoading(true))
     try {
         const response = await fetch(`${import.meta.env.VITE_EAT_WORD_BASE_URL}/auth`, {
             method: "POST",
