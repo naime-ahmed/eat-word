@@ -70,7 +70,7 @@ const SignIn = () => {
           confirmButtonText: "Got it",
         });
         dispatch(setUser(parseJwt(result.accessToken)));
-        navigate("/");
+        navigate("/mySpace");
       } catch (error) {
         console.error("sing-in failed", error);
         // show the error to user
