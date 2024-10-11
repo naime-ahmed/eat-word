@@ -1,13 +1,24 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import defaultUserProfile from "../../../assets/defaultUserProfileImage.png";
 import logo from "../../../assets/logo.png";
+import UserProfile from "../../popups/UserProfile/UserProfile";
 import PrimaryBtn from "../../ui/button/PrimaryBtn/PrimaryBtn";
+import Skeleton from "../../ui/loader/Skeleton/Skeleton";
 import styles from "./Header.module.css";
 
 const Header = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isSticky, setIsSticky] = useState(false);
+  const [isProfileShown, setIsProfileShown] = useState(false);
+  const profileRef = useRef(null);
+  const profilePicBtnRef = useRef(null);
 
+  const { isAuthenticated, user, isLoading } = useSelector(
+    (state) => state.auth
+  );
+  console.log(isAuthenticated, user);
   const handleSidebarToggle = () => {
     setIsSidebarOpen(!isSidebarOpen);
   };
@@ -19,6 +30,26 @@ const Header = () => {
       setIsSticky(false);
     }
   };
+
+  // Detect clicks outside the profile card to close it
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (
+        profileRef.current &&
+        !profileRef.current.contains(event.target) &&
+        profilePicBtnRef.current &&
+        !profilePicBtnRef.current.contains(event.target) &&
+        isProfileShown
+      ) {
+        setIsProfileShown(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isProfileShown]);
 
   useEffect(() => {
     window.addEventListener("scroll", handleScroll);
@@ -60,31 +91,68 @@ const Header = () => {
 
           <ul className={styles.navLinks}>
             <li>
-              <Link to="/" onClick={handleSidebarToggle}>
-                Home
-              </Link>
-            </li>
-            <li>
-              <Link to="/myspace" onClick={handleSidebarToggle}>
-                My Space
-              </Link>
-            </li>
-            <li>
-              <Link to="/magic" onClick={handleSidebarToggle}>
-                Magic Tools
-              </Link>
-            </li>
-            <li>
-              <Link to="/about" onClick={handleSidebarToggle}>
-                About
-              </Link>
-            </li>
-            <li>
-              <PrimaryBtn handleClick={handleSidebarToggle}>
-                <Link to="/signIn">
-                  Sing In <i className="fa-solid fa-arrow-right-to-bracket"></i>
+              {isLoading ? (
+                <Skeleton width={"80px"} height={"20px"} />
+              ) : (
+                <Link to="/" onClick={handleSidebarToggle}>
+                  Home
                 </Link>
-              </PrimaryBtn>
+              )}
+            </li>
+            {isAuthenticated && (
+              <li>
+                <Link to="/myspace" onClick={handleSidebarToggle}>
+                  My Space
+                </Link>
+              </li>
+            )}
+            <li>
+              {isLoading ? (
+                <Skeleton width={"80px"} height={"20px"} />
+              ) : (
+                <Link to="/price" onClick={handleSidebarToggle}>
+                  Pricing
+                </Link>
+              )}
+            </li>
+            <li>
+              {isLoading ? (
+                <Skeleton width={"80px"} height={"20px"} />
+              ) : (
+                <Link to="/about" onClick={handleSidebarToggle}>
+                  About
+                </Link>
+              )}
+            </li>
+            <li>
+              {isLoading ? (
+                <Skeleton width={"80px"} height={"20px"} />
+              ) : isAuthenticated ? (
+                <>
+                  <button
+                    ref={profilePicBtnRef}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setIsProfileShown((prev) => !prev);
+                    }}
+                    className={styles.profile}
+                  >
+                    <img src={defaultUserProfile} alt="user profile picture" />
+                  </button>
+                  {isProfileShown && (
+                    <div ref={profileRef}>
+                      <UserProfile onClose={() => setIsProfileShown(false)} />
+                    </div>
+                  )}
+                </>
+              ) : (
+                <PrimaryBtn handleClick={handleSidebarToggle}>
+                  <Link to="/signIn">
+                    Sign In{" "}
+                    <i className="fa-solid fa-arrow-right-to-bracket"></i>
+                  </Link>
+                </PrimaryBtn>
+              )}
             </li>
           </ul>
         </div>
