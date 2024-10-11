@@ -4,11 +4,14 @@ import { Provider } from "react-redux";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import App from "./App";
 import store from "./app/store";
+import ProtectedRoute from "./components/ProtectedRoute/ProtectedRoute";
 import "./index.css";
 import About from "./pages/About/About";
 import Contact from "./pages/Contact/Contact";
 import Home from "./pages/Home/Home";
+import MySpace from "./pages/MySpace/MySpace";
 import NotFound from "./pages/NotFound/NotFound";
+import Pricing from "./pages/Pricing/Pricing";
 import PrivacyPolicy from "./pages/PrivacyPolicy/PrivacyPolicy";
 import SignIn from "./pages/SignIn/SignIn";
 import SignUp from "./pages/SignUp/SignUp";
@@ -23,6 +26,18 @@ const router = createBrowserRouter([
       {
         path: "/",
         element: <Home />,
+      },
+      {
+        path: "/mySpace",
+        element: (
+          <ProtectedRoute>
+            <MySpace />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "/price",
+        element: <Pricing />,
       },
       {
         path: "/signUp",
