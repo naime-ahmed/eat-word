@@ -77,7 +77,7 @@ const SignUp = () => {
 
         // update isAuth state
         dispatch(setUser(parseJwt(result.accessToken)));
-        navigate("/");
+        navigate("/mySpace");
 
         // inform the user success result
         Swal.fire({
