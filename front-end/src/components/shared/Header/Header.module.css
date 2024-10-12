@@ -52,12 +52,12 @@
   align-items: center;
 }
 
-.navLinks li {
+.navLinks > li {
   margin: 0 5px;
   list-style: none;
 }
 
-.navLinks li:not(:last-child) a {
+.navLinks > li:not(:last-child) a {
   position: relative;
   font-size: 18px;
   font-weight: 500;
@@ -66,7 +66,7 @@
   padding: 6px 12px;
 }
 
-.navLinks li:not(:last-child) a::before {
+.navLinks > li:not(:last-child) a::before {
   content: "";
   position: absolute;
   left: 50%;
@@ -80,7 +80,7 @@
   transition: all 0.4s ease;
 }
 
-.navLinks li:not(:last-child):hover a::before {
+.navLinks > li:not(:last-child):hover a::before {
   opacity: 1;
   width: 45px;
 }
@@ -157,11 +157,11 @@
     padding-top: 30px;
   }
 
-  .navLinks li:not(:last-child) a {
+  .navLinks > li:not(:last-child) a {
     display: block;
     margin-top: 20px;
   }
-  .navLinks li:last-child {
+  .navLinks > li:last-child {
     margin-top: 20px;
   }
 }
