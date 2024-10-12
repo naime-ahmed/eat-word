@@ -1,6 +1,11 @@
 import styles from "./FancyBtn.module.css";
 
-const FancyBtn = ({ children, clickHandler, btnWidth, btnHeight }) => {
+const FancyBtn = ({
+  children,
+  clickHandler = () => {},
+  btnWidth,
+  btnHeight,
+}) => {
   return (
     <button
       onClick={clickHandler}
