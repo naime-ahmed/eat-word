@@ -77,7 +77,7 @@ const SignUp = () => {
 
         // update isAuth state
         dispatch(setUser(parseJwt(result.accessToken)));
-        navigate("/mySpace");
+        navigate("/my-space");
 
         // inform the user success result
         Swal.fire({
@@ -204,7 +204,7 @@ const SignUp = () => {
             {isError && <p style={{ margin: "0 19px" }}>{error.message}</p>}
             <br />
             <p>
-              Have an account? <Link to="/signIn">Sign in</Link>
+              Have an account? <Link to="/sign-in">Sign in</Link>
             </p>
           </div>
         </form>
