@@ -28,7 +28,7 @@ const router = createBrowserRouter([
         element: <Home />,
       },
       {
-        path: "/mySpace",
+        path: "/my-space",
         element: (
           <ProtectedRoute>
             <MySpace />
@@ -40,11 +40,11 @@ const router = createBrowserRouter([
         element: <Pricing />,
       },
       {
-        path: "/signUp",
+        path: "/sign-up",
         element: <SignUp />,
       },
       {
-        path: "/signIn",
+        path: "/sign-in",
         element: <SignIn />,
       },
       {
