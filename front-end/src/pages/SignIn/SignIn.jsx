@@ -70,7 +70,7 @@ const SignIn = () => {
           confirmButtonText: "Got it",
         });
         dispatch(setUser(parseJwt(result.accessToken)));
-        navigate("/mySpace");
+        navigate("/my-space");
       } catch (error) {
         console.error("sing-in failed", error);
         // show the error to user
@@ -94,7 +94,7 @@ const SignIn = () => {
         </PrimaryBtn>
       </div>
       <div className={style.formContainer}>
-        <h2>Welcome Back</h2>
+        <h2>Sign In</h2>
         <form onSubmit={handelSubmit}>
           <div>
             <input
@@ -153,7 +153,7 @@ const SignIn = () => {
             {isError && <p style={{ margin: "0 19px" }}>{error.message}</p>}
             <br />
             <p>
-              New here? <Link to="/signUp">Create account</Link>
+              New here? <Link to="/sign-up">Create account</Link>
             </p>
           </div>
         </form>
