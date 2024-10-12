@@ -1,0 +1,75 @@
+.pricingPage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: #020817;
+}
+
+/* style for card section */
+.pricingSection {
+  min-height: 80vh;
+  margin-top: 70px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  column-gap: 32px;
+}
+.pricingSection > div {
+  min-width: 300px;
+  min-height: 350px;
+  border-radius: 12px;
+  background-color: rgb(215, 239, 250);
+}
+
+.free,
+.premium {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  row-gap: 12px;
+  padding: 22px;
+}
+.freePriceCardTitle h3,
+.PaidPriceCardTitle h3 {
+  font-size: 1.6rem;
+}
+
+.freePriceCardAmount > span,
+.paidPriceCardAmount > span {
+  font-size: 3rem;
+  font-weight: 700;
+}
+.freePriceCardAmount > small,
+.paidPriceCardAmount > small {
+  font-size: 18px;
+  opacity: 0.7;
+}
+.freePriceCardFeatures > ul > li,
+.paidPriceCardFeatures > ul > li {
+  list-style: none;
+  margin: 10px 0;
+}
+.freePriceCardFeatures > ul > li > i,
+.paidPriceCardFeatures > ul > li > i {
+  margin-right: 8px;
+  padding: 4px;
+}
+.freePriceCardFeatures > ul > li:nth-child(-n + 3) i {
+  color: rgb(0, 177, 0);
+  background-color: rgba(0, 211, 0, 0.13);
+  border-radius: 50%;
+}
+
+.paidPriceCardFeatures > ul > li > i {
+  color: rgb(0, 177, 0);
+  background-color: rgba(0, 211, 0, 0.13);
+  border-radius: 50%;
+}
+
+.freePriceCardFeatures > ul > li:nth-child(n + 4) i {
+  padding: 4px 5px;
+  color: red;
+  background-color: rgba(255, 0, 0, 0.13);
+  border-radius: 50%;
+}
