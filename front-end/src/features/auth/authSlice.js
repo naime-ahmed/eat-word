@@ -13,7 +13,7 @@ const authSlice = createSlice({
             state.user = action.payload;
             state.isLoading = false
         },
-        signOutUser: (state) => {
+        setSignOutUser: (state) => {
             state.isAuthenticated = false,
             state.user = null;
             state.isLoading = false
@@ -24,7 +24,7 @@ const authSlice = createSlice({
     }
 })
 
-export const {setUser, signOutUser, setLoading} = authSlice.actions;
+export const {setUser, setSignOutUser, setLoading} = authSlice.actions;
 
 // check if user is authenticated or not
 export const checkAuthentication = (token) => async (dispatch) => {
@@ -63,18 +63,18 @@ export const checkAuthentication = (token) => async (dispatch) => {
 
                     dispatch(setUser(dataWithoutToken)); // Update user in Redux
                 } else {
-                    dispatch(signOutUser()); // If refresh token fails, log out
+                    dispatch(setSignOutUser()); // If refresh token fails, log out
                     const err = await refreshResponse.json();
                     console.log(err.message);
                 }
             } else {
-                dispatch(signOutUser()); // Other error cases, log out
+                dispatch(setSignOutUser()); // Other error cases, log out
                 console.log("token invalid error");
             }
         }
     } catch (error) {
         console.error("Token verification failed", error);
-        dispatch(signOutUser()); // Log out on any error
+        dispatch(setSignOutUser()); // Log out on any error
     }
 };
 
