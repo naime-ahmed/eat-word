@@ -101,7 +101,7 @@ const Header = () => {
             </li>
             {isAuthenticated && (
               <li>
-                <Link to="/myspace" onClick={handleSidebarToggle}>
+                <Link to="/my-space" onClick={handleSidebarToggle}>
                   My Space
                 </Link>
               </li>
@@ -147,7 +147,7 @@ const Header = () => {
                 </>
               ) : (
                 <PrimaryBtn handleClick={handleSidebarToggle}>
-                  <Link to="/signIn">
+                  <Link to="/sign-in">
                     Sign In{" "}
                     <i className="fa-solid fa-arrow-right-to-bracket"></i>
                   </Link>
