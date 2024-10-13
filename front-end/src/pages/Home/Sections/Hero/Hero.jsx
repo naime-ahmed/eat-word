@@ -1,8 +1,15 @@
+import { useSelector } from "react-redux";
+import { Link } from "react-router-dom";
 import Sparkles from "../../../../components/Sparkles/Sparkles";
-import StartBtn from "../../../../components/ui/button/StartBtn/StartBtn";
+import CTABtn from "../../../../components/ui/button/CTABtn/CTABtn";
+import Skeleton from "../../../../components/ui/loader/Skeleton/Skeleton";
 import styles from "./Hero.module.css";
 
 function Hero() {
+  const { isAuthenticated, user, isLoading } = useSelector(
+    (state) => state.auth
+  );
+
   return (
     <div className={styles.container}>
       <div className={styles.header}>
@@ -11,7 +18,15 @@ function Hero() {
         </div>
         <h1 className={styles.title}>Eat Word, Elevate Your Language</h1>
         <div className={styles.ctaBtn}>
-          <StartBtn>Start, It&#39;s free</StartBtn>
+          {isLoading ? (
+            <Skeleton width="180px" height="45px" />
+          ) : (
+            <CTABtn>
+              <Link to={isAuthenticated ? "/my-space" : "sign-up"}>
+                {isAuthenticated ? "My Space" : "Start, It's free"}
+              </Link>
+            </CTABtn>
+          )}
         </div>
       </div>
       <div className={styles.sparkleContainer}>
