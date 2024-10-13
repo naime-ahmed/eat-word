@@ -1,6 +1,8 @@
+import crown from "../../assets/crown.png";
 import Footer from "../../components/shared/Footer/Footer";
 import Header from "../../components/shared/Header/Header";
 import FancyBtn from "../../components/ui/button/FancyBtn/FancyBtn";
+
 import styles from "./Pricing.module.css";
 
 const Pricing = () => {
@@ -46,6 +48,7 @@ const Pricing = () => {
               Stay Pleb
             </FancyBtn>
           </div>
+          <div className={styles.radialGradFree}></div>
         </div>
         <div className={styles.premium}>
           <div className={styles.PaidPriceCardTitle}>
@@ -86,6 +89,10 @@ const Pricing = () => {
               Become Elite
             </FancyBtn>
           </div>
+          <div className={styles.crownImg}>
+            <img src={crown} alt="crown image" />
+          </div>
+          <div className={styles.radialGradPaid}></div>
         </div>
       </div>
       <Footer />
