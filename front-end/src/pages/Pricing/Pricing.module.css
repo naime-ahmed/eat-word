@@ -4,37 +4,49 @@
   align-items: center;
   justify-content: center;
   background-color: #020817;
+  overflow: hidden;
 }
 
 /* style for card section */
 .pricingSection {
   min-height: 80vh;
-  margin-top: 70px;
+  margin-top: 80px;
   display: flex;
   justify-content: center;
   align-items: center;
   column-gap: 32px;
 }
-.pricingSection > div {
-  min-width: 300px;
-  min-height: 350px;
-  border-radius: 12px;
-  background-color: rgb(215, 239, 250);
-}
-
 .free,
 .premium {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  row-gap: 12px;
   padding: 22px;
+  min-width: 300px;
+  min-height: 350px;
+  backdrop-filter: blur(6px) saturate(130%);
+  -webkit-backdrop-filter: blur(6px) saturate(130%);
+  background-color: rgba(17, 25, 40, 0.41);
+  color: #fff;
+  position: relative;
 }
+.premium {
+  border: 2px solid #cb57ff;
+  border-radius: 12px 24px 12px 12px;
+}
+.free {
+  border-radius: 12px;
+  border: 2px solid rgba(255, 255, 255, 0.125);
+}
+
 .freePriceCardTitle h3,
 .PaidPriceCardTitle h3 {
   font-size: 1.6rem;
 }
-
+.freePriceCardAmount,
+.paidPriceCardAmount {
+  margin: 8px 0;
+}
 .freePriceCardAmount > span,
 .paidPriceCardAmount > span {
   font-size: 3rem;
@@ -44,6 +56,10 @@
 .paidPriceCardAmount > small {
   font-size: 18px;
   opacity: 0.7;
+}
+.freePriceCardFeatures,
+.paidPriceCardFeatures {
+  margin: 12px 0;
 }
 .freePriceCardFeatures > ul > li,
 .paidPriceCardFeatures > ul > li {
@@ -72,4 +88,42 @@
   color: red;
   background-color: rgba(255, 0, 0, 0.13);
   border-radius: 50%;
+}
+
+.crownImg {
+  position: absolute;
+  top: -45px;
+  right: -43px;
+  transform: rotate(45deg);
+}
+.crownImg img {
+  width: 80px;
+}
+
+/* radial gradient bg styles */
+.radialGradPaid {
+  z-index: -100;
+  width: 800px;
+  height: 600px;
+  position: absolute;
+  top: -300px;
+  left: -90px;
+  background: rgb(100, 15, 144);
+  background: radial-gradient(
+    ellipse 80% 40% at center,
+    rgba(100, 15, 144, 0.32) 0%,
+    rgba(100, 15, 144, 0.26) 9%,
+    rgba(0, 212, 255, 0) 66%
+  );
+  transform: rotate(-45deg);
+}
+
+/* Styles for smaller devices */
+@media (max-width: 699.99px) {
+  .pricingSection {
+    flex-direction: column;
+    column-gap: 0;
+    row-gap: 54px;
+    margin: 120px 0;
+  }
 }
