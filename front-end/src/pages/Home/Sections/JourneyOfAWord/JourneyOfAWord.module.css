@@ -330,11 +330,7 @@
     height: 102px;
   }
 }
-@media (max-height: 850px) {
-  .JourneyOfAWordContainer {
-    margin-top: 180px;
-  }
-}
+
 @media (min-width: 768px) and (max-width: 999.98px) {
   /* CSS rules for medium devices */
   .JourneyOfAWordContainer {
