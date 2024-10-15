@@ -84,15 +84,12 @@ const UserProfile = ({ onClose }) => {
       <div className={styles.userProfileTabs}>
         <ul>
           <li onClick={onClose}>
-            <Link to="/mySpace"> My Space</Link>
-          </li>
-          <li onClick={onClose}>
-            <Link to="/leader-board">Leader board</Link>
+            <Link to="/my-space"> My Space</Link>
           </li>
           <li onClick={onClose}>
             <i className="fas fa-sign-out-alt"></i>{" "}
             <span onClick={handleSignOut}>
-              {isLoading ? "sign outing..." : "sign out0"}
+              {isLoading ? "sign outing..." : "sign out"}
             </span>
           </li>
         </ul>
