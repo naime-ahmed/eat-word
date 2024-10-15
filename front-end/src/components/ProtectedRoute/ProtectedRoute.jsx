@@ -2,10 +2,17 @@ import { useSelector } from "react-redux";
 import { Navigate } from "react-router-dom";
 
 const ProtectedRoute = ({ children }) => {
-  const { isAuthenticated } = useSelector((state) => state.auth);
+  const { isAuthenticated, isLoading } = useSelector((state) => state.auth);
 
-  if (!isAuthenticated) {
-    return <Navigate to="/signIn" replace />;
+  if (isLoading) {
+    console.log("loading...");
+    return <div>Loading...</div>;
+  }
+
+  // If user is not authenticated after loading is done, redirect to sign-in
+  console.log("inside protected", isAuthenticated, isLoading);
+  if (!isAuthenticated && !isLoading) {
+    return <Navigate to="/sign-in" replace />;
   }
 
   return children;
