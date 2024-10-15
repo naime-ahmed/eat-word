@@ -5,7 +5,7 @@ const authSlice = createSlice({
     initialState: {
         isAuthenticated: false,
         user: null,
-        isLoading: false,
+        isLoading: true,
     },
     reducers: {
         setUser: (state, action) => {
@@ -28,7 +28,7 @@ export const {setUser, setSignOutUser, setLoading} = authSlice.actions;
 
 // check if user is authenticated or not
 export const checkAuthentication = (token) => async (dispatch) => {
-    dispatch(setLoading(true))
+    dispatch(setLoading(true));
     try {
         const response = await fetch(`${import.meta.env.VITE_EAT_WORD_BASE_URL}/auth`, {
             method: "POST",
@@ -37,16 +37,15 @@ export const checkAuthentication = (token) => async (dispatch) => {
                 authorization: `Bearer ${token}`,
             }
         });
-
+        console.log("inside checks");
         if (response.ok) {
             const user = await response.json();
-            dispatch(setUser(user)); // Successful, set the user in state
+            dispatch(setUser(user)); // set the user in state
         } else {
             const errorData = await response.json();
 
             if (errorData.message === "Access token expired") {
-                console.log("inside refresh");
-                // Call the refresh token endpoint if access token expired
+                //  Handle refresh token
                 const refreshResponse = await fetch(`${import.meta.env.VITE_EAT_WORD_BASE_URL}/auth/refresh-token`, {
                     method: "POST",
                      // necessary to include cookies in cross-origin requests
@@ -61,20 +60,23 @@ export const checkAuthentication = (token) => async (dispatch) => {
                     const { accessToken, ...dataWithoutToken } = refreshedData;
                     localStorage.setItem("access-token", accessToken);
 
-                    dispatch(setUser(dataWithoutToken)); // Update user in Redux
+                    dispatch(setUser(dataWithoutToken)); // Set the user after refresh
                 } else {
-                    dispatch(setSignOutUser()); // If refresh token fails, log out
+                    dispatch(setSignOutUser()); // / Log out if refresh fails
                     const err = await refreshResponse.json();
                     console.log(err.message);
                 }
             } else {
-                dispatch(setSignOutUser()); // Other error cases, log out
+                dispatch(setSignOutUser()); // Log out if access token is invalid
                 console.log("token invalid error");
             }
         }
     } catch (error) {
         console.error("Token verification failed", error);
         dispatch(setSignOutUser()); // Log out on any error
+    }finally{
+        // Set loading to false after everything is done
+        dispatch(setLoading(false));
     }
 };
 
