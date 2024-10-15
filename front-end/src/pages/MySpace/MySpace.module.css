@@ -1,0 +1,74 @@
+/* my space page style */
+.myspacePage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: #020817;
+}
+
+/* my space container style */
+.myspaceContainer {
+  max-width: 1250px;
+  min-height: calc(100vh - 250px);
+  margin-top: 80px;
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  row-gap: 50px;
+}
+
+/* Style for my space heading */
+.mySpaceHeading {
+  width: 100%;
+  min-width: 300px;
+  min-height: 150px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* style for my space content */
+.mySpaceContent {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+  gap: 15px;
+}
+
+.mySpaceContent > div {
+  flex: 0 1 calc(25% - 15px);
+  box-sizing: border-box;
+  padding: 10px;
+  color: #fff;
+  background-color: cadetblue;
+}
+
+.week {
+  display: flex;
+  column-gap: 10px;
+}
+/* Media query for smaller screens */
+@media screen and (max-width: 1200px) {
+  .mySpaceContent > div {
+    flex: 0 1 calc(25% - 15px); /* 25% width for 4 items per row on smaller screens */
+  }
+}
+
+@media screen and (max-width: 900px) {
+  .mySpaceContent > div {
+    flex: 0 1 calc(33.333% - 14px); /* 33.333% width for 3 items per row on even smaller screens */
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .mySpaceContent > div {
+    flex: 0 1 calc(50% - 10px); /* 50% width for 2 items per row on mobile screens */
+  }
+}
+
+@media screen and (max-width: 400px) {
+  .mySpaceContent > div {
+    flex: 0 1 100%; /* Full width for 1 item per row on very small screens */
+  }
+}
