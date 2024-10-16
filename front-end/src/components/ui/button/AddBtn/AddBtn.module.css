@@ -2,8 +2,8 @@
 .iconBtn {
   width: 80px;
   height: 80px;
-  border: 1px solid #cdcdcd;
-  background: white;
+  border: 2px solid #a7a5ff54;
+  background: rgb(2, 2, 34);
   border-radius: 40px;
   overflow: hidden;
   position: relative;
@@ -23,7 +23,7 @@
   height: 6px;
   width: 16px;
   top: calc(50% - 3px);
-  background: seagreen;
+  background: rgb(52, 61, 196);
 }
 .addBtn::after {
   right: 22px;
@@ -40,6 +40,7 @@
   outline: none;
 }
 .btnTxt {
+  color: #fff;
   opacity: 0;
   visibility: hidden;
   transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
@@ -61,20 +62,18 @@
   content: "";
   position: absolute;
   height: 32px;
-  width: 3px;
+  width: 5px;
   top: calc(50% - 16px);
-  background: seagreen;
+  background: rgb(52, 61, 196);
   overflow: hidden;
 }
 .addIcon::before {
   left: 36px;
-  border-top-left-radius: 3px;
-  border-bottom-left-radius: 3px;
+  border-radius: 5px;
 }
 .addIcon::after {
   right: 36px;
-  border-top-right-radius: 3px;
-  border-bottom-right-radius: 3px;
+  border-radius: 5px;
 }
 .addBtn:hover .addIcon::before {
   left: 24px;
