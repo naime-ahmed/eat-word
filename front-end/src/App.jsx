@@ -7,9 +7,6 @@ function App() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    // Set loading to true initially
-    dispatch(setLoading(true));
-
     // get the token from local storage
     const token = localStorage.getItem("access-token");
 
