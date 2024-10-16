@@ -39,15 +39,65 @@
 .mySpaceContent > div {
   flex: 0 1 calc(25% - 15px);
   box-sizing: border-box;
-  padding: 10px;
+  padding: 2px;
   color: #fff;
-  background-color: cadetblue;
+  border: 1px solid rgb(38, 37, 75);
+  transition: border 0.2s ease-in;
 }
 
-.week {
-  display: flex;
-  column-gap: 10px;
+/* card style */
+.weekCard {
+  background-color: rgb(2, 2, 34);
+  border-radius: 0.75rem;
+  padding: 0.125rem;
+  transition: all 1s;
+  cursor: pointer;
 }
+.weekCard:hover {
+  border: 1px solid rgb(71, 68, 141);
+}
+.weekMainContent {
+  border-radius: 0.625rem 0.625rem 0 0;
+  padding: 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.weekNum p {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #e3e8ff;
+}
+
+.wordVerdict {
+  display: flex;
+  gap: 1rem;
+}
+
+.wordVerdict p {
+  font-size: 1rem;
+  font-weight: 700;
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+}
+
+.wordVerdict p:first-child {
+  background-color: #09ac5838;
+  color: #02c70c;
+}
+
+.wordVerdict p:last-child {
+  background-color: #ca01012c;
+  color: #d10404;
+}
+
+.weekCardLastEdit {
+  color: #a9c6ffb4;
+  font-size: 0.75rem;
+  padding: 0.5rem 1.5rem;
+}
+
 /* Media query for smaller screens */
 @media screen and (max-width: 1200px) {
   .mySpaceContent > div {
