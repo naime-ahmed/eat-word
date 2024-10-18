@@ -1,18 +1,26 @@
-import { TakeWeekRequirements } from "../../components/popups/TakeWeekRequirements/TakeWeekRequirements";
+import { useState } from "react";
+
+import TakeWeekRequirements from "../../components/popups/TakeWeekRequirements/TakeWeekRequirements";
 import Footer from "../../components/shared/Footer/Footer";
 import Header from "../../components/shared/Header/Header";
 import AddBtn from "../../components/ui/button/AddBtn/AddBtn";
 import styles from "./MySpace.module.css";
 
 const MySpace = () => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const openModal = () => setIsModalOpen(true);
+  const closeModal = () => setIsModalOpen(false);
+
   return (
     <div className={styles.myspacePage}>
       <Header />
       <div className={styles.myspaceContainer}>
         <div className={styles.mySpaceHeading}>
           <div className={styles.createNewWeekBtn}>
-            <AddBtn handleRequirementClick={TakeWeekRequirements} />
+            <AddBtn handleOpenModal={openModal} />
           </div>
+          <TakeWeekRequirements isOpen={isModalOpen} onClose={closeModal} />
         </div>
         <div className={styles.mySpaceContent}>
           <div className={styles.weekCard}>
