@@ -1,14 +1,13 @@
-import { useDispatch, useSelector } from "react-redux";
-import {
-  resetNewWeekForm,
-  updateNewWeekForm,
-} from "../../../features/newWeekForm/newWeekFormSlice.js";
+import { useState } from "react";
 import PrimaryBtn from "../../ui/button/PrimaryBtn/PrimaryBtn.jsx";
 import styles from "./TakeWeekRequirements.module.css";
 
 const TakeWeekRequirements = ({ isOpen, onClose }) => {
-  const dispatch = useDispatch();
-  const formData = useSelector((state) => state.newWeekForm);
+  const [newWeekFormData, setNewWeekFormData] = useState({
+    numberOfWords: 35,
+    learnSynonyms: false,
+    includeDefinition: false,
+  });
 
   const handleChange = (event) => {
     const name = event.target.name;
@@ -16,13 +15,18 @@ const TakeWeekRequirements = ({ isOpen, onClose }) => {
       event.target.type === "checkbox"
         ? event.target.checked
         : event.target.value;
-    dispatch(updateNewWeekForm({ name, value }));
+
+    setNewWeekFormData({ ...newWeekFormData, [name]: value });
   };
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    console.log(formData);
-    dispatch(resetNewWeekForm());
+    console.log(newWeekFormData);
+    setNewWeekFormData({
+      numberOfWords: 35,
+      learnSynonyms: false,
+      includeDefinition: false,
+    });
     onClose();
   };
 
@@ -40,7 +44,7 @@ const TakeWeekRequirements = ({ isOpen, onClose }) => {
               id="numberOfWords"
               min="28"
               max="100"
-              value={formData.numberOfWords}
+              value={newWeekFormData.numberOfWords}
               onChange={handleChange}
               className={styles.inputField}
               required
@@ -54,7 +58,7 @@ const TakeWeekRequirements = ({ isOpen, onClose }) => {
               type="checkbox"
               name="learnSynonyms"
               id="learnSynonyms"
-              checked={formData.learnSynonyms}
+              checked={newWeekFormData.learnSynonyms}
               onChange={handleChange}
               className={styles.checkbox}
             />
@@ -67,7 +71,7 @@ const TakeWeekRequirements = ({ isOpen, onClose }) => {
               type="checkbox"
               name="includeDefinition"
               id="includeDefinition"
-              checked={formData.includeDefinition}
+              checked={newWeekFormData.includeDefinition}
               onChange={handleChange}
               className={styles.checkbox}
             />
