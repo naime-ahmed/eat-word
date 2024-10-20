@@ -11,8 +11,8 @@ import {
   notFoundHandler,
 } from "./middlewares/common/errorHandler.js";
 import authRouter from "./router/authRouter.js";
+import milestonesRouter from "./router/milestonesRouter.js";
 import usersRouter from "./router/usersRouter.js";
-import weeksRouter from "./router/weeksRouter.js";
 
 const app = express();
 dotenv.config();
@@ -41,8 +41,8 @@ app.use("/auth", authRouter);
 // handler users
 app.use("/users", usersRouter);
 
-// handle weeks request
-app.use("/weeks", weeksRouter);
+// handle milestones request
+app.use("/milestones", milestonesRouter);
 
 app.get("/", (req, res) => {
   res.send({
