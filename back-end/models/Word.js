@@ -13,19 +13,17 @@ const wordSchema = new mongoose.Schema(
       ref: "People",
       required: true,
     },
-    addedWeek: {
-      // const moment = require('moment');
-      // const addedWeek = moment().format('YYYY-[W]WW');
-      // 2024-W42
-      type: String,
+    addedMilestone: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Milestone",
       required: true,
     },
   },
   { timestamps: true }
 );
 
-// Adding an index for querying by user and week
-wordSchema.index({ addedBy: 1, addedWeek: 1 });
+// Adding an index for querying by user and milestone
+wordSchema.index({ addedBy: 1, addedMilestone: 1 });
 
 const Word = mongoose.model("Word", wordSchema);
 
