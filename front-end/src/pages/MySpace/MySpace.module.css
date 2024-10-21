@@ -9,13 +9,15 @@
 
 /* my space container style */
 .myspaceContainer {
+  width: 100%;
   max-width: 1250px;
   min-height: calc(100vh - 250px);
-  margin-top: 80px;
+  margin: 80px auto;
   display: flex;
   flex-direction: column;
   align-items: start;
   row-gap: 50px;
+  box-sizing: border-box;
 }
 
 /* Style for my space heading */
@@ -30,89 +32,126 @@
 
 /* style for my space content */
 .mySpaceContent {
-  min-width: 300px;
+  width: 100%;
+  min-height: 500px;
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-evenly;
-  gap: 15px;
+  justify-content: center;
+  column-gap: 15px;
+  row-gap: 64px;
+  color: #fff;
+}
+.mySpaceContent > div {
+  flex: 0 0 calc(33.333% - 10px);
+  max-width: calc(33.333% - 10px);
+  box-sizing: border-box;
+  /* overflow: hidden; */
+  position: relative;
 }
 
-.mySpaceContent > div {
-  flex: 0 1 calc(25% - 15px);
-  box-sizing: border-box;
-  padding: 2px;
-  color: #fff;
-  transition: border 0.2s ease-in;
+.mySpaceContent > div:not(:last-child)::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: -8px;
+  width: 1px;
+  height: 100%;
+  border-right: 1px dashed #7f8cff9a;
+}
+
+.sevenDayHeading,
+.threeDayHeading,
+.flexibleLHeading {
+  text-align: center;
+}
+.sevenDayContent,
+.threeDayContent,
+.flexibleLContent {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 16px;
 }
 
 /* card style */
-.weekCard {
-  min-width: 282px;
+.milestoneCard {
+  min-width: 190px;
+  color: #fff;
   background: rgba(2, 2, 34, 0.19);
-  border-radius: 16px;
+  border-radius: 8px;
   box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
   backdrop-filter: blur(5.1px);
   -webkit-backdrop-filter: blur(5.1px);
   border: 1px solid rgb(39, 39, 78);
-  border-radius: 0.75rem;
-  padding: 0.125rem;
   transition: all 1s;
   cursor: pointer;
+  display: flex;
+  flex-direction: column;
 }
-.weekCard:hover {
+
+.milestoneCard:hover {
   border: 1px solid rgb(71, 68, 141);
 }
-.weekMainContent {
-  border-radius: 0.625rem 0.625rem 0 0;
-  padding: 1.5rem;
+
+.milestoneMainContent {
+  /* min-width: 175px; */
+  border-radius: 12px;
+  padding: 14px;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  flex-wrap: wrap;
 }
 
-.weekNum p {
-  font-size: 1.25rem;
-  font-weight: 600;
+.milestoneNum p {
+  font-size: 1rem;
+  font-weight: 500;
   color: #e3e8ff;
 }
 
-.wordVerdict {
-  display: flex;
-  gap: 1rem;
-}
-
 .wordVerdict p {
-  font-size: 1rem;
-  font-weight: 700;
-  padding: 0.25rem 0.75rem;
-  border-radius: 9999px;
+  font-size: 15px;
+  font-weight: 500;
+  padding: 0 1px;
 }
 
 .wordVerdict p:first-child {
-  background-color: #09ac5838;
+  background: rgb(0, 89, 6);
+  background: linear-gradient(
+    180deg,
+    rgba(0, 89, 6, 0) 33%,
+    rgba(0, 77, 1, 0.9808298319327731) 100%
+  );
+  border-radius: 4px;
   color: #02c70c;
+  margin-bottom: 4px;
 }
 
 .wordVerdict p:last-child {
-  background-color: #ca01012c;
+  background: rgb(89, 0, 0);
+  background: linear-gradient(
+    0deg,
+    rgba(89, 0, 0, 0) 33%,
+    rgba(89, 0, 0, 0.9808298319327731) 100%
+  );
+  border-radius: 4px;
   color: #d10404;
 }
 
-.weekCardLastEdit {
+.milestoneCardLastEdit {
   color: #a9c6ffb4;
-  font-size: 0.75rem;
-  padding: 0.5rem 1.5rem;
+  font-size: 12px;
+  padding: 8px;
+  word-break: break-word;
 }
 
 /* Media query for smaller screens */
-
 @media (min-width: 1200px) and (max-width: 1400px) {
   .myspaceContainer {
     max-width: 1150px;
   }
-  .mySpaceContent > div {
-    flex: 0 1 calc(25% - 15px);
-    justify-content: center;
+  .milestoneCard {
+    min-width: 175px;
   }
 }
 
@@ -121,8 +160,11 @@
     max-width: 950px;
   }
   .mySpaceContent > div {
-    flex: 0 1 calc(33.333% - 14px);
-    justify-content: center;
+    flex: 0 0 calc(50% - 7.5px);
+    max-width: calc(50% - 7.5px);
+  }
+  .mySpaceContent > div:nth-child(2)::after {
+    content: none;
   }
 }
 
@@ -131,18 +173,37 @@
     max-width: 750px;
   }
   .mySpaceContent > div {
-    flex: 0 1 calc(50% - 10px);
-    justify-content: center;
+    flex: 0 0 100%;
+    max-width: 100%;
+  }
+  .mySpaceContent > div:not(:last-child)::after {
+    content: none;
+  }
+  .milestoneCard {
+    min-width: 290px;
   }
 }
-
 @media (max-width: 767.98px) {
   .myspaceContainer {
     max-width: 560px;
-    margin: 80px 20px;
+  }
+  .mySpaceContent {
+    justify-content: center;
   }
   .mySpaceContent > div {
-    flex: 0 1 100%;
-    justify-content: center;
+    flex: 0 0 calc(100% - 32px);
+    max-width: 100%;
+  }
+  .mySpaceContent > div:not(:last-child)::after {
+    content: none;
+  }
+  .sevenDayContent,
+  .threeDayContent,
+  .flexibleLContent {
+    flex-direction: column;
+    align-items: center;
+  }
+  .milestoneCard {
+    min-width: 290px;
   }
 }
