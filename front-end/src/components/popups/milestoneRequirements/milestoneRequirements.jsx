@@ -4,10 +4,11 @@ import styles from "./milestoneRequirements.module.css";
 
 const TakeWeekRequirements = ({ isOpen, onClose }) => {
   const [newWeekFormData, setNewWeekFormData] = useState({
+    learningPlan: "",
+    nameOfMilestone: "",
     numberOfWords: 35,
     learnSynonyms: false,
     includeDefinition: false,
-    learningPlan: "",
   });
 
   const handleChange = (event) => {
@@ -23,10 +24,11 @@ const TakeWeekRequirements = ({ isOpen, onClose }) => {
     event.preventDefault();
     console.log(newWeekFormData);
     setNewWeekFormData({
+      learningPlan: "",
+      nameOfMilestone: "",
       numberOfWords: 35,
       learnSynonyms: false,
       includeDefinition: false,
-      learningPlan: "",
     });
     onClose();
   };
@@ -38,6 +40,40 @@ const TakeWeekRequirements = ({ isOpen, onClose }) => {
       <div className={styles.modalContent}>
         <h2 className={styles.modalTitle}>Let me know your preferences</h2>
         <form onSubmit={handleSubmit} className={styles.form}>
+          <div className={styles.inputGroup}>
+            <select
+              name="learningPlan"
+              id="learningPlan"
+              value={newWeekFormData.learningPlan}
+              onChange={handleChange}
+              className={styles.inputField}
+              required
+            >
+              <option value="" disabled>
+                Select a learning plan
+              </option>
+              <option value="7">7-Day Challenge</option>
+              <option value="3">3-Day Sprint</option>
+              <option value="0">Flexible Learning</option>
+            </select>
+            <label htmlFor="learningPlan" className={styles.formLabel}>
+              Choose your learning plan
+            </label>
+          </div>
+          <div className={styles.inputGroup}>
+            <input
+              type="text"
+              name="nameOfMilestone"
+              id="nameOfMilestone"
+              value={newWeekFormData.nameOfMilestone}
+              onChange={handleChange}
+              className={styles.inputField}
+              required
+            />
+            <label htmlFor="nameOfMilestone" className={styles.formLabel}>
+              Give it a name
+            </label>
+          </div>
           <div className={styles.inputGroup}>
             <input
               type="number"
@@ -52,26 +88,6 @@ const TakeWeekRequirements = ({ isOpen, onClose }) => {
             />
             <label htmlFor="numberOfWords" className={styles.formLabel}>
               How many words you want to learn?
-            </label>
-          </div>
-          <div className={styles.inputGroup}>
-            <select
-              name="learningPlan"
-              id="learningPlan"
-              value={newWeekFormData.learningPlan}
-              onChange={handleChange}
-              className={styles.inputField}
-              required
-            >
-              <option value="" disabled>
-                Select a learning plan
-              </option>
-              <option value="7-Day Challenge">7-Day Challenge</option>
-              <option value="3-Day Sprint">3-Day Sprint</option>
-              <option value="Flexible Learning">Flexible Learning</option>
-            </select>
-            <label htmlFor="learningPlan" className={styles.formLabel}>
-              Choose your learning plan
             </label>
           </div>
           <div className={styles.checkboxGroup}>
