@@ -8,7 +8,7 @@ const AddBtn = ({ handleOpenModal }) => {
       onClick={handleOpenModal}
     >
       <div className={styles.addIcon}></div>
-      <div className={styles.btnTxt}>New Week</div>
+      <div className={styles.btnTxt}>New Challenge</div>
     </button>
   );
 };
