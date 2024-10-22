@@ -32,38 +32,31 @@
 
 /* style for my space content */
 .mySpaceContent {
-  width: 100%;
-  min-height: 500px;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  column-gap: 15px;
-  row-gap: 64px;
   color: #fff;
 }
-.mySpaceContent > div {
-  flex: 0 0 calc(33.333% - 10px);
-  max-width: calc(33.333% - 10px);
-  box-sizing: border-box;
-  /* overflow: hidden; */
-  position: relative;
+
+.tabs {
+  width: 1250px;
+  border-bottom: 2px solid #34277c;
+  margin-bottom: 16px;
+}
+.tabs > ul {
+  display: flex;
+  gap: 16px;
+  padding-bottom: 12px;
+}
+.tabs > ul > li {
+  list-style: none;
+  font-size: 18px;
+  padding: 6px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease-out;
+}
+.tabs > ul > li.active {
+  background-color: #34277c;
 }
 
-.mySpaceContent > div:not(:last-child)::after {
-  content: "";
-  position: absolute;
-  top: 0;
-  right: -8px;
-  width: 1px;
-  height: 100%;
-  border-right: 1px dashed #7f8cff9a;
-}
-
-.sevenDayHeading,
-.threeDayHeading,
-.flexibleLHeading {
-  text-align: center;
-}
 .sevenDayContent,
 .threeDayContent,
 .flexibleLContent {
@@ -75,7 +68,7 @@
 
 /* card style */
 .milestoneCard {
-  min-width: 190px;
+  width: 190px;
   color: #fff;
   background: rgba(2, 2, 34, 0.19);
   border-radius: 8px;
@@ -103,6 +96,11 @@
   flex-wrap: wrap;
 }
 
+.milestoneNum {
+  max-width: 80%;
+  white-space: nowrap;
+  overflow: hidden;
+}
 .milestoneNum p {
   font-size: 1rem;
   font-weight: 500;
@@ -147,7 +145,8 @@
 
 /* Media query for smaller screens */
 @media (min-width: 1200px) and (max-width: 1400px) {
-  .myspaceContainer {
+  .myspaceContainer,
+  .tabs {
     max-width: 1150px;
   }
   .milestoneCard {
@@ -156,54 +155,43 @@
 }
 
 @media (min-width: 1000px) and (max-width: 1199.98px) {
-  .myspaceContainer {
+  .myspaceContainer,
+  .tabs {
     max-width: 950px;
-  }
-  .mySpaceContent > div {
-    flex: 0 0 calc(50% - 7.5px);
-    max-width: calc(50% - 7.5px);
-  }
-  .mySpaceContent > div:nth-child(2)::after {
-    content: none;
   }
 }
 
 @media (min-width: 768px) and (max-width: 999.98px) {
-  .myspaceContainer {
+  .myspaceContainer,
+  .tabs {
     max-width: 750px;
   }
-  .mySpaceContent > div {
-    flex: 0 0 100%;
-    max-width: 100%;
-  }
-  .mySpaceContent > div:not(:last-child)::after {
-    content: none;
-  }
+
   .milestoneCard {
     min-width: 290px;
   }
 }
 @media (max-width: 767.98px) {
-  .myspaceContainer {
+  .myspaceContainer,
+  .tabs {
     max-width: 560px;
   }
-  .mySpaceContent {
-    justify-content: center;
-  }
-  .mySpaceContent > div {
-    flex: 0 0 calc(100% - 32px);
-    max-width: 100%;
-  }
-  .mySpaceContent > div:not(:last-child)::after {
-    content: none;
-  }
-  .sevenDayContent,
-  .threeDayContent,
-  .flexibleLContent {
-    flex-direction: column;
-    align-items: center;
-  }
+
   .milestoneCard {
     min-width: 290px;
+  }
+}
+@media (max-width: 599.98px) {
+  .myspaceContainer,
+  .tabs {
+    max-width: 360px;
+  }
+  .tabs > ul {
+    display: flex;
+    gap: 4px;
+  }
+  .tabs > ul > li {
+    font-size: 14px;
+    padding: 2px;
   }
 }
