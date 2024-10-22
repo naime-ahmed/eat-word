@@ -8,6 +8,7 @@ const milestoneSchema = new mongoose.Schema(
       required: true,
     },
     name: { type: String, required: true, trim: true },
+    challengeType: {type: String, required: true},
     targetWords: { type: Number, required: true },
     wordsCount: { type: Number, required: true },
     memorizedCount: { type: Number, required: true },
