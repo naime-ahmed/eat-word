@@ -52,9 +52,9 @@ const TakeWeekRequirements = ({ isOpen, onClose }) => {
               <option value="" disabled>
                 Select a learning plan
               </option>
-              <option value="7">7-Day Challenge</option>
-              <option value="3">3-Day Sprint</option>
-              <option value="0">Flexible Learning</option>
+              <option value="seven">7-Day Challenge</option>
+              <option value="three">3-Day Sprint</option>
+              <option value="zero">Flexible Learning</option>
             </select>
             <label htmlFor="learningPlan" className={styles.formLabel}>
               Choose your learning plan
