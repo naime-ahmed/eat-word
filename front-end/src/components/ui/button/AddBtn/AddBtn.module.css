@@ -45,7 +45,7 @@
   visibility: hidden;
   transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
   transition-delay: 0.1s;
-  font-size: 1.5em;
+  font-size: 1.3em;
 }
 .addBtn:hover::before,
 .addBtn:hover::after {
