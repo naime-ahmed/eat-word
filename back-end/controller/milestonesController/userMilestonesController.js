@@ -12,7 +12,7 @@ async function userMilestones(req, res, next) {
 
     if (!milestones || milestones.length === 0) {
       return res.status(404).json({
-        message: "No milestones found for this user",
+        message: "Looks like you've not taken any challenge/milestone yet!",
       });
     }
 
@@ -27,7 +27,7 @@ async function userMilestones(req, res, next) {
 
     // Send a generic error message to the client
     res.status(500).json({
-      message: "An unknown error occurred while retrieving milestones",
+      message: "Opps. Something went wrong!",
     });
   }
 }
