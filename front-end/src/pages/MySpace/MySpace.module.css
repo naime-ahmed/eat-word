@@ -37,7 +37,7 @@
 
 .tabs {
   width: 1250px;
-  border-bottom: 2px solid #34277c;
+  border-bottom: 2px solid #2e1c96;
   margin-bottom: 16px;
 }
 .tabs > ul {
@@ -51,24 +51,36 @@
   padding: 6px 10px;
   border-radius: 4px;
   cursor: pointer;
+  border: 1px solid #c5bbff79;
+  border-radius: 8px;
   transition: background-color 0.3s ease-out;
 }
+.tabs > ul > li:hover {
+  background-color: #3014cc3d;
+}
 .tabs > ul > li.active {
-  background-color: #34277c;
+  color: #d8d2ff;
+  border: 1px solid #2b0fca;
 }
 
-.sevenDayContent,
-.threeDayContent,
-.flexibleLContent {
-  display: flex;
+.milestonesSection {
+  /* display: flex;
   justify-content: center;
+  gap: 12px;
+  margin-top: 16px; */
+}
+
+.milestones {
+  display: flex;
+  justify-content: flex-start;
+  flex-wrap: wrap;
   gap: 12px;
   margin-top: 16px;
 }
 
 /* card style */
 .milestoneCard {
-  width: 190px;
+  min-width: 303px;
   color: #fff;
   background: rgba(2, 2, 34, 0.19);
   border-radius: 8px;
@@ -108,9 +120,9 @@
 }
 
 .wordVerdict p {
-  font-size: 15px;
+  font-size: 16px;
   font-weight: 500;
-  padding: 0 1px;
+  padding: 4px 6px;
 }
 
 .wordVerdict p:first-child {
@@ -149,9 +161,6 @@
   .tabs {
     max-width: 1150px;
   }
-  .milestoneCard {
-    min-width: 175px;
-  }
 }
 
 @media (min-width: 1000px) and (max-width: 1199.98px) {
@@ -166,19 +175,11 @@
   .tabs {
     max-width: 750px;
   }
-
-  .milestoneCard {
-    min-width: 290px;
-  }
 }
 @media (max-width: 767.98px) {
   .myspaceContainer,
   .tabs {
     max-width: 560px;
-  }
-
-  .milestoneCard {
-    min-width: 290px;
   }
 }
 @media (max-width: 599.98px) {
