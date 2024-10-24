@@ -15,9 +15,6 @@ const MySpace = () => {
 
   const { data, isLoading, isError, error } = useBringMilestonesQuery();
 
-  if (isLoading) {
-    return <h1>Loading...</h1>;
-  }
   if (isError) {
     console.log("error", error);
   }
@@ -43,7 +40,9 @@ const MySpace = () => {
           />
         </div>
 
-        {isError ? (
+        {isLoading ? (
+          <p>Loading...</p>
+        ) : isError ? (
           <Error error={error}></Error>
         ) : (
           <div className={styles.mySpaceContent}>
@@ -69,6 +68,7 @@ const MySpace = () => {
                 </li>
               </ul>
             </div>
+            <div className={styles.divider}></div>
             <div className={styles.milestonesSection}>
               {filteredMilestones?.length === 0 ? (
                 <div>
@@ -89,12 +89,22 @@ const MySpace = () => {
                         <div className={styles.milestoneNum}>
                           <p>{milestone.name}</p>
                         </div>
-                        <div className={styles.wordVerdict}>
-                          <p title="Memorized">{milestone.memorizedCount}</p>
-                          <p title="Required revision">
-                            {milestone.revisionCount}
-                          </p>
-                        </div>
+                        {milestone.memorizedCount === 0 &&
+                        milestone.revisionCount === 0 ? (
+                          <div
+                            className={styles.curWordCount}
+                            title="Number of current words"
+                          >
+                            W : {milestone.curWords}
+                          </div>
+                        ) : (
+                          <div className={styles.wordVerdict}>
+                            <p title="Memorized">{milestone.memorizedCount}</p>
+                            <p title="Required revision">
+                              {milestone.revisionCount}
+                            </p>
+                          </div>
+                        )}
                       </div>
                       <p className={styles.milestoneCardLastEdit}>
                         Edited: {formatTimeAgo(milestone.updatedAt)}
