@@ -2,6 +2,7 @@ import styles from "./PrimaryBtn.module.css";
 
 const PrimaryBtn = ({
   handleClick = () => {},
+  isLoading = false,
   colorOne = "#0a4bae",
   colorTwo = "#0c80c9",
   children,
@@ -15,8 +16,9 @@ const PrimaryBtn = ({
         backgroundImage: `linear-gradient(to left, ${colorOne}, ${colorTwo})`,
       }}
       className={styles.btn}
+      disabled={isLoading}
     >
-      {children}
+      {isLoading ? "creating..." : children}
     </button>
   );
 };
