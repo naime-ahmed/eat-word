@@ -1,15 +1,22 @@
 import { useState } from "react";
+import { useSelector } from "react-redux";
+import { useAddMilestoneMutation } from "../../../services/milestone.js";
 import PrimaryBtn from "../../ui/button/PrimaryBtn/PrimaryBtn.jsx";
 import styles from "./milestoneRequirements.module.css";
 
 const TakeWeekRequirements = ({ isOpen, onClose }) => {
   const [newWeekFormData, setNewWeekFormData] = useState({
-    learningPlan: "",
-    nameOfMilestone: "",
-    numberOfWords: 35,
+    milestoneType: "",
+    name: "",
+    targetWords: 35,
     learnSynonyms: false,
     includeDefinition: false,
   });
+
+  const { user } = useSelector((user) => user.auth);
+
+  const [addMilestone, { isLoading, isError, error }] =
+    useAddMilestoneMutation();
 
   const handleChange = (event) => {
     const name = event.target.name;
@@ -20,13 +27,25 @@ const TakeWeekRequirements = ({ isOpen, onClose }) => {
     setNewWeekFormData({ ...newWeekFormData, [name]: value });
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     console.log(newWeekFormData);
+    const newMilestoneData = {
+      ...newWeekFormData,
+      addedBy: user.id,
+      curWords: 0,
+      wordsCount: 0,
+      memorizedCount: 0,
+      revisionCount: 0,
+    };
+    await addMilestone(newMilestoneData);
+    if (isError) {
+      return;
+    }
     setNewWeekFormData({
-      learningPlan: "",
-      nameOfMilestone: "",
-      numberOfWords: 35,
+      milestoneType: "",
+      name: "",
+      targetWords: 35,
       learnSynonyms: false,
       includeDefinition: false,
     });
@@ -42,9 +61,9 @@ const TakeWeekRequirements = ({ isOpen, onClose }) => {
         <form onSubmit={handleSubmit} className={styles.form}>
           <div className={styles.inputGroup}>
             <select
-              name="learningPlan"
-              id="learningPlan"
-              value={newWeekFormData.learningPlan}
+              name="milestoneType"
+              id="milestoneType"
+              value={newWeekFormData.milestoneType}
               onChange={handleChange}
               className={styles.inputField}
               required
@@ -56,37 +75,37 @@ const TakeWeekRequirements = ({ isOpen, onClose }) => {
               <option value="three">3-Day Sprint</option>
               <option value="zero">Flexible Learning</option>
             </select>
-            <label htmlFor="learningPlan" className={styles.formLabel}>
+            <label htmlFor="milestoneType" className={styles.formLabel}>
               Choose your learning plan
             </label>
           </div>
           <div className={styles.inputGroup}>
             <input
               type="text"
-              name="nameOfMilestone"
-              id="nameOfMilestone"
-              value={newWeekFormData.nameOfMilestone}
+              name="name"
+              id="name"
+              value={newWeekFormData.name}
               onChange={handleChange}
               className={styles.inputField}
               required
             />
-            <label htmlFor="nameOfMilestone" className={styles.formLabel}>
+            <label htmlFor="name" className={styles.formLabel}>
               Give it a name
             </label>
           </div>
           <div className={styles.inputGroup}>
             <input
               type="number"
-              name="numberOfWords"
-              id="numberOfWords"
+              name="targetWords"
+              id="targetWords"
               min="10"
               max="100"
-              value={newWeekFormData.numberOfWords}
+              value={newWeekFormData.targetWords}
               onChange={handleChange}
               className={styles.inputField}
               required
             />
-            <label htmlFor="numberOfWords" className={styles.formLabel}>
+            <label htmlFor="targetWords" className={styles.formLabel}>
               How many words you want to learn?
             </label>
           </div>
@@ -116,8 +135,14 @@ const TakeWeekRequirements = ({ isOpen, onClose }) => {
               Want to include English definition?
             </label>
           </div>
+          {isError && <p>{error.data.message}</p>}
           <div className={styles.buttonGroup}>
-            <PrimaryBtn btnType="submit" colorOne="#068200" colorTwo="#00a116">
+            <PrimaryBtn
+              btnType="submit"
+              colorOne="#068200"
+              colorTwo="#00a116"
+              isLoading={isLoading}
+            >
               Let&#39;s goo
             </PrimaryBtn>
             <PrimaryBtn
