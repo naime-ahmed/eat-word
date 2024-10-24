@@ -6,9 +6,9 @@ import Milestones from "../../models/Milestone.js";
 async function addMilestone(req, res, next) {
   try {
     // Validate request body
-    if (!req.body.name || !req.body.addedBy || !req.body.targetWords) {
+    if (!req.body.name || !req.body.addedBy || !req.body.targetWords || !req.body.milestoneType) {
       return res.status(400).json({
-        message: "Missing required fields: name, addedBy, or targetWords",
+        message: "Missing required fields: name, addedBy, or milestoneType",
       });
     }
 
@@ -21,7 +21,6 @@ async function addMilestone(req, res, next) {
     // Send success response
     res.status(201).json({
       message: "New milestone created successfully",
-      savedMilestone,
     });
   } catch (error) {
     // Log the error for further investigation
