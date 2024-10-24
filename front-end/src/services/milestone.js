@@ -30,7 +30,7 @@ export const milestoneApi = createApi({
             undefined,
             (draft) => {
               // Add the new milestone to the local cache immediately
-              draft.push(milestoneData);
+              Object.assign(draft, milestoneData)
             }
           )
         );
