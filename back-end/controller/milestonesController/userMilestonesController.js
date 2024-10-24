@@ -12,7 +12,7 @@ async function userMilestones(req, res, next) {
 
     if (!milestones || milestones.length === 0) {
       return res.status(404).json({
-        message: "Looks like you've not taken any challenge/milestone yet!",
+        message: "Get out of comfort zone, take challenge, become strong",
       });
     }
 
