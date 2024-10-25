@@ -1,12 +1,12 @@
 import { useState } from "react";
 
+import MilestoneCard from "../../components/dynamicComponents/MilestoneCard/MilestoneCard";
 import TakeMilestoneRequirements from "../../components/popups/milestoneRequirements/milestoneRequirements";
 import Error from "../../components/shared/Error/Error";
 import Footer from "../../components/shared/Footer/Footer";
 import Header from "../../components/shared/Header/Header";
 import AddBtn from "../../components/ui/button/AddBtn/AddBtn";
 import { useBringMilestonesQuery } from "../../services/milestone";
-import { formatTimeAgo } from "../../utils/formateTimeAgo";
 import styles from "./MySpace.module.css";
 
 const MySpace = () => {
@@ -71,45 +71,18 @@ const MySpace = () => {
             <div className={styles.divider}></div>
             <div className={styles.milestonesSection}>
               {filteredMilestones?.length === 0 ? (
-                <div>
-                  <Error
-                    error={{
-                      data: {
-                        message: "You've not taken this challenge yet!",
-                      },
-                      status: 404,
-                    }}
-                  />
-                </div>
+                <Error
+                  error={{
+                    data: {
+                      message: "You've not taken this challenge yet!",
+                    },
+                    status: 404,
+                  }}
+                />
               ) : (
                 <div className={styles.milestones}>
                   {filteredMilestones?.map((milestone) => (
-                    <div key={milestone._id} className={styles.milestoneCard}>
-                      <div className={styles.milestoneMainContent}>
-                        <div className={styles.milestoneNum}>
-                          <p>{milestone.name}</p>
-                        </div>
-                        {milestone.memorizedCount === 0 &&
-                        milestone.revisionCount === 0 ? (
-                          <div
-                            className={styles.curWordCount}
-                            title="Number of current words"
-                          >
-                            W : {milestone.curWords}
-                          </div>
-                        ) : (
-                          <div className={styles.wordVerdict}>
-                            <p title="Memorized">{milestone.memorizedCount}</p>
-                            <p title="Required revision">
-                              {milestone.revisionCount}
-                            </p>
-                          </div>
-                        )}
-                      </div>
-                      <p className={styles.milestoneCardLastEdit}>
-                        Edited: {formatTimeAgo(milestone.updatedAt)}
-                      </p>
-                    </div>
+                    <MilestoneCard key={milestone._id} milestone={milestone} />
                   ))}
                 </div>
               )}
