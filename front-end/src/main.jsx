@@ -9,6 +9,7 @@ import "./index.css";
 import About from "./pages/About/About";
 import Contact from "./pages/Contact/Contact";
 import Home from "./pages/Home/Home";
+import Milestone from "./pages/Milestone/Milestone";
 import MySpace from "./pages/MySpace/MySpace";
 import NotFound from "./pages/NotFound/NotFound";
 import Pricing from "./pages/Pricing/Pricing";
@@ -34,6 +35,10 @@ const router = createBrowserRouter([
             <MySpace />
           </ProtectedRoute>
         ),
+      },
+      {
+        path: "/my-space/:milestoneId",
+        element: <Milestone />,
       },
       {
         path: "/price",
