@@ -22,7 +22,7 @@ function Hero() {
             <Skeleton width="180px" height="45px" />
           ) : (
             <CTABtn>
-              <Link to={isAuthenticated ? "/my-space" : "sign-up"}>
+              <Link to={isAuthenticated ? "/my-space" : "sign-in"}>
                 {isAuthenticated ? "My Space" : "Start, It's free"}
               </Link>
             </CTABtn>
