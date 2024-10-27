@@ -18,7 +18,7 @@ const PrimaryBtn = ({
       className={styles.btn}
       disabled={isLoading}
     >
-      {isLoading ? "creating..." : children}
+      {isLoading ? "cooking..." : children}
     </button>
   );
 };
