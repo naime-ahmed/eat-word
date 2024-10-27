@@ -1,3 +1,6 @@
 .errorContainer {
+  width: 100%;
+  text-align: center;
   color: #ffff;
+  font-size: 1.3rem;
 }
