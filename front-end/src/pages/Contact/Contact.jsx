@@ -56,9 +56,6 @@ const Contact = () => {
         <div className={styles.contactForm}>
           <form onSubmit={handelSubmit}>
             <div>
-              <label htmlFor="email">
-                Your Email <span>&#8727;</span>
-              </label>
               <br />
               <input
                 type="email"
@@ -68,11 +65,14 @@ const Contact = () => {
                 value={userMessage.email}
                 required
                 placeholder="email"
+                className={styles.inputField}
               />
+              <label htmlFor="email" className={styles.formLabel}>
+                Your Email
+              </label>
               {userMessageError.email && <p>{userMessageError.email}</p>}
             </div>
             <div>
-              <label htmlFor="subject">Message about?</label>
               <br />
               <input
                 type="text"
@@ -81,12 +81,13 @@ const Contact = () => {
                 onChange={handleChange}
                 value={userMessage.subject}
                 placeholder="message about?"
+                className={styles.inputField}
               />
+              <label htmlFor="subject" className={styles.formLabel}>
+                Message about?
+              </label>
             </div>
             <div>
-              <label htmlFor="message">
-                Write your message <span>&#8727;</span>
-              </label>
               <br />
               <textarea
                 name="message"
@@ -94,13 +95,14 @@ const Contact = () => {
                 onChange={handleChange}
                 value={userMessage.message}
                 required
-                placeholder="write your message here"
+                placeholder="Write your message"
+                className={`${styles.inputField} ${styles.textAreaField}`}
               />
+              <label htmlFor="message" className={styles.formLabel}>
+                Write your message
+              </label>
             </div>
             <div>
-              <label htmlFor="captcha">
-                What is 9+7? <span>&#8727;</span>
-              </label>
               <br />
               <input
                 type="number"
@@ -109,7 +111,12 @@ const Contact = () => {
                 onChange={handleChange}
                 value={userMessage.captcha}
                 required
+                placeholder="What is 9+7?"
+                className={styles.inputField}
               />
+              <label htmlFor="captcha" className={styles.formLabel}>
+                What is 9+7?
+              </label>
               {userMessageError.captcha && <p>{userMessageError.captcha}</p>}
             </div>
             <div className={styles.contactBtn}>
@@ -135,7 +142,7 @@ const Contact = () => {
             <div>
               <i className="fa-solid fa-paper-plane"></i>
             </div>
-            <p>Email: support@eatwords.com</p>
+            <p>Email: support@eatword.com</p>
           </div>
         </div>
       </div>
