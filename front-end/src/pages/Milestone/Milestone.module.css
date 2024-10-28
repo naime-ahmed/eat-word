@@ -17,3 +17,25 @@
   row-gap: 50px;
   box-sizing: border-box;
 }
+
+/* milestone  heading style*/
+.milestoneHeading {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+}
+.milestoneHeading > div {
+  flex: 0 1 33.33%;
+  max-width: 33.33%;
+  min-height: 100px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 16px;
+  gap: 12px;
+  border-radius: 6px;
+  font-size: 18px;
+  background-color: #00233f;
+}
