@@ -22,7 +22,7 @@ const MilestoneCard = ({ milestone }) => {
         </div>
         {milestone?.memorizedCount === 0 && milestone?.revisionCount === 0 ? (
           <div className={styles.curWordCount} title="Number of current words">
-            W : {milestone?.curWords}
+            W : {milestone?.wordsCount}
           </div>
         ) : (
           <div className={styles.wordVerdict}>
