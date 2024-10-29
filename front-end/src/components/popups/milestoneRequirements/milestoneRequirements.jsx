@@ -33,7 +33,6 @@ const TakeWeekRequirements = ({ isOpen, onClose }) => {
     const newMilestoneData = {
       ...newWeekFormData,
       addedBy: user.id,
-      curWords: 0,
       wordsCount: 0,
       memorizedCount: 0,
       revisionCount: 0,
