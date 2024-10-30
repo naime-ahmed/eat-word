@@ -5,6 +5,7 @@ import Countdown from "../../components/dynamicComponents/Countdown/Countdown";
 import Error from "../../components/shared/Error/Error";
 import Footer from "../../components/shared/Footer/Footer";
 import Header from "../../components/shared/Header/Header";
+import SpinnerForPage from "../../components/ui/loader/SpinnerForPage/SpinnerForPage";
 import { useBringMilestonesQuery } from "../../services/milestone";
 import styles from "./Milestone.module.css";
 
@@ -44,7 +45,7 @@ const Milestone = () => {
       <Header />
 
       {isLoading ? (
-        <p>loading...</p>
+        <SpinnerForPage />
       ) : (
         <div className={styles.milestoneContent}>
           {isError ? (
