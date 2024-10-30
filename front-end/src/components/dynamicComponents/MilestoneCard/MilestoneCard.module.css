@@ -1,6 +1,7 @@
 /* card style */
 .milestoneCard {
   min-width: 291px;
+  max-width: 291px;
   color: #fff;
   background: rgba(46, 9, 83, 0.137);
   border-radius: 8px;
