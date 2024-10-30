@@ -27,13 +27,14 @@
 }
 
 .milestoneNameInput {
-  border: none;
-  outline: none;
-  max-height: 40px;
   font-size: 32px;
+  padding: 5px 10px 12px 10px;
   font-weight: 800;
   background-color: transparent;
   color: #fff;
+  outline: none;
+  border: 1px solid #1e2744e5;
+  border-radius: 4px;
 }
 
 .divider {
