@@ -29,7 +29,7 @@
 }
 
 .testimonialItem {
-  padding: 0 0.625rem; /* Equivalent to 2.5 in Tailwind */
+  padding: 0 0.625rem;
   height: 100%;
 }
 
@@ -42,7 +42,7 @@
   border-radius: 10px;
   background-color: #06122c4b;
   border: 1px solid rgba(209, 199, 253, 0.164);
-  padding: 1.5rem 2rem;
+  padding: 12px 20px;
 }
 .testimonialCard:hover {
   background-color: #091c464b;
