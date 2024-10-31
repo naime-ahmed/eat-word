@@ -64,7 +64,7 @@
 }
 
 .baseTheoryHeading p {
-  margin-top: 20px;
+  margin-top: 10px;
   color: #d4d5d6;
   font-size: 20px;
 }
@@ -75,10 +75,10 @@
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 40px;
-  margin-top: 30px;
+  margin-top: 50px;
 }
 .baseTheoryCardsContainer > div {
-  padding: 45px;
+  padding: 25px;
   border-radius: 10px;
   min-height: 400px;
   background-color: #06122c4b;
@@ -89,7 +89,7 @@
   max-width: 80px;
 }
 .baseTheoryCardsContainer > div > h2 {
-  font-size: 34px;
+  font-size: 28px;
   margin: 10px 0;
   font-weight: 800;
   color: #e6e6e6;
