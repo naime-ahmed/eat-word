@@ -42,3 +42,64 @@
   height: 1px;
   background-color: #1a2541ea;
 }
+
+/* Extra Large Devices (large desktops) - 1200px and above: */
+@media (min-width: 1200px) and (max-width: 1400px) {
+  .milestoneContent {
+    max-width: 1150px;
+  }
+}
+
+/* Large Devices (desktops) - 1000px to 1199px wide: */
+@media (min-width: 1000px) and (max-width: 1199.98px) {
+  .milestoneContent {
+    max-width: 950px;
+  }
+  .milestoneNameInput {
+    font-size: 22px;
+  }
+  .milestoneTimeLeft {
+    font-size: 15px;
+  }
+}
+
+/* Medium Devices (laptops) - 768px to 991px wide: */
+@media (min-width: 768px) and (max-width: 999.98px) {
+  .milestoneContent {
+    max-width: 750px;
+  }
+  .milestoneNameInput {
+    font-size: 20px;
+  }
+  .milestoneTimeLeft {
+    font-size: 14px;
+  }
+}
+
+/* Small Devices (tablets) - 576px to 767px wide: */
+@media (min-width: 600px) and (max-width: 767.98px) {
+  .milestoneContent {
+    max-width: 560px;
+  }
+  .milestoneNameInput {
+    font-size: 18px;
+  }
+  .milestoneTimeLeft {
+    font-size: 13px;
+  }
+}
+
+/* Extra Small Devices (phones) - Up to 576px wide: */
+@media (max-width: 599.98px) {
+  .milestoneContent {
+    max-width: 340px;
+  }
+  .milestoneNameInput {
+    font-size: 15px;
+    padding: 3px 7px 7px 7px;
+    font-weight: 600;
+  }
+  .milestoneTimeLeft {
+    font-size: 10px;
+  }
+}
