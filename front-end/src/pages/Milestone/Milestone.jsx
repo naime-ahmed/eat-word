@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
-import Countdown from "../../components/dynamicComponents/Countdown/Countdown";
+import MilestoneDeadline from "../../components/dynamicComponents/MilestoneDeadline/MilestoneDeadline";
 import Error from "../../components/shared/Error/Error";
 import Footer from "../../components/shared/Footer/Footer";
 import Header from "../../components/shared/Header/Header";
@@ -62,7 +62,7 @@ const Milestone = () => {
                 />
               </div>
               <div className={styles.milestoneTimeLeft}>
-                <Countdown
+                <MilestoneDeadline
                   createdAt={curMilestone.createdAt}
                   duration={duration}
                 />
