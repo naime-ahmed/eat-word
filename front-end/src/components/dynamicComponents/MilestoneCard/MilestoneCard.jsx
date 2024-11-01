@@ -16,13 +16,26 @@ const MilestoneCard = ({ milestone }) => {
       key={milestone?._id}
       className={styles.milestoneCard}
     >
-      <div className={styles.milestoneMainContent}>
-        <div className={styles.milestoneNum}>
+      <div className={styles.milestoneNameAndEdit}>
+        <div className={styles.milestoneName}>
           <p>{milestone?.name}</p>
         </div>
+        <div>
+          <i className="fa-solid fa-ellipsis-vertical"></i>
+        </div>
+      </div>
+      <div className={styles.milestoneInfo}>
+        <p className={styles.milestoneCardLastEdit}>
+          Edited: {formatTimeAgo(milestone?.updatedAt)}
+        </p>
         {milestone?.memorizedCount === 0 && milestone?.revisionCount === 0 ? (
-          <div className={styles.curWordCount} title="Number of current words">
-            W : {milestone?.wordsCount}
+          <div className={styles.curWordCount}>
+            <span title="Number of current words">
+              W : {milestone?.wordsCount}
+            </span>
+            <span title="Number of targeted words">
+              T : {milestone?.targetWords}
+            </span>
           </div>
         ) : (
           <div className={styles.wordVerdict}>
@@ -31,9 +44,6 @@ const MilestoneCard = ({ milestone }) => {
           </div>
         )}
       </div>
-      <p className={styles.milestoneCardLastEdit}>
-        Edited: {formatTimeAgo(milestone?.updatedAt)}
-      </p>
     </div>
   );
 };
