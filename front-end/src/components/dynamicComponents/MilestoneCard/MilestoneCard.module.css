@@ -19,6 +19,7 @@
 }
 
 .milestoneNameAndEdit {
+  position: relative;
   border-radius: 12px;
   display: flex;
   justify-content: space-between;
@@ -45,6 +46,18 @@
 .milestoneNameAndEdit i:hover {
   border: 1px solid #9277a377;
 }
+.floatCard {
+  position: absolute;
+  top: 0;
+  right: 0;
+  display: flex;
+  flex-direction: column;
+  row-gap: 8px;
+  padding: 8px 12px;
+  background-color: #352c63;
+  border-radius: 8px;
+}
+
 .wordVerdict {
   display: flex;
 }
