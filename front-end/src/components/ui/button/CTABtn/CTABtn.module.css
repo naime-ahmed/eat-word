@@ -18,9 +18,7 @@
   overflow: hidden;
   transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
 }
-.animatedButton a {
-  text-decoration: none;
-}
+
 .animatedButton svg {
   position: absolute;
   width: 24px;
@@ -61,7 +59,7 @@
   box-shadow: 0 0 0 12px transparent;
   border-radius: 100px;
 }
-.animatedButton:hover a {
+.animatedButton:hover {
   color: #111111;
 }
 .animatedButton:hover .arr1 {
