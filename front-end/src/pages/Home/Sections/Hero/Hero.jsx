@@ -1,5 +1,5 @@
 import { useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Sparkles from "../../../../components/Sparkles/Sparkles";
 import CTABtn from "../../../../components/ui/button/CTABtn/CTABtn";
 import Skeleton from "../../../../components/ui/loader/Skeleton/Skeleton";
@@ -9,6 +9,16 @@ function Hero() {
   const { isAuthenticated, user, isLoading } = useSelector(
     (state) => state.auth
   );
+
+  const navigate = useNavigate();
+
+  const handleNavigation = () => {
+    if (isAuthenticated) {
+      navigate("/my-space");
+    } else {
+      navigate("/sign-in");
+    }
+  };
 
   return (
     <div className={styles.container}>
@@ -21,10 +31,8 @@ function Hero() {
           {isLoading ? (
             <Skeleton width="180px" height="45px" />
           ) : (
-            <CTABtn>
-              <Link to={isAuthenticated ? "/my-space" : "sign-in"}>
-                {isAuthenticated ? "My Space" : "Start, It's free"}
-              </Link>
+            <CTABtn handleClick={handleNavigation}>
+              {isAuthenticated ? "My Space" : "Start, It's free"}
             </CTABtn>
           )}
         </div>
@@ -38,30 +46,30 @@ function Hero() {
         />
       </div>
       <div className={styles.subtitleContainer}>
-        <div>
+        <div className={styles.personalizedL}>
           <div>
             <h4>Personalized Learning</h4>
             <p>
-              You control your vocabulary. Select words and learn at your own
-              pace with personalized support.
+              You control your vocabulary, learning at your own pace with
+              support.
             </p>
           </div>
         </div>
-        <div>
-          <div>
+        <div className={styles.scienceBackedM}>
+          <div className={styles.scienceBackedM}>
             <h4>Science-Backed Methods</h4>
             <p>
-              Enhance retention with proven techniques like Spaced Repetition
-              and Active Recall, integrated into your learning journey.
+              Enhance retention using Spaced Repetition and Active Recall
+              techniques in learning.
             </p>
           </div>
         </div>
-        <div>
-          <div>
+        <div className={styles.aiPowered}>
+          <div className={styles.aiPowered}>
             <h4>AI-Powered Efficiency</h4>
             <p>
-              Our AI helps you quickly fill in word definitions, examples, and
-              synonyms to streamline your vocabulary building.
+              Our AI quickly provides definitions, examples, and synonyms for
+              vocabulary.
             </p>
           </div>
         </div>
