@@ -1,8 +1,8 @@
 import styles from "./CTABtn.module.css";
 
-const StartBtn = ({ children }) => {
+const StartBtn = ({ children, handleClick = () => {} }) => {
   return (
-    <button className={styles.animatedButton}>
+    <button className={styles.animatedButton} onClick={handleClick}>
       <svg
         viewBox="0 0 24 24"
         className={styles.arr2}
