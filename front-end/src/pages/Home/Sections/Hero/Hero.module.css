@@ -115,7 +115,7 @@
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 2rem;
-  width: 72%;
+  width: 100%;
   max-width: 1250px;
   margin-left: auto;
   margin-right: auto;
@@ -148,17 +148,26 @@
   color: #ffffff;
 }
 .subtitleContainer > div > div > p {
-  color: #dddfff;
+  color: #c1c5ff;
 }
 
 /* CSS for small devices */
-@media (min-width: 1000px) and (max-width: 1249.98px) {
+@media (min-width: 1200px) and (max-width: 1400px) {
   .subtitleContainer {
     gap: 0.7rem;
-    width: 85%;
+    width: 100%;
+    max-width: 1150px;
+  }
+}
+
+@media (min-width: 1000px) and (max-width: 1199.98px) {
+  .subtitleContainer {
+    gap: 0.7rem;
+    width: 100%;
+    max-width: 950px;
   }
   .subtitleContainer > div > div {
-    width: 95%;
+    width: 100%;
   }
 }
 @media (max-height: 779.98px) {
@@ -177,7 +186,8 @@
   }
   .subtitleContainer {
     gap: 0.7rem;
-    width: 90%;
+    width: 100%;
+    max-width: 750px;
   }
   .subtitleContainer > div > div {
     width: 100%;
@@ -196,12 +206,17 @@
     padding-top: 1rem;
   }
   .subtitleContainer {
-    gap: 0.4rem;
+    display: grid;
     width: 95%;
+    max-width: 560px;
+    grid-template-columns: repeat(2, 1fr);
+    justify-items: center;
+    align-items: center;
   }
   .subtitleContainer > div > div {
     width: 100%;
   }
+
   .title {
     font-size: 28px;
   }
@@ -232,6 +247,12 @@
   }
   .subtitleContainer > div > div > p {
     font-size: 15px;
+  }
+}
+@media (max-width: 391.98px) {
+  .title {
+    font-size: 1rem;
+    padding: 10px;
   }
 }
 /* 
