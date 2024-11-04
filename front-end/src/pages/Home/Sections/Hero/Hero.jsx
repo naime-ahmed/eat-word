@@ -60,7 +60,7 @@ function Hero() {
             <h4>Science-Backed Methods</h4>
             <p>
               Enhance retention using Spaced Repetition and Active Recall
-              techniques in learning.
+              techniques.
             </p>
           </div>
         </div>
