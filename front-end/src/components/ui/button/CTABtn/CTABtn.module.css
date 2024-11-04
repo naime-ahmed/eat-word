@@ -92,5 +92,18 @@
 @media (max-width: 599.98px) {
   .animatedButton {
     padding: 10px 25px;
+    font-size: 16px;
+  }
+  .animatedButton svg {
+    width: 18px;
+  }
+}
+@media (max-width: 391.98px) {
+  .animatedButton {
+    padding: 6px 20px;
+    font-size: 15px;
+  }
+  .animatedButton svg {
+    width: 16px;
   }
 }
