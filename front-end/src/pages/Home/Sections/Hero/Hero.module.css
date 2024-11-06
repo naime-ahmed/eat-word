@@ -121,18 +121,35 @@
   margin-right: auto;
   margin-top: 20px;
 }
+
 .subtitleContainer > div {
   width: 100%;
   display: flex;
   justify-content: center;
 }
+
 .subtitleContainer > div > div {
   width: 100%;
   padding: 15px;
   border: 1px solid transparent;
-  background: linear-gradient(71deg, #030b1e, #0d1738, #04031e);
   background-clip: padding-box;
   border-radius: 15px;
+}
+
+/* Apply backgrounds based on the position of the outer divs */
+.subtitleContainer > div:nth-child(1) > div {
+  background: linear-gradient(140deg, #030b1e, #0d1738, #04031e);
+  background-clip: padding-box;
+}
+
+.subtitleContainer > div:nth-child(2) > div {
+  background: linear-gradient(90deg, #030b1e, #0d1738, #04031e);
+  background-clip: padding-box;
+}
+
+.subtitleContainer > div:nth-child(3) > div {
+  background: linear-gradient(50deg, #030b1e, #0d1738, #04031e);
+  background-clip: padding-box;
 }
 
 .personalizedL,
