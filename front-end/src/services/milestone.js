@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { setSignOutUser, setUser } from "../features/auth/authSlice.js";
+import { setSignOutUser, setUser } from "../features/authSlice.js";
 
 // Create a base query with the common configuration
 const baseQueryWithAuth = fetchBaseQuery({
