@@ -1,7 +1,7 @@
 import { configureStore } from "@reduxjs/toolkit";
-import authReducers from "../features/auth/authSlice";
-import signInReducers from "../features/userSignIn/userSignInSlice";
-import signUpReducers from "../features/userSignUp/userSignUpSlice";
+import authReducers from "../features/authSlice";
+import signInReducers from "../features/userSignInSlice";
+import signUpReducers from "../features/userSignUpSlice";
 import { authApi } from "../services/auth";
 import { milestoneApi } from "../services/milestone";
 
