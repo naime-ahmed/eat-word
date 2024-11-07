@@ -2,7 +2,7 @@ import { useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import defaultUserProfileImage from "../../../assets/defaultUserProfileImage.png";
-import { setSignOutUser } from "../../../features/auth/authSlice";
+import { setSignOutUser } from "../../../features/authSlice";
 import { useSignOutUserMutation } from "../../../services/auth";
 import FancyBtn from "../../ui/button/FancyBtn/FancyBtn";
 import styles from "./UserProfile.module.css";
