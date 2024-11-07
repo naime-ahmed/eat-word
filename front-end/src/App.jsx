@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { Outlet } from "react-router-dom";
-import { checkAuthentication, setLoading } from "./features/auth/authSlice";
+import { checkAuthentication, setLoading } from "./features/authSlice";
 
 function App() {
   const dispatch = useDispatch();
