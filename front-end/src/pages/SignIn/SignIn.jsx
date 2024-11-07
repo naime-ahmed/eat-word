@@ -2,12 +2,12 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import PrimaryBtn from "../../components/ui/button/PrimaryBtn/PrimaryBtn";
-import { setUser } from "../../features/auth/authSlice.js";
+import { setUser } from "../../features/authSlice.js";
 import {
   resetForm,
   setUserErrors,
   updateUser,
-} from "../../features/userSignIn/userSignInSlice";
+} from "../../features/userSignInSlice";
 import { useSignInUserMutation } from "../../services/auth.js";
 import { parseJwt } from "../../utils/parseJWT.js";
 import style from "./SignIn.module.css";
