@@ -5,10 +5,10 @@ import {
   resetNewUserForm,
   setUserNewErrors,
   updateNewUser,
-} from "../../features/userSignUp/userSignUpSlice";
+} from "../../features/userSignUpSlice";
 import { useSignUpUserMutation } from "../../services/auth.js";
 
-import { setUser } from "../../features/auth/authSlice.js";
+import { setUser } from "../../features/authSlice.js";
 import { parseJwt } from "../../utils/parseJWT.js";
 import style from "./SignUp.module.css";
 
