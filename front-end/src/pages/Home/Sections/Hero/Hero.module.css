@@ -1,7 +1,6 @@
 .container {
-  margin-top: 168px;
-  height: calc(100vh - 100px);
-  max-height: 940px;
+  height: min-content;
+  margin: 168px 0;
   width: calc(100vw - 50px);
   overflow: hidden;
 }
@@ -187,16 +186,7 @@
     width: 100%;
   }
 }
-@media (max-height: 779.98px) {
-  .container {
-    min-height: 900px;
-  }
-}
-@media (max-height: 370px) {
-  .container {
-    margin-top: 180px;
-  }
-}
+
 @media (min-width: 768px) and (max-width: 999.98px) {
   .header {
     padding-top: 1rem;
