@@ -14,6 +14,7 @@ import MySpace from "./pages/MySpace/MySpace";
 import NotFound from "./pages/NotFound/NotFound";
 import Pricing from "./pages/Pricing/Pricing";
 import PrivacyPolicy from "./pages/PrivacyPolicy/PrivacyPolicy";
+import Profile from "./pages/Profile/Profile";
 import SignIn from "./pages/SignIn/SignIn";
 import SignUp from "./pages/SignUp/SignUp";
 import TermsAndConditions from "./pages/TermsAndConditions/TermsAndConditions";
@@ -59,6 +60,10 @@ const router = createBrowserRouter([
       {
         path: "/contact",
         element: <Contact />,
+      },
+      {
+        path: "/profile",
+        element: <Profile />,
       },
       {
         path: "/tac",
