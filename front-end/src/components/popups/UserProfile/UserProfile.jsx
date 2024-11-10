@@ -77,9 +77,15 @@ const UserProfile = ({ onClose }) => {
         <h3>User name</h3>
       </div>
       <div className={styles.viewProfileBtn}>
-        <FancyBtn clickHandler={onClose} btnWidth={"130px"} btnHeight={"37px"}>
-          view profile
-        </FancyBtn>
+        <Link to="/profile">
+          <FancyBtn
+            clickHandler={onClose}
+            btnWidth={"130px"}
+            btnHeight={"37px"}
+          >
+            view profile
+          </FancyBtn>
+        </Link>
       </div>
       <div className={styles.userProfileTabs}>
         <ul>
