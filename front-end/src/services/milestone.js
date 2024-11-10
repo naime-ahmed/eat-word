@@ -99,7 +99,7 @@ export const milestoneApi = createApi({
     }),
 
     editMilestone: builder.mutation({
-      query: ({ updatedFields, milestoneId }) => ({
+      query: ([ updatedFields, milestoneId ]) => ({
         url: `/${milestoneId}`,
         method: "PUT",
         body: updatedFields,
@@ -113,11 +113,10 @@ export const milestoneApi = createApi({
             "bringMilestones",
             undefined,
             (draft) => {
-              const milestone = draft.find(
-                (milestone) => milestone.id === milestoneId
-              );
-              if (milestone) {
-                Object.assign(milestone, updatedFields);
+              const milestoneKeys = Object.keys(draft);
+              const milestoneIndex = milestoneKeys.findIndex((key) => draft[key].id === milestoneId);
+              if (milestoneIndex !== -1) {
+                Object.assign(draft[milestoneKeys[milestoneIndex]], updatedFields);
               }
             }
           )
