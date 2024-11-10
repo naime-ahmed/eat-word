@@ -1,11 +1,25 @@
+import { useNavigate } from "react-router-dom";
 import crown from "../../assets/crown.png";
 import Footer from "../../components/shared/Footer/Footer";
 import Header from "../../components/shared/Header/Header";
 import FancyBtn from "../../components/ui/button/FancyBtn/FancyBtn";
 
+import { useSelector } from "react-redux";
 import styles from "./Pricing.module.css";
 
 const Pricing = () => {
+  const { isAuthenticated } = useSelector((state) => state.auth);
+
+  const navigate = useNavigate();
+
+  const handleFreeClick = () => {
+    if (isAuthenticated) {
+      navigate("/my-space");
+    } else {
+      navigate("/sign-in");
+    }
+  };
+
   return (
     <div className={styles.pricingPage}>
       <Header />
@@ -44,7 +58,11 @@ const Pricing = () => {
             </ul>
           </div>
           <div>
-            <FancyBtn btnWidth="255px" btnHeight="38px">
+            <FancyBtn
+              clickHandler={handleFreeClick}
+              btnWidth="255px"
+              btnHeight="38px"
+            >
               Stay Pleb
             </FancyBtn>
           </div>
