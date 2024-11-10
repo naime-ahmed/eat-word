@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import { useRemoveMilestoneMutation } from "../../../services/milestone";
 import { formatTimeAgo } from "../../../utils/formateTimeAgo";
+import EditMilestone from "../../popups/EditMilestone/EditMilestone";
 import PrimaryBtn from "../../ui/button/PrimaryBtn/PrimaryBtn";
 import styles from "./MilestoneCard.module.css";
 
@@ -12,6 +13,8 @@ const MilestoneCard = ({ milestone }) => {
   const [showFloatCard, setShowFloatCard] = useState(false);
   const floatCardRef = useRef(null);
   const ellipsisRef = useRef(null);
+  const [isEditMilestonePopShown, setIsEditMilestonePopShown] = useState(false);
+
   const [removeMilestone, { isLoading, isError, error }] =
     useRemoveMilestoneMutation();
 
@@ -23,6 +26,7 @@ const MilestoneCard = ({ milestone }) => {
         !ellipsisRef.current.contains(event.target)
       ) {
         setShowFloatCard(false);
+        setIsEditMilestonePopShown(false);
       }
     };
 
@@ -40,6 +44,12 @@ const MilestoneCard = ({ milestone }) => {
     e.stopPropagation();
     setShowFloatCard(!showFloatCard);
   };
+
+  const openEditMilestone = (e) => {
+    e.stopPropagation();
+    setIsEditMilestonePopShown(true);
+  };
+  const closeEditMilestone = () => setIsEditMilestonePopShown(false);
 
   const handleDelete = async () => {
     try {
@@ -106,9 +116,15 @@ const MilestoneCard = ({ milestone }) => {
             className={styles.floatCard}
             onClick={handlePropagation}
           >
-            <PrimaryBtn>
+            <PrimaryBtn handleClick={openEditMilestone}>
               <i className="far fa-edit"></i> Edit
             </PrimaryBtn>
+            <EditMilestone
+              isOpen={isEditMilestonePopShown}
+              onClose={closeEditMilestone}
+              milestone={milestone}
+              onCloseFloatCard={setShowFloatCard}
+            />
             <PrimaryBtn
               colorOne="#da3633"
               colorTwo="#da3633"
