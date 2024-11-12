@@ -1,6 +1,7 @@
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
+import GoogleSignIn from "../../components/OAuth/Google/GoogleSignIn";
 import PrimaryBtn from "../../components/ui/button/PrimaryBtn/PrimaryBtn";
 import { setUser } from "../../features/authSlice.js";
 import {
@@ -144,6 +145,9 @@ const SignIn = () => {
               What is 3 + 5?
             </label>
             {userErrors.captcha && <p>{userErrors.captcha}</p>}
+          </div>
+          <div>
+            <GoogleSignIn />
           </div>
           <div className={style.submitBtn}>
             <button type="submit" disabled={isLoading}>
