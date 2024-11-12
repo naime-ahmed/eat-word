@@ -29,7 +29,7 @@ export const checkAuthentication = (token) => async (dispatch) => {
   dispatch(setLoading(true));
   try {
     const response = await fetch(
-      `${import.meta.env.VITE_EAT_WORD_BASE_URL}/auth`,
+      `${import.meta.env.VITE_EAT_WORD_BACKEND_URL}/auth`,
       {
         method: "POST",
         credentials: "include",
@@ -48,7 +48,7 @@ export const checkAuthentication = (token) => async (dispatch) => {
       if (errorData.message === "Access token expired") {
         //  Handle refresh token
         const refreshResponse = await fetch(
-          `${import.meta.env.VITE_EAT_WORD_BASE_URL}/auth/refresh-token`,
+          `${import.meta.env.VITE_EAT_WORD_BACKEND_URL}/auth/refresh-token`,
           {
             method: "POST",
             // necessary to include cookies in cross-origin requests
