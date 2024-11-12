@@ -10,6 +10,8 @@ import { addUser } from "../controller/authController/signUpController.js";
 import { removeUser } from "../controller/usersController/deleteController.js";
 import { verifyAccessToken } from "../middlewares/validate/verifyAccessToken.js";
 
+import { signInWithGoogle } from '../controller/authController/signInWithGoogleController.js';
+
 const router = express.Router();
 
 // check is the user is valid or not
@@ -20,6 +22,9 @@ router.post("/sign-up", addUser);
 
 // sign in user
 router.post("/sign-in", signIn);
+
+// authenticate user via google
+router.post("/google", signInWithGoogle);
 
 // sign out user
 router.post("/sign-out", signOut);
