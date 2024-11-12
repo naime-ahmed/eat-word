@@ -8,16 +8,16 @@ import { generateAccessToken, generateRefreshToken } from '../../utils/tokenUtil
 
 async function signInWithGoogle(req, res, next) {
   const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
-  const { googleIdToken } = req.body;
-
-  if (!googleIdToken) {
+  const { token } = req.body;
+  
+  if (!token) {
     return res.status(400).json({ message: 'Google ID token is required' });
   }
 
   try {
     // Verify Google token
     const ticket = await client.verifyIdToken({
-      idToken: googleIdToken,
+      idToken: token,
       audience: process.env.GOOGLE_CLIENT_ID,
     });
     const { name, email, picture } = ticket.getPayload();
