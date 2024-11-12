@@ -3,7 +3,7 @@ import { setSignOutUser, setUser } from "../features/authSlice.js";
 
 // Create a base query with the common configuration
 const baseQueryWithAuth = fetchBaseQuery({
-  baseUrl: `${import.meta.env.VITE_EAT_WORD_BASE_URL}/milestones`,
+  baseUrl: `${import.meta.env.VITE_EAT_WORD_BACKEND_URL}/milestones`,
   credentials: "include",
   prepareHeaders: (headers) => {
     const token = localStorage.getItem("access-token");
@@ -26,7 +26,7 @@ const baseQueryWithReauth = async (args, api, extraOptions) => {
   ) {
     // Try to get a new token
     const refreshResult = await fetch(
-      `${import.meta.env.VITE_EAT_WORD_BASE_URL}/auth/refresh-token`,
+      `${import.meta.env.VITE_EAT_WORD_BACKEND_URL}/auth/refresh-token`,
       {
         method: "POST",
         credentials: "include",
