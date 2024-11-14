@@ -109,8 +109,7 @@ input:-webkit-autofill:active {
   width: 300px;
   height: 35px;
   border-radius: 4px;
-  font-size: 16px;
-  font-weight: 600;
+  font-size: 15px;
   border: transparent;
   background: dodgerblue;
   color: #f8fafc;
@@ -125,13 +124,30 @@ input:-webkit-autofill:active {
     rgba(0, 212, 255, 1) 100%
   );
 }
-.submitBtn p {
+
+.separator {
+  display: flex;
+  align-items: center;
   text-align: center;
-  margin-top: 5px;
+  color: #f8fafc;
+  margin: 8px 0;
+}
+.separator::before,
+.separator::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background-color: #ccc;
+  margin: 0 10px;
+}
+
+.submitBtn p:last-child {
+  text-align: center;
+  margin-top: 12px;
   color: #f8fafc;
 }
 .submitBtn p a {
-  color: rgb(74, 74, 231);
+  color: rgb(95, 95, 255);
 }
 /* CSS for mobile devices */
 @media (max-width: 599.98px) {
