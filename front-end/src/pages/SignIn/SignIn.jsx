@@ -37,9 +37,6 @@ const SignIn = () => {
     if (!user.password) {
       errors.password = "password required";
     }
-    if (!user.captcha || user.captcha !== "8") {
-      errors.captcha = "Captcha failed!";
-    }
 
     dispatch(setUserErrors(errors));
     return Object.keys(errors).length === 0;
@@ -130,25 +127,6 @@ const SignIn = () => {
             </label>
             {userErrors.password && <p>{userErrors.password}</p>}
           </div>
-          <div>
-            <input
-              type="number"
-              name="captcha"
-              id="captcha"
-              placeholder="Answer"
-              onChange={handleChange}
-              value={user.captcha}
-              className={style.inputField}
-              required
-            />
-            <label htmlFor="captcha" className={style.formLabel}>
-              What is 3 + 5?
-            </label>
-            {userErrors.captcha && <p>{userErrors.captcha}</p>}
-          </div>
-          <div>
-            <GoogleSignIn />
-          </div>
           <div className={style.submitBtn}>
             <button type="submit" disabled={isLoading}>
               {" "}
@@ -156,6 +134,10 @@ const SignIn = () => {
             </button>
             {isError && <p style={{ margin: "0 19px" }}>{error.message}</p>}
             <br />
+            <p className={style.separator}>or</p>
+            <div className={style.googleLogin}>
+              <GoogleSignIn />
+            </div>
             <p>
               New here? <Link to="/sign-up">Create account</Link>
             </p>
