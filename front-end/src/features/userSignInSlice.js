@@ -5,7 +5,6 @@ const initialState = {
   user: {
     email: "",
     password: "",
-    captcha: "",
   },
   userErrors: {},
 };
@@ -31,7 +30,6 @@ const signInSlice = createSlice({
       state.user = {
         email: "",
         password: "",
-        captcha: "",
       };
       state.userErrors = {};
     },
