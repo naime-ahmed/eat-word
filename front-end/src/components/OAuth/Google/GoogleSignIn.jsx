@@ -65,6 +65,7 @@ function GoogleSignIn() {
         onSuccess={handleLoginSuccess}
         onError={handleLoginError}
         cookiePolicy={"single_host_origin"}
+        theme="filled_blue"
       />
     </GoogleOAuthProvider>
   );
