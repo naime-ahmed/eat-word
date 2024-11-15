@@ -1,0 +1,13 @@
+.profilePage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: #020817;
+  overflow: hidden;
+  color: #fff;
+}
+
+.profileContent {
+  min-height: calc(100vh - 200px);
+}
