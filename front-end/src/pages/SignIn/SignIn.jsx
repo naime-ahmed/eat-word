@@ -54,7 +54,6 @@ const SignIn = () => {
         };
 
         const result = await signInUser(formData).unwrap();
-        console.log("res", result);
         // Reset the form to default values
         dispatch(resetForm());
 
