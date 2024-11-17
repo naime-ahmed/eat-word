@@ -30,6 +30,12 @@ const peopleSchema = mongoose.Schema(
       enum: ["admin", "user"],
       default: "user",
     },
+    preferredLang: {
+      type: String,
+    },
+    preferredDevice:{
+      type: String,
+    }
   },
   {
     timestamps: true,
