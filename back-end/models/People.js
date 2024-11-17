@@ -30,6 +30,9 @@ const peopleSchema = mongoose.Schema(
       enum: ["admin", "user"],
       default: "user",
     },
+    profilePicture:{
+      type: String,
+    },
     preferredLang: {
       type: String,
     },
