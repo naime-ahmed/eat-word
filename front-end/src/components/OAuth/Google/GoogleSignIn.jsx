@@ -21,6 +21,7 @@ function GoogleSignIn() {
         `${import.meta.env.VITE_EAT_WORD_BACKEND_URL}/auth/google`,
         {
           method: "POST",
+          credentials: "include",
           headers: {
             "Content-Type": "application/json",
           },
@@ -64,7 +65,7 @@ function GoogleSignIn() {
         buttonText="Sign In with Google"
         onSuccess={handleLoginSuccess}
         onError={handleLoginError}
-        cookiePolicy={"single_host_origin"}
+        cookiePolicy="single_host_origin"
         theme="filled_blue"
       />
     </GoogleOAuthProvider>
