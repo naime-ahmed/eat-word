@@ -32,12 +32,15 @@ const peopleSchema = mongoose.Schema(
     },
     profilePicture:{
       type: String,
+      default: "",
     },
     preferredLang: {
       type: String,
+      default: "",
     },
     preferredDevice:{
       type: String,
+      default: "",
     }
   },
   {
