@@ -7,7 +7,6 @@ import { refreshTokenController } from "../controller/authController/refreshToke
 import { signIn } from "../controller/authController/signInController.js";
 import { signOut } from "../controller/authController/signOutController.js";
 import { addUser } from "../controller/authController/signUpController.js";
-import { removeUser } from "../controller/usersController/deleteController.js";
 import { verifyAccessToken } from "../middlewares/validate/verifyAccessToken.js";
 
 import { signInWithGoogle } from '../controller/authController/signInWithGoogleController.js';
@@ -28,9 +27,6 @@ router.post("/google", signInWithGoogle);
 
 // sign out user
 router.post("/sign-out", signOut);
-
-// delete user
-router.delete("/delete-me", removeUser);
 
 // validate refresh token
 router.post("/refresh-token", refreshTokenController);
