@@ -4,7 +4,7 @@ import User from "../../models/People.js";
 async function getUserById(req, res) {
   try {
     const { userId } = req?.params;
-    console.log(req.user);
+
     // Validate userId
     if (!userId || !userId.match(/^[0-9a-fA-F]{24}$/)) {
       return res.status(400).json({ message: "Invalid user ID format" });
