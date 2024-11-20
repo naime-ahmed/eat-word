@@ -9,5 +9,88 @@
 }
 
 .profileContent {
+  width: 1250px;
+  max-width: 1250px;
   min-height: calc(100vh - 200px);
+  margin-top: 100px;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  padding: 24px;
+}
+.profileHead {
+  display: flex;
+  justify-content: space-between;
+}
+.basicInfo {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.profileImg {
+  flex-basis: 200px;
+  text-align: center;
+}
+.profileImg img {
+  max-width: 180px;
+}
+.nameAndEmail,
+.preferred {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: end;
+  gap: 2rem;
+}
+.inputField {
+  width: 300px;
+  padding: 0.625rem;
+  background-color: transparent;
+  border: 1px solid rgba(75, 103, 173, 0.363);
+  color: #e1e3ff;
+  font-size: 0.875rem;
+  border-radius: 0.5rem;
+  box-sizing: border-box;
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.inputField:focus {
+  outline: none;
+  border-color: rgba(75, 103, 173, 0.663);
+}
+/* 
+.preferred {
+  flex: 1;
+} */
+
+.selectField {
+  width: 300px;
+  padding: 0.625rem;
+  background-color: transparent;
+  border: 1px solid rgba(75, 103, 173, 0.363);
+  color: #e1e3ff;
+  font-size: 0.875rem;
+  border-radius: 0.5rem;
+  box-sizing: border-box;
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+.selectField option {
+  background-color: #020817;
+  color: #e1e3ff;
+}
+.selectField:focus {
+  outline: none;
+  border-color: rgba(75, 103, 173, 0.663);
+}
+
+.saveBasicInfo,
+.changePassBtn {
+  display: flex;
+  justify-content: end;
+}
+.divider {
+  width: 100%;
+  height: 2px;
+  background-color: rgba(139, 139, 255, 0.651);
 }
