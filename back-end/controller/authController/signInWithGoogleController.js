@@ -27,7 +27,7 @@ async function signInWithGoogle(req, res, next) {
     let isNewUser = false;
     
     if (!user) {
-      user = new Users({ name, email, authProvider: 'google' });
+      user = new Users({ name, email, authProvider: 'google', profilePicture: picture });
       await user.save();
       isNewUser = true;
     }
