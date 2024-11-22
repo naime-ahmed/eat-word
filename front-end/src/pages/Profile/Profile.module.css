@@ -22,6 +22,15 @@
   display: flex;
   justify-content: space-between;
 }
+.profileHead p {
+  font-size: 28px;
+  font-weight: 800;
+  color: #0f77ff;
+  background-image: linear-gradient(180deg, #0f77ff 4%, #e0e4ff 74%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
 .basicInfo {
   display: flex;
   justify-content: space-between;
@@ -32,7 +41,9 @@
   text-align: center;
 }
 .profileImg img {
-  max-width: 180px;
+  width: 160px;
+  border: 3px solid rgba(75, 109, 196, 0.337);
+  border-radius: 100%;
 }
 .nameAndEmail,
 .preferred {
@@ -58,6 +69,16 @@
 .inputField:focus {
   outline: none;
   border-color: rgba(75, 103, 173, 0.663);
+}
+
+.inputLabel {
+  margin-bottom: 8px;
+  margin-left: 2px;
+  display: block;
+  color: #e1e3ff;
+}
+.inputLabel small {
+  color: rgb(255, 65, 65);
 }
 /* 
 .preferred {
@@ -92,5 +113,16 @@
 .divider {
   width: 100%;
   height: 2px;
-  background-color: rgba(139, 139, 255, 0.651);
+  background-color: rgba(75, 103, 173, 0.363);
+}
+
+.changePass {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.changePass > div > small {
+  display: block;
+  color: rgb(255, 124, 124);
+  margin-left: 2px;
 }
