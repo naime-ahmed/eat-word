@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import profilePic from "../../assets/defaultUserProfileImage.png";
+import defaultProfilePic from "../../assets/defaultUserProfileImage.png";
 import Error from "../../components/shared/Error/Error";
 import Footer from "../../components/shared/Footer/Footer";
 import Header from "../../components/shared/Header/Header";
@@ -14,14 +14,23 @@ function Profile() {
   const { data, isLoading, isError, error } = useBringUserByIdQuery(user?.id);
 
   const userData = data?.data;
-
-  // Initialize state with empty values
+  // Initialize basic info state with empty values
   const [basicInfo, setBasicInfo] = useState({
     name: "",
     email: "",
     profilePicture: "",
     preferredLang: "",
     preferredDevice: "",
+  });
+
+  // initialize the password state with empty values
+  const [pass, setPass] = useState({
+    curPass: "",
+    curPassError: false,
+    newPass: "",
+    newPassError: false,
+    retypePass: "",
+    retypePassError: false,
   });
 
   // Log any errors (if present)
@@ -41,7 +50,7 @@ function Profile() {
   }, [userData]);
 
   // Function to handle input changes
-  function handleChange(event) {
+  function handleBasicInfoChange(event) {
     const { name, value, type, options } = event.target;
 
     setBasicInfo((prevBasicInfo) => ({
@@ -55,8 +64,27 @@ function Profile() {
     }));
   }
 
-  const handleClick = () => {
+  const handleBasicInfoChangeClick = () => {
     console.log(basicInfo);
+  };
+
+  function handlePassChange(event) {
+    const { name, value } = event.target;
+    setPass({ ...pass, [name]: value });
+  }
+
+  const handlePassChangeClick = () => {
+    setPass((prevPass) => ({
+      ...prevPass,
+      curPassError: pass.curPass === "",
+      newPassError: pass.newPass === "",
+      retypePassError: pass.retypePass === "",
+    }));
+    if (pass.curPassError || pass.newPassError || pass.retypePassError) {
+      return;
+    }
+    console.log(pass);
+    // Call server to update password
   };
 
   return (
@@ -70,18 +98,23 @@ function Profile() {
         <div className={styles.profileContent}>
           <div className={styles.profileHead}>
             <p>My Profile</p>
-            <i className="far fa-edit"></i>
+            <PrimaryBtn>
+              Edit <i className="far fa-edit"></i>
+            </PrimaryBtn>
           </div>
           <div className={styles.basicInfo}>
             <div className={styles.profileImg}>
-              <img src={profilePic} alt="profile picture" />
+              <img
+                src={basicInfo.profilePicture || defaultProfilePic}
+                alt="profile picture"
+              />
             </div>
             <div className={styles.nameAndEmail}>
               <div>
                 <input
                   type="text"
                   name="name"
-                  onChange={handleChange}
+                  onChange={handleBasicInfoChange}
                   value={basicInfo?.name}
                   className={styles.inputField}
                 />
@@ -90,7 +123,7 @@ function Profile() {
                 <input
                   type="email"
                   name="email"
-                  onChange={handleChange}
+                  onChange={handleBasicInfoChange}
                   value={basicInfo?.email}
                   className={styles.inputField}
                 />
@@ -101,7 +134,7 @@ function Profile() {
                 <input
                   list="languages"
                   name="preferredLang"
-                  onChange={handleChange}
+                  onChange={handleBasicInfoChange}
                   value={basicInfo?.preferredLang || ""}
                   className={styles.inputField}
                   placeholder="What’s your comfortable language?"
@@ -131,7 +164,7 @@ function Profile() {
               <div>
                 <select
                   name="preferredDevice"
-                  onChange={handleChange}
+                  onChange={handleBasicInfoChange}
                   value={basicInfo?.preferredDevice || ""}
                   className={styles.selectField}
                 >
@@ -147,16 +180,62 @@ function Profile() {
             </div>
           </div>
           <div className={styles.saveBasicInfo}>
-            <PrimaryBtn handleClick={handleClick}>Save changes</PrimaryBtn>
+            <PrimaryBtn handleBasicInfoChangeClick={handleBasicInfoChangeClick}>
+              Save changes
+            </PrimaryBtn>
           </div>
           <div className={styles.divider}></div>
           <div className={styles.changePass}>
-            <div></div>
-            <div></div>
-            <div></div>
+            <div>
+              <label htmlFor="curPass" className={styles.inputLabel}>
+                Enter current password <small>&#42;</small>
+              </label>
+
+              <input
+                type="password"
+                name="curPass"
+                id="curPass"
+                onChange={handlePassChange}
+                value={pass?.curPass}
+                className={styles.inputField}
+              />
+              {pass.curPassError && <small>current password required</small>}
+            </div>
+            <div>
+              <label htmlFor="newPass" className={styles.inputLabel}>
+                Enter new password <small>&#42;</small>
+              </label>
+
+              <input
+                type="password"
+                name="newPass"
+                id="newPass"
+                onChange={handlePassChange}
+                value={pass?.newPass}
+                className={styles.inputField}
+              />
+              {pass.newPassError && <small>new password required</small>}
+            </div>
+            <div>
+              <label htmlFor="retypePass" className={styles.inputLabel}>
+                Enter new password Again <small>&#42;</small>
+              </label>
+
+              <input
+                type="password"
+                name="retypePass"
+                id="retypePass"
+                onChange={handlePassChange}
+                value={pass?.retypePass}
+                className={styles.inputField}
+              />
+              {pass.retypePassError && <small>retype password required</small>}
+            </div>
           </div>
           <div className={styles.changePassBtn}>
-            <PrimaryBtn>Change Password</PrimaryBtn>
+            <PrimaryBtn handleClick={handlePassChangeClick}>
+              Change Password
+            </PrimaryBtn>
           </div>
         </div>
       )}
