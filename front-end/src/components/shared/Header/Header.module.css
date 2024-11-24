@@ -87,15 +87,20 @@
 
 .profile {
   position: relative;
-  width: 42px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 43px;
   height: 43px;
-  border: 2px solid rgba(179, 180, 255, 0.733);
+  background-color: transparent;
+  border: 2px solid rgba(75, 103, 173, 0.563);
   outline: none;
   border-radius: 50%;
   cursor: pointer;
 }
 .profile img {
-  width: 37px;
+  max-width: 100%;
+  max-height: 100%;
   border-radius: 50%;
 }
 
