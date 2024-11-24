@@ -15,10 +15,11 @@ const Header = () => {
   const profileRef = useRef(null);
   const profilePicBtnRef = useRef(null);
 
-  const { isAuthenticated, user, isLoading } = useSelector(
-    (state) => state.auth
-  );
-  console.log(isAuthenticated, user);
+  const { isAuthenticated, isLoading } = useSelector((state) => state.auth);
+  const { user } = useSelector((state) => state.user);
+  console.log("from header, user data", user);
+  console.log("from header, is auth and user", isAuthenticated);
+
   const handleSidebarToggle = () => {
     setIsSidebarOpen(!isSidebarOpen);
   };
@@ -137,7 +138,10 @@ const Header = () => {
                     }}
                     className={styles.profile}
                   >
-                    <img src={defaultUserProfile} alt="user profile picture" />
+                    <img
+                      src={user?.profilePicture || defaultUserProfile}
+                      alt="user profile picture"
+                    />
                   </button>
                   {isProfileShown && (
                     <div ref={profileRef}>
