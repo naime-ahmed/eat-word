@@ -37,22 +37,64 @@
   align-items: center;
 }
 .profileImg {
+  position: relative;
   flex-basis: 200px;
-  text-align: center;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 .profileImg img {
   width: 160px;
   border: 3px solid rgba(75, 109, 196, 0.337);
   border-radius: 100%;
 }
-.nameAndEmail,
-.preferred {
+.updateImgBtn {
+  position: absolute;
+  bottom: 20px;
+  right: 40px;
+  width: 35px;
+  height: 35px;
+  border-radius: 100%;
+  background-color: #020817;
+  color: #e1e3ff;
+  border: 1px solid rgba(75, 109, 196, 0.337);
+  outline: none;
+  cursor: pointer;
+}
+.updateImgBtn i {
+  transform: rotate(-20deg);
+}
+.nameAndEmailEdit,
+.preferredEdit {
   flex: 1;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: end;
   gap: 2rem;
+}
+.nameAndEmailShow,
+.preferredShow {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: end;
+  gap: 2rem;
+}
+.nameAndEmailShow > div,
+.preferredShow > div {
+  min-width: 300px;
+}
+.nameAndEmailShow > div p:first-child,
+.preferredShow > div p:first-child {
+  opacity: 0.7;
+  margin-bottom: 8px;
+}
+.nameAndEmailShow > div p:last-child,
+.preferredShow > div p:last-child {
+  font-size: 18px;
+  font-weight: 500;
 }
 .inputField {
   width: 300px;
