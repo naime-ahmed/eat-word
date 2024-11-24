@@ -1,17 +1,19 @@
 import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import defaultProfilePic from "../../assets/defaultUserProfileImage.png";
 import Error from "../../components/shared/Error/Error";
 import Footer from "../../components/shared/Footer/Footer";
 import Header from "../../components/shared/Header/Header";
 import PrimaryBtn from "../../components/ui/button/PrimaryBtn/PrimaryBtn";
+import { setUserData, setUserError } from "../../features/userSlice";
 import { useBringUserByIdQuery } from "../../services/user";
 import styles from "./Profile.module.css";
 
 function Profile() {
   const { user } = useSelector((state) => state.auth);
-
+  const dispatch = useDispatch();
   const { data, isLoading, isError, error } = useBringUserByIdQuery(user?.id);
+  const [isChanging, setIsChanging] = useState(false);
 
   const userData = data?.data;
   // Initialize basic info state with empty values
@@ -34,7 +36,13 @@ function Profile() {
   });
 
   // Log any errors (if present)
-  if (isError) console.log(error);
+  if (isError) {
+    console.log(error);
+    dispatch(setUserError(error));
+  } else {
+    console.log("from profile", userData);
+    dispatch(setUserData(userData));
+  }
 
   // Update state once userData is fetched
   useEffect(() => {
@@ -98,145 +106,215 @@ function Profile() {
         <div className={styles.profileContent}>
           <div className={styles.profileHead}>
             <p>My Profile</p>
-            <PrimaryBtn>
-              Edit <i className="far fa-edit"></i>
+            <PrimaryBtn handleClick={() => setIsChanging((prev) => !prev)}>
+              {isChanging ? (
+                <>
+                  <i className="fa-solid fa-xmark"></i> Cancel Edit
+                </>
+              ) : (
+                <>
+                  <i className="far fa-edit"></i> Edit
+                </>
+              )}
             </PrimaryBtn>
           </div>
           <div className={styles.basicInfo}>
             <div className={styles.profileImg}>
               <img
-                src={basicInfo.profilePicture || defaultProfilePic}
+                src={basicInfo?.profilePicture || defaultProfilePic}
                 alt="profile picture"
               />
-            </div>
-            <div className={styles.nameAndEmail}>
-              <div>
-                <input
-                  type="text"
-                  name="name"
-                  onChange={handleBasicInfoChange}
-                  value={basicInfo?.name}
-                  className={styles.inputField}
-                />
-              </div>
-              <div>
-                <input
-                  type="email"
-                  name="email"
-                  onChange={handleBasicInfoChange}
-                  value={basicInfo?.email}
-                  className={styles.inputField}
-                />
-              </div>
-            </div>
-            <div className={styles.preferred}>
-              <div>
-                <input
-                  list="languages"
-                  name="preferredLang"
-                  onChange={handleBasicInfoChange}
-                  value={basicInfo?.preferredLang || ""}
-                  className={styles.inputField}
-                  placeholder="What’s your comfortable language?"
-                />
-                <datalist id="languages">
-                  {[
-                    "English",
-                    "Spanish",
-                    "Mandarin",
-                    "Hindi",
-                    "French",
-                    "Arabic",
-                    "Bengali",
-                    "Russian",
-                    "Portuguese",
-                    "Japanese",
-                    "German",
-                    "Korean",
-                    "Italian",
-                    "Turkish",
-                    "Vietnamese",
-                  ].map((lang) => (
-                    <option key={lang} value={lang} />
-                  ))}
-                </datalist>
-              </div>
-              <div>
-                <select
-                  name="preferredDevice"
-                  onChange={handleBasicInfoChange}
-                  value={basicInfo?.preferredDevice || ""}
-                  className={styles.selectField}
+              {isChanging && (
+                <button
+                  className={styles.updateImgBtn}
+                  title="Edit profile picture"
                 >
-                  <option value="" disabled>
-                    what device you will use often?
-                  </option>
-                  <option value="phone">Phone</option>
-                  <option value="tablet">Tablet</option>
-                  <option value="laptop">Laptop</option>
-                  <option value="pc">PC</option>
-                </select>
+                  <i className="fa-solid fa-pen"></i>
+                </button>
+              )}
+            </div>
+            <div
+              className={
+                isChanging ? styles.nameAndEmailEdit : styles.nameAndEmailShow
+              }
+            >
+              <div>
+                {isChanging ? (
+                  <input
+                    type="text"
+                    name="name"
+                    onChange={handleBasicInfoChange}
+                    value={basicInfo?.name}
+                    className={styles.inputField}
+                  />
+                ) : (
+                  <div>
+                    <p>Your Name:</p>
+                    <p>{basicInfo?.name}</p>
+                  </div>
+                )}
+              </div>
+              <div>
+                {isChanging ? (
+                  <input
+                    type="email"
+                    name="email"
+                    disabled
+                    value={basicInfo?.email}
+                    className={styles.inputField}
+                    title="Email can't be changed now"
+                    style={{ cursor: "not-allowed" }}
+                  />
+                ) : (
+                  <div>
+                    <p>Your Email:</p>
+                    <p>{basicInfo?.email}</p>
+                  </div>
+                )}
+              </div>
+            </div>
+            <div
+              className={
+                isChanging ? styles.preferredEdit : styles.preferredShow
+              }
+            >
+              {isChanging ? (
+                <div>
+                  <input
+                    list="languages"
+                    name="preferredLang"
+                    onChange={handleBasicInfoChange}
+                    value={basicInfo?.preferredLang || ""}
+                    className={styles.inputField}
+                    placeholder="What’s your comfortable language?"
+                  />
+                  <datalist id="languages">
+                    {[
+                      "English",
+                      "Spanish",
+                      "Mandarin",
+                      "Hindi",
+                      "French",
+                      "Arabic",
+                      "Bengali",
+                      "Russian",
+                      "Portuguese",
+                      "Japanese",
+                      "German",
+                      "Korean",
+                      "Italian",
+                      "Turkish",
+                      "Vietnamese",
+                    ].map((lang) => (
+                      <option key={lang} value={lang} />
+                    ))}
+                  </datalist>
+                </div>
+              ) : (
+                <div>
+                  <p>Your language:</p>
+                  <p>
+                    {basicInfo?.preferredLang
+                      ? basicInfo?.preferredLang
+                      : "You haven't given yet"}
+                  </p>
+                </div>
+              )}
+              <div>
+                {isChanging ? (
+                  <select
+                    name="preferredDevice"
+                    onChange={handleBasicInfoChange}
+                    value={basicInfo?.preferredDevice || ""}
+                    className={styles.selectField}
+                  >
+                    <option value="" disabled>
+                      what device you will use often?
+                    </option>
+                    <option value="phone">Phone</option>
+                    <option value="tablet">Tablet</option>
+                    <option value="laptop">Laptop</option>
+                    <option value="pc">PC</option>
+                  </select>
+                ) : (
+                  <div>
+                    <p>preferred device:</p>
+                    <p>
+                      {basicInfo?.preferredDevice
+                        ? basicInfo?.preferredDevice
+                        : "you haven't selected yet"}
+                    </p>
+                  </div>
+                )}
               </div>
             </div>
           </div>
-          <div className={styles.saveBasicInfo}>
-            <PrimaryBtn handleBasicInfoChangeClick={handleBasicInfoChangeClick}>
-              Save changes
-            </PrimaryBtn>
-          </div>
-          <div className={styles.divider}></div>
-          <div className={styles.changePass}>
-            <div>
-              <label htmlFor="curPass" className={styles.inputLabel}>
-                Enter current password <small>&#42;</small>
-              </label>
-
-              <input
-                type="password"
-                name="curPass"
-                id="curPass"
-                onChange={handlePassChange}
-                value={pass?.curPass}
-                className={styles.inputField}
-              />
-              {pass.curPassError && <small>current password required</small>}
+          {isChanging && (
+            <div className={styles.saveBasicInfo}>
+              <PrimaryBtn handleClick={handleBasicInfoChangeClick}>
+                Save changes
+              </PrimaryBtn>
             </div>
-            <div>
-              <label htmlFor="newPass" className={styles.inputLabel}>
-                Enter new password <small>&#42;</small>
-              </label>
+          )}
+          {isChanging && <div className={styles.divider}></div>}
+          {isChanging && (
+            <div className={styles.changePass}>
+              <div>
+                <label htmlFor="curPass" className={styles.inputLabel}>
+                  Enter current password <small>&#42;</small>
+                </label>
 
-              <input
-                type="password"
-                name="newPass"
-                id="newPass"
-                onChange={handlePassChange}
-                value={pass?.newPass}
-                className={styles.inputField}
-              />
-              {pass.newPassError && <small>new password required</small>}
-            </div>
-            <div>
-              <label htmlFor="retypePass" className={styles.inputLabel}>
-                Enter new password Again <small>&#42;</small>
-              </label>
+                <input
+                  type="password"
+                  name="curPass"
+                  id="curPass"
+                  onChange={handlePassChange}
+                  value={pass?.curPass}
+                  className={styles.inputField}
+                />
+                {pass.curPassError && <small>current password required</small>}
+              </div>
+              <div>
+                <label htmlFor="newPass" className={styles.inputLabel}>
+                  Enter new password <small>&#42;</small>
+                </label>
 
-              <input
-                type="password"
-                name="retypePass"
-                id="retypePass"
-                onChange={handlePassChange}
-                value={pass?.retypePass}
-                className={styles.inputField}
-              />
-              {pass.retypePassError && <small>retype password required</small>}
+                <input
+                  type="password"
+                  name="newPass"
+                  id="newPass"
+                  onChange={handlePassChange}
+                  value={pass?.newPass}
+                  className={styles.inputField}
+                />
+                {pass.newPassError && <small>new password required</small>}
+              </div>
+              <div>
+                <label htmlFor="retypePass" className={styles.inputLabel}>
+                  Enter new password Again <small>&#42;</small>
+                </label>
+
+                <input
+                  type="password"
+                  name="retypePass"
+                  id="retypePass"
+                  onChange={handlePassChange}
+                  value={pass?.retypePass}
+                  className={styles.inputField}
+                />
+                {pass.retypePassError && (
+                  <small>retype password required</small>
+                )}
+              </div>
             </div>
-          </div>
-          <div className={styles.changePassBtn}>
-            <PrimaryBtn handleClick={handlePassChangeClick}>
-              Change Password
-            </PrimaryBtn>
-          </div>
+          )}
+          {isChanging && (
+            <div className={styles.changePassBtn}>
+              <PrimaryBtn handleClick={handlePassChangeClick}>
+                Change Password
+              </PrimaryBtn>
+            </div>
+          )}
         </div>
       )}
       <Footer />
