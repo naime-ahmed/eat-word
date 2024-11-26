@@ -1,12 +1,16 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import Swal from "sweetalert2";
 import defaultProfilePic from "../../assets/defaultUserProfileImage.png";
 import Error from "../../components/shared/Error/Error";
 import Footer from "../../components/shared/Footer/Footer";
 import Header from "../../components/shared/Header/Header";
 import PrimaryBtn from "../../components/ui/button/PrimaryBtn/PrimaryBtn";
 import { setUserData, setUserError } from "../../features/userSlice";
-import { useBringUserByIdQuery } from "../../services/user";
+import {
+  useBringUserByIdQuery,
+  useUpdateUserMutation,
+} from "../../services/user";
 import styles from "./Profile.module.css";
 
 function Profile() {
@@ -14,6 +18,11 @@ function Profile() {
   const dispatch = useDispatch();
   const { data, isLoading, isError, error } = useBringUserByIdQuery(user?.id);
   const [isChanging, setIsChanging] = useState(false);
+
+  const [
+    updateUser,
+    { isLoading: isLoadingUpdate, isError: isErrorUpdate, error: errorUpdate },
+  ] = useUpdateUserMutation();
 
   const userData = data?.data;
   // Initialize basic info state with empty values
@@ -72,8 +81,47 @@ function Profile() {
     }));
   }
 
-  const handleBasicInfoChangeClick = () => {
-    console.log(basicInfo);
+  const handleBasicInfoChangeClick = async () => {
+    try {
+      const changedBasicInfo = {
+        name: basicInfo.name,
+        profilePicture: basicInfo.profilePicture,
+        preferredLang: basicInfo.preferredLang,
+        preferredDevice: basicInfo.preferredDevice,
+      };
+      const updatedUser = await updateUser(changedBasicInfo);
+      console.log("updated user", updatedUser);
+      console.log("ue", isErrorUpdate, errorUpdate);
+      if (isErrorUpdate || [400, 404].includes(updatedUser?.error?.status)) {
+        // show the error to user
+        Swal.fire({
+          title: "Something went wrong",
+          text:
+            errorUpdate?.data?.message ||
+            updatedUser?.error?.data?.message ||
+            "An unexpected error occurred",
+          icon: "error",
+          confirmButtonText: "ok",
+        });
+      } else {
+        dispatch(setUserData(updatedUser?.data?.user));
+        // show the error to user
+        Swal.fire({
+          title: updatedUser?.data?.message,
+          icon: "success",
+          confirmButtonText: "ok",
+        });
+        setIsChanging(false);
+      }
+    } catch (error) {
+      console.log("update basicInfo", error);
+      Swal.fire({
+        title: "Something went wrong",
+        text: "An unexpected error occurred",
+        icon: "error",
+        confirmButtonText: "ok",
+      });
+    }
   };
 
   function handlePassChange(event) {
@@ -91,8 +139,18 @@ function Profile() {
     if (pass.curPassError || pass.newPassError || pass.retypePassError) {
       return;
     }
-    console.log(pass);
+    console.log("pass change", pass);
     // Call server to update password
+
+    // reset password fields
+    // setPass({
+    //   curPass: "",
+    //   curPassError: false,
+    //   newPass: "",
+    //   newPassError: false,
+    //   retypePass: "",
+    //   retypePassError: false,
+    // });
   };
 
   return (
@@ -251,7 +309,10 @@ function Profile() {
           </div>
           {isChanging && (
             <div className={styles.saveBasicInfo}>
-              <PrimaryBtn handleClick={handleBasicInfoChangeClick}>
+              <PrimaryBtn
+                handleClick={handleBasicInfoChangeClick}
+                isLoading={isLoadingUpdate}
+              >
                 Save changes
               </PrimaryBtn>
             </div>
