@@ -3,16 +3,16 @@
   top: 70px;
   right: 0;
   width: 250px;
-  height: 340px;
+  min-height: min-content;
   padding: 20px;
   z-index: 100;
   transition: all 0.4s ease;
-  background: rgba(1, 0, 31, 0.95);
-  border-radius: 10px;
+  background: rgba(1, 0, 24);
+  border: 1px solid rgba(75, 103, 173, 0.363);
+  border-radius: 6px;
   box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-  backdrop-filter: blur(50px);
-  -webkit-backdrop-filter: blur(50px);
-  border: 1px solid rgba(54, 56, 136, 0.5);
+  backdrop-filter: blur(5.6px);
+  -webkit-backdrop-filter: blur(5.6px);
   color: white;
 }
 .profilePicture,
@@ -22,12 +22,14 @@
 }
 .profilePicture img {
   max-width: 100px;
-  border: 2px solid #3ea8ff;
+  border: 2px solid rgba(75, 103, 173, 0.563);
   border-radius: 50%;
 }
-
+.userName {
+  margin-top: 4px;
+}
 .viewProfileBtn {
-  margin-top: 10px;
+  margin-top: 14px;
 }
 .userProfileTabs {
   margin-top: 20px;
