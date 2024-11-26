@@ -168,3 +168,41 @@
   color: rgb(255, 124, 124);
   margin-left: 2px;
 }
+
+/* Extra Large Devices (large desktops) - 1200px and above: */
+@media (min-width: 1200px) and (max-width: 1400px) {
+  /* CSS for Hero Container */
+  .profileContent {
+    max-width: 1150px;
+  }
+}
+
+/* Large Devices (desktops) - 1000px to 1199px wide: */
+@media (min-width: 1000px) and (max-width: 1199.98px) {
+  .profileContent {
+    max-width: 950px;
+  }
+  .inputField,
+  .selectField {
+    width: 250px;
+  }
+}
+
+@media (max-width: 999.98px) {
+  .profileContent {
+    width: 100%;
+    max-width: 750px;
+  }
+  .basicInfo {
+    flex-direction: column;
+    gap: 32px;
+  }
+  .updateImgBtn {
+    bottom: 35px;
+    right: 2px;
+  }
+  .changePass {
+    flex-direction: column;
+    gap: 20px;
+  }
+}
