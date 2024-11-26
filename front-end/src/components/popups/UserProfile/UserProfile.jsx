@@ -1,4 +1,4 @@
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import defaultUserProfileImage from "../../../assets/defaultUserProfileImage.png";
@@ -12,6 +12,7 @@ const UserProfile = ({ onClose }) => {
   const dispatch = useDispatch();
 
   const [signOutUser, { isLoading }] = useSignOutUserMutation();
+  const { user } = useSelector((state) => state.user);
 
   const handleSignOut = async () => {
     try {
@@ -71,10 +72,13 @@ const UserProfile = ({ onClose }) => {
   return (
     <div className={styles.userProfile}>
       <div className={styles.profilePicture}>
-        <img src={defaultUserProfileImage} alt="profile picture" />
+        <img
+          src={user?.profilePicture || defaultUserProfileImage}
+          alt="profile picture"
+        />
       </div>
       <div className={styles.userName}>
-        <h3>User name</h3>
+        <h3>{user?.name}</h3>
       </div>
       <div className={styles.viewProfileBtn}>
         <Link to="/profile">
