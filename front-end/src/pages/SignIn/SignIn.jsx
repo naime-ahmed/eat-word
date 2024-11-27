@@ -102,6 +102,7 @@ const SignIn = () => {
               onChange={handleChange}
               value={user.email}
               className={style.inputField}
+              autoComplete="on"
               required
             />
             <label htmlFor="email" className={style.formLabel}>
@@ -119,6 +120,7 @@ const SignIn = () => {
               onChange={handleChange}
               value={user.password}
               className={style.inputField}
+              autoComplete="on"
               required
             />
             <label htmlFor="password" className={style.formLabel}>
