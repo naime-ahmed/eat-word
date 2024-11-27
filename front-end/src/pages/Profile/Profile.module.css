@@ -152,6 +152,9 @@
   display: flex;
   justify-content: end;
 }
+.changePassBtn {
+  margin-top: 32px;
+}
 .divider {
   width: 100%;
   height: 2px;
