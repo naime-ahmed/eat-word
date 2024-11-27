@@ -83,17 +83,32 @@ function Profile() {
 
   const handleBasicInfoChangeClick = async () => {
     try {
-      const changedBasicInfo = {
-        name: basicInfo.name,
-        profilePicture: basicInfo.profilePicture,
-        preferredLang: basicInfo.preferredLang,
-        preferredDevice: basicInfo.preferredDevice,
-      };
+      // Construct the object with only changed fields
+      const changedBasicInfo = {};
+      if (userData?.name !== basicInfo?.name) {
+        changedBasicInfo.name = basicInfo?.name;
+      }
+      if (userData?.profilePicture !== basicInfo?.profilePicture) {
+        changedBasicInfo.profilePicture = basicInfo?.profilePicture;
+      }
+      if (userData?.preferredLang !== basicInfo?.preferredLang) {
+        changedBasicInfo.preferredLang = basicInfo?.preferredLang;
+      }
+      if (userData?.preferredDevice !== basicInfo?.preferredDevice) {
+        changedBasicInfo.preferredDevice = basicInfo?.preferredDevice;
+      }
+
+      // Check if any field was actually changed
+      if (Object.keys(changedBasicInfo).length === 0) {
+        console.log("No changes detected, skipping server update.");
+        return;
+      }
+
+      // Make the server call to update the user
       const updatedUser = await updateUser(changedBasicInfo);
-      console.log("updated user", updatedUser);
-      console.log("ue", isErrorUpdate, errorUpdate);
+
       if (isErrorUpdate || [400, 404].includes(updatedUser?.error?.status)) {
-        // show the error to user
+        // Display error to the user
         Swal.fire({
           title: "Something went wrong",
           text:
@@ -104,17 +119,17 @@ function Profile() {
           confirmButtonText: "ok",
         });
       } else {
+        // Update state and notify the user
         dispatch(setUserData(updatedUser?.data?.user));
-        // show the error to user
         Swal.fire({
-          title: updatedUser?.data?.message,
+          title: updatedUser?.data?.message || "Update successful",
           icon: "success",
           confirmButtonText: "ok",
         });
         setIsChanging(false);
       }
     } catch (error) {
-      console.log("update basicInfo", error);
+      console.error("Error updating basic info:", error);
       Swal.fire({
         title: "Something went wrong",
         text: "An unexpected error occurred",
@@ -129,28 +144,43 @@ function Profile() {
     setPass({ ...pass, [name]: value });
   }
 
-  const handlePassChangeClick = () => {
+  const handlePassChangeClick = (e) => {
+    e.preventDefault();
+
+    // Validate fields
+    const curPassError = pass.curPass === "";
+    const newPassError = pass.newPass === "";
+    const retypePassError = pass.retypePass === "";
+
+    // Update state with validation errors
     setPass((prevPass) => ({
       ...prevPass,
-      curPassError: pass.curPass === "",
-      newPassError: pass.newPass === "",
-      retypePassError: pass.retypePass === "",
+      curPassError,
+      newPassError,
+      retypePassError,
     }));
-    if (pass.curPassError || pass.newPassError || pass.retypePassError) {
+
+    // If there are any validation errors, return early
+    if (curPassError || newPassError || retypePassError) {
+      console.log("Validation failed, returning...");
       return;
     }
-    console.log("pass change", pass);
-    // Call server to update password
 
+    // Proceed with the function if no validation errors
+    console.log("Password change details:", pass);
+  };
+
+  const handleIsChanging = () => {
+    setIsChanging((prev) => !prev);
     // reset password fields
-    // setPass({
-    //   curPass: "",
-    //   curPassError: false,
-    //   newPass: "",
-    //   newPassError: false,
-    //   retypePass: "",
-    //   retypePassError: false,
-    // });
+    setPass({
+      curPass: "",
+      curPassError: false,
+      newPass: "",
+      newPassError: false,
+      retypePass: "",
+      retypePassError: false,
+    });
   };
 
   return (
@@ -164,7 +194,7 @@ function Profile() {
         <div className={styles.profileContent}>
           <div className={styles.profileHead}>
             <p>My Profile</p>
-            <PrimaryBtn handleClick={() => setIsChanging((prev) => !prev)}>
+            <PrimaryBtn handleClick={handleIsChanging}>
               {isChanging ? (
                 <>
                   <i className="fa-solid fa-xmark"></i> Cancel Edit
@@ -319,62 +349,65 @@ function Profile() {
           )}
           {isChanging && <div className={styles.divider}></div>}
           {isChanging && (
-            <div className={styles.changePass}>
-              <div>
-                <label htmlFor="curPass" className={styles.inputLabel}>
-                  Enter current password <small>&#42;</small>
-                </label>
+            <form onSubmit={handlePassChangeClick}>
+              <div className={styles.changePass}>
+                <div>
+                  <label htmlFor="curPass" className={styles.inputLabel}>
+                    Enter current password <small>&#42;</small>
+                  </label>
 
-                <input
-                  type="password"
-                  name="curPass"
-                  id="curPass"
-                  onChange={handlePassChange}
-                  value={pass?.curPass}
-                  className={styles.inputField}
-                />
-                {pass.curPassError && <small>current password required</small>}
-              </div>
-              <div>
-                <label htmlFor="newPass" className={styles.inputLabel}>
-                  Enter new password <small>&#42;</small>
-                </label>
+                  <input
+                    type="password"
+                    name="curPass"
+                    id="curPass"
+                    onChange={handlePassChange}
+                    value={pass?.curPass}
+                    className={styles.inputField}
+                    autoComplete="on"
+                  />
+                  {pass.curPassError && (
+                    <small>current password required</small>
+                  )}
+                </div>
+                <div>
+                  <label htmlFor="newPass" className={styles.inputLabel}>
+                    Enter new password <small>&#42;</small>
+                  </label>
 
-                <input
-                  type="password"
-                  name="newPass"
-                  id="newPass"
-                  onChange={handlePassChange}
-                  value={pass?.newPass}
-                  className={styles.inputField}
-                />
-                {pass.newPassError && <small>new password required</small>}
-              </div>
-              <div>
-                <label htmlFor="retypePass" className={styles.inputLabel}>
-                  Enter new password Again <small>&#42;</small>
-                </label>
+                  <input
+                    type="password"
+                    name="newPass"
+                    id="newPass"
+                    onChange={handlePassChange}
+                    value={pass?.newPass}
+                    className={styles.inputField}
+                    autoComplete="on"
+                  />
+                  {pass.newPassError && <small>new password required</small>}
+                </div>
+                <div>
+                  <label htmlFor="retypePass" className={styles.inputLabel}>
+                    Enter new password Again <small>&#42;</small>
+                  </label>
 
-                <input
-                  type="password"
-                  name="retypePass"
-                  id="retypePass"
-                  onChange={handlePassChange}
-                  value={pass?.retypePass}
-                  className={styles.inputField}
-                />
-                {pass.retypePassError && (
-                  <small>retype password required</small>
-                )}
+                  <input
+                    type="password"
+                    name="retypePass"
+                    id="retypePass"
+                    onChange={handlePassChange}
+                    value={pass?.retypePass}
+                    className={styles.inputField}
+                    autoComplete="on"
+                  />
+                  {pass.retypePassError && (
+                    <small>retype password required</small>
+                  )}
+                </div>
               </div>
-            </div>
-          )}
-          {isChanging && (
-            <div className={styles.changePassBtn}>
-              <PrimaryBtn handleClick={handlePassChangeClick}>
-                Change Password
-              </PrimaryBtn>
-            </div>
+              <div className={styles.changePassBtn}>
+                <PrimaryBtn btnType="submit">Change Password</PrimaryBtn>
+              </div>
+            </form>
           )}
         </div>
       )}
