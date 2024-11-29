@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useEditMilestoneMutation } from "../../../services/milestone";
 import PrimaryBtn from "../../ui/button/PrimaryBtn/PrimaryBtn";
 import styles from "./EditMilestone.module.css";
+import Swal from "sweetalert2";
 
 function EditMilestone({ isOpen, onClose, milestone, onCloseFloatCard }) {
   const [editedMilestone, setEditedMilestone] = useState({
