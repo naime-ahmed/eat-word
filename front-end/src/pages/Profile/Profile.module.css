@@ -54,13 +54,28 @@
   right: 40px;
   width: 35px;
   height: 35px;
-  border-radius: 100%;
+  border-radius: 50%;
   background-color: #020817;
-  color: #e1e3ff;
+  color: #e1e3ff; /* Icon color */
   border: 1px solid rgba(75, 109, 196, 0.337);
   outline: none;
   cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  transition: background-color 0.3s;
 }
+
+.updateImgBtn:hover {
+  background-color: #1d2c4d;
+}
+
+/* Hide the actual file input */
+.updateImgBtn > input {
+  display: none;
+}
+
 .updateImgBtn i {
   transform: rotate(-20deg);
 }
