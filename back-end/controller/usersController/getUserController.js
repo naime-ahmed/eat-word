@@ -21,6 +21,7 @@ async function getUserById(req, res) {
       email: user.email,
       profilePicture: user.profilePicture,
       role: user.role,
+      authProvider: user.authProvider,
       preferredLang: user.preferredLang,
       preferredDevice: user.preferredDevice,
       createdAt: user.createdAt,
