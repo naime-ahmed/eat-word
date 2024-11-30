@@ -92,6 +92,14 @@ export const userApi = createApi({
       invalidatesTags: ["user"],
     }),
 
+    // update user password
+    updatePassword: builder.mutation({
+      query: (currAndNewPass) => ({
+        url: "/update-pass",
+        method: "PUT",
+        body: currAndNewPass,
+      })
+    }),
     // Delete a user
     deleteUser: builder.mutation({
       query: () => ({
@@ -119,6 +127,7 @@ export const userApi = createApi({
 export const {
   useBringUserByIdQuery,
   useUpdateUserMutation,
+  useUpdatePasswordMutation,
   useDeleteUserMutation,
 } = userApi;
 
