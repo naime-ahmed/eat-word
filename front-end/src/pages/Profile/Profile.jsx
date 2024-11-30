@@ -9,6 +9,7 @@ import PrimaryBtn from "../../components/ui/button/PrimaryBtn/PrimaryBtn";
 import { setUserData, setUserError } from "../../features/userSlice";
 import {
   useBringUserByIdQuery,
+  useUpdatePasswordMutation,
   useUpdateUserMutation,
 } from "../../services/user";
 import styles from "./Profile.module.css";
@@ -24,6 +25,11 @@ function Profile() {
     { isLoading: isLoadingUpdate, isError: isErrorUpdate, error: errorUpdate },
   ] = useUpdateUserMutation();
 
+  const [
+    updatePassword,
+    { isLoading: isLoadingUpPass, isError: isErrorUpPass, error: errorUpPass },
+  ] = useUpdatePasswordMutation();
+
   const userData = data?.data;
   // Initialize basic info state with empty values
   const [basicInfo, setBasicInfo] = useState({
@@ -37,11 +43,11 @@ function Profile() {
   // initialize the password state with empty values
   const [pass, setPass] = useState({
     curPass: "",
-    curPassError: false,
+    curPassError: "",
     newPass: "",
-    newPassError: false,
+    newPassError: "",
     retypePass: "",
-    retypePassError: false,
+    retypePassError: "",
   });
 
   // Log any errors (if present)
@@ -49,7 +55,7 @@ function Profile() {
     console.log(error);
     dispatch(setUserError(error));
   } else {
-    console.log("from profile", userData);
+    // console.log("from profile", userData);
     dispatch(setUserData(userData));
   }
 
@@ -181,7 +187,10 @@ function Profile() {
       // Make the server call to update the user
       const updatedUser = await updateUser(changedBasicInfo);
 
-      if (isErrorUpdate || [400, 404].includes(updatedUser?.error?.status)) {
+      if (
+        isErrorUpdate ||
+        [400, 404, 500].includes(updatedUser?.error?.status)
+      ) {
         // Display error to the user
         Swal.fire({
           title: "Something went wrong",
@@ -218,13 +227,25 @@ function Profile() {
     setPass({ ...pass, [name]: value });
   }
 
-  const handlePassChangeClick = (e) => {
+  const handlePassChangeClick = async (e) => {
     e.preventDefault();
 
     // Validate fields
-    const curPassError = pass.curPass === "";
-    const newPassError = pass.newPass === "";
-    const retypePassError = pass.retypePass === "";
+    const curPassError =
+      pass.curPass === "" ? "current password is required" : "";
+    const newPassError = pass.newPass === "" ? "new password is required" : "";
+    let retypePassError =
+      pass.retypePass === "" ? "retype the new password" : "";
+
+    // front-end validation
+    if (pass.newPass != pass.retypePass) {
+      retypePassError = "didn't match with new password";
+    }
+
+    // check is curr pass and new pass is same or not
+    if (pass.newPass === pass.curPass) {
+      pass.newPassError = "current password and this password is same! lol";
+    }
 
     // Update state with validation errors
     setPass((prevPass) => ({
@@ -241,7 +262,40 @@ function Profile() {
     }
 
     // Proceed with the function if no validation errors
-    console.log("Password change details:", pass);
+    try {
+      const res = await updatePassword({
+        curPass: pass?.curPass,
+        newPass: pass?.newPass,
+      });
+      console.log("upPassRes", await res);
+      if (isErrorUpPass || [400, 401, 404, 500].includes(res?.error?.status)) {
+        // Display error to the user
+        Swal.fire({
+          title: "Something went wrong",
+          text:
+            errorUpPass?.data?.message ||
+            res?.error?.data?.message ||
+            "An unexpected error occurred",
+          icon: "error",
+          confirmButtonText: "ok",
+        });
+      } else {
+        Swal.fire({
+          title: res?.data?.message || "Update successful",
+          icon: "success",
+          confirmButtonText: "ok",
+        });
+        setIsChanging(false);
+      }
+    } catch (error) {
+      console.log(error);
+      Swal.fire({
+        title: "Something went wrong",
+        text: "An unexpected error occurred",
+        icon: "error",
+        confirmButtonText: "ok",
+      });
+    }
   };
 
   const handleIsChanging = () => {
@@ -424,8 +478,10 @@ function Profile() {
               </PrimaryBtn>
             </div>
           )}
-          {isChanging && <div className={styles.divider}></div>}
-          {isChanging && (
+          {isChanging && userData?.authProvider === "local" && (
+            <div className={styles.divider}></div>
+          )}
+          {isChanging && userData?.authProvider === "local" && (
             <form onSubmit={handlePassChangeClick}>
               <div className={styles.changePass}>
                 <div>
@@ -442,9 +498,7 @@ function Profile() {
                     className={styles.inputField}
                     autoComplete="on"
                   />
-                  {pass.curPassError && (
-                    <small>current password required</small>
-                  )}
+                  {pass.curPassError && <small>{pass.curPassError}</small>}
                 </div>
                 <div>
                   <label htmlFor="newPass" className={styles.inputLabel}>
@@ -460,7 +514,7 @@ function Profile() {
                     className={styles.inputField}
                     autoComplete="on"
                   />
-                  {pass.newPassError && <small>new password required</small>}
+                  {pass.newPassError && <small>{pass.newPassError}</small>}
                 </div>
                 <div>
                   <label htmlFor="retypePass" className={styles.inputLabel}>
@@ -477,12 +531,14 @@ function Profile() {
                     autoComplete="on"
                   />
                   {pass.retypePassError && (
-                    <small>retype password required</small>
+                    <small>{pass.retypePassError}</small>
                   )}
                 </div>
               </div>
               <div className={styles.changePassBtn}>
-                <PrimaryBtn btnType="submit">Change Password</PrimaryBtn>
+                <PrimaryBtn btnType="submit" isLoading={isLoadingUpPass}>
+                  Change Password
+                </PrimaryBtn>
               </div>
             </form>
           )}
