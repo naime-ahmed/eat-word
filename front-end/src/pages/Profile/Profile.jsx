@@ -81,6 +81,80 @@ function Profile() {
     }));
   }
 
+  // function to handle profile img change
+  async function handleProfilePicChange(event) {
+    const file = event.target.files?.[0]; // Access the first file selected safely
+
+    if (!file) {
+      console.log("No file selected.");
+      return;
+    }
+
+    // Validate the file type
+    const validImageTypes = ["image/png", "image/jpg", "image/jpeg"];
+    if (!validImageTypes.includes(file.type)) {
+      Swal.fire({
+        title: "Invalid File Type",
+        text: "Please upload a valid image file (PNG or JPEG).",
+        icon: "error",
+        confirmButtonText: "OK",
+      });
+      return;
+    }
+
+    // Validate the file size (300 KB limit)
+    const maxSizeKB = 300;
+    if (file.size > maxSizeKB * 1024) {
+      Swal.fire({
+        title: "File Too Large",
+        text: `File size must be less than ${maxSizeKB}KB.`,
+        icon: "error",
+        confirmButtonText: "OK",
+      });
+      return;
+    }
+
+    try {
+      // Prepare data for Cloudinary upload
+      const data = new FormData();
+      data.append("file", file);
+      data.append("upload_preset", "eatwordCloudImg");
+      data.append("cloud_name", "dspfa3xt1");
+
+      const response = await fetch(
+        "https://api.cloudinary.com/v1_1/dspfa3xt1/image/upload",
+        {
+          method: "POST",
+          body: data,
+        }
+      );
+
+      if (!response.ok) {
+        const errorResponse = await response.json();
+        throw new Error(
+          errorResponse.error?.message || "Failed to upload image."
+        );
+      }
+
+      const resData = await response.json();
+
+      // Update state with the uploaded image URL
+      setBasicInfo((prev) => ({
+        ...prev,
+        profilePicture: resData.secure_url,
+      }));
+    } catch (error) {
+      // Display error to the user
+      console.error("Error uploading image:", error);
+      Swal.fire({
+        title: "Upload Failed",
+        text: error.message || "An unexpected error occurred.",
+        icon: "error",
+        confirmButtonText: "OK",
+      });
+    }
+  }
+
   const handleBasicInfoChangeClick = async () => {
     try {
       // Construct the object with only changed fields
@@ -213,12 +287,15 @@ function Profile() {
                 alt="profile picture"
               />
               {isChanging && (
-                <button
-                  className={styles.updateImgBtn}
-                  title="Edit profile picture"
-                >
+                <label htmlFor="file-upload" className={styles.updateImgBtn}>
                   <i className="fa-solid fa-pen"></i>
-                </button>
+                  <input
+                    id="file-upload"
+                    onChange={handleProfilePicChange}
+                    type="file"
+                    accept="image/png, image/jpg, image/jpeg"
+                  />
+                </label>
               )}
             </div>
             <div
