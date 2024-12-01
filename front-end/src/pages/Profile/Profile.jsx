@@ -29,7 +29,7 @@ function Profile() {
     updatePassword,
     { isLoading: isLoadingUpPass, isError: isErrorUpPass, error: errorUpPass },
   ] = useUpdatePasswordMutation();
-
+  console.log("errFromRTKUpPassOut", isErrorUpPass, errorUpPass);
   const userData = data?.data;
   // Initialize basic info state with empty values
   const [basicInfo, setBasicInfo] = useState({
@@ -233,20 +233,23 @@ function Profile() {
     // Validate fields
     const curPassError =
       pass.curPass === "" ? "current password is required" : "";
-    const newPassError = pass.newPass === "" ? "new password is required" : "";
+    let newPassError = pass.newPass === "" ? "new password is required" : "";
     let retypePassError =
       pass.retypePass === "" ? "retype the new password" : "";
 
     // front-end validation
-    if (pass.newPass != pass.retypePass) {
+    if (pass.newPass && pass.retypePass && pass.newPass != pass.retypePass) {
       retypePassError = "didn't match with new password";
     }
 
     // check is curr pass and new pass is same or not
-    if (pass.newPass === pass.curPass) {
-      pass.newPassError = "current password and this password is same! lol";
+    if (pass.newPass && pass.curPass && pass.newPass === pass.curPass) {
+      newPassError = "current password and this password is same! lol";
     }
 
+    if (newPassError === "" && pass.newPass.length < 6) {
+      newPassError = "password is too small";
+    }
     // Update state with validation errors
     setPass((prevPass) => ({
       ...prevPass,
@@ -267,19 +270,9 @@ function Profile() {
         curPass: pass?.curPass,
         newPass: pass?.newPass,
       });
-      console.log("upPassRes", await res);
-      if (isErrorUpPass || [400, 401, 404, 500].includes(res?.error?.status)) {
-        // Display error to the user
-        Swal.fire({
-          title: "Something went wrong",
-          text:
-            errorUpPass?.data?.message ||
-            res?.error?.data?.message ||
-            "An unexpected error occurred",
-          icon: "error",
-          confirmButtonText: "ok",
-        });
-      } else {
+      console.log("upPassRes", res?.status, res);
+
+      if (res?.data) {
         Swal.fire({
           title: res?.data?.message || "Update successful",
           icon: "success",
@@ -499,6 +492,7 @@ function Profile() {
                     autoComplete="on"
                   />
                   {pass.curPassError && <small>{pass.curPassError}</small>}
+                  {isErrorUpPass && <small>{errorUpPass?.data?.message}</small>}
                 </div>
                 <div>
                   <label htmlFor="newPass" className={styles.inputLabel}>
