@@ -5,11 +5,13 @@ import express from "express";
 import { isUserValid } from "../controller/authController/isUserValidController.js";
 import { refreshTokenController } from "../controller/authController/refreshTokenController.js";
 import { signIn } from "../controller/authController/signInController.js";
+import { signInWithGoogle } from "../controller/authController/signInWithGoogleController.js";
 import { signOut } from "../controller/authController/signOutController.js";
-import { addUser } from "../controller/authController/signUpController.js";
+import {
+  activate,
+  signUp,
+} from "../controller/authController/signUpController.js";
 import { verifyAccessToken } from "../middlewares/validate/verifyAccessToken.js";
-
-import { signInWithGoogle } from '../controller/authController/signInWithGoogleController.js';
 
 const router = express.Router();
 
@@ -17,10 +19,13 @@ const router = express.Router();
 router.post("/", verifyAccessToken, isUserValid);
 
 // sing up user
-router.post("/sign-up", addUser);
+router.post("/sign-up", signUp);
 
 // sign in user
 router.post("/sign-in", signIn);
+
+// activate the user
+router.post("/activate", activate);
 
 // authenticate user via google
 router.post("/google", signInWithGoogle);
