@@ -28,3 +28,17 @@ export function generateAccessToken(user) {
     { expiresIn: process.env.JWT_ACCESS_TOKEN_EXPIRY }
   );
 }
+
+// generate activation token
+export function generateActivationToken(user) {
+  return jwt.sign(
+    {
+      id: user._id,
+      name: user.name,
+      email: user.email,
+      password: user.password,
+    },
+    process.env.JWT_ACTIVATION_TOKEN_SECRET,
+    { expiresIn: process.env.JWT_ACTIVATION_TOKEN_EXPIRY }
+  );
+}
