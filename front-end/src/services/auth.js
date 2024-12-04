@@ -17,6 +17,15 @@ export const authApi = createApi({
       }),
       invalidatesTags: ["User"],
     }),
+    activateUser: builder.mutation({
+      query: (activationToken) => ({
+        url:"/activate",
+        method: "POST",
+        credentials: "include",
+        body: {activation_token: activationToken},
+      }),
+      providesTags: ["User"],
+    }),
     signInUser: builder.mutation({
       query: (signInData) => ({
         url: "/sign-in",
@@ -48,6 +57,7 @@ export const authApi = createApi({
 // hooks for components to signup users
 export const {
   useSignUpUserMutation,
+  useActivateUserMutation,
   useSignInUserMutation,
   useSignOutUserMutation,
   useDeleteUserMutation,
