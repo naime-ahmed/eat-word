@@ -7,6 +7,7 @@ import store from "./app/store";
 import ProtectedRoute from "./components/ProtectedRoute/ProtectedRoute";
 import "./index.css";
 import About from "./pages/About/About";
+import ActiveAcc from "./pages/ActivateAcc/ActiveAcc";
 import Contact from "./pages/Contact/Contact";
 import Home from "./pages/Home/Home";
 import Milestone from "./pages/Milestone/Milestone";
@@ -48,6 +49,10 @@ const router = createBrowserRouter([
       {
         path: "/sign-up",
         element: <SignUp />,
+      },
+      {
+        path: "/activate/:activateToken",
+        element: <ActiveAcc />,
       },
       {
         path: "/sign-in",
