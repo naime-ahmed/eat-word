@@ -1,21 +1,17 @@
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
 import {
-  resetNewUserForm,
   setUserNewErrors,
   updateNewUser,
 } from "../../features/userSignUpSlice";
 import { useSignUpUserMutation } from "../../services/auth.js";
 
-import { setUser } from "../../features/authSlice.js";
-import { parseJwt } from "../../utils/parseJWT.js";
 import style from "./SignUp.module.css";
 
 const SignUp = () => {
   // state of new user
   const { newUser, newUserErrors } = useSelector((state) => state.signUp);
-  const navigate = useNavigate();
   const dispatch = useDispatch();
 
   // use the singUp mutation
@@ -69,21 +65,12 @@ const SignUp = () => {
         };
 
         const result = await singUpUser(formData).unwrap();
-
-        // Reset the form to default values
-        dispatch(resetNewUserForm());
-        // save access token into local-storage
-        localStorage.setItem("access-token", result.accessToken);
-
-        // update isAuth state
-        dispatch(setUser(parseJwt(result.accessToken)));
-        navigate("/my-space");
-
+        console.log("fromSignUp", await result);
         // inform the user success result
         Swal.fire({
-          title: result.message,
+          title: result.msg,
           icon: "success",
-          confirmButtonText: "got it",
+          confirmButtonText: "I'm going",
         });
       } catch (error) {
         console.error("sing-up failed", error);
