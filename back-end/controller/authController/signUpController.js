@@ -48,46 +48,70 @@ async function signUp(req, res, next) {
 }
 
 const activate = async (req, res) => {
-  // get token
   const { activation_token } = req.body;
 
-  // verify token
-  const user = jwt.verify(
-    activation_token,
-    process.env.JWT_ACTIVATION_TOKEN_SECRET
-  );
-  const { name, email, password } = user;
+  try {
+    // Verify token
+    const user = jwt.verify(
+      activation_token,
+      process.env.JWT_ACTIVATION_TOKEN_SECRET
+    );
+    const { name, email, password } = user;
 
-  // check user
-  const check = await Users.findOne({ email });
-  if (check) {
-    return res.status(400).json({ msg: "This email is already registered." });
+    // Check for existing user
+    const existingUser = await Users.findOne({ email });
+    if (existingUser) {
+      console.log("inside dup email");
+      return res.status(400).json({ msg: "This email is already registered." });
+    }
+
+    // Create new user
+    const newUser = new Users({ name, email, password });
+    const savedUser = await newUser.save();
+
+    // Generate JWT tokens
+    const accessToken = generateAccessToken(savedUser);
+    const refreshToken = generateRefreshToken(savedUser);
+
+    // Set refresh token cookie
+    const refreshTokenExpiry = ms(process.env.JWT_REFRESH_TOKEN_EXPIRY);
+    res.cookie(process.env.COOKIE_NAME, refreshToken, {
+      httpOnly: true,
+      signed: true,
+      maxAge: refreshTokenExpiry,
+    });
+    // Success response
+    res.status(201).json({
+      message: "Your account has been successfully activated.",
+      accessToken,
+    });
+  } catch (err) {
+    console.error("Error during account activation:", err);
+
+    //  Check for duplicate key error (development mode only)
+    if(process.env.NODE_ENV === "development" && err.code === 11000){
+      // Generate JWT tokens
+      const existingUser = await Users.findOne(err.keyValue);
+      const accessToken = generateAccessToken(existingUser);
+      const refreshToken = generateRefreshToken(existingUser);
+
+      // Set refresh token cookie
+      const refreshTokenExpiry = ms(process.env.JWT_REFRESH_TOKEN_EXPIRY);
+      res.cookie(process.env.COOKIE_NAME, refreshToken, {
+        httpOnly: true,
+        signed: true,
+        maxAge: refreshTokenExpiry,
+      });
+      return res.status(201).json({
+        message: "Your account has been successfully activated.",
+        accessToken
+      });
+    }
+
+    return res
+      .status(400)
+      .json({ msg: "Invalid or expired activation token." });
   }
-
-  // Create new user
-  const newUser = new Users({ name, email, password });
-
-  // Save user
-  const savedUser = await newUser.save();
-
-  // Generate JWT access token and refresh token
-  const accessToken = generateAccessToken(savedUser);
-  const refreshToken = generateRefreshToken(savedUser);
-
-  // Store refresh token in HTTP-only cookie
-  const refreshTokenExpiry = ms(process.env.JWT_REFRESH_TOKEN_EXPIRY);
-
-  res.cookie(process.env.COOKIE_NAME, refreshToken, {
-    httpOnly: true,
-    signed: true,
-    maxAge: refreshTokenExpiry,
-  });
-
-  // Send success response with token
-  res.status(201).json({
-    message: "Your account has been activated",
-    accessToken, // Send token to client
-  });
 };
 
 export { activate, signUp };
