@@ -9,6 +9,7 @@ import "./index.css";
 import About from "./pages/About/About";
 import ActiveAcc from "./pages/ActivateAcc/ActiveAcc";
 import Contact from "./pages/Contact/Contact";
+import ForgotPass from "./pages/ForgotPass/ForgotPass";
 import Home from "./pages/Home/Home";
 import Milestone from "./pages/Milestone/Milestone";
 import MySpace from "./pages/MySpace/MySpace";
@@ -16,6 +17,7 @@ import NotFound from "./pages/NotFound/NotFound";
 import Pricing from "./pages/Pricing/Pricing";
 import PrivacyPolicy from "./pages/PrivacyPolicy/PrivacyPolicy";
 import Profile from "./pages/Profile/Profile";
+import ResetPass from "./pages/ResetPass/ResetPass";
 import SignIn from "./pages/SignIn/SignIn";
 import SignUp from "./pages/SignUp/SignUp";
 import TermsAndConditions from "./pages/TermsAndConditions/TermsAndConditions";
@@ -57,6 +59,14 @@ const router = createBrowserRouter([
       {
         path: "/sign-in",
         element: <SignIn />,
+      },
+      {
+        path: "/forgot-password",
+        element: <ForgotPass />,
+      },
+      {
+        path: "/reset-password",
+        element: <ResetPass />,
       },
       {
         path: "/about",
