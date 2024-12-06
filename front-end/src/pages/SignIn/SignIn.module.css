@@ -97,7 +97,14 @@ input:-webkit-autofill:active {
   -webkit-text-fill-color: rgb(255, 255, 255) !important;
   caret-color: rgb(255, 255, 255) !important;
 }
-
+.passwordSection {
+  display: flex;
+  flex-direction: column;
+}
+.forgotPass {
+  align-self: self-end;
+  margin-top: 4px;
+}
 .termsBox label {
   margin-left: 3px;
   color: #f8fafc;
