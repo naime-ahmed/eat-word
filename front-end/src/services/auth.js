@@ -35,6 +35,13 @@ export const authApi = createApi({
       }),
       providesTags: ["User"],
     }),
+    forgotPass: builder.mutation({
+      query: (email) => ({
+        url: "/forgot-password",
+        method: "POST",
+        body: {email: email},
+      })
+    }),
     signOutUser: builder.mutation({
       query: () => ({
         url: "/sign-out",
@@ -59,6 +66,7 @@ export const {
   useSignUpUserMutation,
   useActivateUserMutation,
   useSignInUserMutation,
+  useForgotPassMutation,
   useSignOutUserMutation,
   useDeleteUserMutation,
 } = authApi;
