@@ -4,6 +4,7 @@ import express from "express";
 // internal imports
 import { isUserValid } from "../controller/authController/isUserValidController.js";
 import { refreshTokenController } from "../controller/authController/refreshTokenController.js";
+import { resetPassword } from "../controller/authController/resetPassController.js";
 import { signIn } from "../controller/authController/signInController.js";
 import { signInWithGoogle } from "../controller/authController/signInWithGoogleController.js";
 import { signOut } from "../controller/authController/signOutController.js";
@@ -32,6 +33,12 @@ router.post("/google", signInWithGoogle);
 
 // sign out user
 router.post("/sign-out", signOut);
+
+// reset password request with email
+router.post("/forgot-password", resetPassword.forgot);
+
+// reset password request with new pass and token
+router.post("/reset-password", resetPassword.reset);
 
 // validate refresh token
 router.post("/refresh-token", refreshTokenController);
