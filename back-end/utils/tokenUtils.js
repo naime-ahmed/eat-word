@@ -29,16 +29,18 @@ export function generateAccessToken(user) {
   );
 }
 
-// generate activation token
-export function generateActivationToken(user) {
-  return jwt.sign(
-    {
-      id: user._id,
-      name: user.name,
-      email: user.email,
-      password: user.password,
-    },
-    process.env.JWT_ACTIVATION_TOKEN_SECRET,
-    { expiresIn: process.env.JWT_ACTIVATION_TOKEN_EXPIRY }
-  );
-}
+// generate a temporary token
+export function generateTempToken(payload, secret, expiresIn) {
+  return jwt.sign(payload, secret || process.env.JWT_ACTIVATION_TOKEN_SECRET, {
+    expiresIn: expiresIn || process.env.JWT_ACTIVATION_TOKEN_EXPIRY,
+  });
+};
+
+// verify token
+export function verifyToken(token){
+  try {
+    return jwt.verify(token, process.env.JWT_ACTIVATION_TOKEN_SECRET);
+  } catch {
+    return null;
+  }
+};
