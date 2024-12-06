@@ -19,7 +19,7 @@ const SignIn = () => {
   const dispatch = useDispatch();
 
   // use the sing-in mutation
-  const [signInUser, { isLoading, isError, error }] = useSignInUserMutation();
+  const [signInUser, { isLoading }] = useSignInUserMutation();
 
   // handle the form field change
   function handleChange(event) {
@@ -36,6 +36,9 @@ const SignIn = () => {
     }
     if (!user.password) {
       errors.password = "password required";
+    }
+    if (user.password && user.password.length < 6) {
+      errors.password = "incorrect password";
     }
 
     dispatch(setUserErrors(errors));
@@ -111,7 +114,7 @@ const SignIn = () => {
             {userErrors.email && <p>{userErrors.email}</p>}
           </div>
 
-          <div>
+          <div className={style.passwordSection}>
             <input
               type="password"
               name="password"
@@ -127,14 +130,15 @@ const SignIn = () => {
               your password
             </label>
             {userErrors.password && <p>{userErrors.password}</p>}
+            <Link to="/forgot-password" className={style.forgotPass}>
+              Forgot Password?
+            </Link>
           </div>
           <div className={style.submitBtn}>
             <button type="submit" disabled={isLoading}>
               {" "}
               {isLoading ? "submitting..." : "Submit"}
             </button>
-            {isError && <p style={{ margin: "0 19px" }}>{error.message}</p>}
-            <br />
             <p className={style.separator}>or</p>
             <div className={style.googleLogin}>
               <GoogleSignIn />
