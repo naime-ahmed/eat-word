@@ -8,8 +8,8 @@ import { sendEmailRegister } from "../../helper/sendMail.js";
 import Users from "../../models/People.js";
 import {
   generateAccessToken,
-  generateActivationToken,
   generateRefreshToken,
+  generateTempToken
 } from "../../utils/tokenUtils.js";
 
 // register user
@@ -28,11 +28,11 @@ async function signUp(req, res, next) {
     // generate activation token
     const potentialUser = { name, email, password: hashedPassword };
     console.log(potentialUser);
-    const activation_token = generateActivationToken(potentialUser);
+    const activation_token = generateTempToken(potentialUser);
 
     // send verification email
     const url = `${process.env.FRONT_END_URL}/activate/${activation_token}`;
-    sendEmailRegister(email, "ACTIVATE YOUR ACCOUNT", "Active now", url);
+    sendEmailRegister(email, "ACTIVATE YOUR ACCOUNT", "Activate Now", url);
 
     // registration success
     res.status(200).json({ msg: "Welcome! Please check your email." });
