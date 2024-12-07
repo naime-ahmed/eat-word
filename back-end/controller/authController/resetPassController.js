@@ -20,7 +20,7 @@ export const resetPassword = {
 
       // Generate the reset token
       const resetToken = generateTempToken({ id: user._id });
-      const url = `${process.env.FRONT_END_URL}/reset-password/?token=${resetToken}&id=${user._id}`;
+      const url = `${process.env.FRONT_END_URL}/reset-password/?token=${resetToken}`;
 
       // Send email
       await sendEmailForgotPass(
@@ -51,7 +51,7 @@ export const resetPassword = {
 
       // Validate password complexity
       if (newPass.length < 6) {
-        return res.status(400).json({ message: "Password must be at least 8 characters long." });
+        return res.status(400).json({ message: "Password must be at least 6 characters long." });
       }
 
       // Hash password
