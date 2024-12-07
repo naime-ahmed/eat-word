@@ -1,0 +1,86 @@
+.ForgotPassPage {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #020817;
+}
+.formContainer {
+  width: 380px;
+  padding: 25px;
+  border-radius: 10px;
+  border: 3px solid #1e293b;
+  color: #fff;
+}
+.formContainer > form {
+  display: flex;
+  flex-direction: column;
+  row-gap: 16px;
+}
+.resetPassHeader {
+  margin-bottom: 20px;
+  text-align: center;
+}
+.newPass,
+.retypePass {
+  position: relative;
+}
+.newPass > input,
+.retypePass > input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #0966a8;
+  outline: none;
+  background: transparent;
+  border-radius: 8px;
+  font-size: 14px;
+  color: #e0e0e0;
+}
+.newPass > label,
+.retypePass > label {
+  display: block;
+  font-size: 15px;
+  font-weight: bold;
+  margin-left: 4px;
+  margin-bottom: 4px;
+  color: rgb(236, 236, 236);
+}
+
+.newPassEyeIcon,
+.retypePassEyeIcon {
+  position: absolute;
+  right: 10px;
+  bottom: 10px;
+  color: #0496ff;
+}
+.newPass > p,
+.retypePass > p {
+  font-size: 12px;
+  color: rgb(255, 60, 60);
+}
+
+.submitBtn > button {
+  width: 100%;
+  margin-top: 4px;
+}
+
+.errorMessage {
+  width: 330px;
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  row-gap: 4px;
+  border-radius: 10px;
+  border: 2px solid #e91348;
+  color: #fff;
+}
+.errorMessage > p:first-child {
+  font-size: 64px;
+  color: #e91348;
+  text-align: center;
+}
+.errorMessage > button {
+  margin-top: 16px;
+}
