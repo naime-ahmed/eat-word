@@ -17,8 +17,6 @@ const Header = () => {
 
   const { isAuthenticated, isLoading } = useSelector((state) => state.auth);
   const { user } = useSelector((state) => state.user);
-  console.log("from header, user data", user);
-  console.log("from header, is auth and user", isAuthenticated);
 
   const handleSidebarToggle = () => {
     setIsSidebarOpen(!isSidebarOpen);
