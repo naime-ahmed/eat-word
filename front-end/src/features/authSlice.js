@@ -38,7 +38,7 @@ export const checkAuthentication = (token) => async (dispatch) => {
         },
       }
     );
-    console.log("inside checks");
+    // console.log("inside checks");
     if (response.ok) {
       const user = await response.json();
       dispatch(setUser(user)); // set the user in state
