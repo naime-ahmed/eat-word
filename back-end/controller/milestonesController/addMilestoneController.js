@@ -16,7 +16,7 @@ async function addMilestone(req, res, next) {
     const newMilestone = new Milestones({ ...req.body });
 
     // save milestone to db
-    const savedMilestone = await newMilestone.save();
+    await newMilestone.save();
 
     // Send success response
     res.status(201).json({
