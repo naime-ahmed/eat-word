@@ -3,11 +3,11 @@ import mongoose from "mongoose";
 const wordSchema = new mongoose.Schema(
   {
     word: { type: String, required: true, trim: true },
-    meanings: [{ type: String, required: true }],
+    meanings: [{ type: String}],
     synonyms: [{ type: String }],
     definitions: [{ type: String }],
     examples: [{ type: String }],
-    memorized: { type: Boolean, default: false },
+    memorized: { type: Boolean, default: true },
     addedBy: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "People",
