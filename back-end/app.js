@@ -13,6 +13,7 @@ import {
 import authRouter from "./router/authRouter.js";
 import milestonesRouter from "./router/milestonesRouter.js";
 import usersRouter from "./router/usersRouter.js";
+import wordRouter from "./router/wordRouter.js";
 
 const app = express();
 dotenv.config();
@@ -43,6 +44,9 @@ app.use("/users", usersRouter);
 
 // handle milestones request
 app.use("/milestones", milestonesRouter);
+
+// handle words request
+app.use("/words", wordRouter);
 
 app.get("/", (req, res) => {
   res.send({
