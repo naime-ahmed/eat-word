@@ -16,7 +16,7 @@ export default function Sparkles({
   opacitySpeed = 3,
   minOpacity = null,
   color = "#ffffff",
-  mousemove = false,
+  mousemove = true,
   hover = false,
   background = "transparent",
   options = {},
