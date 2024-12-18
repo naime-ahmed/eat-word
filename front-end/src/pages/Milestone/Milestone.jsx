@@ -83,13 +83,3 @@ const Milestone = () => {
 };
 
 export default Milestone;
-/*
-    word: 'example4',
-    meanings: [ 'a representative form or pattern' ],
-    synonyms: [ 'instance', 'case' ],
-    definitions: [ 'a thing characteristic of its kind' ],
-    examples: [ 'This is an example sentence.' ],
-    memorized: true,
-    addedBy: new ObjectId('67545860d2611ccbb2a3b527'),
-    addedMilestone: new ObjectId('6755c854a57e7dc56fe2ea42'),
-*/
