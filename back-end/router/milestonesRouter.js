@@ -4,6 +4,7 @@ import express from "express";
 // internal imports
 import { addMilestone } from "../controller/milestonesController/addMilestoneController.js";
 import { deleteMilestone } from "../controller/milestonesController/deleteMilestoneController.js";
+import { getMilestoneWords } from "../controller/milestonesController/getMilestoneWords.js";
 import { updateMilestone } from "../controller/milestonesController/updateMilestoneController.js";
 import { userMilestones } from "../controller/milestonesController/userMilestonesController.js";
 import { verifyAccessToken } from "../middlewares/validate/verifyAccessToken.js";
@@ -15,6 +16,9 @@ router.post("/", verifyAccessToken, addMilestone);
 
 // retrieve milestones form database
 router.get("/", verifyAccessToken, userMilestones);
+
+// get the words associated with the milestone id
+router.get("/:milestoneId", verifyAccessToken, getMilestoneWords);
 
 // update specific milestone data
 router.put("/:milestoneId", verifyAccessToken, updateMilestone);
