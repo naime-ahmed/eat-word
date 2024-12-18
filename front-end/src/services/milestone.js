@@ -98,6 +98,14 @@ export const milestoneApi = createApi({
       providesTags: ["Milestone"],
     }),
 
+    bringMilestoneWord: builder.query({
+      query: (milestoneId) => ({
+        url:`/${milestoneId}`,
+        method: "GET"
+      }),
+      providesTags: ["Milestone"]
+    }),
+
     editMilestone: builder.mutation({
       query: ([ updatedFields, milestoneId ]) => ({
         url: `/${milestoneId}`,
@@ -159,6 +167,7 @@ export const milestoneApi = createApi({
 export const {
   useAddMilestoneMutation,
   useBringMilestonesQuery,
+  useBringMilestoneWordQuery,
   useEditMilestoneMutation,
   useRemoveMilestoneMutation,
 } = milestoneApi;
