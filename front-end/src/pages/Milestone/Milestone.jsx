@@ -2,11 +2,11 @@ import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import MilestoneDeadline from "../../components/dynamicComponents/MilestoneDeadline/MilestoneDeadline";
-import Word from "../../components/dynamicComponents/Word/Word";
 import Error from "../../components/shared/Error/Error";
 import Footer from "../../components/shared/Footer/Footer";
 import Header from "../../components/shared/Header/Header";
 import SpinnerForPage from "../../components/ui/loader/SpinnerForPage/SpinnerForPage";
+import WordsContainer from "../../components/WordsContainer/WordsContainer";
 import { useBringMilestonesQuery } from "../../services/milestone";
 import styles from "./Milestone.module.css";
 
@@ -71,51 +71,8 @@ const Milestone = () => {
                   />
                 </div>
               </div>
-
               <div className={styles.divider}></div>
-              <div className={styles.milestoneWords}>
-                <div className={styles.wordsHeading}>
-                  <div className={styles.wordColumn}>Word</div>
-                  <div className={styles.meaningColumn}>Meaning</div>
-                  {curMilestone.learnSynonyms && (
-                    <div className={styles.synonymColumn}>Synonyms</div>
-                  )}
-                  {curMilestone.includeDefinition && (
-                    <div className={styles.engDefinitionColumn}>
-                      English Definition
-                    </div>
-                  )}
-                  <div className={styles.exmInSenColumn}>
-                    Example in a sentence
-                  </div>
-                </div>
-                <div className={styles.words}>
-                  <Word
-                    hasSynonym={Boolean(curMilestone.learnSynonyms)}
-                    hasDefinition={Boolean(curMilestone.includeDefinition)}
-                  />
-                  <Word
-                    hasSynonym={Boolean(curMilestone.learnSynonyms)}
-                    hasDefinition={Boolean(curMilestone.includeDefinition)}
-                  />
-                  <Word
-                    hasSynonym={Boolean(curMilestone.learnSynonyms)}
-                    hasDefinition={Boolean(curMilestone.includeDefinition)}
-                  />
-                  <Word
-                    hasSynonym={Boolean(curMilestone.learnSynonyms)}
-                    hasDefinition={Boolean(curMilestone.includeDefinition)}
-                  />
-                  <Word
-                    hasSynonym={Boolean(curMilestone.learnSynonyms)}
-                    hasDefinition={Boolean(curMilestone.includeDefinition)}
-                  />
-                  <Word
-                    hasSynonym={Boolean(curMilestone.learnSynonyms)}
-                    hasDefinition={Boolean(curMilestone.includeDefinition)}
-                  />
-                </div>
-              </div>
+              <WordsContainer curMilestone={curMilestone} />
             </>
           )}
         </div>
@@ -126,3 +83,13 @@ const Milestone = () => {
 };
 
 export default Milestone;
+/*
+    word: 'example4',
+    meanings: [ 'a representative form or pattern' ],
+    synonyms: [ 'instance', 'case' ],
+    definitions: [ 'a thing characteristic of its kind' ],
+    examples: [ 'This is an example sentence.' ],
+    memorized: true,
+    addedBy: new ObjectId('67545860d2611ccbb2a3b527'),
+    addedMilestone: new ObjectId('6755c854a57e7dc56fe2ea42'),
+*/
