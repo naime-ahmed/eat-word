@@ -1,5 +1,4 @@
-import { useState } from "react";
-
+import { useCallback, useState } from "react";
 import MilestoneCard from "../../components/dynamicComponents/MilestoneCard/MilestoneCard";
 import TakeMilestoneRequirements from "../../components/popups/milestoneRequirements/milestoneRequirements";
 import Error from "../../components/shared/Error/Error";
@@ -11,20 +10,23 @@ import styles from "./MySpace.module.css";
 
 const MySpace = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [viewMilestone, setViewMilestone] = useState("seven");
+  const [viewMilestone, setViewMilestone] = useState(() => {
+    return localStorage.getItem("selectedMS") || "seven";
+  });
 
   const { data, isLoading, isError, error } = useBringMilestonesQuery();
 
-  if (isError) {
-    console.log("error", error);
-  }
-  console.log(data);
+  const handleSelectMSType = useCallback((MSType) => {
+    localStorage.setItem("selectedMS", MSType);
+    setViewMilestone(MSType);
+  }, []);
+
   const filteredMilestones = data?.milestones?.filter(
     (milestone) => milestone?.milestoneType === viewMilestone
   );
 
-  const openModal = () => setIsModalOpen(true);
-  const closeModal = () => setIsModalOpen(false);
+  const openModal = useCallback(() => setIsModalOpen(true), []);
+  const closeModal = useCallback(() => setIsModalOpen(false), []);
 
   return (
     <div className={styles.myspacePage}>
@@ -43,29 +45,24 @@ const MySpace = () => {
         {isLoading ? (
           <p>Loading...</p>
         ) : isError ? (
-          <Error error={error}></Error>
+          <Error error={error} />
         ) : (
           <div className={styles.mySpaceContent}>
             <div className={styles.tabs}>
               <ul>
-                <li
-                  onClick={() => setViewMilestone("seven")}
-                  className={viewMilestone === "seven" ? styles.active : ""}
-                >
-                  7-Day challenges
-                </li>
-                <li
-                  onClick={() => setViewMilestone("three")}
-                  className={viewMilestone === "three" ? styles.active : ""}
-                >
-                  3-Day Challenges
-                </li>
-                <li
-                  onClick={() => setViewMilestone("zero")}
-                  className={viewMilestone === "zero" ? styles.active : ""}
-                >
-                  Flexible Learning
-                </li>
+                {["seven", "three", "zero"].map((type) => (
+                  <li
+                    key={type}
+                    onClick={() => handleSelectMSType(type)}
+                    className={viewMilestone === type ? styles.active : ""}
+                  >
+                    {type === "seven"
+                      ? "7-Day challenges"
+                      : type === "three"
+                      ? "3-Day Challenges"
+                      : "Flexible Learning"}
+                  </li>
+                ))}
               </ul>
             </div>
             <div className={styles.divider}></div>
