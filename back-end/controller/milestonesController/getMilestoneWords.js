@@ -15,7 +15,7 @@ const getMilestoneWords = async (req, res) => {
       addedBy: userId,
       addedMilestone: milestoneId,
     });
-    console.log(milestoneId, words);
+
     // Check if any words are found
     if (!words.length) {
       return res
