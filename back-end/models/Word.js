@@ -3,11 +3,15 @@ import mongoose from "mongoose";
 const wordSchema = new mongoose.Schema(
   {
     word: { type: String, required: true, trim: true },
-    meanings: [{ type: String}],
-    synonyms: [{ type: String }],
-    definitions: [{ type: String }],
-    examples: [{ type: String }],
-    memorized: { type: Boolean, default: true },
+    meanings: { type: String, default: "" },
+    synonyms: { type: String, default: "" },
+    definitions: { type: String, default: "" },
+    examples: { type: String, default: "" },
+    memorized: { type: Boolean, default: false },
+    difficultyLevel: { type: String, enum: ["easy", "medium", "hard", "notSpecified"], default: "notSpecified" },
+    contextTags: { type: String, default: "" },
+    frequency: { type: Number, default: 0 },
+    notes: { type: String, default: "" },
     addedBy: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "People",
@@ -18,13 +22,14 @@ const wordSchema = new mongoose.Schema(
       ref: "Milestone",
       required: true,
     },
+    isFavorite: { type: Boolean, default: false },
+    learnedScore: { type: Number, default: 0 },
   },
   { timestamps: true }
 );
 
-// Adding an index for querying by user and milestone
 wordSchema.index({ addedBy: 1, addedMilestone: 1 });
 
 const Word = mongoose.model("Word", wordSchema);
 
-export default Word
+export default Word;
