@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import MilestoneDeadline from "../../components/dynamicComponents/MilestoneDeadline/MilestoneDeadline";
 import Error from "../../components/shared/Error/Error";
@@ -11,10 +10,9 @@ import { useBringMilestonesQuery } from "../../services/milestone";
 import styles from "./Milestone.module.css";
 
 const Milestone = () => {
-  const { user } = useSelector((state) => state.auth);
   const { milestoneId } = useParams();
   const { data, isLoading, isError, error } = useBringMilestonesQuery();
-  console.log(user);
+
   // State for milestone name
   const [milestoneName, setMilestoneName] = useState("");
 
@@ -26,7 +24,6 @@ const Milestone = () => {
   if (curMilestone?.milestoneType === "three") {
     duration = 3;
   }
-  console.log("curr Milestone", curMilestone);
 
   // Set initial milestone name when data is loaded
   useEffect(() => {
