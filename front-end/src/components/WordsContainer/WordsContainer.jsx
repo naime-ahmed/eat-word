@@ -3,13 +3,14 @@ import {
   getCoreRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useBringMilestoneWordQuery } from "../../services/milestone";
 import EditableCell from "./TableCells/EditableCell";
 import styles from "./WordsContainer.module.css";
 
 const WordsContainer = ({ curMilestone }) => {
   const [words, setWords] = useState([]);
+  const [rowHeights, setRowHeights] = useState({}); // Track row heights
   const { data, isLoading, isError, error } = useBringMilestoneWordQuery(
     curMilestone?._id
   );
@@ -19,6 +20,19 @@ const WordsContainer = ({ curMilestone }) => {
       setWords(data.words);
     }
   }, [data]);
+
+  // Update row height for a specific row
+  const updateRowHeight = useCallback(
+    (rowIndex, height) => {
+      console.log("row height:", rowHeights);
+
+      setRowHeights((prev) => ({
+        ...prev,
+        [rowIndex]: Math.max(prev[rowIndex] || 0, height), // Use the tallest height
+      }));
+    },
+    [rowHeights]
+  );
 
   // Column sizes in pixels
   let wordSize = 170;
@@ -106,9 +120,11 @@ const WordsContainer = ({ curMilestone }) => {
           });
         });
       },
+      updateRowHeight,
+      rowHeights, // Pass row heights
     },
   });
-  console.log(words);
+
   if (isLoading) return <div>Loading...</div>;
   if (isError) return <div>Error: {error.message}</div>;
 
@@ -135,7 +151,10 @@ const WordsContainer = ({ curMilestone }) => {
         </thead>
         <tbody>
           {table.getRowModel().rows.map((row) => (
-            <tr key={row.id}>
+            <tr
+              key={row.id}
+              // style={{ height: `${rowHeights[row.index] || "auto"}px` }}
+            >
               {row.getVisibleCells().map((cell) => (
                 <td
                   key={cell.id}
