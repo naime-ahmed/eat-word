@@ -10,3 +10,6 @@
 .tableHeaderCell {
   padding: 10px 6px;
 }
+.tableRowsCell {
+  box-sizing: border-box; /* Add this line */
+}
