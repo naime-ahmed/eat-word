@@ -10,19 +10,22 @@ import { useBringMilestonesQuery } from "../../services/milestone";
 import styles from "./Milestone.module.css";
 
 const Milestone = () => {
-  const { milestoneId } = useParams();
-  const { data, isLoading, isError, error } = useBringMilestonesQuery();
-
   // State for milestone name
   const [milestoneName, setMilestoneName] = useState("");
-
-  const curMilestone = data?.milestones?.filter(
-    (milestone) => milestone._id === milestoneId
-  )[0];
-
+  const { milestoneId } = useParams();
+  const { data, isLoading, isError, error } = useBringMilestonesQuery();
+  let curMilestone = undefined;
   let duration = 7;
-  if (curMilestone?.milestoneType === "three") {
-    duration = 3;
+
+  if (!isError) {
+    curMilestone = data?.milestones?.filter(
+      (milestone) => milestone._id === milestoneId
+    )[0];
+    if (curMilestone?.milestoneType === "three") {
+      duration = 3;
+    }
+  } else {
+    console.log("mile err", error);
   }
 
   // Set initial milestone name when data is loaded
