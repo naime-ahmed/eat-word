@@ -4,7 +4,7 @@ import { useAddMilestoneMutation } from "../../../services/milestone.js";
 import PrimaryBtn from "../../ui/button/PrimaryBtn/PrimaryBtn.jsx";
 import styles from "./milestoneRequirements.module.css";
 
-const TakeWeekRequirements = ({ isOpen, onClose }) => {
+const TakeWeekRequirements = ({ isOpen, onClose, handleViewMilestone }) => {
   const [newWeekFormData, setNewWeekFormData] = useState({
     milestoneType: "",
     name: "",
@@ -28,6 +28,7 @@ const TakeWeekRequirements = ({ isOpen, onClose }) => {
   };
 
   const handleSubmit = async (event) => {
+    // try catch
     event.preventDefault();
     console.log(newWeekFormData);
     const newMilestoneData = {
@@ -49,6 +50,8 @@ const TakeWeekRequirements = ({ isOpen, onClose }) => {
       includeDefinition: false,
     });
     onClose();
+    handleViewMilestone(newWeekFormData.milestoneType);
+    localStorage.setItem("selectedMS", newWeekFormData.milestoneType);
   };
 
   if (!isOpen) return null;
