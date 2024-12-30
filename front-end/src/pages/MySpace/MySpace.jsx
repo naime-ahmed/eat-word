@@ -39,6 +39,7 @@ const MySpace = () => {
           <TakeMilestoneRequirements
             isOpen={isModalOpen}
             onClose={closeModal}
+            handleViewMilestone={setViewMilestone}
           />
         </div>
 
