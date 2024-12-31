@@ -11,11 +11,14 @@ const EditableCell = ({ getValue, row, column, table }) => {
     const textarea = textareaRef.current;
     if (textarea) {
       textarea.style.height = "auto"; // Reset height to auto
-      textarea.style.height = `${textarea.scrollHeight}px`; // Adjust height based on content
+      textarea.style.height = `${textarea.scrollHeight}px`;
       console.log(`cell height: r -> ${row.index} `, textarea.scrollHeight);
-      table.options.meta?.updateRowHeight(row.index, textarea.scrollHeight); // Notify parent about height
+      table.options.meta?.updateRowHeight(row.index, {
+        ["colId"]: column.id,
+        ["value"]: textarea.scrollHeight,
+      });
     }
-  }, [row.index, table]);
+  }, [row.index, table, column.id]);
 
   const handleOnChange = (e) => {
     setValue(e.target.value);
@@ -41,7 +44,8 @@ const EditableCell = ({ getValue, row, column, table }) => {
     const textarea = textareaRef.current;
     if (textarea) {
       textarea.style.height = `${
-        table.options.meta?.rowHeights[row.index] || textarea.scrollHeight
+        table.options.meta?.rowHeights[row.index]?.curMax ||
+        textarea.scrollHeight
       }px`;
     }
   }, [row.index, table.options.meta?.rowHeights]);
@@ -50,9 +54,9 @@ const EditableCell = ({ getValue, row, column, table }) => {
     <textarea
       ref={textareaRef}
       value={value}
-      height={table.options.meta?.rowHeights}
+      height={table.options.meta?.rowHeights[row.index]?.curMax}
       onChange={handleOnChange}
-      onKeyUp={handleOnKeyUp} // Call adjustHeight on keyup
+      onKeyUp={handleOnKeyUp}
       onBlur={handleOnBlur}
       className={styles.editableCell}
       rows={1}
@@ -61,9 +65,3 @@ const EditableCell = ({ getValue, row, column, table }) => {
 };
 
 export default EditableCell;
-
-/*
-
-rowHeights = {0:[{col_id: height}, {col_id: height}, {col_id: height}]}
-
-*/
