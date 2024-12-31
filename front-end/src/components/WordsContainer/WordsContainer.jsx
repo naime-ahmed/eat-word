@@ -10,26 +10,48 @@ import styles from "./WordsContainer.module.css";
 
 const WordsContainer = ({ curMilestone }) => {
   const [words, setWords] = useState([]);
-  const [rowHeights, setRowHeights] = useState({}); // Track row heights
+  /*
+  rowHeights = {0:{colId:val},{colId:val}, {"curMax":maxHeight} }
+  */
+  const [rowHeights, setRowHeights] = useState({});
+
+  // Fetch the data using the hook
   const { data, isLoading, isError, error } = useBringMilestoneWordQuery(
     curMilestone?._id
   );
 
+  // Effect to update words when data is available
   useEffect(() => {
-    if (data?.words) {
+    if (data?.words && !isError) {
       setWords(data.words);
     }
-  }, [data]);
+  }, [data, isError]);
 
-  // Update row height for a specific row
+  // Update row height for a specific row and column
   const updateRowHeight = useCallback(
-    (rowIndex, height) => {
-      console.log("row height:", rowHeights);
+    (rowIndex, { colId, value }) => {
+      setRowHeights((prev) => {
+        const currentRow = prev[rowIndex] || {};
 
-      setRowHeights((prev) => ({
-        ...prev,
-        [rowIndex]: Math.max(prev[rowIndex] || 0, height), // Use the tallest height
-      }));
+        const updatedRow = {
+          ...currentRow,
+          [colId]: value,
+        };
+
+        // Calculate the new maximum height for the row
+        const maxHeight = Math.max(
+          ...Object.entries(updatedRow)
+            .filter(([key]) => key !== "curMax")
+            .map(([, height]) => height)
+        );
+        updatedRow.curMax = maxHeight;
+
+        return {
+          ...prev,
+          [rowIndex]: updatedRow,
+        };
+      });
+      console.log("row", rowHeights);
     },
     [rowHeights]
   );
@@ -121,12 +143,12 @@ const WordsContainer = ({ curMilestone }) => {
         });
       },
       updateRowHeight,
-      rowHeights, // Pass row heights
+      rowHeights,
     },
   });
 
   if (isLoading) return <div>Loading...</div>;
-  if (isError) return <div>Error: {error.message}</div>;
+  if (isError) return <div>Error: {error.data.message}</div>;
 
   return (
     <div>
@@ -153,7 +175,9 @@ const WordsContainer = ({ curMilestone }) => {
           {table.getRowModel().rows.map((row) => (
             <tr
               key={row.id}
-              // style={{ height: `${rowHeights[row.index] || "auto"}px` }}
+              style={{
+                height: `${rowHeights[row.index]?.curMax || "auto"}px`,
+              }}
             >
               {row.getVisibleCells().map((cell) => (
                 <td
