@@ -21,7 +21,7 @@ router.get("/", verifyAccessToken, userMilestones);
 router.get("/:milestoneId", verifyAccessToken, getMilestoneWords);
 
 // update specific milestone data
-router.put("/:milestoneId", verifyAccessToken, updateMilestone);
+router.patch("/:milestoneId", verifyAccessToken, updateMilestone);
 
 // delete specific milestone from db
 router.delete("/:milestoneId", verifyAccessToken, deleteMilestone);
