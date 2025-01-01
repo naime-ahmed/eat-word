@@ -44,6 +44,11 @@
   background-color: #1a2541ea;
 }
 
+.error {
+  font-size: 13px;
+  color: rgb(255, 67, 67);
+}
+
 /* Extra Large Devices (large desktops) - 1200px and above: */
 @media (min-width: 1200px) and (max-width: 1400px) {
   .milestoneContent {
