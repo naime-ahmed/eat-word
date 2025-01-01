@@ -107,9 +107,9 @@ export const milestoneApi = createApi({
     }),
 
     editMilestone: builder.mutation({
-      query: ([ updatedFields, milestoneId ]) => ({
+      query: ([milestoneId, updatedFields ]) => ({
         url: `/${milestoneId}`,
-        method: "PUT",
+        method: "PATCH",
         body: updatedFields,
       }),
       async onQueryStarted(
