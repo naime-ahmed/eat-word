@@ -6,7 +6,11 @@ import Footer from "../../components/shared/Footer/Footer";
 import Header from "../../components/shared/Header/Header";
 import SpinnerForPage from "../../components/ui/loader/SpinnerForPage/SpinnerForPage";
 import WordsContainer from "../../components/WordsContainer/WordsContainer";
-import { useBringMilestonesQuery } from "../../services/milestone";
+import {
+  useBringMilestonesQuery,
+  useEditMilestoneMutation,
+} from "../../services/milestone";
+import { debounceUpdate } from "../../utils/debounceUpdate";
 import styles from "./Milestone.module.css";
 
 const Milestone = () => {
@@ -14,19 +18,19 @@ const Milestone = () => {
   const [milestoneName, setMilestoneName] = useState("");
   const { milestoneId } = useParams();
   const { data, isLoading, isError, error } = useBringMilestonesQuery();
-  let curMilestone = undefined;
-  let duration = 7;
+  const [
+    editMilestone,
+    {
+      isLoading: isEditMileLoading,
+      isError: isEditMileError,
+      error: editMileError,
+    },
+  ] = useEditMilestoneMutation();
 
-  if (!isError) {
-    curMilestone = data?.milestones?.filter(
-      (milestone) => milestone._id === milestoneId
-    )[0];
-    if (curMilestone?.milestoneType === "three") {
-      duration = 3;
-    }
-  } else {
-    console.log("mile err", error);
-  }
+  const curMilestone = data?.milestones?.find(
+    (milestone) => milestone._id === milestoneId
+  );
+  const duration = curMilestone?.milestoneType === "three" ? 3 : 7;
 
   // Set initial milestone name when data is loaded
   useEffect(() => {
@@ -35,11 +39,24 @@ const Milestone = () => {
     }
   }, [curMilestone]);
 
+  // Debounced function to update milestone name
+  const updateName = debounceUpdate(async (newName) => {
+    try {
+      const updatedMilestone = await editMilestone([
+        milestoneId,
+        { name: newName },
+      ]).unwrap();
+      console.log("Milestone updated successfully:", updatedMilestone);
+    } catch (error) {
+      console.error("Error while updating milestone name:", error);
+    }
+  }, 1000);
+
   // Handle input change
   const handleNameChange = (e) => {
-    setMilestoneName(e.target.value);
-    // Here implement throttled server update
-    // Example: throttledUpdateServer(e.target.value);
+    const newValue = e.target.value;
+    setMilestoneName(newValue);
+    updateName(newValue);
   };
 
   return (
@@ -62,11 +79,17 @@ const Milestone = () => {
                     value={milestoneName}
                     onChange={handleNameChange}
                     className={styles.milestoneNameInput}
+                    disabled={isEditMileLoading} // Disable during update
                   />
+                  {isEditMileError && (
+                    <p className={styles.error}>
+                      {editMileError?.data?.message || "Error updating name"}
+                    </p>
+                  )}
                 </div>
                 <div className={styles.milestoneTimeLeft}>
                   <MilestoneDeadline
-                    createdAt={curMilestone.createdAt}
+                    createdAt={curMilestone?.createdAt}
                     duration={duration}
                   />
                 </div>
