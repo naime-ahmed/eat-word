@@ -49,9 +49,20 @@ const EditableCell = ({ getValue, row, column, table }) => {
   };
 
   const handleOnBlur = useCallback(() => {
-    table.options.meta?.updateWords(row.index, column.id, value);
-    adjustHeight();
-  }, [column.id, row.index, value, table.options.meta, adjustHeight]);
+    console.log("called on blur");
+    if (initialValue !== value) {
+      console.log("called on blur inside");
+      table.options.meta?.updateWords(row.index, column.id, value);
+      adjustHeight();
+    }
+  }, [
+    column.id,
+    row.index,
+    value,
+    table.options.meta,
+    adjustHeight,
+    initialValue,
+  ]);
 
   useEffect(() => {
     setValue(initialValue);
