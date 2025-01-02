@@ -6,6 +6,7 @@ import userReducers from '../features/userSlice';
 import { authApi } from "../services/auth";
 import { milestoneApi } from "../services/milestone";
 import { userApi } from "../services/user";
+import { wordApi } from "../services/word";
 
 const store = configureStore({
   reducer: {
@@ -16,12 +17,14 @@ const store = configureStore({
     [authApi.reducerPath]: authApi.reducer,
     [milestoneApi.reducerPath]: milestoneApi.reducer,
     [userApi.reducerPath]: userApi.reducer,
+    [wordApi.reducerPath]: wordApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware()
       .concat(authApi.middleware)
       .concat(milestoneApi.middleware)
-      .concat(userApi.middleware),
+      .concat(userApi.middleware)
+      .concat(wordApi.middleware),
   devTools: import.meta.env.NODE_ENV !== "production",
 });
 
