@@ -6,19 +6,38 @@ const EditableCell = ({ getValue, row, column, table }) => {
   const [value, setValue] = useState(initialValue);
   const textareaRef = useRef(null);
 
-  // Adjust textarea height based on content
   const adjustHeight = useCallback(() => {
     const textarea = textareaRef.current;
     if (textarea) {
-      textarea.style.height = "auto"; // Reset height to auto
+      textarea.style.height = "auto";
       textarea.style.height = `${textarea.scrollHeight}px`;
-      console.log(`cell height: r -> ${row.index} `, textarea.scrollHeight);
       table.options.meta?.updateRowHeight(row.index, {
-        ["colId"]: column.id,
-        ["value"]: textarea.scrollHeight,
+        colId: column.id,
+        value: textarea.scrollHeight,
       });
     }
   }, [row.index, table, column.id]);
+
+  // Add zoom detection
+  useEffect(() => {
+    const handleZoom = () => {
+      requestAnimationFrame(adjustHeight);
+    };
+
+    // Listen for keyboard zoom
+    window.addEventListener("keydown", (e) => {
+      if ((e.ctrlKey || e.metaKey) && (e.key === "+" || e.key === "-")) {
+        handleZoom();
+      }
+    });
+
+    // Listen for resize (catches both keyboard and mouse wheel zoom)
+    window.visualViewport.addEventListener("resize", handleZoom);
+
+    return () => {
+      window.visualViewport.removeEventListener("resize", handleZoom);
+    };
+  }, [adjustHeight]);
 
   const handleOnChange = (e) => {
     setValue(e.target.value);
@@ -39,7 +58,6 @@ const EditableCell = ({ getValue, row, column, table }) => {
     adjustHeight();
   }, [initialValue, adjustHeight]);
 
-  // Synchronize textarea height with row height from parent
   useEffect(() => {
     const textarea = textareaRef.current;
     if (textarea) {
