@@ -77,16 +77,38 @@ export const wordApi = createApi({
             wordData.addedMilestone,
             (draft) => {
               if (draft && draft.words) {
-                draft.words.push(wordData);
+                console.log("new word went inside cache", draft.words);
+                draft.words.push(wordData); // Add the temporary word
               }
             }
           )
         );
-    
+      
         try {
-          await queryFulfilled;
+          const result = await queryFulfilled;
+          const { message, newWord } = result.data;
+      
+          // Update the cache with the server response
+          dispatch(
+            milestoneApi.util.updateQueryData(
+              "bringMilestoneWord",
+              newWord.addedMilestone,
+              (draft) => {
+                if (draft && draft.words) {
+                  // Find the temporary word in the cache
+                  const wordIndex = draft.words.findIndex(
+                    (word) => word.word === newWord.word
+                  );
+                  if (wordIndex !== -1) {
+                    // Replace the temporary word with the server response
+                    draft.words[wordIndex] = newWord;
+                  }
+                }
+              }
+            )
+          );
         } catch {
-          patchResult.undo();
+          patchResult.undo(); // Undo the optimistic update if the mutation fails
         }
       },
       invalidatesTags: ["Milestone"],
@@ -117,7 +139,7 @@ export const wordApi = createApi({
               if (draft && draft.words) {
                 // Find the word in the words array
                 const wordIndex = draft.words.findIndex((word) => word._id === wordId);
-                console.log("modified word Idx",wordIndex);
+                console.log("modified word Idx",wordIndex, wordId);
                 if (wordIndex !== -1) {
                   // Merge the editedFields into the found word object
                   Object.assign(draft.words[wordIndex], editedFields);
