@@ -3,14 +3,29 @@ import {
   getCoreRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useBringMilestoneWordQuery } from "../../services/milestone";
-import { useEditWordMutation } from "../../services/word";
+import {
+  useAppendWordMutation,
+  useEditWordMutation,
+} from "../../services/word";
 import EditableCell from "./TableCells/EditableCell";
 import styles from "./WordsContainer.module.css";
 
 const WordsContainer = ({ curMilestone }) => {
   const [words, setWords] = useState([]);
+  const [missingError, setMissingError] = useState("");
+  const newWordsSet = useRef(new Set());
+
+  const [
+    appendWord,
+    {
+      isLoading: appendWordIsLoading,
+      isError: appendWordIsError,
+      error: appendWordError,
+    },
+  ] = useAppendWordMutation();
+
   const [
     editWord,
     {
@@ -187,18 +202,44 @@ const WordsContainer = ({ curMilestone }) => {
     meta: {
       updateWords: (rowIndex, columnId, value) => {
         setWords((prev) => {
-          return prev.map((row, index) => {
+          const updatedWords = prev.map((row, index) => {
             return index === rowIndex
               ? { ...prev[rowIndex], [columnId]: value }
               : row;
           });
-        });
 
-        console.log("params", curMilestone._id, { [columnId]: value });
-        if (!words[rowIndex]._id) {
-          return;
-        }
-        handleEditWord(words[rowIndex]?._id, { [columnId]: value });
+          const wordToUpdate = updatedWords[rowIndex];
+
+          // If the row is a new word (has no _id), call the appendWord mutation
+          if (!wordToUpdate._id) {
+            if (wordToUpdate.word === "") {
+              setMissingError("word field can not be empty");
+            } else {
+              if (newWordsSet.current.has(rowIndex)) return;
+              newWordsSet.current.add(rowIndex);
+
+              appendWord(wordToUpdate)
+                .unwrap()
+                .then((response) => {
+                  // Replace the temporary word with the server response
+                  setWords((prevWords) =>
+                    prevWords.map((word, index) =>
+                      index === rowIndex ? response?.newWord : word
+                    )
+                  );
+                })
+                .catch((error) => {
+                  console.error("Error while appending word:", error);
+                  setMissingError("something went wrong while updating word");
+                });
+            }
+          } else {
+            // If the row is an existing word, call the editWord mutation
+            handleEditWord(wordToUpdate._id, { [columnId]: value });
+          }
+
+          return updatedWords;
+        });
       },
       updateRowHeight,
       rowHeights,
@@ -258,6 +299,7 @@ const WordsContainer = ({ curMilestone }) => {
           <i className="fa-solid fa-plus"></i> Add new word
         </button>
       </div>
+      {missingError && <p style={{ color: "red" }}>{missingError}</p>}
     </div>
   );
 };
