@@ -1,45 +1,62 @@
-// external imports
 import mongoose from "mongoose";
-
-// internal imports
 import Milestones from "../../models/Milestone.js";
 
-async function updateMilestone(req, res, next) {
+async function updateMilestone(req, res) {
   try {
-    const milestoneId = req.params.milestoneId;
-    const userId = req.user.id;
+    const { milestoneId } = req.params;
+    const { id: userId } = req.user;
     const updateData = req.body;
 
-    // Check if milestoneId is a valid ObjectId
     if (!mongoose.Types.ObjectId.isValid(milestoneId)) {
-      return res.status(400).json({ message: "Invalid milestone ID" });
+      return res.status(400).json({ message: "Invalid milestone ID format" });
     }
 
-    // Find the milestone by id and addedBy to ensure the user owns the milestone
-    const milestone = await Milestones.findOne({ _id: milestoneId, addedBy: userId });
+    const allowedFields = ['name', 'targetWords', 'wordsCount', 'memorizedCount', "revisionCount"];
+    const invalidFields = Object.keys(updateData).filter(
+      field => !allowedFields.includes(field)
+    );
 
-    if (!milestone) {
-      return res
-        .status(404)
-        .json({ message: "milestone not found or unauthorized" });
+    if (invalidFields.length > 0) {
+      return res.status(400).json({
+        message: "Invalid update fields",
+        invalidFields
+      });
     }
 
-    // Update the milestone with the provided data
-    Object.assign(milestone, updateData); // Merge the update data into the existing milestone object
-    const updatedMilestone = await milestone.save(); // Save the updated milestone
+    const updatedMilestone = await Milestones.findOneAndUpdate(
+      { _id: milestoneId, addedBy: userId },
+      { $set: updateData },
+      { 
+        new: true,
+        runValidators: true
+      }
+    );
 
-    // Send success response
+    if (!updatedMilestone) {
+      return res.status(404).json({ 
+        message: "Milestone not found or unauthorized" 
+      });
+    }
     res.status(200).json({
-      message: "milestone updated successfully",
-      updatedMilestone,
+      message: "Milestone updated successfully",
+      milestone: updatedMilestone
     });
-  } catch (error) {
-    // Log the error for further investigation
-    console.error("Error during milestone update:", error);
 
-    // Send a generic error message to the client
+  } catch (error) {
+    if (error.name === 'ValidationError') {
+      return res.status(400).json({
+        message: "Validation error",
+        errors: Object.keys(error.errors).reduce((acc, key) => {
+          acc[key] = error.errors[key].message;
+          return acc;
+        }, {})
+      });
+    }
+
+    console.error("Milestone update error:", error);
     res.status(500).json({
-      message: "An unknown error occurred during milestone update",
+      message: "Failed to update milestone",
+      error: process.env.NODE_ENV === 'development' ? error.message : undefined
     });
   }
 }
