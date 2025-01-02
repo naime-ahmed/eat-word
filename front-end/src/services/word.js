@@ -1,5 +1,6 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { setSignOutUser, setUser } from "../features/authSlice";
+import { milestoneApi } from "./milestone";
 
 // Create a base query with the common configuration
 const baseQueryWithAuth = fetchBaseQuery({
@@ -61,12 +62,84 @@ export const wordApi = createApi({
   baseQuery: baseQueryWithReAuth,
   tagTypes: ["word"],
   endpoints: (builder) => ({
-    bringWords: builder.query({
-      query: () => ({
-        url: "/",
+    appendWord: builder.mutation({
+      query: (wordData) => ({
+        url: `/`,
+        method: "POST",
+        body: wordData,
+      }),
+      // Optimistic update
+      async onQueryStarted(wordData, { dispatch, queryFulfilled }) {
+        // Optimistically add the new word to the milestoneApi cache
+        const patchResult = dispatch(
+          milestoneApi.util.updateQueryData(
+            "bringMilestoneWord",
+            wordData.addedMilestone,
+            (draft) => {
+              if (draft && draft.words) {
+                draft.words.push(wordData);
+              }
+            }
+          )
+        );
+    
+        try {
+          await queryFulfilled;
+        } catch {
+          patchResult.undo();
+        }
+      },
+      invalidatesTags: ["Milestone"],
+    }),
+    bringWord: builder.query({
+      query: (wordId) => ({
+        url: `/${wordId}`,
         method: "GET",
       }),
       providesTags: ["word"],
     }),
+    editWord: builder.mutation({
+      query: ({ wordId, milestoneId, updates }) => ({
+        url: `/${wordId}`,
+        method: "PATCH",
+        body: { milestoneId, updates },
+      }),
+      async onQueryStarted(
+        { wordId, milestoneId, updates: editedFields },
+        { dispatch, queryFulfilled }
+      ) {
+        // Optimistically update the cache
+        const patchResult = dispatch(
+          milestoneApi.util.updateQueryData(
+            "bringMilestoneWord",
+            milestoneId,
+            (draft) => {
+              if (draft && draft.words) {
+                // Find the word in the words array
+                const wordIndex = draft.words.findIndex((word) => word._id === wordId);
+                console.log("modified word Idx",wordIndex);
+                if (wordIndex !== -1) {
+                  // Merge the editedFields into the found word object
+                  Object.assign(draft.words[wordIndex], editedFields);
+                }
+              }
+            }
+          )
+        );
+    
+        try {
+          await queryFulfilled;
+        } catch {
+          patchResult.undo();
+        }
+      },
+      invalidatesTags: ["Milestone"],
+    }),
   }),
 });
+
+export const { 
+  useAppendWordMutation,
+  useBringWordQuery, 
+  useEditWordMutation 
+} = wordApi;
