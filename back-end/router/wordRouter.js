@@ -16,8 +16,8 @@ router.get("/", verifyAccessToken, getWords);
 // add words
 router.post("/", verifyAccessToken, addWord);
 
-// update word
-router.put("/:wordId",verifyAccessToken, updateWord);
+// edit word
+router.patch("/:wordId",verifyAccessToken, updateWord);
 
 // delete word
 router.delete("/:wordId", verifyAccessToken, deleteWord);
