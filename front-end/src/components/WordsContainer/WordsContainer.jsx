@@ -5,11 +5,20 @@ import {
 } from "@tanstack/react-table";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useBringMilestoneWordQuery } from "../../services/milestone";
+import { useEditWordMutation } from "../../services/word";
 import EditableCell from "./TableCells/EditableCell";
 import styles from "./WordsContainer.module.css";
 
 const WordsContainer = ({ curMilestone }) => {
   const [words, setWords] = useState([]);
+  const [
+    editWord,
+    {
+      isLoading: editWordIsLoading,
+      isError: editWordIsError,
+      error: editWordError,
+    },
+  ] = useEditWordMutation();
   /*
   rowHeights = {0:{colId:val},{colId:val}, {"curMax":maxHeight} }
   */
@@ -28,33 +37,76 @@ const WordsContainer = ({ curMilestone }) => {
   }, [data, isError]);
 
   // Update row height for a specific row and column
-  const updateRowHeight = useCallback(
-    (rowIndex, { colId, value }) => {
-      setRowHeights((prev) => {
-        const currentRow = prev[rowIndex] || {};
+  const updateRowHeight = useCallback((rowIndex, { colId, value }) => {
+    setRowHeights((prev) => {
+      const currentRow = prev[rowIndex] || {};
 
-        const updatedRow = {
-          ...currentRow,
-          [colId]: value,
-        };
+      const updatedRow = {
+        ...currentRow,
+        [colId]: value,
+      };
 
-        // Calculate the new maximum height for the row
-        const maxHeight = Math.max(
-          ...Object.entries(updatedRow)
-            .filter(([key]) => key !== "curMax")
-            .map(([, height]) => height)
-        );
-        updatedRow.curMax = maxHeight;
+      // Calculate the new maximum height for the row
+      const maxHeight = Math.max(
+        ...Object.entries(updatedRow)
+          .filter(([key]) => key !== "curMax")
+          .map(([, height]) => height)
+      );
+      updatedRow.curMax = maxHeight;
 
-        return {
-          ...prev,
-          [rowIndex]: updatedRow,
-        };
-      });
-      console.log("row", rowHeights);
-    },
-    [rowHeights]
-  );
+      return {
+        ...prev,
+        [rowIndex]: updatedRow,
+      };
+    });
+    // console.log("row", rowHeights);
+  }, []);
+
+  // append new word
+  const handleAppendWord = async () => {
+    console.log("appending");
+    // Create a new empty word object with default values
+    const newWord = {
+      word: "",
+      meanings: "",
+      synonyms: "",
+      definitions: "",
+      examples: "",
+      memorized: false,
+      difficultyLevel: "notSpecified",
+      contextTags: "",
+      frequency: 0,
+      notes: "",
+      addedBy: curMilestone?.addedBy,
+      addedMilestone: curMilestone?._id,
+      isFavorite: false,
+      learnedScore: 0,
+    };
+
+    // Optimistically add the new word to the local state
+    setWords((prev) => [...prev, newWord]);
+
+    console.log("words after append new", words);
+    // Optionally, you can focus on the new row's input field for better UX
+    // This depends on how your EditableCell component is implemented
+  };
+
+  // update word
+  const handleEditWord = async (wordId, editedFields) => {
+    try {
+      const res = await editWord({
+        wordId,
+        milestoneId: curMilestone?._id,
+        updates: editedFields,
+      }).unwrap();
+      console.log(res);
+    } catch (error) {
+      console.log("Error while updating word", error);
+    }
+    if (editWordIsError) {
+      console.log("edit word err", editWordError);
+    }
+  };
 
   // Column sizes in pixels
   let wordSize = 170;
@@ -141,6 +193,12 @@ const WordsContainer = ({ curMilestone }) => {
               : row;
           });
         });
+
+        console.log("params", curMilestone._id, { [columnId]: value });
+        if (!words[rowIndex]._id) {
+          return;
+        }
+        handleEditWord(words[rowIndex]?._id, { [columnId]: value });
       },
       updateRowHeight,
       rowHeights,
@@ -194,6 +252,12 @@ const WordsContainer = ({ curMilestone }) => {
           ))}
         </tbody>
       </table>
+      {/* append new word */}
+      <div className={styles.addNewWord}>
+        <button onClick={handleAppendWord}>
+          <i className="fa-solid fa-plus"></i> Add new word
+        </button>
+      </div>
     </div>
   );
 };
