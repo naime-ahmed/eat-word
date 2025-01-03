@@ -1,6 +1,6 @@
 import { useCallback, useState } from "react";
 import MilestoneCard from "../../components/dynamicComponents/MilestoneCard/MilestoneCard";
-import TakeMilestoneRequirements from "../../components/popups/milestoneRequirements/milestoneRequirements";
+import TakeMilestoneRequirements from "../../components/Popup/PopUpContents/milestoneRequirements/milestoneRequirements";
 import Error from "../../components/shared/Error/Error";
 import Footer from "../../components/shared/Footer/Footer";
 import Header from "../../components/shared/Header/Header";
