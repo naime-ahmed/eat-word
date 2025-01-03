@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import { useRemoveMilestoneMutation } from "../../../services/milestone";
 import { formatTimeAgo } from "../../../utils/formateTimeAgo";
-import EditMilestone from "../../popups/EditMilestone/EditMilestone";
+import EditMilestone from "../../Popup/PopUpContents/EditMilestone/EditMilestone";
 import PrimaryBtn from "../../ui/button/PrimaryBtn/PrimaryBtn";
 import styles from "./MilestoneCard.module.css";
 
