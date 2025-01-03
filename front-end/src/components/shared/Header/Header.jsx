@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import defaultUserProfile from "../../../assets/defaultUserProfileImage.png";
 import logo from "../../../assets/logo.png";
-import UserProfile from "../../popups/UserProfile/UserProfile";
+import UserProfile from "../../Popup/PopUpContents/UserProfile/UserProfile";
 import PrimaryBtn from "../../ui/button/PrimaryBtn/PrimaryBtn";
 import Skeleton from "../../ui/loader/Skeleton/Skeleton";
 import styles from "./Header.module.css";
