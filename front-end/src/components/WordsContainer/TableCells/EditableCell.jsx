@@ -88,6 +88,7 @@ const EditableCell = ({ getValue, row, column, table }) => {
       onKeyUp={handleOnKeyUp}
       onBlur={handleOnBlur}
       className={styles.editableCell}
+      style={column.id === "word" ? { paddingLeft: "12px" } : {}}
       rows={1}
     />
   );
