@@ -12,6 +12,7 @@
 
 .tableRowsCell {
   box-sizing: border-box;
+  position: relative;
 }
 
 .addNewWord {
@@ -42,4 +43,31 @@
   visibility: visible;
   background-color: #172342;
   opacity: 1;
+}
+
+.row {
+  position: relative;
+}
+.rowAction {
+  visibility: hidden;
+  position: absolute;
+  left: -10px;
+  top: 50%;
+  transform: translateY(-50%);
+  height: 26px;
+  width: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #10172b;
+  color: #ebebeb;
+  font-size: 20px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+.row:hover .rowAction {
+  visibility: visible;
+}
+.rowAction:hover {
+  background-color: #1c294d;
 }
