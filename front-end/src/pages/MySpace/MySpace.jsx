@@ -1,6 +1,6 @@
 import { useCallback, useState } from "react";
 import MilestoneCard from "../../components/dynamicComponents/MilestoneCard/MilestoneCard";
-import TakeMilestoneRequirements from "../../components/Popup/PopUpContents/milestoneRequirements/milestoneRequirements";
+import MilestoneRequirements from "../../components/Popup/PopUpContents/MilestoneRequirements/MilestoneRequirements";
 import Error from "../../components/shared/Error/Error";
 import Footer from "../../components/shared/Footer/Footer";
 import Header from "../../components/shared/Header/Header";
@@ -36,7 +36,7 @@ const MySpace = () => {
           <div className={styles.createNewMilestoneBtn}>
             <AddBtn handleOpenModal={openModal} />
           </div>
-          <TakeMilestoneRequirements
+          <MilestoneRequirements
             isOpen={isModalOpen}
             onClose={closeModal}
             handleViewMilestone={setViewMilestone}
