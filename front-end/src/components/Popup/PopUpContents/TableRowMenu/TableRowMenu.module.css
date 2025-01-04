@@ -1,0 +1,21 @@
+.rowMenuContainer {
+  width: 200px;
+  height: max-content;
+  background-color: rgb(21, 40, 92);
+  border-radius: 6px;
+  padding: 12px 0;
+  color: #d4d4d4;
+}
+.rowMenuContainer > ul {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.rowMenuContainer > ul > li {
+  cursor: pointer;
+  padding: 4px 12px;
+}
+.rowMenuContainer > ul > li:hover {
+  background-color: rgb(28, 51, 116);
+}
