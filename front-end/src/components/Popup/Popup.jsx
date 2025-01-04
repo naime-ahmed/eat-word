@@ -8,11 +8,9 @@ const Popup = ({
   position = "center",
   closeOnOutsideClick = true,
   showCloseButton = true,
-  width = "300px",
-  height = "200px",
-  backgroundColor = "white",
   children,
-  clickPosition = null, // { x, y } coordinates for custom positioning
+  popupType = "dialog", // menu, dialog, form, notification
+  clickPosition = null, // { x, y }
 }) => {
   const popupRef = useRef(null);
 
@@ -53,7 +51,7 @@ const Popup = ({
     } else if (position === "click" && clickPosition) {
       return {
         top: `${clickPosition.y}px`,
-        left: `${clickPosition.x}px`,
+        left: `${clickPosition.x + 15}px`,
       };
     }
     return {};
@@ -62,23 +60,27 @@ const Popup = ({
   if (!isOpen) return null;
 
   return ReactDOM.createPortal(
-    <div className={styles.overlay}>
+    <div
+      className={`${
+        popupType === "dialog" || popupType === "form" ? styles.overlay : ""
+      }`}
+    >
       <div
         ref={popupRef}
         className={styles.popup}
         style={{
-          width,
-          height,
-          backgroundColor,
           ...getPopupStyle(),
         }}
+        onClick={(e) => e.stopPropagation()}
       >
-        {showCloseButton && (
-          <button className={styles.closeButton} onClick={onClose}>
-            &times;
-          </button>
-        )}
-        <div className={styles.content}>{children}</div>
+        <div className={styles.content}>
+          {showCloseButton && (
+            <button className={styles.closeButton} onClick={onClose}>
+              &times;
+            </button>
+          )}
+          {children}
+        </div>
       </div>
     </div>,
     document.body
