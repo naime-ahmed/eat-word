@@ -1,8 +1,4 @@
-import {
-  flexRender,
-  getCoreRowModel,
-  useReactTable,
-} from "@tanstack/react-table";
+import { getCoreRowModel, useReactTable } from "@tanstack/react-table";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useBringMilestoneWordQuery } from "../../services/milestone";
 import {
@@ -10,39 +6,23 @@ import {
   useEditWordMutation,
 } from "../../services/word";
 import EditableCell from "./TableCells/EditableCell";
+import TableHeader from "./TableHeader";
+import TableRow from "./TableRow";
 import styles from "./WordsContainer.module.css";
+import { calculateColumnWidths, wordSchemaForClient } from "./utils";
 
 const WordsContainer = ({ curMilestone }) => {
   const [words, setWords] = useState([]);
   const [missingError, setMissingError] = useState("");
   const newWordsSet = useRef(new Set());
-
-  const [
-    appendWord,
-    {
-      isLoading: appendWordIsLoading,
-      isError: appendWordIsError,
-      error: appendWordError,
-    },
-  ] = useAppendWordMutation();
-
-  const [
-    editWord,
-    {
-      isLoading: editWordIsLoading,
-      isError: editWordIsError,
-      error: editWordError,
-    },
-  ] = useEditWordMutation();
-  /*
-  rowHeights = {0:{colId:val},{colId:val}, {"curMax":maxHeight} }
-  */
   const [rowHeights, setRowHeights] = useState({});
 
-  // Fetch the data using the hook
   const { data, isLoading, isError, error } = useBringMilestoneWordQuery(
     curMilestone?._id
   );
+
+  const [appendWord] = useAppendWordMutation();
+  const [editWord] = useEditWordMutation();
 
   // Effect to update words when data is available
   useEffect(() => {
@@ -55,58 +35,24 @@ const WordsContainer = ({ curMilestone }) => {
   const updateRowHeight = useCallback((rowIndex, { colId, value }) => {
     setRowHeights((prev) => {
       const currentRow = prev[rowIndex] || {};
-
-      const updatedRow = {
-        ...currentRow,
-        [colId]: value,
-      };
-
-      // Calculate the new maximum height for the row
+      const updatedRow = { ...currentRow, [colId]: value };
       const maxHeight = Math.max(
         ...Object.entries(updatedRow)
           .filter(([key]) => key !== "curMax")
           .map(([, height]) => height)
       );
       updatedRow.curMax = maxHeight;
-
-      return {
-        ...prev,
-        [rowIndex]: updatedRow,
-      };
+      return { ...prev, [rowIndex]: updatedRow };
     });
-    // console.log("row", rowHeights);
   }, []);
 
-  // append new word
+  // Append new word
   const handleAppendWord = async () => {
-    console.log("appending");
-    // Create a new empty word object with default values
-    const newWord = {
-      word: "",
-      meanings: "",
-      synonyms: "",
-      definitions: "",
-      examples: "",
-      memorized: false,
-      difficultyLevel: "notSpecified",
-      contextTags: "",
-      frequency: 0,
-      notes: "",
-      addedBy: curMilestone?.addedBy,
-      addedMilestone: curMilestone?._id,
-      isFavorite: false,
-      learnedScore: 0,
-    };
-
-    // Optimistically add the new word to the local state
+    const newWord = wordSchemaForClient(curMilestone);
     setWords((prev) => [...prev, newWord]);
-
-    console.log("words after append new", words);
-    // Optionally, you can focus on the new row's input field for better UX
-    // This depends on how your EditableCell component is implemented
   };
 
-  // update word
+  // Update word
   const handleEditWord = async (wordId, editedFields) => {
     try {
       const res = await editWord({
@@ -118,30 +64,11 @@ const WordsContainer = ({ curMilestone }) => {
     } catch (error) {
       console.log("Error while updating word", error);
     }
-    if (editWordIsError) {
-      console.log("edit word err", editWordError);
-    }
   };
 
   // Column sizes in pixels
-  let wordSize = 170;
-  let meaningSize = 225;
-  let synonymsSize = curMilestone?.learnSynonyms ? 225 : 0;
-  let definitionsSize = curMilestone?.includeDefinition ? 280 : 0;
-  if (synonymsSize === 0 && definitionsSize !== 0) {
-    wordSize += Math.round(225 / 7);
-    meaningSize += Math.round(225 / 5);
-    definitionsSize += Math.round(225 / 4);
-  } else if (synonymsSize !== 0 && definitionsSize === 0) {
-    wordSize += Math.round(280 / 7);
-    meaningSize += Math.round(280 / 5);
-    synonymsSize += Math.round(280 / 5);
-  } else if (synonymsSize === 0 && definitionsSize === 0) {
-    wordSize += Math.round(505 / 7);
-    meaningSize += Math.round(505 / 5);
-  }
-  const examplesSize =
-    1250 - (wordSize + meaningSize + synonymsSize + definitionsSize);
+  const { wordSize, meaningSize, synonymsSize, definitionsSize, examplesSize } =
+    calculateColumnWidths(curMilestone);
 
   // Define columns dynamically
   const columns = useMemo(() => {
@@ -202,15 +129,12 @@ const WordsContainer = ({ curMilestone }) => {
     meta: {
       updateWords: (rowIndex, columnId, value) => {
         setWords((prev) => {
-          const updatedWords = prev.map((row, index) => {
-            return index === rowIndex
-              ? { ...prev[rowIndex], [columnId]: value }
-              : row;
-          });
+          const updatedWords = prev.map((row, index) =>
+            index === rowIndex ? { ...prev[rowIndex], [columnId]: value } : row
+          );
 
           const wordToUpdate = updatedWords[rowIndex];
 
-          // If the row is a new word (has no _id), call the appendWord mutation
           if (!wordToUpdate._id) {
             if (wordToUpdate.word === "") {
               setMissingError("word field can not be empty");
@@ -221,7 +145,6 @@ const WordsContainer = ({ curMilestone }) => {
               appendWord(wordToUpdate)
                 .unwrap()
                 .then((response) => {
-                  // Replace the temporary word with the server response
                   setWords((prevWords) =>
                     prevWords.map((word, index) =>
                       index === rowIndex ? response?.newWord : word
@@ -234,7 +157,6 @@ const WordsContainer = ({ curMilestone }) => {
                 });
             }
           } else {
-            // If the row is an existing word, call the editWord mutation
             handleEditWord(wordToUpdate._id, { [columnId]: value });
           }
 
@@ -252,48 +174,13 @@ const WordsContainer = ({ curMilestone }) => {
   return (
     <div>
       <table className={styles.table}>
-        <thead>
-          {table.getHeaderGroups().map((headerGroup) => (
-            <tr key={headerGroup.id}>
-              {headerGroup.headers.map((header) => (
-                <th
-                  key={header.id}
-                  style={{ width: `${header.column.columnDef.size}px` }}
-                  className={styles.tableHeaderCell}
-                >
-                  {flexRender(
-                    header.column.columnDef.header,
-                    header.getContext()
-                  )}
-                </th>
-              ))}
-            </tr>
-          ))}
-        </thead>
+        <TableHeader headerGroups={table.getHeaderGroups()} />
         <tbody>
           {table.getRowModel().rows.map((row) => (
-            <tr
-              key={row.id}
-              style={{
-                height: `${rowHeights[row.index]?.curMax || "auto"}px`,
-              }}
-            >
-              {row.getVisibleCells().map((cell) => (
-                <td
-                  key={cell.id}
-                  style={{
-                    width: `${cell.column.columnDef.size}px`,
-                  }}
-                  className={styles.tableRowsCell}
-                >
-                  {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                </td>
-              ))}
-            </tr>
+            <TableRow key={row.id} row={row} rowHeights={rowHeights} />
           ))}
         </tbody>
       </table>
-      {/* append new word */}
       <div className={styles.addNewWord}>
         <button onClick={handleAppendWord}>
           <i className="fa-solid fa-plus"></i> Add new word
