@@ -157,11 +157,43 @@ export const wordApi = createApi({
       },
       invalidatesTags: ["Milestone"],
     }),
+    deleteWord: builder.mutation({
+      query: ({ wordId, milestoneId }) => ({
+        url: `/${wordId}`,
+        method: "DELETE",
+        body: { milestoneId },
+      }),
+      // Optimistic update
+      async onQueryStarted({ wordId, milestoneId }, { dispatch, queryFulfilled }) {
+        // Optimistically remove the word from the milestoneApi cache
+        const patchResult = dispatch(
+          milestoneApi.util.updateQueryData(
+            "bringMilestoneWord",
+            milestoneId,
+            (draft) => {
+              if (draft && draft.words) {
+                console.log("Removing word from cache:", wordId);
+                // Filter out the word with the matching wordId
+                draft.words = draft.words.filter((word) => word._id !== wordId);
+              }
+            }
+          )
+        );
+
+        try {
+          await queryFulfilled;
+        } catch {
+          patchResult.undo(); // Undo the optimistic update if the mutation fails
+        }
+      },
+      invalidatesTags: ["Milestone"],
+    }),
   }),
 });
 
 export const { 
   useAppendWordMutation,
   useBringWordQuery, 
-  useEditWordMutation 
+  useEditWordMutation ,
+  useDeleteWordMutation,
 } = wordApi;
