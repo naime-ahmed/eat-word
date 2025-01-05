@@ -1,7 +1,7 @@
 .rowMenuContainer {
-  width: 200px;
+  width: max-content;
   height: max-content;
-  background-color: rgb(21, 40, 92);
+  background-color: #141e3b;
   border-radius: 6px;
   padding: 12px 0;
   color: #d4d4d4;
@@ -10,12 +10,33 @@
   list-style: none;
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 6px;
 }
 .rowMenuContainer > ul > li {
+  display: flex;
+  align-items: center;
+  column-gap: 6px;
+  padding: 6px 12px;
   cursor: pointer;
-  padding: 4px 12px;
+  transition: all 0.2s ease;
 }
 .rowMenuContainer > ul > li:hover {
-  background-color: rgb(28, 51, 116);
+  background-color: #1a274d;
+}
+.markAsFav:hover > * {
+  color: rgb(243, 0, 142);
+}
+.markHard:hover > * {
+  color: red;
+}
+.rowMenuContainer > ul > li:last-child:hover {
+  color: red;
+  background-color: #ff00001f;
+}
+
+[data-icon="favorite"] {
+  color: rgb(243, 0, 142);
+}
+[data-icon="hard"] {
+  color: red;
 }
