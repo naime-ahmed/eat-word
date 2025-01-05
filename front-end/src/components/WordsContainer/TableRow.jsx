@@ -8,6 +8,7 @@ import styles from "./WordsContainer.module.css";
 const TableRow = ({ row, rowHeights }) => {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [clickPosition, setClickPosition] = useState(null);
+  // console.log("row data", row.original);
 
   const handleButtonClick = (e) => {
     // Calculate click position with scroll offset
@@ -50,7 +51,7 @@ const TableRow = ({ row, rowHeights }) => {
           clickPosition={clickPosition}
           popupType="menu"
         >
-          <TableRowMenu />
+          <TableRowMenu curWord={row?.original} onClose={handleOneClose} />
         </Popup>
       </span>
     </tr>
