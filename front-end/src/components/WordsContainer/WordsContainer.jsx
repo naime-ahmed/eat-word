@@ -129,13 +129,13 @@ const WordsContainer = ({ curMilestone }) => {
     meta: {
       updateWords: (rowIndex, columnId, value) => {
         setWords((prev) => {
-          const updatedWords = prev.map((row, index) =>
+          const updatedWords = prev?.map((row, index) =>
             index === rowIndex ? { ...prev[rowIndex], [columnId]: value } : row
           );
 
           const wordToUpdate = updatedWords[rowIndex];
 
-          if (!wordToUpdate._id) {
+          if (!wordToUpdate?._id) {
             if (wordToUpdate.word === "") {
               setMissingError("word field can not be empty");
             } else {
@@ -157,7 +157,7 @@ const WordsContainer = ({ curMilestone }) => {
                 });
             }
           } else {
-            handleEditWord(wordToUpdate._id, { [columnId]: value });
+            handleEditWord(wordToUpdate?._id, { [columnId]: value });
           }
 
           return updatedWords;
@@ -176,7 +176,7 @@ const WordsContainer = ({ curMilestone }) => {
       <table className={styles.table}>
         <TableHeader headerGroups={table.getHeaderGroups()} />
         <tbody>
-          {table.getRowModel().rows.map((row) => (
+          {table?.getRowModel()?.rows?.map((row) => (
             <TableRow key={row.id} row={row} rowHeights={rowHeights} />
           ))}
         </tbody>
