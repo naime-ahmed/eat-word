@@ -46,7 +46,6 @@ const TableRow = ({ row, rowHeights }) => {
         <Popup
           isOpen={isPopupOpen}
           onClose={handleOneClose}
-          position="click"
           showCloseButton={false}
           clickPosition={clickPosition}
           popupType="menu"
