@@ -5,11 +5,10 @@ import styles from "./Popup.module.css";
 const Popup = ({
   isOpen,
   onClose,
-  position = "center",
   closeOnOutsideClick = true,
   showCloseButton = true,
   children,
-  popupType = "dialog", // menu, dialog, form, notification
+  popupType = "modal", // modal, menu, dialog
   clickPosition = null, // { x, y }
 }) => {
   const popupRef = useRef(null);
@@ -35,20 +34,9 @@ const Popup = ({
     };
   }, [isOpen, closeOnOutsideClick, onClose]);
 
-  // Calculate popup position
+  // Calculate notification position
   const getPopupStyle = () => {
-    if (position === "center") {
-      return {
-        top: "50%",
-        left: "50%",
-        transform: "translate(-50%, -50%)",
-      };
-    } else if (position === "top-left") {
-      return {
-        top: "0",
-        left: "0",
-      };
-    } else if (position === "click" && clickPosition) {
+    if (popupType === "menu" && clickPosition) {
       return {
         top: `${clickPosition.y}px`,
         left: `${clickPosition.x + 15}px`,
@@ -58,16 +46,17 @@ const Popup = ({
   };
 
   if (!isOpen) return null;
+  console.log("render popup");
 
   return ReactDOM.createPortal(
     <div
       className={`${
-        popupType === "dialog" || popupType === "form" ? styles.overlay : ""
+        popupType === "modal" || popupType === "dialog" ? styles.overlay : ""
       }`}
     >
       <div
         ref={popupRef}
-        className={styles.popup}
+        className={styles[popupType]}
         style={{
           ...getPopupStyle(),
         }}
