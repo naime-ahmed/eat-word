@@ -79,6 +79,15 @@ const EditableCell = ({ getValue, row, column, table }) => {
     }
   }, [row.index, table.options.meta?.rowHeights]);
 
+  // dynamic style
+  const style = {
+    paddingLeft: column.id === "word" ? "12px" : undefined,
+    color:
+      column.id === "word" && row.original.difficultyLevel === "hard"
+        ? "#ff1919"
+        : undefined,
+  };
+
   return (
     <textarea
       ref={textareaRef}
@@ -88,7 +97,7 @@ const EditableCell = ({ getValue, row, column, table }) => {
       onKeyUp={handleOnKeyUp}
       onBlur={handleOnBlur}
       className={styles.editableCell}
-      style={column.id === "word" ? { paddingLeft: "12px" } : {}}
+      style={style}
       rows={1}
     />
   );
