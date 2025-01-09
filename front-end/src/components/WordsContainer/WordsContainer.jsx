@@ -38,36 +38,34 @@ const WordsContainer = ({ curMilestone }) => {
     (rowIndex, colId, value, action = "rerender") => {
       console.log("updating row height", rowIndex, colId, value, action);
       setRowHeights((prev) => {
+        if (!Array.isArray(prev)) {
+          console.error("Invalid `rowHeights` state:", prev);
+          return [];
+        }
+
         if (action === "delete") {
           if (rowIndex < 0 || rowIndex >= prev.length) {
-            // Row index is out of bounds, do nothing
+            console.error("Invalid rowIndex for deletion:", rowIndex);
             return prev;
           }
 
           if (rowIndex === prev.length - 1) {
-            // If the row is the last row, simply remove it
             return prev.slice(0, -1);
           } else {
-            // If the row is in the middle, shift the row heights
             const newRowHeights = [...prev];
             for (let i = rowIndex; i < newRowHeights.length - 1; i++) {
-              // Deep copy the next row's object into the current row
               newRowHeights[i] = { ...newRowHeights[i + 1] };
             }
-            // Remove the last row
             newRowHeights.pop();
             return newRowHeights;
           }
         } else if (action === "append") {
-          // Append a new row (used for failed delete action)
           return [...prev, value];
         } else if (action === "update") {
-          // Update the row height for a specific column
           const updatedRowHeights = [...prev];
           const currentRow = updatedRowHeights[rowIndex] || {};
           const updatedRow = { ...currentRow, [colId]: value };
 
-          // Calculate the new maximum height for the row
           const maxHeight = Math.max(
             ...Object.entries(updatedRow)
               .filter(([key]) => key !== "curMax")
@@ -75,22 +73,23 @@ const WordsContainer = ({ curMilestone }) => {
           );
           updatedRow.curMax = maxHeight;
 
-          // Update the row in the array
           updatedRowHeights[rowIndex] = updatedRow;
-
           return updatedRowHeights;
         } else {
-          // Default action: do nothing
           return prev;
         }
       });
     },
     []
   );
+
   // Append new word
   const handleAppendWord = async () => {
     const newWord = wordSchemaForClient(curMilestone);
     setWords((prev) => [...prev, newWord]);
+
+    // Initialize row height for the new word
+    setRowHeights((prev) => [...prev, {}]);
   };
 
   // Update word
@@ -101,10 +100,86 @@ const WordsContainer = ({ curMilestone }) => {
         milestoneId: curMilestone?._id,
         updates: editedFields,
       }).unwrap();
-      console.log(res);
+      console.log("updated Word from server:", res);
     } catch (error) {
       console.log("Error while updating word", error);
     }
+  };
+
+  const updateWords = (rowIndex, columnId, value) => {
+    console.log("on Update", rowIndex, columnId, value);
+
+    // Early return if inputs are invalid
+    if (
+      typeof rowIndex !== "number" ||
+      rowIndex < 0 ||
+      !columnId ||
+      value === undefined ||
+      value === null
+    ) {
+      console.error("Invalid inputs for updateWords:", {
+        rowIndex,
+        columnId,
+        value,
+      });
+      return;
+    }
+
+    setWords((prev) => {
+      // Ensure `prev` is defined and is an array
+      if (!Array.isArray(prev)) {
+        console.error("Invalid `words` state:", prev);
+        return prev || [];
+      }
+
+      // Create a copy of the previous state
+      const updatedWords = prev.map((row, index) =>
+        index === rowIndex ? { ...row, [columnId]: value } : row
+      );
+
+      // Get the word to update
+      const wordToUpdate = updatedWords[rowIndex];
+
+      // If the word is not found, return the previous state
+      if (!wordToUpdate) {
+        console.error("Word not found at index:", rowIndex);
+        return prev;
+      }
+
+      // If the word is new (no _id), append it to the server
+      if (!wordToUpdate._id) {
+        if (wordToUpdate.word === "") {
+          setMissingError("word is required! fill the word.");
+          setDoNotify(true);
+          return prev;
+        }
+
+        // Prevent duplicate append calls
+        if (newWordsSet.current.has(rowIndex)) return prev;
+        newWordsSet.current.add(rowIndex);
+
+        appendWord(wordToUpdate)
+          .unwrap()
+          .then((response) => {
+            setWords((prevWords) =>
+              prevWords.map((word, index) =>
+                index === rowIndex ? response?.newWord : word
+              )
+            );
+          })
+          .catch((error) => {
+            console.error("Error while appending word:", error);
+            setDoNotify(true);
+            setMissingError("something went wrong while updating word");
+            newWordsSet.current.delete(rowIndex);
+          });
+      } else {
+        // If the word exists, update it on the server
+        handleEditWord(wordToUpdate._id, { [columnId]: value });
+      }
+
+      return updatedWords;
+    });
   };
 
   // Column sizes in pixels
@@ -169,56 +244,7 @@ const WordsContainer = ({ curMilestone }) => {
     data: words,
     getCoreRowModel: getCoreRowModel(),
     meta: {
-      updateWords: (rowIndex, columnId, value) => {
-        console.log("on Update", rowIndex, columnId, value);
-        if (!rowIndex || typeof rowIndex !== "number" || !columnId || !value) {
-          return;
-        }
-        if (!words) {
-          console.log("word is undefined!!");
-          return;
-        }
-        setWords((prev) => {
-          const updatedWords = prev?.map((row, index) =>
-            index === rowIndex ? { ...prev[rowIndex], [columnId]: value } : row
-          );
-          if (!updatedWords) {
-            console.log("updated word is undefined!!");
-            return;
-          }
-          console.log("updated words", updatedWords);
-          const wordToUpdate = updatedWords[rowIndex];
-
-          if (!wordToUpdate?._id) {
-            if (wordToUpdate.word === "") {
-              setMissingError("word is required! fill the word.");
-              setDoNotify(true);
-            } else {
-              if (newWordsSet.current.has(rowIndex)) return;
-              newWordsSet.current.add(rowIndex);
-
-              appendWord(wordToUpdate)
-                .unwrap()
-                .then((response) => {
-                  setWords((prevWords) =>
-                    prevWords.map((word, index) =>
-                      index === rowIndex ? response?.newWord : word
-                    )
-                  );
-                })
-                .catch((error) => {
-                  console.error("Error while appending word:", error);
-                  setDoNotify(true);
-                  setMissingError("something went wrong while updating word");
-                });
-            }
-          } else {
-            handleEditWord(wordToUpdate?._id, { [columnId]: value });
-          }
-
-          return updatedWords;
-        });
-      },
+      updateWords,
       updateRowHeight,
       rowHeights,
     },
@@ -242,11 +268,13 @@ const WordsContainer = ({ curMilestone }) => {
           ))}
         </tbody>
       </table>
-      <div className={styles.addNewWord}>
-        <button onClick={handleAppendWord}>
-          <i className="fa-solid fa-plus"></i> Add new word
-        </button>
-      </div>
+      {words[words.length - 1]?._id && (
+        <div className={styles.addNewWord}>
+          <button onClick={handleAppendWord}>
+            <i className="fa-solid fa-plus"></i> Add new word
+          </button>
+        </div>
+      )}
       {missingError && (
         <Notification
           title="An Error Occurred!"
