@@ -8,13 +8,16 @@ const EditableCell = ({ getValue, row, column, table }) => {
 
   const adjustHeight = useCallback(() => {
     const textarea = textareaRef.current;
+    console.log("calling from editable callId", column?.id);
     if (textarea) {
       textarea.style.height = "auto";
       textarea.style.height = `${textarea.scrollHeight}px`;
-      table.options.meta?.updateRowHeight(row.index, {
-        colId: column.id,
-        value: textarea.scrollHeight,
-      });
+      table.options.meta?.updateRowHeight(
+        row.index,
+        column.id,
+        textarea.scrollHeight,
+        "update"
+      );
     }
   }, [row.index, table, column.id]);
 
