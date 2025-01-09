@@ -5,7 +5,7 @@ import Popup from "../Popup/Popup";
 import TableRowMenu from "../Popup/PopUpContents/TableRowMenu/TableRowMenu";
 import styles from "./WordsContainer.module.css";
 
-const TableRow = ({ row, rowHeights }) => {
+const TableRow = ({ row, rowHeights, updateRowHeight }) => {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [clickPosition, setClickPosition] = useState(null);
   // console.log("row data", row.original);
@@ -50,7 +50,13 @@ const TableRow = ({ row, rowHeights }) => {
           clickPosition={clickPosition}
           popupType="menu"
         >
-          <TableRowMenu curWord={row?.original} onClose={handleOneClose} />
+          <TableRowMenu
+            curWord={row?.original}
+            onClose={handleOneClose}
+            rowIdx={row?.index}
+            rowHeights={rowHeights}
+            updateRowHeight={updateRowHeight}
+          />
         </Popup>
       </span>
     </tr>
