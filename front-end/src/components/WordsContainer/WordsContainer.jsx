@@ -5,6 +5,7 @@ import {
   useAppendWordMutation,
   useEditWordMutation,
 } from "../../services/word";
+import Notification from "../Notification/Notification";
 import EditableCell from "./TableCells/EditableCell";
 import TableHeader from "./TableHeader";
 import TableRow from "./TableRow";
@@ -14,8 +15,9 @@ import { calculateColumnWidths, wordSchemaForClient } from "./utils";
 const WordsContainer = ({ curMilestone }) => {
   const [words, setWords] = useState([]);
   const [missingError, setMissingError] = useState("");
+  const [doNotify, setDoNotify] = useState(false);
   const newWordsSet = useRef(new Set());
-  const [rowHeights, setRowHeights] = useState({});
+  const [rowHeights, setRowHeights] = useState([]);
 
   const { data, isLoading, isError, error } = useBringMilestoneWordQuery(
     curMilestone?._id
@@ -32,20 +34,59 @@ const WordsContainer = ({ curMilestone }) => {
   }, [data, isError]);
 
   // Update row height for a specific row and column
-  const updateRowHeight = useCallback((rowIndex, { colId, value }) => {
-    setRowHeights((prev) => {
-      const currentRow = prev[rowIndex] || {};
-      const updatedRow = { ...currentRow, [colId]: value };
-      const maxHeight = Math.max(
-        ...Object.entries(updatedRow)
-          .filter(([key]) => key !== "curMax")
-          .map(([, height]) => height)
-      );
-      updatedRow.curMax = maxHeight;
-      return { ...prev, [rowIndex]: updatedRow };
-    });
-  }, []);
+  const updateRowHeight = useCallback(
+    (rowIndex, colId, value, action = "rerender") => {
+      console.log("updating row height", rowIndex, colId, value, action);
+      setRowHeights((prev) => {
+        if (action === "delete") {
+          if (rowIndex < 0 || rowIndex >= prev.length) {
+            // Row index is out of bounds, do nothing
+            return prev;
+          }
 
+          if (rowIndex === prev.length - 1) {
+            // If the row is the last row, simply remove it
+            return prev.slice(0, -1);
+          } else {
+            // If the row is in the middle, shift the row heights
+            const newRowHeights = [...prev];
+            for (let i = rowIndex; i < newRowHeights.length - 1; i++) {
+              // Deep copy the next row's object into the current row
+              newRowHeights[i] = { ...newRowHeights[i + 1] };
+            }
+            // Remove the last row
+            newRowHeights.pop();
+            return newRowHeights;
+          }
+        } else if (action === "append") {
+          // Append a new row (used for failed delete action)
+          return [...prev, value];
+        } else if (action === "update") {
+          // Update the row height for a specific column
+          const updatedRowHeights = [...prev];
+          const currentRow = updatedRowHeights[rowIndex] || {};
+          const updatedRow = { ...currentRow, [colId]: value };
+
+          // Calculate the new maximum height for the row
+          const maxHeight = Math.max(
+            ...Object.entries(updatedRow)
+              .filter(([key]) => key !== "curMax")
+              .map(([, height]) => height)
+          );
+          updatedRow.curMax = maxHeight;
+
+          // Update the row in the array
+          updatedRowHeights[rowIndex] = updatedRow;
+
+          return updatedRowHeights;
+        } else {
+          // Default action: do nothing
+          return prev;
+        }
+      });
+    },
+    []
+  );
   // Append new word
   const handleAppendWord = async () => {
     const newWord = wordSchemaForClient(curMilestone);
@@ -120,7 +161,8 @@ const WordsContainer = ({ curMilestone }) => {
     examplesSize,
     meaningSize,
   ]);
-
+  console.log("words", words);
+  console.log("rowHeight", rowHeights);
   // Table instance
   const table = useReactTable({
     columns,
@@ -128,16 +170,29 @@ const WordsContainer = ({ curMilestone }) => {
     getCoreRowModel: getCoreRowModel(),
     meta: {
       updateWords: (rowIndex, columnId, value) => {
+        console.log("on Update", rowIndex, columnId, value);
+        if (!rowIndex || typeof rowIndex !== "number" || !columnId || !value) {
+          return;
+        }
+        if (!words) {
+          console.log("word is undefined!!");
+          return;
+        }
         setWords((prev) => {
           const updatedWords = prev?.map((row, index) =>
             index === rowIndex ? { ...prev[rowIndex], [columnId]: value } : row
           );
-
+          if (!updatedWords) {
+            console.log("updated word is undefined!!");
+            return;
+          }
+          console.log("updated words", updatedWords);
           const wordToUpdate = updatedWords[rowIndex];
 
           if (!wordToUpdate?._id) {
             if (wordToUpdate.word === "") {
-              setMissingError("word field can not be empty");
+              setMissingError("word is required! fill the word.");
+              setDoNotify(true);
             } else {
               if (newWordsSet.current.has(rowIndex)) return;
               newWordsSet.current.add(rowIndex);
@@ -153,6 +208,7 @@ const WordsContainer = ({ curMilestone }) => {
                 })
                 .catch((error) => {
                   console.error("Error while appending word:", error);
+                  setDoNotify(true);
                   setMissingError("something went wrong while updating word");
                 });
             }
@@ -170,14 +226,19 @@ const WordsContainer = ({ curMilestone }) => {
 
   if (isLoading) return <div>Loading...</div>;
   if (isError) return <div>Error: {error.data.message}</div>;
-
+  // console.log("table after insert", table?.getRowModel()?.rows);
   return (
     <div>
       <table className={styles.table}>
         <TableHeader headerGroups={table.getHeaderGroups()} />
         <tbody>
           {table?.getRowModel()?.rows?.map((row) => (
-            <TableRow key={row.id} row={row} rowHeights={rowHeights} />
+            <TableRow
+              key={row.id}
+              row={row}
+              rowHeights={rowHeights}
+              updateRowHeight={updateRowHeight}
+            />
           ))}
         </tbody>
       </table>
@@ -186,7 +247,14 @@ const WordsContainer = ({ curMilestone }) => {
           <i className="fa-solid fa-plus"></i> Add new word
         </button>
       </div>
-      {missingError && <p style={{ color: "red" }}>{missingError}</p>}
+      {missingError && (
+        <Notification
+          title="An Error Occurred!"
+          message={missingError}
+          isOpen={doNotify}
+          onClose={() => setDoNotify(false)}
+        />
+      )}
     </div>
   );
 };
