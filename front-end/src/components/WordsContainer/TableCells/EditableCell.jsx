@@ -5,6 +5,7 @@ const EditableCell = ({ getValue, row, column, table }) => {
   const initialValue = getValue();
   const [value, setValue] = useState(initialValue);
   const textareaRef = useRef(null);
+  const hasFocusedRef = useRef(false);
 
   const adjustHeight = useCallback(() => {
     const textarea = textareaRef.current;
@@ -81,6 +82,19 @@ const EditableCell = ({ getValue, row, column, table }) => {
       }px`;
     }
   }, [row.index, table.options.meta?.rowHeights]);
+
+  // Auto-focus the word cell if it's a new placeholder row
+  useEffect(() => {
+    if (
+      column.id === "word" &&
+      !row.original._id &&
+      !hasFocusedRef.current &&
+      textareaRef.current
+    ) {
+      textareaRef.current.focus();
+      hasFocusedRef.current = true;
+    }
+  }, [column.id, row.original._id]);
 
   // dynamic style
   const style = {
