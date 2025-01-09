@@ -41,24 +41,26 @@ const TableRow = ({ row, rowHeights, updateRowHeight }) => {
           {flexRender(cell.column.columnDef.cell, cell.getContext())}
         </td>
       ))}
-      <span className={styles.rowAction} onClick={handleButtonClick}>
-        <RxDragHandleDots2 />
-        <Popup
-          isOpen={isPopupOpen}
-          onClose={handleOneClose}
-          showCloseButton={false}
-          clickPosition={clickPosition}
-          popupType="menu"
-        >
-          <TableRowMenu
-            curWord={row?.original}
+      {row?.original?._id && (
+        <span className={styles.rowAction} onClick={handleButtonClick}>
+          <RxDragHandleDots2 />
+          <Popup
+            isOpen={isPopupOpen}
             onClose={handleOneClose}
-            rowIdx={row?.index}
-            rowHeights={rowHeights}
-            updateRowHeight={updateRowHeight}
-          />
-        </Popup>
-      </span>
+            showCloseButton={false}
+            clickPosition={clickPosition}
+            popupType="menu"
+          >
+            <TableRowMenu
+              curWord={row?.original}
+              onClose={handleOneClose}
+              rowIdx={row?.index}
+              rowHeights={rowHeights}
+              updateRowHeight={updateRowHeight}
+            />
+          </Popup>
+        </span>
+      )}
     </tr>
   );
 };
