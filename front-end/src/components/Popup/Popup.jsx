@@ -46,7 +46,6 @@ const Popup = ({
   };
 
   if (!isOpen) return null;
-  console.log("render popup");
 
   return ReactDOM.createPortal(
     <div
