@@ -9,7 +9,6 @@ const EditableCell = ({ getValue, row, column, table }) => {
 
   const adjustHeight = useCallback(() => {
     const textarea = textareaRef.current;
-    console.log("calling from editable callId", column?.id);
     if (textarea) {
       textarea.style.height = "auto";
       textarea.style.height = `${textarea.scrollHeight}px`;
@@ -53,9 +52,7 @@ const EditableCell = ({ getValue, row, column, table }) => {
   };
 
   const handleOnBlur = useCallback(() => {
-    console.log("called on blur");
     if (initialValue !== value) {
-      console.log("called on blur inside");
       table.options.meta?.updateWords(row.index, column.id, value);
       adjustHeight();
     }
