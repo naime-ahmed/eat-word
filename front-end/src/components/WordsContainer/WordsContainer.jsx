@@ -28,10 +28,8 @@ const WordsContainer = ({ curMilestone }) => {
 
   // Effect to update words when data is available
   useEffect(() => {
-    if (data?.words && !isError) {
-      setWords(data.words);
-    }
-  }, [data, isError]);
+    setWords(data?.words || []);
+  }, [data]);
 
   // Update row height for a specific row and column
   const updateRowHeight = useCallback(
@@ -237,7 +235,7 @@ const WordsContainer = ({ curMilestone }) => {
     meaningSize,
   ]);
   console.log("words", words);
-  console.log("rowHeight", rowHeights);
+  // console.log("rowHeight", rowHeights);
   // Table instance
   const table = useReactTable({
     columns,
@@ -251,29 +249,36 @@ const WordsContainer = ({ curMilestone }) => {
   });
 
   if (isLoading) return <div>Loading...</div>;
-  if (isError) return <div>Error: {error.data.message}</div>;
+  if (isError) {
+    console.log(error);
+  }
+  // if (isError) return <div>Error: {error.data.message}</div>;
   // console.log("table after insert", table?.getRowModel()?.rows);
   return (
     <div>
       <table className={styles.table}>
         <TableHeader headerGroups={table.getHeaderGroups()} />
-        <tbody>
-          {table?.getRowModel()?.rows?.map((row) => (
-            <TableRow
-              key={row.id}
-              row={row}
-              rowHeights={rowHeights}
-              updateRowHeight={updateRowHeight}
-            />
-          ))}
-        </tbody>
+        {words.length !== 0 && (
+          <tbody>
+            {table?.getRowModel()?.rows?.map((row) => (
+              <TableRow
+                key={row.id}
+                row={row}
+                rowHeights={rowHeights}
+                updateRowHeight={updateRowHeight}
+              />
+            ))}
+          </tbody>
+        )}
       </table>
-      {words[words.length - 1]?._id && (
+      {words[words.length - 1]?._id || words.length === 0 ? (
         <div className={styles.addNewWord}>
           <button onClick={handleAppendWord}>
             <i className="fa-solid fa-plus"></i> Add new word
           </button>
         </div>
+      ) : (
+        <></>
       )}
       {missingError && (
         <Notification
