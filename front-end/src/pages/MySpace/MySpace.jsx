@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import MilestoneCard from "../../components/dynamicComponents/MilestoneCard/MilestoneCard";
 import MilestoneRequirements from "../../components/Popup/PopUpContents/MilestoneRequirements/MilestoneRequirements";
 import Error from "../../components/shared/Error/Error";
@@ -13,17 +13,34 @@ const MySpace = () => {
   const [viewMilestone, setViewMilestone] = useState(() => {
     return localStorage.getItem("selectedMS") || "seven";
   });
+  const [milestones, setMilestones] = useState([]);
 
   const { data, isLoading, isError, error } = useBringMilestonesQuery();
+
+  // Update milestones state when data is fetched
+  useEffect(() => {
+    if (data?.milestones) {
+      setMilestones(data.milestones);
+    }
+  }, [data]);
 
   const handleSelectMSType = useCallback((MSType) => {
     localStorage.setItem("selectedMS", MSType);
     setViewMilestone(MSType);
   }, []);
 
-  const filteredMilestones = data?.milestones?.filter(
+  // Filter milestones by selected type
+  const filteredMilestones = milestones?.filter(
     (milestone) => milestone?.milestoneType === viewMilestone
   );
+
+  // Sort milestones: pinned milestones first
+  const sortedMilestones = filteredMilestones?.sort((a, b) => {
+    if (a.pinned && !b.pinned) return -1; // a comes first
+    if (!a.pinned && b.pinned) return 1; // b comes first
+    return 0; // no change in order
+  });
+  console.log("sorted milestone", sortedMilestones);
 
   const openModal = useCallback(() => setIsModalOpen(true), []);
   const closeModal = useCallback(() => setIsModalOpen(false), []);
@@ -79,7 +96,7 @@ const MySpace = () => {
                 />
               ) : (
                 <div className={styles.milestones}>
-                  {filteredMilestones?.map((milestone) => (
+                  {sortedMilestones?.map((milestone) => (
                     <MilestoneCard key={milestone._id} milestone={milestone} />
                   ))}
                 </div>
