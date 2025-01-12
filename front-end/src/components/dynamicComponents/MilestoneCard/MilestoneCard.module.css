@@ -2,6 +2,7 @@
 .milestoneCard {
   min-width: 291px;
   max-width: 291px;
+  position: relative;
   padding: 12px;
   color: #fff;
   background: rgba(46, 9, 83, 0.137);
@@ -16,6 +17,12 @@
 
 .milestoneCard:hover {
   border: 1px solid #9277a367;
+}
+.pinned {
+  position: absolute;
+  top: -18px;
+  left: -6px;
+  color: #fff;
 }
 
 .milestoneNameAndEdit {
