@@ -1,0 +1,29 @@
+.milestoneMenuContainer {
+  width: max-content;
+  height: max-content;
+  background-color: #141e3b;
+  border-radius: 6px;
+  padding: 12px 0;
+  color: #d4d4d4;
+}
+.milestoneMenuContainer > ul {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.milestoneMenuContainer > ul > li {
+  display: flex;
+  align-items: center;
+  column-gap: 6px;
+  padding: 6px 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.milestoneMenuContainer > ul > li:hover {
+  background-color: #1a274d;
+}
+.milestoneMenuContainer > ul > li:last-child:hover {
+  color: red;
+  background-color: #ff00001f;
+}
