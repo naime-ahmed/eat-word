@@ -1,22 +1,50 @@
 import { useState } from "react";
-import { BsPinAngle } from "react-icons/bs";
+import { BsPinAngle, BsPinAngleFill } from "react-icons/bs";
 import { LiaEditSolid } from "react-icons/lia";
 import { MdOutlineDeleteOutline } from "react-icons/md";
 import Swal from "sweetalert2";
-import { useRemoveMilestoneMutation } from "../../../../services/milestone";
+import {
+  useEditMilestoneMutation,
+  useRemoveMilestoneMutation,
+} from "../../../../services/milestone";
 import Notification from "../../../Notification/Notification";
+import Popup from "../../Popup";
+import EditMilestone from "../EditMilestone/EditMilestone";
 import styles from "./MilestoneMenu.module.css";
 
-const MilestoneMenu = ({ milestone, onClose }) => {
+const MilestoneMenu = ({ milestone, onMenuClose }) => {
   const [isDoNotify, setIsDoNotify] = useState(false);
   const [doNotifyTitle, setDoNotifyTitle] = useState("");
   const [doNotifyMessage, setDoNotifyMessage] = useState("");
-  const [removeMilestone, { isLoading, isError, error }] =
-    useRemoveMilestoneMutation();
+  const [doWantEdit, setDoWantEdit] = useState(false);
+  const [removeMilestone] = useRemoveMilestoneMutation();
+  const [editMilestone] = useEditMilestoneMutation();
 
   // handle do notify close
   const handleDoNotifyClose = () => {
     setIsDoNotify(false);
+  };
+
+  // handle edit milestone popup
+  const handleOpenEdit = () => {
+    setDoWantEdit(true);
+  };
+  const handleCloseEdit = () => {
+    setDoWantEdit(false);
+  };
+
+  const handleTogglePin = async () => {
+    try {
+      await editMilestone([
+        milestone?._id,
+        { pinned: !milestone?.pinned || false },
+      ]).then(onMenuClose());
+    } catch (error) {
+      <Notification
+        title="Failed to Edit!"
+        message={error?.data?.message || "Something went wrong while editing!"}
+      />;
+    }
   };
 
   // handle delete milestone
@@ -38,17 +66,8 @@ const MilestoneMenu = ({ milestone, onClose }) => {
         return;
       }
 
-      const res = await removeMilestone(milestone?._id);
-      // inform the user
-      setDoNotifyTitle("Delete successful");
-      setDoNotifyMessage(res?.data?.message || "Milestone has been deleted");
-      <Notification
-        title={doNotifyTitle}
-        message={doNotifyMessage}
-        isOpen={isDoNotify}
-        onClose={handleDoNotifyClose}
-      />;
-      onClose();
+      await removeMilestone(milestone?._id);
+      onMenuClose();
     } catch (error) {
       // show the error to user
       setDoNotifyTitle("Deletion failed");
@@ -64,11 +83,29 @@ const MilestoneMenu = ({ milestone, onClose }) => {
   return (
     <div className={styles.milestoneMenuContainer}>
       <ul>
-        <li>
-          <BsPinAngle /> Pin milestone
+        <li onClick={handleTogglePin}>
+          {milestone?.pinned ? (
+            <>
+              <BsPinAngleFill /> unpin milestone
+            </>
+          ) : (
+            <>
+              <BsPinAngle /> Pin milestone
+            </>
+          )}
         </li>
-        <li>
-          <LiaEditSolid /> Edit milestone
+        <li onClick={handleOpenEdit}>
+          <>
+            <LiaEditSolid /> <span>Edit milestone</span>
+            {doWantEdit && (
+              <Popup isOpen={doWantEdit} onClose={handleCloseEdit}>
+                <EditMilestone
+                  milestone={milestone}
+                  onClose={handleCloseEdit}
+                />
+              </Popup>
+            )}
+          </>
         </li>
         <li onClick={handleDelete}>
           <MdOutlineDeleteOutline /> Delete milestone
