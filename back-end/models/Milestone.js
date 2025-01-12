@@ -14,7 +14,8 @@ const milestoneSchema = new mongoose.Schema(
     memorizedCount: { type: Number, required: true },
     revisionCount: { type: Number, required: true },
     learnSynonyms: {type: Boolean, required: true},
-    includeDefinition:{type: Boolean, required: true}
+    includeDefinition:{type: Boolean, required: true},
+    pinned: {type: Boolean, default: false}
   },
   { timestamps: true }
 );
