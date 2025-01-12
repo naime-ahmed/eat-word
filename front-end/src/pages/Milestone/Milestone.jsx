@@ -10,7 +10,6 @@ import {
   useBringMilestonesQuery,
   useEditMilestoneMutation,
 } from "../../services/milestone";
-import { debounceUpdate } from "../../utils/debounceUpdate";
 import styles from "./Milestone.module.css";
 
 const Milestone = () => {
@@ -39,24 +38,27 @@ const Milestone = () => {
     }
   }, [curMilestone]);
 
-  // Debounced function to update milestone name
-  const updateName = debounceUpdate(async (newName) => {
+  // function to update milestone name
+  const updateName = async () => {
+    // if value is same but blur has called
+    if (curMilestone?.name === milestoneName) {
+      return;
+    }
     try {
       const updatedMilestone = await editMilestone([
         milestoneId,
-        { name: newName },
+        { name: milestoneName },
       ]).unwrap();
       console.log("Milestone updated successfully:", updatedMilestone);
     } catch (error) {
       console.error("Error while updating milestone name:", error);
     }
-  }, 1000);
+  };
 
   // Handle input change
   const handleNameChange = (e) => {
     const newValue = e.target.value;
     setMilestoneName(newValue);
-    updateName(newValue);
   };
 
   return (
@@ -78,6 +80,7 @@ const Milestone = () => {
                     name="milestoneName"
                     value={milestoneName}
                     onChange={handleNameChange}
+                    onBlur={updateName}
                     className={styles.milestoneNameInput}
                     disabled={isEditMileLoading} // Disable during update
                   />
