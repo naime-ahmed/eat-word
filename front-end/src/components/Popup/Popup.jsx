@@ -1,5 +1,6 @@
 import { useEffect, useRef } from "react";
 import ReactDOM from "react-dom";
+import { IoIosCloseCircle } from "react-icons/io";
 import styles from "./Popup.module.css";
 
 const Popup = ({
@@ -16,11 +17,18 @@ const Popup = ({
   // Handle outside click
   useEffect(() => {
     const handleOutsideClick = (e) => {
+      e.stopPropagation();
+
+      // Check if the click is inside any popup (parent or nested)
+      const isInsidePopup = e.target.closest('[data-popup="true"]');
+
       if (
         closeOnOutsideClick &&
         popupRef.current &&
-        !popupRef.current.contains(e.target)
+        !popupRef.current.contains(e.target) &&
+        !isInsidePopup // Do not close if the click is inside a nested popup
       ) {
+        console.log("click outside modal");
         onClose();
       }
     };
@@ -60,11 +68,12 @@ const Popup = ({
           ...getPopupStyle(),
         }}
         onClick={(e) => e.stopPropagation()}
+        data-popup="true" // Add this attribute to identify the popup
       >
         <div className={styles.content}>
           {showCloseButton && (
             <button className={styles.closeButton} onClick={onClose}>
-              &times;
+              <IoIosCloseCircle />
             </button>
           )}
           {children}
