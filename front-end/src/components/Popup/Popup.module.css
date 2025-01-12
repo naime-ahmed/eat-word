@@ -22,17 +22,19 @@
 
 .dialog,
 .modal {
-  top: "50%";
-  left: "50%";
-  transform: "translate(-50%, -50%)";
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 
 .closeButton {
   position: absolute;
-  top: 2px;
-  right: 10px;
+  top: -14px;
+  right: -12px;
+  /* padding: 6px; */
+  color: hsl(229, 48%, 52%);
   background: none;
   border: none;
-  font-size: 18px;
+  font-size: 26px;
   cursor: pointer;
 }
