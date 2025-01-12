@@ -1,94 +1,34 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import Swal from "sweetalert2";
-import { useRemoveMilestoneMutation } from "../../../services/milestone";
 import { formatTimeAgo } from "../../../utils/formateTimeAgo";
-import EditMilestone from "../../Popup/PopUpContents/EditMilestone/EditMilestone";
-import PrimaryBtn from "../../ui/button/PrimaryBtn/PrimaryBtn";
+import Popup from "../../Popup/Popup";
+import MilestoneMenu from "../../Popup/PopUpContents/MilestoneMenu/MilestoneMenu";
 import styles from "./MilestoneCard.module.css";
 
 const MilestoneCard = ({ milestone }) => {
   const navigate = useNavigate();
   const id = milestone?._id;
-  const [showFloatCard, setShowFloatCard] = useState(false);
-  const floatCardRef = useRef(null);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const ellipsisRef = useRef(null);
-  const [isEditMilestonePopShown, setIsEditMilestonePopShown] = useState(false);
-
-  const [removeMilestone, { isLoading, isError, error }] =
-    useRemoveMilestoneMutation();
-
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (
-        floatCardRef.current &&
-        !floatCardRef.current.contains(event.target) &&
-        !ellipsisRef.current.contains(event.target)
-      ) {
-        setShowFloatCard(false);
-        setIsEditMilestonePopShown(false);
-      }
-    };
-
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, []);
+  const [clickPosition, setClickPosition] = useState(null);
 
   function handleClick() {
     navigate(`/my-space/${id}`);
   }
 
-  const handleEllipsisClick = (e) => {
+  // handle the menu on and off
+  const handleMenusOpen = (e) => {
     e.stopPropagation();
-    setShowFloatCard(!showFloatCard);
+    const x = e.clientX + window.scrollX;
+    const y = e.clientY + window.scrollY;
+    setClickPosition({ x, y });
+    setIsMenuOpen(true);
   };
+  const handleMenusClose = useCallback(() => {
+    setIsMenuOpen(false);
+  }, []);
 
-  const openEditMilestone = (e) => {
-    e.stopPropagation();
-    setIsEditMilestonePopShown(true);
-  };
-  const closeEditMilestone = () => setIsEditMilestonePopShown(false);
-
-  const handleDelete = async () => {
-    try {
-      // Wait for the Swal result
-      const warningResult = await Swal.fire({
-        title: "Are you sure?",
-        text: `"${milestone?.name}" will be deleted and you won't be able to restore it`,
-        icon: "warning",
-        showCancelButton: true,
-        confirmButtonColor: "#d33",
-        cancelButtonColor: "#3085d6",
-        confirmButtonText: "ok, delete",
-      });
-
-      // console.log(warningResult);
-
-      // Check if the user confirmed the sign-out
-      if (!warningResult.isConfirmed) {
-        return;
-      }
-
-      const res = await removeMilestone(id);
-      // inform the user
-      Swal.fire({
-        title: res.data?.message,
-        icon: "success",
-        confirmButtonText: "Got it",
-      });
-    } catch (error) {
-      // show the error to user
-      Swal.fire({
-        title: "Something went wrong",
-        text: error.data?.message || "An unexpected error occurred",
-        icon: "error",
-        confirmButtonText: "ok",
-      });
-    }
-  };
-
+  // stop ellipse, metrics on click navigation
   const handlePropagation = (e) => {
     e.stopPropagation();
   };
@@ -105,35 +45,21 @@ const MilestoneCard = ({ milestone }) => {
         </div>
         <div
           ref={ellipsisRef}
-          onClick={handleEllipsisClick}
+          onClick={handleMenusOpen}
           style={{ cursor: "pointer" }}
         >
           <i className="fa-solid fa-ellipsis-vertical"></i>
         </div>
-        {showFloatCard && (
-          <div
-            ref={floatCardRef}
-            className={styles.floatCard}
-            onClick={handlePropagation}
+        {isMenuOpen && (
+          <Popup
+            isOpen={isMenuOpen}
+            onClose={handleMenusClose}
+            popupType="menu"
+            clickPosition={clickPosition}
+            showCloseButton={false}
           >
-            <PrimaryBtn handleClick={openEditMilestone}>
-              <i className="far fa-edit"></i> Edit
-            </PrimaryBtn>
-            <EditMilestone
-              isOpen={isEditMilestonePopShown}
-              onClose={closeEditMilestone}
-              milestone={milestone}
-              onCloseFloatCard={setShowFloatCard}
-            />
-            <PrimaryBtn
-              colorOne="#da3633"
-              colorTwo="#da3633"
-              isLoading={isLoading}
-              handleClick={handleDelete}
-            >
-              Delete
-            </PrimaryBtn>
-          </div>
+            <MilestoneMenu milestone={milestone} onClose={handleMenusClose} />
+          </Popup>
         )}
       </div>
       <div className={styles.milestoneInfo}>
