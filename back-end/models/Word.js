@@ -8,7 +8,7 @@ const wordSchema = new mongoose.Schema(
     definitions: { type: String, default: "" },
     examples: { type: String, default: "" },
     memorized: { type: Boolean, default: false },
-    difficultyLevel: { type: String, enum: ["easy", "medium", "hard", "notSpecified"], default: "notSpecified" },
+    difficultyLevel: { type: String, enum: ["hard", "notSpecified"], default: "notSpecified" },
     contextTags: { type: String, default: "" },
     frequency: { type: Number, default: 0 },
     notes: { type: String, default: "" },
