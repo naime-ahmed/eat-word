@@ -1,4 +1,5 @@
 import { useCallback, useRef, useState } from "react";
+import { BsPinAngleFill } from "react-icons/bs";
 import { useNavigate } from "react-router-dom";
 import { formatTimeAgo } from "../../../utils/formateTimeAgo";
 import Popup from "../../Popup/Popup";
@@ -40,6 +41,11 @@ const MilestoneCard = ({ milestone }) => {
       className={styles.milestoneCard}
     >
       <div className={styles.milestoneNameAndEdit}>
+        {milestone?.pinned && (
+          <span className={styles.pinned}>
+            <BsPinAngleFill />
+          </span>
+        )}
         <div className={styles.milestoneName}>
           <p>{milestone?.name}</p>
         </div>
@@ -58,7 +64,10 @@ const MilestoneCard = ({ milestone }) => {
             clickPosition={clickPosition}
             showCloseButton={false}
           >
-            <MilestoneMenu milestone={milestone} onClose={handleMenusClose} />
+            <MilestoneMenu
+              milestone={milestone}
+              onMenuClose={handleMenusClose}
+            />
           </Popup>
         )}
       </div>
