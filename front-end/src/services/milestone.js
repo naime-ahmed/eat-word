@@ -149,7 +149,7 @@ export const milestoneApi = createApi({
             "bringMilestones",
             undefined,
             (draft) => {
-              return draft.filter((milestone) => milestone.id !== milestoneId);
+              delete draft[milestoneId];
             }
           )
         );
