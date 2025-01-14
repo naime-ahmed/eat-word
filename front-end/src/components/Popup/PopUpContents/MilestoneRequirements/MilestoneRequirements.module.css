@@ -1,24 +1,10 @@
-.modalOverlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(0, 0, 0, 0.75);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 1000;
-}
-
 .modalContent {
-  background-color: #020817;
+  background-color: #141e3b;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   color: #e0e0e0;
   padding: 2rem;
   border-radius: 8px;
-  width: 80%;
   max-width: 500px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .modalTitle {
@@ -42,7 +28,7 @@
 select.inputField {
   width: 100%;
   padding: 0.5rem;
-  background-color: #020817;
+  background-color: #141e3b;
   border: 1px solid #2a3652;
   border-radius: 4px;
   font-size: 1rem;
@@ -65,7 +51,7 @@ select.inputField:focus + .formLabel,
 select.inputField:not([value=""]) + .formLabel {
   top: -0.5rem;
   font-size: 0.8rem;
-  background-color: #020817;
+  background-color: #141e3b;
   padding: 0 0.25rem;
   color: #58a6ff;
 }
@@ -93,41 +79,9 @@ select.inputField:focus {
   color: #e0e0e0;
 }
 
-.buttonGroup {
-  display: flex;
-  justify-content: flex-end;
-  gap: 1rem;
-  margin-top: 1rem;
+.SubmitButton {
+  text-align: end;
 }
-
-.submitButton,
-.cancelButton {
-  padding: 0.5rem 1rem;
-  border: none;
-  border-radius: 4px;
-  font-size: 1rem;
-  cursor: pointer;
-  transition: background-color 0.2s;
-}
-
-.submitButton {
-  background-color: #238636;
-  color: white;
-}
-
-.submitButton:hover {
-  background-color: #2ea043;
-}
-
-.cancelButton {
-  background-color: #da3633;
-  color: white;
-}
-
-.cancelButton:hover {
-  background-color: #f85149;
-}
-
 @media screen and (max-width: 400px) {
   .modalContent {
     padding: 1rem;
