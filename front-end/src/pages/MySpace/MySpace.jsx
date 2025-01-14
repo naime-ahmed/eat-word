@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import MilestoneCard from "../../components/dynamicComponents/MilestoneCard/MilestoneCard";
+import Popup from "../../components/Popup/Popup";
 import MilestoneRequirements from "../../components/Popup/PopUpContents/MilestoneRequirements/MilestoneRequirements";
 import Error from "../../components/shared/Error/Error";
 import Footer from "../../components/shared/Footer/Footer";
@@ -9,7 +10,7 @@ import { useBringMilestonesQuery } from "../../services/milestone";
 import styles from "./MySpace.module.css";
 
 const MySpace = () => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isTakingRequirements, setIsTakingRequirements] = useState(false);
   const [viewMilestone, setViewMilestone] = useState(() => {
     return localStorage.getItem("selectedMS") || "seven";
   });
@@ -42,8 +43,8 @@ const MySpace = () => {
   });
   console.log("sorted milestone", sortedMilestones);
 
-  const openModal = useCallback(() => setIsModalOpen(true), []);
-  const closeModal = useCallback(() => setIsModalOpen(false), []);
+  const openReqModal = useCallback(() => setIsTakingRequirements(true), []);
+  const closeReqModal = useCallback(() => setIsTakingRequirements(false), []);
 
   return (
     <div className={styles.myspacePage}>
@@ -51,13 +52,16 @@ const MySpace = () => {
       <div className={styles.myspaceContainer}>
         <div className={styles.mySpaceHeading}>
           <div className={styles.createNewMilestoneBtn}>
-            <AddBtn handleOpenModal={openModal} />
+            <AddBtn handleOpenModal={openReqModal} />
           </div>
-          <MilestoneRequirements
-            isOpen={isModalOpen}
-            onClose={closeModal}
-            handleViewMilestone={setViewMilestone}
-          />
+
+          <Popup
+            isOpen={isTakingRequirements}
+            onClose={closeReqModal}
+            closeOnOutsideClick={false}
+          >
+            <MilestoneRequirements handleViewMilestone={setViewMilestone} />
+          </Popup>
         </div>
 
         {isLoading ? (
