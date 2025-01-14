@@ -42,6 +42,18 @@ const Popup = ({
     };
   }, [isOpen, closeOnOutsideClick, onClose]);
 
+  // remove scroll
+  useEffect(() => {
+    if (isOpen && popupType !== "menu") {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [isOpen, popupType]);
+
   // Calculate notification position
   const getPopupStyle = () => {
     if (popupType === "menu" && clickPosition) {
