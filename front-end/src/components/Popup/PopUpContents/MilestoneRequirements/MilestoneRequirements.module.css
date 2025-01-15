@@ -4,12 +4,14 @@
   color: #e0e0e0;
   padding: 2rem;
   border-radius: 8px;
+  font-size: 16px;
   max-width: 500px;
+  min-width: 330px;
 }
 
 .modalTitle {
   text-align: center;
-  font-size: 1.5rem;
+  font-size: 1.3rem;
   margin-bottom: 1.5rem;
   color: #ffffff;
 }
@@ -31,7 +33,6 @@ select.inputField {
   background-color: #141e3b;
   border: 1px solid #2a3652;
   border-radius: 4px;
-  font-size: 1rem;
   color: #e0e0e0;
 }
 
@@ -82,13 +83,36 @@ select.inputField:focus {
 .SubmitButton {
   text-align: end;
 }
-@media screen and (max-width: 400px) {
+@media screen and (max-width: 399.98px) {
   .modalContent {
     padding: 1rem;
     border-radius: 8px;
-    width: 90%;
   }
   .modalTitle {
+    font-size: 16px;
+  }
+  .checkboxLabel {
+    font-size: 14px;
+  }
+}
+@media (min-width: 400px) and (max-width: 499.98px) {
+  .modalContent {
+    padding: 1rem;
+    border-radius: 8px;
+  }
+  .modalTitle {
+    font-size: 17px;
+  }
+  .checkboxLabel {
+    font-size: 14px;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 999.98px) {
+  .modalTitle {
     font-size: 1rem;
+  }
+  .modalContent {
+    font-size: 14px;
   }
 }
