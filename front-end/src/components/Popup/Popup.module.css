@@ -25,6 +25,7 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+  min-width: 330px;
 }
 
 .closeButton {
@@ -37,4 +38,14 @@
   border: none;
   font-size: 26px;
   cursor: pointer;
+}
+/* style for smaller devices */
+@media (max-width: 599.98px) {
+  .dialog,
+  .modal {
+    top: 40%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    min-width: 330px;
+  }
 }
