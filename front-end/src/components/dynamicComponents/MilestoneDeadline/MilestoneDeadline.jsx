@@ -27,7 +27,12 @@ const MilestoneTimer = ({ createdAt, duration }) => {
         );
         const seconds = Math.floor((timeDifference % (1000 * 60)) / 1000);
 
-        setMessage(`Time left: ${days}d ${hours}h ${minutes}m ${seconds}s`);
+        // Show seconds only if time left is less than an hour
+        if (timeDifference < 60 * 60 * 1000) {
+          setMessage(`Time left: ${days}d ${hours}h ${minutes}m ${seconds}s`);
+        } else {
+          setMessage(`Time left: ${days}d ${hours}h ${minutes}m`);
+        }
       }
     };
 
