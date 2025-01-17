@@ -1,0 +1,82 @@
+.card {
+  width: 330px;
+  background: rgb(77, 61, 165);
+  border-radius: 2rem;
+  box-shadow: 0px 8px 24px rgba(18, 28, 53, 0.1);
+  padding: 16px;
+}
+.cardContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.cardWord {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* gap: 4px; */
+}
+.cardWord > textarea {
+  width: fit-content;
+  background-color: transparent;
+  color: #d0d0d1;
+  border: none;
+  outline: none;
+  padding: 6px 8px;
+  font-size: 22px;
+  resize: none;
+  overflow: hidden;
+  box-sizing: border-box;
+  transition: box-shadow 0.2s;
+}
+.wordSound {
+  display: flex;
+  align-items: center;
+  /* margin-left: 8px; */
+  font-size: 24px;
+  cursor: pointer;
+}
+
+.cardMeanings,
+.cardSynonyms,
+.cardDefinitions,
+.cardExamples {
+  display: flex;
+  flex-direction: column;
+}
+
+.cardMeanings > label,
+.cardSynonyms > label,
+.cardDefinitions > label,
+.cardExamples > label {
+  font-size: 14px;
+  font-weight: 500;
+  color: #d0d0d1;
+}
+
+.cardMeanings > textarea,
+.cardSynonyms > textarea,
+.cardDefinitions > textarea,
+.cardExamples > textarea {
+  width: 100%;
+  background-color: transparent;
+  color: #d0d0d1;
+  border: none;
+  outline: none;
+  padding: 6px 8px;
+  font-size: 14px;
+  resize: none;
+  overflow: hidden;
+  box-sizing: border-box;
+  transition: box-shadow 0.2s;
+}
+
+.cardMeanings > textarea:focus,
+.cardSynonyms > textarea:focus,
+.cardDefinitions > textarea:focus,
+.cardExamples > textarea:focus {
+  /* outline: 1px solid #005abb; */
+  box-shadow: inset 0 0 0 2px #045dbb;
+  outline-offset: 0;
+}
