@@ -5,7 +5,8 @@ import Error from "../../components/shared/Error/Error";
 import Footer from "../../components/shared/Footer/Footer";
 import Header from "../../components/shared/Header/Header";
 import SpinnerForPage from "../../components/ui/loader/SpinnerForPage/SpinnerForPage";
-import WordsContainer from "../../components/WordsContainer/WordsContainer";
+import Slider from "../../components/WordsContainer/Slider/Slider";
+import Table from "../../components/WordsContainer/Table/Table";
 import {
   useBringMilestonesQuery,
   useEditMilestoneMutation,
@@ -15,8 +16,26 @@ import styles from "./Milestone.module.css";
 const Milestone = () => {
   // State for milestone name
   const [milestoneName, setMilestoneName] = useState("");
+  const [wordContainerType, setWordContainerType] = useState("table");
   const { milestoneId } = useParams();
   const { data, isLoading, isError, error } = useBringMilestonesQuery();
+
+  // measure the screen size
+  useEffect(() => {
+    const countScreenSize = () => {
+      if (window.innerWidth < 1000) {
+        setWordContainerType("slider");
+      } else {
+        setWordContainerType("table");
+      }
+    };
+    countScreenSize();
+    window.addEventListener("resize", countScreenSize);
+    return () => {
+      window.removeEventListener("resize", countScreenSize);
+    };
+  }, []);
+
   const [
     editMilestone,
     {
@@ -98,7 +117,12 @@ const Milestone = () => {
                 </div>
               </div>
               <div className={styles.divider}></div>
-              <WordsContainer curMilestone={curMilestone} />
+
+              {wordContainerType === "table" ? (
+                <Table curMilestone={curMilestone} />
+              ) : (
+                <Slider curMilestone={curMilestone} />
+              )}
             </>
           )}
         </div>
