@@ -1,10 +1,11 @@
 import { useState } from "react";
 import { useSelector } from "react-redux";
 import { useAddMilestoneMutation } from "../../../../services/milestone.js";
+import Notification from "../../../Notification/Notification.jsx";
 import PrimaryBtn from "../../../ui/button/PrimaryBtn/PrimaryBtn.jsx";
 import styles from "./MilestoneRequirements.module.css";
 
-const MilestoneRequirements = ({ handleViewMilestone }) => {
+const MilestoneRequirements = ({ handleViewMilestone, onClose }) => {
   const [newWeekFormData, setNewWeekFormData] = useState({
     milestoneType: "",
     name: "",
@@ -12,6 +13,7 @@ const MilestoneRequirements = ({ handleViewMilestone }) => {
     learnSynonyms: false,
     includeDefinition: false,
   });
+  const [doNotify, setDoNotify] = useState(false);
 
   const { user } = useSelector((user) => user.auth);
 
@@ -27,30 +29,41 @@ const MilestoneRequirements = ({ handleViewMilestone }) => {
     setNewWeekFormData({ ...newWeekFormData, [name]: value });
   };
 
+  const handleNotificationClose = () => {
+    setDoNotify(false);
+  };
+
   const handleSubmit = async (event) => {
-    // try catch
     event.preventDefault();
-    console.log(newWeekFormData);
-    const newMilestoneData = {
-      ...newWeekFormData,
-      addedBy: user.id,
-      wordsCount: 0,
-      memorizedCount: 0,
-      revisionCount: 0,
-    };
-    await addMilestone(newMilestoneData);
-    if (isError) {
-      return;
+    // try catch
+    try {
+      console.log(newWeekFormData);
+      const newMilestoneData = {
+        ...newWeekFormData,
+        addedBy: user.id,
+        wordsCount: 0,
+        memorizedCount: 0,
+        revisionCount: 0,
+      };
+      await addMilestone(newMilestoneData);
+      if (isError) {
+        return;
+      }
+      setNewWeekFormData({
+        milestoneType: "",
+        name: "",
+        targetWords: 35,
+        learnSynonyms: false,
+        includeDefinition: false,
+      });
+      handleViewMilestone(newWeekFormData.milestoneType);
+      localStorage.setItem("selectedMS", newWeekFormData.milestoneType);
+      setDoNotify(false);
+      onClose();
+    } catch (error) {
+      setDoNotify(true);
+      console.log("error on append new challenge", error);
     }
-    setNewWeekFormData({
-      milestoneType: "",
-      name: "",
-      targetWords: 35,
-      learnSynonyms: false,
-      includeDefinition: false,
-    });
-    handleViewMilestone(newWeekFormData.milestoneType);
-    localStorage.setItem("selectedMS", newWeekFormData.milestoneType);
   };
 
   return (
@@ -140,6 +153,17 @@ const MilestoneRequirements = ({ handleViewMilestone }) => {
           </PrimaryBtn>
         </div>
       </form>
+      {doNotify && (
+        <Notification
+          title="Request failed"
+          message={
+            error?.data?.message ||
+            "An error occurred while creating new challenge!"
+          }
+          isOpen={doNotify}
+          onClose={handleNotificationClose}
+        />
+      )}
     </div>
   );
 };
