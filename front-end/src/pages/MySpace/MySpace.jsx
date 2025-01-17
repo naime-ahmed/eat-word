@@ -60,7 +60,10 @@ const MySpace = () => {
             onClose={closeReqModal}
             closeOnOutsideClick={false}
           >
-            <MilestoneRequirements handleViewMilestone={setViewMilestone} />
+            <MilestoneRequirements
+              handleViewMilestone={setViewMilestone}
+              onClose={closeReqModal}
+            />
           </Popup>
         </div>
 
