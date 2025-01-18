@@ -1,24 +1,44 @@
 .card {
-  width: 330px;
-  background: rgb(77, 61, 165);
-  border-radius: 2rem;
+  position: relative;
+  width: 340px;
+  background: #020817;
   box-shadow: 0px 8px 24px rgba(18, 28, 53, 0.1);
-  padding: 16px;
 }
 .cardContainer {
+  padding: 16px;
   display: flex;
   flex-direction: column;
   gap: 12px;
+  background: linear-gradient(
+    25deg,
+    rgba(72, 73, 148, 0) 0%,
+    rgba(152, 191, 254, 0.12) 100%
+  );
+  border: 1px solid #293b69;
+  border-radius: 20px;
 }
 
+.cardMenu {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  font-size: 22px;
+}
+.cardMenu > svg {
+  cursor: pointer;
+}
 .cardWord {
   display: flex;
   align-items: center;
   justify-content: center;
+  border-bottom: 1px solid #293b69;
+  margin-bottom: 6px;
   /* gap: 4px; */
 }
 .cardWord > textarea {
-  width: fit-content;
+  width: max-content;
+  white-space: nowrap;
+  word-wrap: normal;
   background-color: transparent;
   color: #d0d0d1;
   border: none;
@@ -30,10 +50,20 @@
   box-sizing: border-box;
   transition: box-shadow 0.2s;
 }
+
+.cardWord > textarea.empty:not(:focus),
+.cardMeanings > textarea.empty:not(:focus),
+.cardSynonyms > textarea.empty:not(:focus),
+.cardDefinitions > textarea.empty:not(:focus),
+.cardExamples > textarea.empty:not(:focus) {
+  border: 1px dashed #293b69 !important;
+  border-radius: 8px;
+}
+
 .wordSound {
   display: flex;
   align-items: center;
-  /* margin-left: 8px; */
+  margin-top: 6px;
   font-size: 24px;
   cursor: pointer;
 }
@@ -77,6 +107,7 @@
 .cardDefinitions > textarea:focus,
 .cardExamples > textarea:focus {
   /* outline: 1px solid #005abb; */
-  box-shadow: inset 0 0 0 2px #045dbb;
+  box-shadow: inset 0 0 0 1px #293b69;
+  border-radius: 8px;
   outline-offset: 0;
 }
