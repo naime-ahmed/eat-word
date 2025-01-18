@@ -1,10 +1,11 @@
 import PropTypes from "prop-types"; // Add PropTypes for validation
 import { useEffect, useRef, useState } from "react";
+import { BiDotsVerticalRounded } from "react-icons/bi";
 import { RiVolumeUpFill } from "react-icons/ri";
 import { calculateTextWidth } from "../../utils";
 import styles from "./SliderCard.module.css";
 
-const SliderCard = ({ word, wordIdx }) => {
+const SliderCard = ({ word, wordIdx, curMilestone }) => {
   // Initialize state with default values to avoid undefined issues
   const [wordReplica, setWordReplica] = useState({
     word: word?.word || "",
@@ -41,10 +42,18 @@ const SliderCard = ({ word, wordIdx }) => {
 
     // Adjust the width of the word textarea
     if (wordRef.current) {
-      const textWidth = calculateTextWidth(wordRef.current.value, "22"); // Use the utility function
-      wordRef.current.style.width = `${textWidth + 22}px`; // Add padding
+      const textWidth = calculateTextWidth(wordRef.current.value, "24px"); // Use the utility function
+      wordRef.current.style.width = `${textWidth + 14}px`; // Add padding
+      console.log(wordRef.current.value, "width: ", textWidth);
     }
   }, [wordReplica]);
+
+  // Prevent Enter key from creating a new line
+  const handleKeyDown = (event) => {
+    if (event.key === "Enter") {
+      event.preventDefault(); // Prevent default behavior (new line)
+    }
+  };
 
   // Single handler for all textarea changes
   const handleOnChange = (e) => {
@@ -73,6 +82,8 @@ const SliderCard = ({ word, wordIdx }) => {
             name="word"
             value={wordText}
             onChange={handleOnChange}
+            onKeyDown={handleKeyDown}
+            className={`${wordText ? "" : styles.empty}`}
             rows={1}
           />
           <span className={styles.wordSound} aria-label="sound">
@@ -89,35 +100,42 @@ const SliderCard = ({ word, wordIdx }) => {
             id={`meanings-${wordIdx}`}
             value={meanings}
             onChange={handleOnChange}
+            className={`${meanings ? "" : styles.empty}`}
             rows={1}
           />
         </div>
 
         {/* Synonyms */}
-        <div className={styles.cardSynonyms}>
-          <label htmlFor={`synonyms-${wordIdx}`}>SYNONYMS: </label>
-          <textarea
-            ref={synonymsRef}
-            name="synonyms"
-            id={`synonyms-${wordIdx}`}
-            value={synonyms}
-            onChange={handleOnChange}
-            rows={1}
-          />
-        </div>
+        {curMilestone?.learnSynonyms && (
+          <div className={styles.cardSynonyms}>
+            <label htmlFor={`synonyms-${wordIdx}`}>SYNONYMS: </label>
+            <textarea
+              ref={synonymsRef}
+              name="synonyms"
+              id={`synonyms-${wordIdx}`}
+              value={synonyms}
+              onChange={handleOnChange}
+              className={`${synonyms ? "" : styles.empty}`}
+              rows={1}
+            />
+          </div>
+        )}
 
         {/* Definitions */}
-        <div className={styles.cardDefinitions}>
-          <label htmlFor={`definitions-${wordIdx}`}>DEFINITIONS: </label>
-          <textarea
-            ref={definitionsRef}
-            name="definitions"
-            id={`definitions-${wordIdx}`}
-            value={definitions}
-            onChange={handleOnChange}
-            rows={1}
-          />
-        </div>
+        {curMilestone?.includeDefinition && (
+          <div className={styles.cardDefinitions}>
+            <label htmlFor={`definitions-${wordIdx}`}>DEFINITIONS: </label>
+            <textarea
+              ref={definitionsRef}
+              name="definitions"
+              id={`definitions-${wordIdx}`}
+              value={definitions}
+              onChange={handleOnChange}
+              className={`${definitions ? "" : styles.empty}`}
+              rows={1}
+            />
+          </div>
+        )}
 
         {/* Examples */}
         <div className={styles.cardExamples}>
@@ -128,10 +146,14 @@ const SliderCard = ({ word, wordIdx }) => {
             id={`examples-${wordIdx}`}
             value={examples}
             onChange={handleOnChange}
+            className={`${examples ? "" : styles.empty}`}
             rows={1}
           />
         </div>
       </div>
+      <span className={styles.cardMenu}>
+        <BiDotsVerticalRounded />
+      </span>
     </div>
   );
 };
@@ -156,7 +178,7 @@ SliderCard.propTypes = {
     createdAt: PropTypes.string,
     updatedAt: PropTypes.string,
     _id: PropTypes.string,
-    __v: PropTypes.string,
+    __v: PropTypes.number,
   }),
   wordIdx: PropTypes.number.isRequired,
 };
@@ -181,9 +203,9 @@ SliderCard.defaultProps = {
     createdAt: "",
     updatedAt: "",
     _id: "",
-    __v: "0",
+    __v: 0,
   },
-  wordIdx: 0, // Optional: set a default for wordIdx if needed
+  wordIdx: 0,
 };
 
 export default SliderCard;
