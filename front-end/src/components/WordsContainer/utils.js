@@ -1,3 +1,17 @@
+// utils.js (or utils/index.js)
+export const calculateTextWidth = (text, fontSize) => {
+  const tempSpan = document.createElement("span");
+  tempSpan.style.visibility = "hidden";
+  tempSpan.style.whiteSpace = "pre";
+  tempSpan.style.fontSize = fontSize; // Match the textarea font size
+  tempSpan.innerText = text;
+  document.body.appendChild(tempSpan);
+  const width = tempSpan.offsetWidth;
+  document.body.removeChild(tempSpan);
+  return width;
+};
+
+// Existing utility functions
 export const calculateColumnWidths = (curMilestone) => {
   let wordSize = 170;
   let meaningSize = 225;
