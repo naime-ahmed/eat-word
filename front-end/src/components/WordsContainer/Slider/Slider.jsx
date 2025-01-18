@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { IoIosAdd } from "react-icons/io";
 import { IoArrowBackOutline, IoArrowForward } from "react-icons/io5";
 import "swiper/css";
 import "swiper/css/effect-coverflow";
@@ -69,19 +70,30 @@ const Carousel = ({ curMilestone }) => {
       >
         {words.map((word, index) => (
           <SwiperSlide key={word?._id} className={styles.swiperSlide}>
-            <SliderCard word={word} wordIdx={index} />
+            <SliderCard
+              word={word}
+              wordIdx={index}
+              curMilestone={curMilestone}
+            />
           </SwiperSlide>
         ))}
 
         <div className={styles.sliderControler}>
           <div className={`${styles.swiperButtonPrev} ${styles.sliderArrow}`}>
-            <IoArrowBackOutline />
+            <IoArrowBackOutline /> <span>Previous</span>
           </div>
           <div className={`${styles.swiperButtonNext} ${styles.sliderArrow}`}>
+            <span>Next</span>
             <IoArrowForward />
           </div>
         </div>
       </SwiperReact>
+      {/* Add new word */}
+      <div className={styles.addNewWord}>
+        <button>
+          <IoIosAdd /> Add new word
+        </button>
+      </div>
     </div>
   );
 };
