@@ -43,6 +43,7 @@
   color: #d0d0d1;
   border: none;
   outline: none;
+  margin-bottom: 6px;
   padding: 6px 8px;
   font-size: 22px;
   resize: none;
@@ -51,7 +52,10 @@
   transition: box-shadow 0.2s;
 }
 
-.cardWord > textarea.empty:not(:focus),
+.cardWord > textarea.empty:not(:focus) {
+  border: 2px dashed #2852bb !important;
+  border-radius: 8px;
+}
 .cardMeanings > textarea.empty:not(:focus),
 .cardSynonyms > textarea.empty:not(:focus),
 .cardDefinitions > textarea.empty:not(:focus),
@@ -63,7 +67,7 @@
 .wordSound {
   display: flex;
   align-items: center;
-  margin-top: 6px;
+  /* margin-top: 6px; */
   font-size: 24px;
   cursor: pointer;
 }
