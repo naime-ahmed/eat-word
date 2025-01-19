@@ -1,11 +1,15 @@
-import PropTypes from "prop-types"; // Add PropTypes for validation
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { BiDotsVerticalRounded } from "react-icons/bi";
 import { RiVolumeUpFill } from "react-icons/ri";
+import { debounceUpdate } from "../../../../utils/debounceUpdate";
+import { sliderCardPropTypes } from "../../../../utils/propTypes";
+import Notification from "../../../Notification/Notification";
+import Popup from "../../../Popup/Popup";
+import TableRowMenu from "../../../Popup/PopUpContents/TableRowMenu/TableRowMenu";
+import { useUpdateWords } from "../../hooks/useUpdateWords";
 import { calculateTextWidth } from "../../utils";
 import styles from "./SliderCard.module.css";
-
-const SliderCard = ({ word, wordIdx, curMilestone }) => {
+const SliderCard = ({ word, setWords, wordIdx, curMilestone }) => {
   // Initialize state with default values to avoid undefined issues
   const [wordReplica, setWordReplica] = useState({
     word: word?.word || "",
@@ -17,6 +21,9 @@ const SliderCard = ({ word, wordIdx, curMilestone }) => {
     isFavorite: word?.isFavorite || false,
   });
 
+  const [clickPosition, setClickPosition] = useState(null);
+  const [showMenu, setShowMenu] = useState(false);
+
   // Refs for auto-resizing textareas
   const wordRef = useRef(null);
   const meaningsRef = useRef(null);
@@ -24,26 +31,35 @@ const SliderCard = ({ word, wordIdx, curMilestone }) => {
   const definitionsRef = useRef(null);
   const examplesRef = useRef(null);
 
+  const { updateWords, missingError, doNotify, setDoNotify } = useUpdateWords();
+
   // Function to auto-resize textareas
   const autoResizeTextarea = (textareaRef) => {
     if (textareaRef.current) {
-      textareaRef.current.style.height = "auto"; // Reset height
-      textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`; // Set height to scroll height
+      textareaRef.current.style.height = "auto";
+      textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`;
     }
   };
 
   // Auto-resize textareas on mount and state change
   useEffect(() => {
-    autoResizeTextarea(wordRef);
-    autoResizeTextarea(meaningsRef);
-    autoResizeTextarea(synonymsRef);
-    autoResizeTextarea(definitionsRef);
-    autoResizeTextarea(examplesRef);
+    // Auto-resize all textareas
+    const textareas = [
+      wordRef,
+      meaningsRef,
+      synonymsRef,
+      definitionsRef,
+      examplesRef,
+    ];
+    textareas.forEach((ref) => autoResizeTextarea(ref));
 
     // Adjust the width of the word textarea
     if (wordRef.current) {
-      const textWidth = calculateTextWidth(wordRef.current.value, "24px"); // Use the utility function
-      wordRef.current.style.width = `${textWidth + 14}px`; // Add padding
+      const textWidth = Math.max(
+        110,
+        calculateTextWidth(wordRef.current.value, "24px")
+      );
+      wordRef.current.style.width = `${textWidth + 14}px`;
       console.log(wordRef.current.value, "width: ", textWidth);
     }
   }, [wordReplica]);
@@ -51,15 +67,60 @@ const SliderCard = ({ word, wordIdx, curMilestone }) => {
   // Prevent Enter key from creating a new line
   const handleKeyDown = (event) => {
     if (event.key === "Enter") {
-      event.preventDefault(); // Prevent default behavior (new line)
+      event.preventDefault();
     }
   };
 
-  // Single handler for all textarea changes
-  const handleOnChange = (e) => {
-    const { name, value } = e.target;
-    setWordReplica((prev) => ({ ...prev, [name]: value }));
+  const handleUpdateWords = (wordIdx, property, value) => {
+    try {
+      updateWords(setWords, wordIdx, property, value, curMilestone?._id);
+    } catch (error) {
+      console.log("error on edit word (slide): ", error);
+    }
   };
+
+  // Memoize the debounced function using useRef
+  const debouncedUpdateRef = useRef(
+    debounceUpdate((name, value) => {
+      // incase value is same, we don't need to call server
+      if (value === word[name]) {
+        return;
+      }
+      handleUpdateWords(wordIdx, name, value);
+    }, 500)
+  );
+
+  // Cleanup debounce ref on unmount
+  useEffect(() => {
+    const debounceRef = debouncedUpdateRef.current;
+    return () => {
+      debounceRef.cancel();
+    };
+  }, []);
+
+  // Single handler for all textarea changes
+  const handleOnChange = useCallback((e) => {
+    const { name, value } = e.target;
+
+    // Update local state immediately
+    setWordReplica((prev) => ({ ...prev, [name]: value }));
+
+    // call server to update on db
+    debouncedUpdateRef.current(name, value);
+  }, []);
+
+  // handle menu
+  const handleShowMenu = (e) => {
+    console.log("show menu clicked");
+    // Calculate click position with scroll offset
+    const x = e.clientX + window.scrollX;
+    const y = e.clientY + window.scrollY;
+    setClickPosition({ x, y });
+    setShowMenu(true);
+  };
+  const handleMenuClose = useCallback(() => {
+    setShowMenu(false);
+  }, []);
 
   // Destructure wordReplica for cleaner code
   const {
@@ -68,8 +129,6 @@ const SliderCard = ({ word, wordIdx, curMilestone }) => {
     synonyms,
     definitions,
     examples,
-    difficultyLevel,
-    isFavorite,
   } = wordReplica;
 
   return (
@@ -83,12 +142,15 @@ const SliderCard = ({ word, wordIdx, curMilestone }) => {
             value={wordText}
             onChange={handleOnChange}
             onKeyDown={handleKeyDown}
+            placeholder="Your Word"
             className={`${wordText ? "" : styles.empty}`}
             rows={1}
           />
-          <span className={styles.wordSound} aria-label="sound">
-            <RiVolumeUpFill />
-          </span>
+          {wordText && (
+            <span className={styles.wordSound} aria-label="sound">
+              <RiVolumeUpFill />
+            </span>
+          )}
         </div>
 
         {/* Meanings */}
@@ -151,37 +213,37 @@ const SliderCard = ({ word, wordIdx, curMilestone }) => {
           />
         </div>
       </div>
-      <span className={styles.cardMenu}>
+      <span className={styles.cardMenu} onClick={handleShowMenu}>
         <BiDotsVerticalRounded />
+        {/* show word menu */}
+        <Popup
+          isOpen={showMenu}
+          onClose={handleMenuClose}
+          showCloseButton={false}
+          clickPosition={clickPosition}
+          popupType="menu"
+        >
+          <TableRowMenu curWord={word} onClose={handleMenuClose} />
+        </Popup>
       </span>
+
+      {/* show notification */}
+      {doNotify && (
+        <Notification
+          title="Failed to update!"
+          message={missingError}
+          iconType="warning"
+          isOpen={doNotify}
+          onClose={() => setDoNotify(false)}
+          duration={5000}
+        />
+      )}
     </div>
   );
 };
 
 // Add PropTypes for validation
-SliderCard.propTypes = {
-  word: PropTypes.shape({
-    addedBy: PropTypes.string,
-    addedMilestone: PropTypes.string,
-    contextTags: PropTypes.string,
-    word: PropTypes.string,
-    meanings: PropTypes.string,
-    synonyms: PropTypes.string,
-    definitions: PropTypes.string,
-    examples: PropTypes.string,
-    difficultyLevel: PropTypes.string,
-    frequency: PropTypes.number,
-    isFavorite: PropTypes.bool,
-    learnedScore: PropTypes.number,
-    memorized: PropTypes.bool,
-    notes: PropTypes.string,
-    createdAt: PropTypes.string,
-    updatedAt: PropTypes.string,
-    _id: PropTypes.string,
-    __v: PropTypes.number,
-  }),
-  wordIdx: PropTypes.number.isRequired,
-};
+SliderCard.propTypes = sliderCardPropTypes;
 
 // Default props to handle undefined `word`
 SliderCard.defaultProps = {
@@ -205,7 +267,9 @@ SliderCard.defaultProps = {
     _id: "",
     __v: 0,
   },
+  setWords: () => {},
   wordIdx: 0,
+  curMilestone: {},
 };
 
 export default SliderCard;
