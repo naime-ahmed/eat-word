@@ -10,7 +10,12 @@ import {
 import Notification from "../../../Notification/Notification";
 import styles from "./TableRowMenu.module.css";
 
-const TableRowMenu = ({ curWord, onClose, rowIdx, updateRowHeight }) => {
+const TableRowMenu = ({
+  curWord,
+  onClose,
+  rowIdx = undefined,
+  updateRowHeight = () => {},
+}) => {
   const [doNotify, setDoNotify] = useState(false);
   const [notificationTitle, setNotificationTitle] = useState("");
   const [notificationMessage, setNotificationMessage] = useState("");
@@ -45,7 +50,9 @@ const TableRowMenu = ({ curWord, onClose, rowIdx, updateRowHeight }) => {
         milestoneId: curWord?.addedMilestone,
       }).unwrap();
       onClose();
-      updateRowHeight(rowIdx, "", "", "delete");
+      if (rowIdx) {
+        updateRowHeight(rowIdx, "", "", "delete");
+      }
     } catch (error) {
       setNotificationTitle("Action failed!");
       setNotificationMessage(error?.data?.message || "Failed to delete word.");
