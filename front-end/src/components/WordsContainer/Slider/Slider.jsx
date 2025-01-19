@@ -7,18 +7,18 @@ import "swiper/css/navigation";
 import { EffectCoverflow, Navigation } from "swiper/modules";
 import { Swiper as SwiperReact, SwiperSlide } from "swiper/react";
 import { useBringMilestoneWordQuery } from "../../../services/milestone";
-import { useUpdateWords } from "../hooks/useUpdateWords";
+import Notification from "../../Notification/Notification";
 import { wordSchemaForClient } from "../utils";
 import styles from "./Slider.module.css";
 import SliderCard from "./SliderCard/SliderCard";
 
 const Carousel = ({ curMilestone }) => {
   const [words, setWords] = useState([]);
+  const [swiperInstance, setSwiperInstance] = useState(null);
+  const [showNotification, setShowNotification] = useState(false);
   const { data, isLoading, isError, error } = useBringMilestoneWordQuery(
     curMilestone?._id
   );
-  const { updateWords, missingError, doNotify, setDoNotify } = useUpdateWords();
-
   // Effect to update words when data is available
   useEffect(() => {
     setWords(data?.words || []);
@@ -26,11 +26,23 @@ const Carousel = ({ curMilestone }) => {
 
   // Append new word
   const handleAppendWord = async () => {
+    const hasUnsavedWord = words.some((word) => !word._id);
+
+    if (hasUnsavedWord) {
+      setShowNotification(true);
+      setTimeout(() => setShowNotification(false), 5000);
+      return;
+    }
+
     const newWord = wordSchemaForClient(curMilestone);
     setWords((prev) => [...prev, newWord]);
-  };
 
-  const handleUpdateWords = (wordIdx, property, value) => {};
+    setTimeout(() => {
+      if (swiperInstance) {
+        swiperInstance.slideTo(words.length);
+      }
+    }, 0);
+  };
 
   return (
     <div className={styles.container}>
@@ -38,22 +50,8 @@ const Carousel = ({ curMilestone }) => {
         effect={"coverflow"}
         grabCursor={true}
         centeredSlides={true}
-        loop={true}
+        loop={false}
         slidesPerView={"auto"}
-        // breakpoints={{
-        //   // When window width is >= 320px (mobile)
-        //   320: {
-        //     slidesPerView: 1,
-        //   },
-        //   // When window width is >= 768px (tablet)
-        //   768: {
-        //     slidesPerView: 2,
-        //   },
-        //   // When window width is >= 1024px (desktop)
-        //   1024: {
-        //     slidesPerView: "auto",
-        //   },
-        // }}
         coverflowEffect={{
           rotate: 0,
           stretch: 0,
@@ -67,11 +65,14 @@ const Carousel = ({ curMilestone }) => {
         }}
         modules={[EffectCoverflow, Navigation]}
         className={styles.swiperContainer}
+        onSwiper={setSwiperInstance}
       >
         {words.map((word, index) => (
           <SwiperSlide key={word?._id} className={styles.swiperSlide}>
             <SliderCard
+              key={word?._id}
               word={word}
+              setWords={setWords}
               wordIdx={index}
               curMilestone={curMilestone}
             />
@@ -90,10 +91,18 @@ const Carousel = ({ curMilestone }) => {
       </SwiperReact>
       {/* Add new word */}
       <div className={styles.addNewWord}>
-        <button>
+        <button onClick={handleAppendWord}>
           <IoIosAdd /> Add new word
         </button>
       </div>
+      {showNotification && (
+        <Notification
+          title="Warning! "
+          message="Please provide word to save it before adding a new word."
+          isOpen={showNotification}
+          onClose={() => setShowNotification(false)}
+        />
+      )}
     </div>
   );
 };
