@@ -1,13 +1,16 @@
 export function debounceUpdate(func, delay) {
   let timeoutId;
-  return (...args) => {
+  const debounced = (...args) => {
     clearTimeout(timeoutId);
-    timeoutId = setTimeout(async () => {
-      try {
-        await func(...args);
-      } catch (error) {
-        console.error("Error in debounced function:", error);
-      }
+    timeoutId = setTimeout(() => {
+      func(...args);
     }, delay);
   };
+
+  //cancel method to clear the timeout
+  debounced.cancel = () => {
+    clearTimeout(timeoutId);
+  };
+
+  return debounced;
 }
