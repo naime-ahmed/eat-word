@@ -20,23 +20,32 @@
   cursor: pointer;
   transition: all 0.2s ease;
 }
-.rowMenuContainer > ul > li:hover {
-  background-color: #1a274d;
-}
-.markAsFav:hover > * {
-  color: rgb(243, 0, 142);
-}
-.markHard:hover > * {
-  color: red;
-}
-.rowMenuContainer > ul > li:last-child:hover {
-  color: red;
-  background-color: #ff00001f;
+
+/* Hover effects for desktop */
+@media (hover: hover) and (pointer: fine) {
+  .rowMenuContainer > ul > li:hover {
+    background-color: #1a274d;
+  }
+
+  .markAsFav:hover > * {
+    color: rgb(243, 0, 142);
+  }
+
+  .markHard:hover > * {
+    color: red;
+  }
+
+  .rowMenuContainer > ul > li:last-child:hover {
+    color: red;
+    background-color: #ff00001f;
+  }
 }
 
+/* Styles for icons */
 [data-icon="favorite"] {
   color: rgb(243, 0, 142);
 }
+
 [data-icon="hard"] {
   color: red;
 }
