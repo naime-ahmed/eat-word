@@ -68,8 +68,13 @@
   display: flex;
   align-items: center;
   /* margin-top: 6px; */
+  color: #757575;
   font-size: 24px;
   cursor: pointer;
+  transition: color 0.3s ease;
+}
+.wordSound:hover {
+  color: #b8b8b8;
 }
 
 .cardMeanings,
