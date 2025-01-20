@@ -13,8 +13,6 @@ const Notification = ({
   duration = 5000,
 }) => {
   const [visible, setVisible] = useState(isOpen);
-
-  console.log("noti", title, message, iconType, isOpen, onClose, duration);
   useEffect(() => {
     let timeout;
 
