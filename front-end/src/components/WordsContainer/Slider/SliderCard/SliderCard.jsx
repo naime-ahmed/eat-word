@@ -6,6 +6,7 @@ import { sliderCardPropTypes } from "../../../../utils/propTypes";
 import Notification from "../../../Notification/Notification";
 import Popup from "../../../Popup/Popup";
 import TableRowMenu from "../../../Popup/PopUpContents/TableRowMenu/TableRowMenu";
+import { useTextToSpeech } from "../../hooks/useTextToSpeech";
 import { useUpdateWords } from "../../hooks/useUpdateWords";
 import { calculateTextWidth } from "../../utils";
 import styles from "./SliderCard.module.css";
@@ -17,9 +18,16 @@ const SliderCard = ({ word, setWords, wordIdx, curMilestone }) => {
     synonyms: word?.synonyms || "",
     definitions: word?.definitions || "",
     examples: word?.examples || "",
-    difficultyLevel: word?.difficultyLevel || "",
-    isFavorite: word?.isFavorite || false,
   });
+
+  // Destructure wordReplica for cleaner code
+  const {
+    word: wordText,
+    meanings,
+    synonyms,
+    definitions,
+    examples,
+  } = wordReplica;
 
   const [clickPosition, setClickPosition] = useState(null);
   const [showMenu, setShowMenu] = useState(false);
@@ -82,7 +90,6 @@ const SliderCard = ({ word, setWords, wordIdx, curMilestone }) => {
   // Memoize the debounced function using useRef
   const debouncedUpdateRef = useRef(
     debounceUpdate((name, value) => {
-      // incase value is same, we don't need to call server
       if (value === word[name]) {
         return;
       }
@@ -101,35 +108,32 @@ const SliderCard = ({ word, setWords, wordIdx, curMilestone }) => {
   // Single handler for all textarea changes
   const handleOnChange = useCallback((e) => {
     const { name, value } = e.target;
-
-    // Update local state immediately
     setWordReplica((prev) => ({ ...prev, [name]: value }));
-
-    // call server to update on db
     debouncedUpdateRef.current(name, value);
   }, []);
 
   // handle menu
   const handleShowMenu = (e) => {
-    console.log("show menu clicked");
-    // Calculate click position with scroll offset
-    const x = e.clientX + window.scrollX;
-    const y = e.clientY + window.scrollY;
-    setClickPosition({ x, y });
-    setShowMenu(true);
+    if (showMenu) {
+      setShowMenu(false);
+    } else {
+      // Calculate click position with scroll offset
+      const x = e.clientX + window.scrollX;
+      const y = e.clientY + window.scrollY;
+      setClickPosition({ x, y });
+      setShowMenu(true);
+    }
   };
   const handleMenuClose = useCallback(() => {
     setShowMenu(false);
   }, []);
 
-  // Destructure wordReplica for cleaner code
-  const {
-    word: wordText,
-    meanings,
-    synonyms,
-    definitions,
-    examples,
-  } = wordReplica;
+  // handle text-to-speech
+  const { speckText, speechError, notifySpeechError, setNotifySpeechError } =
+    useTextToSpeech();
+  const handleSpeckText = (text) => {
+    speckText(text);
+  };
 
   return (
     <div className={styles.card}>
@@ -147,9 +151,24 @@ const SliderCard = ({ word, setWords, wordIdx, curMilestone }) => {
             rows={1}
           />
           {wordText && (
-            <span className={styles.wordSound} aria-label="sound">
+            <span
+              className={styles.wordSound}
+              aria-label="sound"
+              onClick={() => handleSpeckText(wordText)}
+              role="button"
+              tabIndex={0}
+            >
               <RiVolumeUpFill />
             </span>
+          )}
+          {notifySpeechError && (
+            <Notification
+              title="Failed to utter!"
+              message={speechError}
+              iconType="error"
+              isOpen={notifySpeechError}
+              onClose={() => setNotifySpeechError(false)}
+            />
           )}
         </div>
 
