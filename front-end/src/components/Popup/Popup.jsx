@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import ReactDOM from "react-dom";
 import { IoIosCloseCircle } from "react-icons/io";
 import styles from "./Popup.module.css";
@@ -13,6 +13,19 @@ const Popup = ({
   clickPosition = null, // { x, y }
 }) => {
   const popupRef = useRef(null);
+  const contentRef = useRef(null);
+  const [popupDimensions, setPopupDimensions] = useState({
+    width: 0,
+    height: 0,
+  });
+
+  // Measure the dimensions of the content after it renders
+  useEffect(() => {
+    if (isOpen && contentRef.current) {
+      const { width, height } = contentRef.current.getBoundingClientRect();
+      setPopupDimensions({ width, height });
+    }
+  }, [isOpen, children]);
 
   // Handle outside click
   useEffect(() => {
@@ -26,7 +39,7 @@ const Popup = ({
         closeOnOutsideClick &&
         popupRef.current &&
         !popupRef.current.contains(e.target) &&
-        !isInsidePopup // Do not close if the click is inside a nested popup
+        !isInsidePopup
       ) {
         console.log("click outside modal");
         onClose();
@@ -42,7 +55,7 @@ const Popup = ({
     };
   }, [isOpen, closeOnOutsideClick, onClose]);
 
-  // remove scroll
+  // Remove scroll
   useEffect(() => {
     if (isOpen && popupType !== "menu") {
       document.body.style.overflow = "hidden";
@@ -54,12 +67,34 @@ const Popup = ({
     };
   }, [isOpen, popupType]);
 
-  // Calculate notification position
+  // Calculate popup position
   const getPopupStyle = () => {
     if (popupType === "menu" && clickPosition) {
+      const { width: popupWidth, height: popupHeight } = popupDimensions;
+
+      let left = clickPosition.x + 15;
+      let top = clickPosition.y + 15;
+
+      if (window.innerWidth <= 600) {
+        left = clickPosition.x - popupWidth - 15;
+      }
+
+      // Adjust if the popup would overflow the right edge
+      if (left + popupWidth > window.innerWidth) {
+        left = window.innerWidth - (popupWidth + 15);
+      }
+
+      if (left < 0) {
+        left = 15;
+      }
+
+      if (top + popupHeight > window.innerHeight) {
+        top = window.innerHeight - popupHeight;
+      }
+
       return {
-        top: `${clickPosition.y}px`,
-        left: `${clickPosition.x + 15}px`,
+        top: `${top}px`,
+        left: `${left}px`,
       };
     }
     return {};
@@ -80,9 +115,9 @@ const Popup = ({
           ...getPopupStyle(),
         }}
         onClick={(e) => e.stopPropagation()}
-        data-popup="true" // Add this attribute to identify the popup
+        data-popup="true"
       >
-        <div className={styles.content}>
+        <div ref={contentRef} className={styles.content}>
           {showCloseButton && (
             <button className={styles.closeButton} onClick={onClose}>
               <IoIosCloseCircle />
