@@ -3,6 +3,7 @@ import styles from "./PrimaryBtn.module.css";
 const PrimaryBtn = ({
   handleClick = () => {},
   isLoading = false,
+  loadingText = "cooking...",
   colorOne = "#0a4bae",
   colorTwo = "#0c80c9",
   children,
@@ -18,7 +19,7 @@ const PrimaryBtn = ({
       className={styles.btn}
       disabled={isLoading}
     >
-      {isLoading ? "cooking..." : children}
+      {isLoading ? loadingText : children}
     </button>
   );
 };
