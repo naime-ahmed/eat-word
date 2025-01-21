@@ -31,6 +31,10 @@
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
+.profileActionBtns {
+  display: flex;
+  gap: 22px;
+}
 .basicInfo {
   display: flex;
   justify-content: space-between;
