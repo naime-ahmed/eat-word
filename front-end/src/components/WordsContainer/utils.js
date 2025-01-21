@@ -1,5 +1,5 @@
 // utils.js (or utils/index.js)
-export const calculateTextWidth = (text, fontSize) => {
+export const calculateTextWidth = (text="", fontSize) => {
   const tempSpan = document.createElement("span");
   tempSpan.style.visibility = "hidden";
   tempSpan.style.whiteSpace = "pre";
