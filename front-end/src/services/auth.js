@@ -57,14 +57,6 @@ export const authApi = createApi({
       }),
       invalidatesTags: ["User"],
     }),
-    deleteUser: builder.mutation({
-      query: () => ({
-        url: "/delete-me",
-        credentials: "include",
-        method: "DELETE",
-      }),
-      invalidatesTags: ["User"],
-    }),
   }),
 });
 
@@ -76,5 +68,4 @@ export const {
   useForgotPassMutation,
   useResetPassMutation,
   useSignOutUserMutation,
-  useDeleteUserMutation,
 } = authApi;
