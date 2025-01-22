@@ -3,15 +3,17 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import defaultProfilePic from "../../assets/defaultUserProfileImage.png";
+import Notification from "../../components/Notification/Notification";
 import Error from "../../components/shared/Error/Error";
 import Footer from "../../components/shared/Footer/Footer";
 import Header from "../../components/shared/Header/Header";
 import PrimaryBtn from "../../components/ui/button/PrimaryBtn/PrimaryBtn";
 import SpinnerForPage from "../../components/ui/loader/SpinnerForPage/SpinnerForPage";
+import { setSignOutUser } from "../../features/authSlice";
 import { setUserData } from "../../features/userSlice";
-import { useDeleteUserMutation } from "../../services/auth";
 import {
   useBringUserByIdQuery,
+  useDeleteUserMutation,
   useUpdatePasswordMutation,
   useUpdateUserMutation,
 } from "../../services/user";
@@ -21,6 +23,7 @@ function Profile() {
   const { user } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
   const { data, isLoading, isError, error } = useBringUserByIdQuery(user?.id);
+  const [doNotify, setDoNotify] = useState(false);
   const [isChanging, setIsChanging] = useState(false);
 
   const [
@@ -59,6 +62,7 @@ function Profile() {
 
   const handleBasicInfoChangeClick = async () => {
     try {
+      setDoNotify(false);
       const changedBasicInfo = {};
       if (userData?.name !== basicInfo?.name) {
         changedBasicInfo.name = basicInfo?.name;
@@ -75,6 +79,7 @@ function Profile() {
 
       if (Object.keys(changedBasicInfo).length === 0) {
         console.log("No changes detected, skipping server update.");
+        setDoNotify(true);
         return;
       }
 
@@ -168,6 +173,14 @@ function Profile() {
                   >
                     Save changes
                   </PrimaryBtn>
+                  {doNotify && (
+                    <Notification
+                      title="Nothing to Edit!"
+                      message="You did not change anything!"
+                      isOpen={doNotify}
+                      onClose={() => setDoNotify(false)}
+                    />
+                  )}
                 </div>
               )}
               {isChanging && userData?.authProvider === "local" && (
@@ -562,6 +575,8 @@ function DeleteAccount() {
       if (res?.data) {
         navigate("/");
         dispatch(setUserData({}));
+        dispatch(setSignOutUser());
+        localStorage.removeItem("access-token");
         Swal.fire({
           title: res?.data?.message || "Account has been deleted successfully",
           icon: "success",
