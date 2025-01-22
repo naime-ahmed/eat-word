@@ -11,7 +11,6 @@ function GoogleSignIn() {
   const dispatch = useDispatch();
 
   const handleLoginSuccess = async (response) => {
-    console.log(response);
     try {
       // Extract the Google ID token
       const googleToken = response.credential;
@@ -30,7 +29,6 @@ function GoogleSignIn() {
       );
 
       const result = await backendResponse.json();
-      console.log("Backend response:", result);
 
       // save access token into local-storage
       localStorage.setItem("access-token", result.accessToken);
