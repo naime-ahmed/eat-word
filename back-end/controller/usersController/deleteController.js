@@ -2,7 +2,9 @@
 import jwt from "jsonwebtoken";
 
 // internal imports
+import Milestone from "../../models/Milestone.js";
 import Users from "../../models/People.js";
+import Word from "../../models/Word.js";
 
 // remove user
 async function removeUser(req, res, next) {
@@ -18,17 +20,23 @@ async function removeUser(req, res, next) {
     const decoded = jwt.verify(token, process.env.JWT_REFRESH_TOKEN_SECRET);
     const userId = decoded.id;
 
-    // Find and delete the user by ID
+    // Delete all words created by the user
+    await Word.deleteMany({ addedBy: userId });
+
+    // Delete all milestones created by the user
+    await Milestone.deleteMany({ addedBy: userId });
+
+    // Delete the user
     const user = await Users.findByIdAndDelete(userId);
 
     // Check if user was found and deleted
     if (!user) {
       return res.status(404).json({
-        message: "User not found",
+        message: "Account not found",
       });
     }
 
-    // if deleting was successful, clear the refresh cookie
+    // If deleting was successful, clear the refresh cookie
     res.clearCookie(process.env.COOKIE_NAME, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
@@ -37,12 +45,12 @@ async function removeUser(req, res, next) {
     });
 
     res.status(200).json({
-      message: "User has been removed successfully",
+      message: "Account and all associated content have been removed successfully",
     });
   } catch (err) {
     console.error("Error removing user:", err);
     res.status(500).json({
-      message: "Could not delete the user due to a server error",
+      message: "Could not delete the account due to a server error",
     });
   }
 }
