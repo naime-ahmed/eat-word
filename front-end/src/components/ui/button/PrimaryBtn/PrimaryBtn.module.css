@@ -12,3 +12,11 @@
   text-decoration: none;
   color: #e6e6e6;
 }
+
+@media screen and (max-width: 510px) {
+  .btn {
+    padding: 6px 12px;
+    font-size: 14px;
+    font-weight: 400;
+  }
+}
