@@ -71,11 +71,15 @@ select.inputField:focus {
     height: 240px;
   }
   .modalContent {
-    padding: 14px;
+    padding: 18px;
     border-radius: 8px;
-    width: 90%;
+    max-width: 340px;
   }
   .modalTitle {
     font-size: 15px;
+  }
+  .inputField,
+  select.inputField {
+    width: 290px;
   }
 }
