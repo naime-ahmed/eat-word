@@ -1,0 +1,38 @@
+.confirmationContent {
+  padding: 20px;
+  background-color: rgb(34, 34, 34);
+  text-align: center;
+  border-radius: 16px;
+}
+
+.confirmationTitle {
+  margin: 0 0 15px 0;
+  font-size: 1.5rem;
+  color: #fff;
+}
+
+.confirmationMessage {
+  margin: 0 0 25px 0;
+  font-size: 1rem;
+  color: #fff;
+}
+
+.confirmationButtons {
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+}
+
+.confirmationButton {
+  padding: 10px 25px;
+  border: none;
+  border-radius: 5px;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+}
+
+.confirmationButton:hover {
+  opacity: 0.9;
+}
