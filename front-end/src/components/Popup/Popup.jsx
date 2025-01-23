@@ -1,6 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import ReactDOM from "react-dom";
 import { IoIosCloseCircle } from "react-icons/io";
+import { useDispatch, useSelector } from "react-redux";
+import { incrementPopupZIndex } from "../../features/popupZIndexSlice";
 import styles from "./Popup.module.css";
 
 const Popup = ({
@@ -18,12 +20,23 @@ const Popup = ({
     width: 0,
     height: 0,
   });
+  const [isPositioned, setIsPositioned] = useState(false); // Track if positioned
+  const dispatch = useDispatch();
+  const zIndex = useSelector((state) => state.popupZIndex.popupZIndex);
 
-  // Measure the dimensions of the content after it renders
+  // Increment z-index when the popup opens
+  useEffect(() => {
+    if (isOpen) {
+      dispatch(incrementPopupZIndex());
+    }
+  }, [isOpen, dispatch]);
+
+  // Measure dimensions and calculate position
   useEffect(() => {
     if (isOpen && contentRef.current) {
       const { width, height } = contentRef.current.getBoundingClientRect();
       setPopupDimensions({ width, height });
+      setIsPositioned(true);
     }
   }, [isOpen, children]);
 
@@ -31,17 +44,13 @@ const Popup = ({
   useEffect(() => {
     const handleOutsideClick = (e) => {
       e.stopPropagation();
-
-      // Check if the click is inside any popup (parent or nested)
       const isInsidePopup = e.target.closest('[data-popup="true"]');
-
       if (
         closeOnOutsideClick &&
         popupRef.current &&
         !popupRef.current.contains(e.target) &&
         !isInsidePopup
       ) {
-        console.log("click outside modal");
         onClose();
       }
     };
@@ -49,10 +58,7 @@ const Popup = ({
     if (isOpen) {
       document.addEventListener("mousedown", handleOutsideClick);
     }
-
-    return () => {
-      document.removeEventListener("mousedown", handleOutsideClick);
-    };
+    return () => document.removeEventListener("mousedown", handleOutsideClick);
   }, [isOpen, closeOnOutsideClick, onClose]);
 
   // Remove scroll
@@ -62,40 +68,31 @@ const Popup = ({
     } else {
       document.body.style.overflow = "";
     }
-    return () => {
-      document.body.style.overflow = "";
-    };
+    return () => (document.body.style.overflow = "");
   }, [isOpen, popupType]);
 
   // Calculate popup position
   const getPopupStyle = () => {
     if (popupType === "menu" && clickPosition) {
       const { width: popupWidth, height: popupHeight } = popupDimensions;
-
       let left = clickPosition.x + 15;
       let top = clickPosition.y + 15;
 
+      // Mobile adjustments
       if (window.innerWidth <= 600) {
         left = clickPosition.x - popupWidth - 15;
       }
 
-      // Adjust if the popup would overflow the right edge
+      // Prevent overflow
       if (left + popupWidth > window.innerWidth) {
         left = window.innerWidth - (popupWidth + 15);
       }
-
-      if (left < 0) {
-        left = 15;
-      }
-
+      if (left < 0) left = 15;
       if (top + popupHeight > window.innerHeight) {
         top = window.innerHeight - popupHeight;
       }
 
-      return {
-        top: `${top}px`,
-        left: `${left}px`,
-      };
+      return { top: `${top}px`, left: `${left}px` };
     }
     return {};
   };
@@ -107,12 +104,15 @@ const Popup = ({
       className={`${
         popupType === "modal" || popupType === "dialog" ? styles.overlay : ""
       }`}
+      style={{ zIndex }}
     >
       <div
         ref={popupRef}
         className={styles[popupType]}
         style={{
           ...getPopupStyle(),
+          zIndex,
+          visibility: isPositioned ? "visible" : "hidden",
         }}
         onClick={(e) => e.stopPropagation()}
         data-popup="true"
