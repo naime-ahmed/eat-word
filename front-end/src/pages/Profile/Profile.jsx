@@ -4,6 +4,9 @@ import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import defaultProfilePic from "../../assets/defaultUserProfileImage.png";
 import Notification from "../../components/Notification/Notification";
+import ConfirmationPopup, {
+  useConfirmation,
+} from "../../components/Popup/ConfirmationPopup/ConfirmationPopup";
 import Error from "../../components/shared/Error/Error";
 import Footer from "../../components/shared/Footer/Footer";
 import Header from "../../components/shared/Header/Header";
@@ -553,21 +556,21 @@ function DeleteAccount() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [deleteUser, { isLoading, isError, error }] = useDeleteUserMutation();
+  const { confirm, confirmationProps } = useConfirmation();
 
   const handleDeleteAccount = async () => {
     console.log("del click");
     try {
-      const warningResult = await Swal.fire({
+      const warningResult = await confirm({
         title: "Are you sure?",
-        text: "Your Account and all associated contents will be removed permanently!",
-        icon: "warning",
-        showCancelButton: true,
-        confirmButtonColor: "#d33",
-        cancelButtonColor: "#3085d6",
-        confirmButtonText: "Yes, sign out",
+        message: `Your Account and words will be deleted permanently`,
+        confirmText: "Yes, Delete",
+        cancelText: "Cancel",
+        confirmColor: "#d33",
+        cancelColor: "#3085d6",
       });
 
-      if (!warningResult.isConfirmed) {
+      if (!warningResult) {
         return;
       }
       const res = await deleteUser();
@@ -596,6 +599,7 @@ function DeleteAccount() {
 
   return (
     <div>
+      <ConfirmationPopup {...confirmationProps} />
       <PrimaryBtn
         handleClick={handleDeleteAccount}
         isLoading={isLoading}
