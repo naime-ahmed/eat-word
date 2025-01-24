@@ -6,6 +6,7 @@ import Error from "../../components/shared/Error/Error";
 import Footer from "../../components/shared/Footer/Footer";
 import Header from "../../components/shared/Header/Header";
 import AddBtn from "../../components/ui/button/AddBtn/AddBtn";
+import Skeleton from "../../components/ui/loader/Skeleton/Skeleton";
 import { useBringMilestonesQuery } from "../../services/milestone";
 import styles from "./MySpace.module.css";
 
@@ -68,7 +69,19 @@ const MySpace = () => {
         </div>
 
         {isLoading ? (
-          <p>Loading...</p>
+          <div className={styles.contentSkeleton}>
+            <div className={styles.headerSkeleton}>
+              <Skeleton width={100} height={30} />
+              <Skeleton width={100} height={30} />
+              <Skeleton width={100} height={30} />
+            </div>
+            <div className={styles.milestoneSkeleton}>
+              <Skeleton width={291} height={80} />
+              <Skeleton width={291} height={80} />
+              <Skeleton width={291} height={80} />
+              <Skeleton width={291} height={80} />
+            </div>
+          </div>
         ) : isError ? (
           <Error error={error} />
         ) : (

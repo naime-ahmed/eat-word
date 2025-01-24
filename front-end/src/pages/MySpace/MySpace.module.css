@@ -121,6 +121,35 @@
   gap: 12px;
 }
 
+/* Skeleton loader */
+.contentSkeleton {
+  width: 100%;
+  max-width: 1250px;
+  padding: 16px 24px;
+  border-radius: 12px;
+  color: #fff;
+  background-color: #c77ff711;
+  border: 1px solid #9277a32d;
+}
+.headerSkeleton {
+  display: flex;
+  gap: 16px;
+  margin: 8px 0 20px 0;
+  overflow-x: auto;
+  scrollbar-width: thin;
+  -webkit-overflow-scrolling: touch;
+  scroll-behavior: smooth;
+  overflow-y: hidden;
+  flex-wrap: nowrap;
+  padding-bottom: 12px;
+}
+.milestoneSkeleton {
+  display: flex;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
 @media (min-width: 1000px) and (max-width: 1199.98px) {
   .myspaceContainer {
     max-width: 950px;
