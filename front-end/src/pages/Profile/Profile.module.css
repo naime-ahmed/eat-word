@@ -21,6 +21,7 @@
 .profileHead {
   display: flex;
   justify-content: space-between;
+  align-items: center;
 }
 .profileHead p {
   font-size: 28px;
@@ -211,6 +212,9 @@
 }
 
 @media (max-width: 999.98px) {
+  .profileActionBtns {
+    flex-direction: column-reverse;
+  }
   .profileContent {
     width: 100%;
     max-width: 750px;
