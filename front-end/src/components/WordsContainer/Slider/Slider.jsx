@@ -8,9 +8,12 @@ import { EffectCoverflow, Navigation } from "swiper/modules";
 import { Swiper as SwiperReact, SwiperSlide } from "swiper/react";
 import { useBringMilestoneWordQuery } from "../../../services/milestone";
 import Notification from "../../Notification/Notification";
+import Skeleton from "../../ui/loader/Skeleton/Skeleton";
 import { wordSchemaForClient } from "../utils";
 import styles from "./Slider.module.css";
 import SliderCard from "./SliderCard/SliderCard";
+
+// TODO: add place holder for empty word array
 
 const Carousel = ({ curMilestone }) => {
   const [words, setWords] = useState([]);
@@ -21,8 +24,12 @@ const Carousel = ({ curMilestone }) => {
   );
   // Effect to update words when data is available
   useEffect(() => {
-    setWords(data?.words || []);
-  }, [data]);
+    if (data?.words.length > 0) {
+      setWords(data?.words);
+    } else {
+      setWords([wordSchemaForClient(curMilestone)]);
+    }
+  }, [data, curMilestone]);
 
   // Append new word
   const handleAppendWord = async () => {
@@ -46,55 +53,77 @@ const Carousel = ({ curMilestone }) => {
 
   return (
     <div className={styles.container}>
-      <SwiperReact
-        effect={"coverflow"}
-        grabCursor={true}
-        centeredSlides={true}
-        loop={false}
-        slidesPerView={"auto"}
-        coverflowEffect={{
-          rotate: 0,
-          stretch: 0,
-          depth: 100,
-          modifier: 2.5,
-        }}
-        navigation={{
-          nextEl: `.${styles.swiperButtonNext}`,
-          prevEl: `.${styles.swiperButtonPrev}`,
-          clickable: true,
-        }}
-        modules={[EffectCoverflow, Navigation]}
-        className={styles.swiperContainer}
-        onSwiper={setSwiperInstance}
-      >
-        {words.map((word, index) => (
-          <SwiperSlide key={word?._id} className={styles.swiperSlide}>
-            <SliderCard
-              key={word?._id}
-              word={word}
-              setWords={setWords}
-              wordIdx={index}
-              curMilestone={curMilestone}
-            />
-          </SwiperSlide>
-        ))}
+      {!isLoading ? (
+        <>
+          <SwiperReact
+            effect={"coverflow"}
+            grabCursor={true}
+            centeredSlides={true}
+            loop={false}
+            slidesPerView={"auto"}
+            coverflowEffect={{
+              rotate: 0,
+              stretch: 0,
+              depth: 100,
+              modifier: 2.5,
+            }}
+            navigation={{
+              nextEl: `.${styles.swiperButtonNext}`,
+              prevEl: `.${styles.swiperButtonPrev}`,
+              clickable: true,
+            }}
+            modules={[EffectCoverflow, Navigation]}
+            className={styles.swiperContainer}
+            onSwiper={setSwiperInstance}
+            key={words[0]?._id}
+          >
+            {words.map((word, index) => (
+              <SwiperSlide key={word?._id} className={styles.swiperSlide}>
+                <SliderCard
+                  key={word?._id}
+                  word={word}
+                  setWords={setWords}
+                  wordIdx={index}
+                  curMilestone={curMilestone}
+                />
+              </SwiperSlide>
+            ))}
 
-        <div className={styles.sliderControler}>
-          <div className={`${styles.swiperButtonPrev} ${styles.sliderArrow}`}>
-            <IoArrowBackOutline /> <span>Previous</span>
+            <div className={styles.sliderControler}>
+              <div
+                className={`${styles.swiperButtonPrev} ${styles.sliderArrow}`}
+              >
+                <IoArrowBackOutline /> <span>Previous</span>
+              </div>
+              <div
+                className={`${styles.swiperButtonNext} ${styles.sliderArrow}`}
+              >
+                <span>Next</span>
+                <IoArrowForward />
+              </div>
+            </div>
+          </SwiperReact>
+
+          <div className={styles.addNewWord}>
+            <button onClick={handleAppendWord}>
+              <IoIosAdd /> Add new word
+            </button>
           </div>
-          <div className={`${styles.swiperButtonNext} ${styles.sliderArrow}`}>
-            <span>Next</span>
-            <IoArrowForward />
+        </>
+      ) : (
+        <div className={styles.sliderSkeletonLoader}>
+          <Skeleton width={340} height={46} />
+          <Skeleton width={340} height={46} />
+          <Skeleton width={340} height={46} />
+          <Skeleton width={340} height={46} />
+          <Skeleton width={340} height={46} />
+          <div className={styles.sliderController}>
+            <Skeleton width={340} height={46} />
+            <Skeleton width={340} height={46} />
           </div>
+          <Skeleton width={340} height={23} />
         </div>
-      </SwiperReact>
-      {/* Add new word */}
-      <div className={styles.addNewWord}>
-        <button onClick={handleAppendWord}>
-          <IoIosAdd /> Add new word
-        </button>
-      </div>
+      )}
       {showNotification && (
         <Notification
           title="Warning! "

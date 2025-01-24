@@ -1,6 +1,6 @@
 .container {
   max-width: 1250px;
-  padding: 1rem 0;
+  padding: 0 0 1rem 0;
   margin: 0 auto;
 }
 
@@ -77,6 +77,32 @@
   cursor: pointer;
 }
 
+/* skeleton loader*/
+.sliderSkeletonLoader {
+  max-width: 340;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
+.sliderSkeletonLoader > div:first-child {
+  width: 200px !important;
+  margin-bottom: 12px;
+}
+.sliderSkeletonLoader > div:last-child {
+  margin-top: 12px;
+}
+.sliderSkeletonLoader > div {
+  width: 100%;
+  border-radius: 8px;
+}
+.sliderController {
+  max-width: 340px;
+  display: flex;
+  gap: 12px;
+  margin-top: 12px;
+}
 /* Extra Large Devices (large desktops) - 1200px and above: */
 @media (min-width: 1200px) and (max-width: 1400px) {
   .container {
