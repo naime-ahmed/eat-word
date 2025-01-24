@@ -94,7 +94,7 @@ const SliderCard = ({ word, setWords, wordIdx, curMilestone }) => {
         return;
       }
       handleUpdateWords(wordIdx, name, value);
-    }, 500)
+    }, 1000)
   );
 
   // Cleanup debounce ref on unmount
@@ -235,15 +235,17 @@ const SliderCard = ({ word, setWords, wordIdx, curMilestone }) => {
       <span className={styles.cardMenu} onClick={handleShowMenu}>
         <BiDotsVerticalRounded />
         {/* show word menu */}
-        <Popup
-          isOpen={showMenu}
-          onClose={handleMenuClose}
-          showCloseButton={false}
-          clickPosition={clickPosition}
-          popupType="menu"
-        >
-          <TableRowMenu curWord={word} onClose={handleMenuClose} />
-        </Popup>
+        {showMenu && (
+          <Popup
+            isOpen={showMenu}
+            onClose={handleMenuClose}
+            showCloseButton={false}
+            clickPosition={clickPosition}
+            popupType="menu"
+          >
+            <TableRowMenu curWord={word} onClose={handleMenuClose} />
+          </Popup>
+        )}
       </span>
 
       {/* show notification */}
