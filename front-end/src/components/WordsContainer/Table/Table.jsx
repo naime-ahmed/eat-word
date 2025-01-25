@@ -8,6 +8,7 @@ import styles from "./Table.module.css";
 import EditableCell from "./TableCells/EditableCell";
 import TableHeader from "./TableHeader";
 import TableRow from "./TableRow";
+import TableSkeletonLoader from "./TableSkeletonLoader.jsx";
 
 const WordsContainer = ({ curMilestone }) => {
   const [words, setWords] = useState([]);
@@ -153,7 +154,10 @@ const WordsContainer = ({ curMilestone }) => {
     },
   });
 
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading) {
+    return <TableSkeletonLoader />;
+  }
+
   if (isError) {
     console.log(error);
   }
