@@ -71,3 +71,13 @@
 .rowAction:hover {
   background-color: #1c294d;
 }
+
+/* skelton style */
+.tableSkeleton {
+  box-sizing: border-box;
+}
+.rowSkeleton {
+  display: flex;
+  gap: 8px;
+  margin-top: 8px;
+}
