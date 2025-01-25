@@ -1,5 +1,4 @@
-// utils.js (or utils/index.js)
-export const calculateTextWidth = (text="", fontSize) => {
+export const calculateTextWidth = (text = "", fontSize) => {
   const tempSpan = document.createElement("span");
   tempSpan.style.visibility = "hidden";
   tempSpan.style.whiteSpace = "pre";
@@ -11,7 +10,6 @@ export const calculateTextWidth = (text="", fontSize) => {
   return width;
 };
 
-// Existing utility functions
 export const calculateColumnWidths = (curMilestone) => {
   let wordSize = 170;
   let meaningSize = 225;
@@ -60,3 +58,23 @@ export const wordSchemaForClient = (curMilestone) => ({
   isFavorite: false,
   learnedScore: 0,
 });
+
+export const getProportionalWidth = (milestoneContentWidth) => {
+  const baseWidth = 1250;
+
+  const skeletonWidths = {
+    skeleton1: 162 / baseWidth,
+    skeleton2: 218 / baseWidth,
+    skeleton3: 218 / baseWidth,
+    skeleton4: 272 / baseWidth,
+    skeleton5: 350 / baseWidth,
+  };
+
+  return {
+    skeleton1: milestoneContentWidth * skeletonWidths.skeleton1,
+    skeleton2: milestoneContentWidth * skeletonWidths.skeleton2,
+    skeleton3: milestoneContentWidth * skeletonWidths.skeleton3,
+    skeleton4: milestoneContentWidth * skeletonWidths.skeleton4,
+    skeleton5: milestoneContentWidth * skeletonWidths.skeleton5,
+  };
+};
