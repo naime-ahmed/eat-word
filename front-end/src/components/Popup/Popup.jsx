@@ -1,6 +1,6 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import ReactDOM from "react-dom";
-import { IoIosCloseCircle } from "react-icons/io";
+import { IoClose } from "react-icons/io5";
 import { useDispatch, useSelector } from "react-redux";
 import { incrementPopupZIndex } from "../../features/popupZIndexSlice";
 import styles from "./Popup.module.css";
@@ -20,7 +20,8 @@ const Popup = ({
     width: 0,
     height: 0,
   });
-  const [isPositioned, setIsPositioned] = useState(false); // Track if positioned
+  const [isPositioned, setIsPositioned] = useState(false);
+  const [isClosing, setIsClosing] = useState(false);
   const dispatch = useDispatch();
   const zIndex = useSelector((state) => state.popupZIndex.popupZIndex);
 
@@ -40,6 +41,15 @@ const Popup = ({
     }
   }, [isOpen, children]);
 
+  // Handle close with animation
+  const handleClose = useCallback(() => {
+    setIsClosing(true);
+    setTimeout(() => {
+      onClose();
+      setIsClosing(false);
+    }, 300);
+  }, [onClose]);
+
   // Handle outside click
   useEffect(() => {
     const handleOutsideClick = (e) => {
@@ -51,7 +61,7 @@ const Popup = ({
         !popupRef.current.contains(e.target) &&
         !isInsidePopup
       ) {
-        onClose();
+        handleClose();
       }
     };
 
@@ -59,7 +69,7 @@ const Popup = ({
       document.addEventListener("mousedown", handleOutsideClick);
     }
     return () => document.removeEventListener("mousedown", handleOutsideClick);
-  }, [isOpen, closeOnOutsideClick, onClose]);
+  }, [isOpen, closeOnOutsideClick, handleClose]);
 
   // Remove scroll
   useEffect(() => {
@@ -108,7 +118,7 @@ const Popup = ({
     >
       <div
         ref={popupRef}
-        className={styles[popupType]}
+        className={`${styles[popupType]} ${isClosing ? styles.closing : ""}`}
         style={{
           ...getPopupStyle(),
           zIndex,
@@ -119,8 +129,8 @@ const Popup = ({
       >
         <div ref={contentRef} className={styles.content}>
           {showCloseButton && (
-            <button className={styles.closeButton} onClick={onClose}>
-              <IoIosCloseCircle />
+            <button className={styles.closeButton} onClick={handleClose}>
+              <IoClose />
             </button>
           )}
           {children}

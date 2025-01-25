@@ -30,15 +30,88 @@
 
 .closeButton {
   position: absolute;
-  top: -14px;
-  right: -12px;
-  /* padding: 6px; */
-  color: hsl(229, 48%, 52%);
+  top: 4px;
+  right: 6px;
+  color: hsl(0, 0%, 77%);
   background: none;
   border: none;
-  font-size: 26px;
+  font-size: 22px;
   cursor: pointer;
 }
+.closeButton > svg {
+  background-color: #72727250;
+  border-radius: 10px;
+}
+
+/* Keyframes for scaling up (for modal and dialog) */
+@keyframes scaleUp {
+  from {
+    transform: translate(-50%, -50%) scale(0.8);
+    opacity: 0;
+  }
+  to {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 1;
+  }
+}
+
+/* Keyframes for scaling down (for modal and dialog) */
+@keyframes scaleDown {
+  from {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 1;
+  }
+  to {
+    transform: translate(-50%, -50%) scale(0.8);
+    opacity: 0;
+  }
+}
+
+/* Keyframes for sliding up and fading in (for menu) */
+@keyframes slideUpFadeIn {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* Keyframes for sliding down and fading out (for menu) */
+@keyframes slideDownFadeOut {
+  from {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+}
+
+/* Apply animations to modal and dialog */
+.modal,
+.dialog {
+  animation: scaleUp 0.3s ease-out forwards;
+}
+
+/* Apply animations to menu */
+.menu {
+  animation: slideUpFadeIn 0.3s ease-out forwards;
+}
+
+/* Closing animations */
+.modal.closing,
+.dialog.closing {
+  animation: scaleDown 0.3s ease-out forwards;
+}
+
+.menu.closing {
+  animation: slideDownFadeOut 0.3s ease-out forwards;
+}
+
 /* style for smaller devices */
 @media (max-width: 599.98px) {
   .dialog,
