@@ -1,116 +1,47 @@
-.testimonialsCardContainer {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-}
-
-.testimonialsMarquee {
-  display: flex;
-  max-width: 100vw;
-  overflow: hidden;
-  padding: 1.25rem 0;
+.card {
   position: relative;
-}
-.marqueOne {
-  display: flex;
-  width: max-content;
-  animation: marquee 50s linear infinite;
-}
-.marqueTwo {
-  display: flex;
-  width: max-content;
-  animation: marquee 25s linear infinite;
-}
-
-.marqueOne:hover,
-.marqueTwo:hover {
-  animation-play-state: paused;
+  width: 16rem;
+  cursor: pointer;
+  overflow: hidden;
+  border-radius: 0.75rem;
+  padding: 1rem;
+  background: linear-gradient(
+    25deg,
+    rgba(72, 73, 148, 0) 0%,
+    rgba(152, 191, 254, 0.12) 100%
+  );
+  color: #fff;
+  border: 1px solid #293b69;
 }
 
-.testimonialItem {
-  padding: 0 0.625rem;
-  height: 100%;
+.card:hover {
+  background-color: rgba(3, 7, 18, 0.05);
 }
 
-.testimonialCard {
-  width: 28rem;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  border-radius: 10px;
-  background-color: #06122c4b;
-  border: 1px solid rgba(209, 199, 253, 0.164);
-  padding: 12px 20px;
-}
-.testimonialCard:hover {
-  background-color: #091c464b;
-  cursor: default;
-  user-select: none;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-}
-.testimonialText {
-  font-weight: 400;
-  color: #f8fafc;
-  padding-bottom: 1rem;
-}
-
-.testimonialProfile {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  margin-top: auto;
-}
-
-.profileImage {
-  width: 2.25rem;
-  height: 2.25rem;
+.avatar {
   border-radius: 50%;
 }
 
-.profileInfo {
+.content {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.name {
   font-size: 0.875rem;
+  font-weight: 500;
+  color: #eeeeee;
 }
 
-.profileName {
-  color: white;
+.username {
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: rgba(231, 231, 231, 0.562);
 }
 
-.profileTitle {
-  color: rgba(255, 255, 255, 0.75);
-}
-
-/* Marquee animation */
-@keyframes marquee {
-  to {
-    transform: translateX(-50%);
-  }
-}
-
-/* CSS for small devices */
-@media (min-width: 1000px) and (max-width: 1199.98px) {
-  .testimonialCard {
-    width: 22rem;
-    padding: 1rem 1.5rem;
-  }
-}
-@media (min-width: 768px) and (max-width: 999.98px) {
-  .testimonialCard {
-    width: 18rem;
-    padding: 0.8rem 1.2rem;
-  }
-}
-@media (max-width: 767.98px) {
-  .testimonialCard {
-    width: 15rem;
-    padding: 0.5rem 0.8rem;
-  }
-  .testimonialText {
-    font-size: 15px;
-  }
+.quote {
+  margin-top: 0.5rem;
+  font-size: 0.875rem;
 }
