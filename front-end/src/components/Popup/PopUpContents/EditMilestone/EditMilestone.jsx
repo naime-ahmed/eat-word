@@ -84,8 +84,10 @@ function EditMilestone({ milestone, onClose }) {
             Increase, decrease or keep it
           </label>
         </div>
-        {isError && <p>{error.data.message}</p>}
-        {!hasChanges && <p>You have not changed anything! lol</p>}
+        {isError && <p className={styles.editError}>{error.data.message}</p>}
+        {!hasChanges && (
+          <p className={styles.editError}>You have not changed anything! lol</p>
+        )}
         <div className={styles.EditButton}>
           <PrimaryBtn btnType="submit" isLoading={isLoading}>
             Update Changes

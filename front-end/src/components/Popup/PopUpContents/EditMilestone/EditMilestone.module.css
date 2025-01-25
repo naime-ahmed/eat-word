@@ -1,7 +1,7 @@
 .modalContent {
   background-color: #141e3b;
   color: #e0e0e0;
-  padding: 2rem;
+  padding: 2rem 2rem 1rem 2rem;
   border-radius: 8px;
   max-width: 500px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
@@ -55,6 +55,12 @@ select.inputField:not([value=""]) + .formLabel {
 select.inputField:focus {
   outline: 1px solid #58a6ff;
   border-color: #58a6ff;
+}
+
+.editError {
+  font-size: 13px;
+  color: rgb(255, 64, 96);
+  margin-left: 3px;
 }
 
 .EditButton {
