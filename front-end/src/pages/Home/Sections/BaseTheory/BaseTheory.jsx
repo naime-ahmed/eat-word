@@ -10,7 +10,7 @@ const BaseTheory = () => {
       <div className={style.gradientLine}></div>
       <div className={style.gradientBackground}></div>
       <div className={style.baseTheoryHeading}>
-        <h1>Base of Eat Word</h1>
+        <h1>The premise of Eat Word</h1>
         <p>
           Eat Word is designed to help you learn vocabulary through three
           scientifically <br /> proven concepts, making the learning process
