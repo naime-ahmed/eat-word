@@ -57,7 +57,7 @@
 .testimonialHead {
   text-align: center;
   margin-top: -45px;
-  margin-bottom: 40px;
+  margin-bottom: 22px;
 }
 .testimonialHead h1 {
   font-size: 44px;
@@ -94,4 +94,66 @@
   width: 33%;
   background: linear-gradient(to left, #020817, transparent);
   pointer-events: none;
+}
+
+/* Extra Large Devices (large desktops) - 1200px and above: */
+@media (min-width: 1200px) and (max-width: 1400px) {
+  .container {
+    max-width: 1150px;
+  }
+}
+
+/* Large Devices (desktops) - 1000px to 1199px wide: */
+@media (min-width: 1000px) and (max-width: 1199.98px) {
+  .container {
+    max-width: 950px;
+  }
+  .testimonialHead > h1 {
+    font-size: 38px;
+  }
+  .testimonialHead > p {
+    font-size: 18px;
+  }
+}
+
+/* Medium Devices (laptops) - 768px to 991px wide: */
+@media (min-width: 768px) and (max-width: 999.98px) {
+  .container {
+    max-width: 750px;
+  }
+  .testimonialHead > h1 {
+    font-size: 34px;
+  }
+  .testimonialHead > p {
+    font-size: 17px;
+  }
+}
+
+/* Small Devices (tablets) - 576px to 767px wide: */
+@media (min-width: 600px) and (max-width: 767.98px) {
+  .container {
+    max-width: 560px;
+  }
+  .testimonialHead > h1 {
+    font-size: 28px;
+  }
+  .testimonialHead > p {
+    font-size: 16px;
+  }
+}
+/* Extra Small Devices (phones) - Up to 576px wide: */
+@media (max-width: 599.98px) {
+  .container {
+    max-width: 340px;
+  }
+  .testimonialHead > h1 {
+    font-size: 28px;
+  }
+  .testimonialHead > p {
+    font-size: 16px;
+  }
+  .gradientLeft,
+  .gradientRight {
+    width: 16%;
+  }
 }
