@@ -19,7 +19,7 @@ const ConfirmationPopup = ({
       isOpen={isOpen}
       onClose={onCancel}
       closeOnOutsideClick={false}
-      showCloseButton={false}
+      showCloseButton={true}
       popupType="dialog"
     >
       <div className={styles.confirmationContent}>
