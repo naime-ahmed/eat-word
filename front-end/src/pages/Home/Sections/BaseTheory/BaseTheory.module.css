@@ -1,6 +1,6 @@
 /* CSS for baseTheoryContainer */
 .baseTheoryContainer {
-  margin-top: 180px;
+  margin-top: 140px;
   width: 1250px;
   position: relative;
 }
@@ -70,59 +70,118 @@
 }
 
 /* CSS for Cards */
+/* Base container for the cards */
 .baseTheoryCardsContainer {
-  width: 100%;
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 40px;
-  margin-top: 50px;
-}
-.baseTheoryCardsContainer > div {
-  padding: 25px;
-  border-radius: 10px;
-  min-height: 400px;
-  background-color: #06122c4b;
-  border: 2px solid rgba(209, 199, 253, 0.164);
+  grid-template-rows: repeat(2, 1fr);
+  gap: 24px;
+  max-width: 1200px;
+  margin: 26px auto 22px auto;
+  padding: 20px;
 }
 
-.baseTheoryCardsContainer > div > div > img {
-  max-width: 80px;
-}
-.baseTheoryCardsContainer > div > h2 {
-  font-size: 28px;
-  margin: 10px 0;
-  font-weight: 800;
-  color: #e6e6e6;
-}
-.baseTheoryCardsContainer > div > p {
-  font-size: 18px;
-  text-align: justify;
-  color: #d4d5d6;
+/* Shared styles for all cards */
+.spacedRepetition,
+.activeRecall,
+.contextualLearning,
+.fewMoreThings {
+  background: linear-gradient(
+    25deg,
+    rgba(72, 73, 148, 0) 0%,
+    rgba(152, 191, 254, 0.12) 100%
+  );
+  border: 1px solid #293b69;
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-/* Extra Small Devices (phones) - Up to 576px wide: */
-@media (max-width: 599.98px) {
+/* Image container */
+.spacedRepetition img,
+.activeRecall img,
+.contextualLearning img,
+.fewMoreThings img {
+  width: 64px;
+  height: 64px;
+  margin-bottom: 16px;
+  transition: transform 0.3s ease;
+}
+
+/* Image hover animation */
+.spacedRepetition:hover img,
+.activeRecall:hover img,
+.contextualLearning:hover img,
+.fewMoreThings:hover img {
+  transform: scale(1.1);
+}
+
+/* Heading styles */
+.spacedRepetition h2,
+.activeRecall h2,
+.contextualLearning h2,
+.fewMoreThings h2 {
+  font-size: 1.5rem;
+  margin-bottom: 12px;
+  color: #6e96e0;
+}
+
+/* Paragraph styles */
+.spacedRepetition p,
+.activeRecall p,
+.contextualLearning p,
+.fewMoreThings p {
+  font-size: 1rem;
+  color: #4c78a3;
+  line-height: 1.6;
+}
+
+/* Extra Large Devices (large desktops) - 1200px and above: */
+@media (min-width: 1200px) and (max-width: 1400px) {
   .baseTheoryContainer {
-    max-width: 340px;
+    max-width: 1150px;
   }
-  .baseTheoryCardsContainer {
-    grid-template-columns: 1fr;
+}
+
+/* Large Devices (desktops) - 1000px to 1199px wide: */
+@media (min-width: 1000px) and (max-width: 1199.98px) {
+  .baseTheoryContainer {
+    max-width: 950px;
   }
   .baseTheoryHeading h1 {
-    font-size: 28px;
+    font-size: 38px;
   }
   .baseTheoryHeading p {
-    font-size: 16px;
+    font-size: 18px;
+  }
+  .baseTheoryCardsContainer > div > h2 {
+    font-size: 26px;
+  }
+  .baseTheoryCardsContainer > div > p {
+    font-size: 17px;
+  }
+}
+
+/* Medium Devices (laptops) - 768px to 991px wide: */
+@media (min-width: 768px) and (max-width: 999.98px) {
+  .baseTheoryContainer {
+    max-width: 750px;
+  }
+  .baseTheoryHeading h1 {
+    font-size: 34px;
+  }
+  .baseTheoryHeading p {
+    font-size: 17px;
   }
   .baseTheoryCardsContainer > div {
     padding: 35px;
   }
   .baseTheoryCardsContainer > div > h2 {
-    font-size: 22px;
+    font-size: 24px;
   }
   .baseTheoryCardsContainer > div > p {
     font-size: 16px;
-    text-align: left;
   }
 }
 
@@ -151,50 +210,28 @@
   }
 }
 
-/* Medium Devices (laptops) - 768px to 991px wide: */
-@media (min-width: 768px) and (max-width: 999.98px) {
+/* Extra Small Devices (phones) - Up to 576px wide: */
+@media (max-width: 599.98px) {
   .baseTheoryContainer {
-    max-width: 750px;
+    max-width: 340px;
+  }
+  .baseTheoryCardsContainer {
+    grid-template-columns: 1fr;
   }
   .baseTheoryHeading h1 {
-    font-size: 34px;
+    font-size: 28px;
   }
   .baseTheoryHeading p {
-    font-size: 17px;
+    font-size: 16px;
   }
   .baseTheoryCardsContainer > div {
     padding: 35px;
   }
   .baseTheoryCardsContainer > div > h2 {
-    font-size: 24px;
+    font-size: 22px;
   }
   .baseTheoryCardsContainer > div > p {
     font-size: 16px;
-  }
-}
-
-/* Large Devices (desktops) - 1000px to 1199px wide: */
-@media (min-width: 1000px) and (max-width: 1199.98px) {
-  .baseTheoryContainer {
-    max-width: 950px;
-  }
-  .baseTheoryHeading h1 {
-    font-size: 38px;
-  }
-  .baseTheoryHeading p {
-    font-size: 18px;
-  }
-  .baseTheoryCardsContainer > div > h2 {
-    font-size: 26px;
-  }
-  .baseTheoryCardsContainer > div > p {
-    font-size: 17px;
-  }
-}
-
-/* Extra Large Devices (large desktops) - 1200px and above: */
-@media (min-width: 1200px) and (max-width: 1400px) {
-  .baseTheoryContainer {
-    max-width: 1150px;
+    text-align: left;
   }
 }
