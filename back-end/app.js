@@ -48,6 +48,9 @@ app.use("/milestones", milestonesRouter);
 // handle words request
 app.use("/words", wordRouter);
 
+// handle admin request
+app.use("/admin", adminRouter)
+
 app.get("/", (req, res) => {
   res.send({
     success: true,
