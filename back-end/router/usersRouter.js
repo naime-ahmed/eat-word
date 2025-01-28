@@ -10,9 +10,6 @@ import { verifyAccessToken } from "../middlewares/validate/verifyAccessToken.js"
 
 const router = express.Router();
 
-// get users
-// router.get("/");
-
 // get a user by id
 router.get("/:userId", verifyAccessToken, getUserById);
 
@@ -23,6 +20,6 @@ router.put("/", verifyAccessToken, updateUserById);
 router.put("/update-pass", verifyAccessToken, updatePassword);
 
 // delete user
-router.delete("/delete-me", removeUser);
+router.delete("/delete-me",verifyAccessToken, removeUser);
 
 export default router;
