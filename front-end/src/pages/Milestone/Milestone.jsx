@@ -7,15 +7,11 @@ import Header from "../../components/shared/Header/Header";
 import SpinnerForPage from "../../components/ui/loader/SpinnerForPage/SpinnerForPage";
 import Slider from "../../components/WordsContainer/Slider/Slider";
 import Table from "../../components/WordsContainer/Table/Table";
-import {
-  useBringMilestonesQuery,
-  useEditMilestoneMutation,
-} from "../../services/milestone";
+import { useBringMilestonesQuery } from "../../services/milestone";
 import styles from "./Milestone.module.css";
 
 const Milestone = () => {
-  // State for milestone name
-  const [milestoneName, setMilestoneName] = useState("");
+  const [isOnRecallMood, setIsOnReCallMood] = useState(false);
   const [wordContainerType, setWordContainerType] = useState("table");
   const { milestoneId } = useParams();
   const { data, isLoading, isError, error } = useBringMilestonesQuery();
@@ -36,49 +32,10 @@ const Milestone = () => {
     };
   }, []);
 
-  const [
-    editMilestone,
-    {
-      isLoading: isEditMileLoading,
-      isError: isEditMileError,
-      error: editMileError,
-    },
-  ] = useEditMilestoneMutation();
-
   const curMilestone = data?.milestones?.find(
     (milestone) => milestone._id === milestoneId
   );
   const duration = curMilestone?.milestoneType === "three" ? 3 : 7;
-
-  // Set initial milestone name when data is loaded
-  useEffect(() => {
-    if (curMilestone?.name) {
-      setMilestoneName(curMilestone.name);
-    }
-  }, [curMilestone]);
-
-  // function to update milestone name
-  const updateName = async () => {
-    // if value is same but blur has called
-    if (curMilestone?.name === milestoneName) {
-      return;
-    }
-    try {
-      const updatedMilestone = await editMilestone([
-        milestoneId,
-        { name: milestoneName },
-      ]).unwrap();
-      console.log("Milestone updated successfully:", updatedMilestone);
-    } catch (error) {
-      console.error("Error while updating milestone name:", error);
-    }
-  };
-
-  // Handle input change
-  const handleNameChange = (e) => {
-    const newValue = e.target.value;
-    setMilestoneName(newValue);
-  };
 
   return (
     <div className={styles.milestonePage}>
@@ -93,27 +50,31 @@ const Milestone = () => {
           ) : (
             <>
               <div className={styles.milestoneHeading}>
-                <div className={styles.milestoneName}>
-                  <input
-                    type="text"
-                    name="milestoneName"
-                    value={milestoneName}
-                    onChange={handleNameChange}
-                    onBlur={updateName}
-                    className={styles.milestoneNameInput}
-                    disabled={isEditMileLoading} // Disable during update
-                  />
-                  {isEditMileError && (
-                    <p className={styles.error}>
-                      {editMileError?.data?.message || "Error updating name"}
-                    </p>
-                  )}
+                <div className={styles.nameAndLeftTime}>
+                  <div className={styles.milestoneName}>
+                    <h3>{curMilestone?.name}</h3>
+                  </div>
+                  <div className={styles.milestoneTimeLeft}>
+                    <MilestoneDeadline
+                      createdAt={curMilestone?.createdAt}
+                      duration={duration}
+                    />
+                  </div>
                 </div>
-                <div className={styles.milestoneTimeLeft}>
-                  <MilestoneDeadline
-                    createdAt={curMilestone?.createdAt}
-                    duration={duration}
-                  />
+                <div className={styles.recallAndLastRecall}>
+                  <div className={styles.checkboxAndLabels}>
+                    <label className={styles.switch}>
+                      <input
+                        type="checkbox"
+                        onChange={(e) => setIsOnReCallMood(e.target.checked)}
+                      />
+                      <span className={styles.slider}></span>
+                    </label>
+                    <span>{isOnRecallMood ? "Off recall" : "On recall"}</span>
+                  </div>
+                  <div className={styles.lastRecalled}>
+                    <span>Last: 2d 23h 44m ago</span>
+                  </div>
                 </div>
               </div>
               <div className={styles.divider}></div>
