@@ -10,6 +10,7 @@ import {
   errorHandler,
   notFoundHandler,
 } from "./middlewares/common/errorHandler.js";
+import adminRouter from "./router/adminRouter.js";
 import authRouter from "./router/authRouter.js";
 import milestonesRouter from "./router/milestonesRouter.js";
 import usersRouter from "./router/usersRouter.js";
@@ -49,7 +50,7 @@ app.use("/milestones", milestonesRouter);
 app.use("/words", wordRouter);
 
 // handle admin request
-app.use("/admin", adminRouter)
+app.use("/admin", adminRouter);
 
 app.get("/", (req, res) => {
   res.send({
