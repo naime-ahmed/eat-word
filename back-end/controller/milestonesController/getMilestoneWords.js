@@ -19,8 +19,8 @@ const getMilestoneWords = async (req, res) => {
     // Check if any words are found
     if (!words.length) {
       return res
-        .status(404)
-        .json({ message: "No words found for this milestone." });
+        .status(200)
+        .json({ message: "No words found for this milestone.", words:[] });
     }
 
     // Return the words
