@@ -100,11 +100,13 @@ export const userApi = createApi({
         body: currAndNewPass,
       })
     }),
-    // Delete a user
-    deleteUser: builder.mutation({
-      query: () => ({
-        url: "/",
-        method: "DELETE",
+
+    //Deactivate user
+    deactivateUser: builder.mutation({
+      query: ([userId, actionObj]) => ({
+        url: `/suspend/${userId}`,
+        method: "PATCH",
+        body: actionObj,
       }),
       async onQueryStarted(_, { dispatch, queryFulfilled }) {
         const patchResult = dispatch(
@@ -121,6 +123,13 @@ export const userApi = createApi({
       },
       invalidatesTags: ["user"],
     }),
+    deleteUser: builder.mutation({
+      query: () => ({
+        url: "/delete-me",
+        method: "DELETE",
+      }),
+      invalidatesTags: ["user"],
+    }),
   }),
 });
 
@@ -128,6 +137,7 @@ export const {
   useBringUserByIdQuery,
   useUpdateUserMutation,
   useUpdatePasswordMutation,
+  useDeactivateUserMutation,
   useDeleteUserMutation,
 } = userApi;
 
