@@ -48,11 +48,9 @@ const TableRowMenu = ({
       await deleteWord({
         wordId: curWord?._id,
         milestoneId: curWord?.addedMilestone,
-      }).unwrap();
+      });
+      updateRowHeight(rowIdx, "", "", "delete");
       onClose();
-      if (rowIdx) {
-        updateRowHeight(rowIdx, "", "", "delete");
-      }
     } catch (error) {
       setNotificationTitle("Action failed!");
       setNotificationMessage(error?.data?.message || "Failed to delete word.");
