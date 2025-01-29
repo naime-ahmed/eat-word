@@ -37,6 +37,14 @@ const Milestone = () => {
   );
   const duration = curMilestone?.milestoneType === "three" ? 3 : 7;
 
+  // handle on recall
+  const handleOnRecall = (e) => {
+    if (curMilestone?.wordsCount <= 0) {
+      return;
+    }
+    setIsOnReCallMood(e.target.checked);
+  };
+
   return (
     <div className={styles.milestonePage}>
       <Header />
@@ -66,14 +74,23 @@ const Milestone = () => {
                     <label className={styles.switch}>
                       <input
                         type="checkbox"
-                        onChange={(e) => setIsOnReCallMood(e.target.checked)}
+                        onChange={handleOnRecall}
+                        disabled={curMilestone?.wordsCount <= 0}
                       />
                       <span className={styles.slider}></span>
                     </label>
-                    <span>{isOnRecallMood ? "Off recall" : "On recall"}</span>
+                    <span>
+                      {curMilestone?.wordsCount <= 0
+                        ? "No words to recall" // Show message
+                        : isOnRecallMood
+                        ? "Off recall"
+                        : "On recall"}
+                    </span>
                   </div>
                   <div className={styles.lastRecalled}>
-                    <span>Last: 2d 23h 44m ago</span>
+                    <span>
+                      {curMilestone?.lastRecalled ? "" : "You haven't recalled"}
+                    </span>
                   </div>
                 </div>
               </div>
