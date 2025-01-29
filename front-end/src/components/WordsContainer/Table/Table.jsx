@@ -27,27 +27,42 @@ const WordsContainer = ({ curMilestone }) => {
   // Update row height for a specific row and column
   const updateRowHeight = useCallback(
     (rowIndex, colId, value, action = "rerender") => {
-      console.log("updating row height", rowIndex, colId, value, action);
       setRowHeights((prev) => {
         if (!Array.isArray(prev)) {
           console.error("Invalid `rowHeights` state:", prev);
           return [];
         }
-
         if (action === "delete") {
-          if (rowIndex < 0 || rowIndex >= prev.length) {
+          console.log("updating row height", rowIndex, colId, value, action);
+          if (
+            rowIndex === undefined ||
+            rowIndex < 0 ||
+            rowIndex >= prev.length
+          ) {
             console.error("Invalid rowIndex for deletion:", rowIndex);
             return prev;
           }
 
-          if (rowIndex === prev.length - 1) {
+          const newRowHeights = [...prev];
+
+          if (rowIndex === 0) {
+            // Special case for deleting the first row
+            if (newRowHeights.length > 1) {
+              for (let i = 0; i < newRowHeights.length - 1; i++) {
+                newRowHeights[i] = { ...newRowHeights[i + 1] };
+              }
+            }
+            newRowHeights.pop();
+            return newRowHeights;
+          } else if (rowIndex === prev.length - 1) {
             return prev.slice(0, -1);
           } else {
-            const newRowHeights = [...prev];
+            // console.log("row height before: ", rowHeights);
             for (let i = rowIndex; i < newRowHeights.length - 1; i++) {
               newRowHeights[i] = { ...newRowHeights[i + 1] };
             }
             newRowHeights.pop();
+            // console.log("row height after: ", rowHeights);
             return newRowHeights;
           }
         } else if (action === "append") {
@@ -141,6 +156,7 @@ const WordsContainer = ({ curMilestone }) => {
     meaningSize,
   ]);
   console.log("words", words);
+  console.log("row height after: ", rowHeights);
   // console.log("rowHeight", rowHeights);
   // Table instance
   const table = useReactTable({
@@ -162,7 +178,7 @@ const WordsContainer = ({ curMilestone }) => {
     console.log(error);
   }
   // if (isError) return <div>Error: {error.data.message}</div>;
-  // console.log("table after insert", table?.getRowModel()?.rows);
+  console.log("table after insert", table?.getRowModel()?.rows);
   return (
     <div>
       <table className={styles.table}>
