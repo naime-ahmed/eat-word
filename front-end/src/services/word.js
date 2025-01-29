@@ -60,7 +60,7 @@ const baseQueryWithReAuth = async (args, api, extraOptions) => {
 export const wordApi = createApi({
   reducerPath: "wordApi",
   baseQuery: baseQueryWithReAuth,
-  tagTypes: ["word"],
+  tagTypes: ["Word"],
   endpoints: (builder) => ({
     appendWord: builder.mutation({
       query: (wordData) => ({
@@ -76,6 +76,7 @@ export const wordApi = createApi({
             "bringMilestoneWord",
             wordData.addedMilestone,
             (draft) => {
+              console.log("append word", draft);
               if (draft && draft.words) {
                 console.log("new word went inside cache", draft.words);
                 draft.words.push(wordData); // Add the temporary word
@@ -83,11 +84,11 @@ export const wordApi = createApi({
             }
           )
         );
-      
+
         try {
           const result = await queryFulfilled;
           const { message, newWord } = result.data;
-      
+
           // Update the cache with the server response
           dispatch(
             milestoneApi.util.updateQueryData(
@@ -107,8 +108,35 @@ export const wordApi = createApi({
               }
             )
           );
+          // update milestone cache
+          dispatch(
+            milestoneApi.util.updateQueryData(
+              "bringMilestones",
+              undefined,
+              (draft) => {
+                const milestonesArray = draft?.milestones;
+          
+                if (milestonesArray) {
+                  const milestoneIndex = milestonesArray.findIndex(
+                    (milestone) => milestone._id === newWord.addedMilestone
+                  );
+                  if (milestoneIndex !== -1) {
+                  
+                    milestonesArray[milestoneIndex] = {
+                      ...milestonesArray[milestoneIndex],
+                      wordsCount: milestonesArray[milestoneIndex].wordsCount + 1,
+                    };
+                  } else {
+                    console.warn("Milestone not found in cache:", newWord.addedMilestone);
+                  }
+                } else {
+                  console.warn("Milestones array not found in cache.");
+                }
+              }
+            )
+          );
         } catch {
-          patchResult.undo(); // Undo the optimistic update if the mutation fails
+          patchResult.undo();
         }
       },
       invalidatesTags: ["Milestone"],
@@ -118,7 +146,7 @@ export const wordApi = createApi({
         url: `/${wordId}`,
         method: "GET",
       }),
-      providesTags: ["word"],
+      providesTags: ["Word"],
     }),
     editWord: builder.mutation({
       query: ({ wordId, milestoneId, updates }) => ({
@@ -138,8 +166,10 @@ export const wordApi = createApi({
             (draft) => {
               if (draft && draft.words) {
                 // Find the word in the words array
-                const wordIndex = draft.words.findIndex((word) => word._id === wordId);
-                console.log("modified word Idx",wordIndex, wordId);
+                const wordIndex = draft.words.findIndex(
+                  (word) => word._id === wordId
+                );
+                console.log("modified word Idx", wordIndex, wordId);
                 if (wordIndex !== -1) {
                   // Merge the editedFields into the found word object
                   Object.assign(draft.words[wordIndex], editedFields);
@@ -148,7 +178,7 @@ export const wordApi = createApi({
             }
           )
         );
-    
+
         try {
           await queryFulfilled;
         } catch {
@@ -164,7 +194,10 @@ export const wordApi = createApi({
         body: { milestoneId },
       }),
       // Optimistic update
-      async onQueryStarted({ wordId, milestoneId }, { dispatch, queryFulfilled }) {
+      async onQueryStarted(
+        { wordId, milestoneId },
+        { dispatch, queryFulfilled }
+      ) {
         // Optimistically remove the word from the milestoneApi cache
         const patchResult = dispatch(
           milestoneApi.util.updateQueryData(
@@ -182,8 +215,37 @@ export const wordApi = createApi({
 
         try {
           await queryFulfilled;
+
+          // update milestone cache
+          dispatch(
+            milestoneApi.util.updateQueryData(
+              "bringMilestones",
+              undefined,
+              (draft) => {
+                const milestonesArray = draft?.milestones;
+          
+                if (milestonesArray) {
+                  const milestoneIndex = milestonesArray.findIndex(
+                    (milestone) => milestone._id === milestoneId
+                  );
+                  if (milestoneIndex !== -1) {
+                  
+                    milestonesArray[milestoneIndex] = {
+                      ...milestonesArray[milestoneIndex],
+                      wordsCount: milestonesArray[milestoneIndex].wordsCount - 1,
+                    };
+                  } else {
+                    console.warn("Milestone not found in cache:", milestoneId);
+                  }
+                } else {
+                  console.warn("Milestones array not found in cache.");
+                }
+              }
+            )
+          );
+
         } catch {
-          patchResult.undo(); // Undo the optimistic update if the mutation fails
+          patchResult.undo();
         }
       },
       invalidatesTags: ["Milestone"],
@@ -191,9 +253,9 @@ export const wordApi = createApi({
   }),
 });
 
-export const { 
+export const {
   useAppendWordMutation,
-  useBringWordQuery, 
-  useEditWordMutation ,
+  useBringWordQuery,
+  useEditWordMutation,
   useDeleteWordMutation,
 } = wordApi;
