@@ -8,14 +8,48 @@ const milestoneSchema = new mongoose.Schema(
       required: true,
     },
     name: { type: String, required: true, trim: true },
-    milestoneType: {type: String, required: true},
+    milestoneType: { type: String, required: true },
     targetWords: { type: Number, required: true },
-    wordsCount: { type: Number, required: true },
-    memorizedCount: { type: Number, required: true },
-    revisionCount: { type: Number, required: true },
-    learnSynonyms: {type: Boolean, required: true},
-    includeDefinition:{type: Boolean, required: true},
-    pinned: {type: Boolean, default: false}
+    wordsCount: {
+      type: Number,
+      required: true,
+      validate: [
+        {
+          validator: function (value) {
+            return value <= this.targetWords;
+          },
+          msg: "wordsCount cannot be greater than targetWords",
+        },
+      ],
+    },
+    memorizedCount: {
+      type: Number,
+      required: true,
+      validate: [
+        {
+          validator: function (value) {
+            return value <= this.wordsCount;
+          },
+          msg: "memorizedCount cannot be greater than wordsCount",
+        },
+      ],
+    },
+    revisionCount: {
+      type: Number,
+      required: true,
+      validate: [
+        {
+          validator: function (value) {
+            return value <= this.wordsCount;
+          },
+          msg: "memorizedCount cannot be greater than wordsCount",
+        },
+      ],
+    },
+    learnSynonyms: { type: Boolean, required: true },
+    includeDefinition: { type: Boolean, required: true },
+    pinned: { type: Boolean, default: false },
+    lastRecalled: { type: Date, default: null },
   },
   { timestamps: true }
 );
