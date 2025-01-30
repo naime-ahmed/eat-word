@@ -1,11 +1,25 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import styles from "./EditableCell.module.css";
-
+const CHARACTER_LIMITS = {
+  word: 35,
+  meanings: 100,
+  synonyms: 100,
+  definitions: 250,
+  examples: 255,
+};
 const EditableCell = ({ getValue, row, column, table }) => {
   const initialValue = getValue();
   const [value, setValue] = useState(initialValue);
   const textareaRef = useRef(null);
   const hasFocusedRef = useRef(false);
+  const [isBlurDismissed, setIsBlurDismissed] = useState(false);
+  const isOnRecallMode = table.options.meta?.isOnRecallMood;
+  const [showLimitMessage, setShowLimitMessage] = useState(false);
+  const characterLimit = CHARACTER_LIMITS[column.id] || 0;
+
+  const showBlur =
+    isOnRecallMode && column.id !== "word" && !isBlurDismissed && value;
+  console.log("is on blur mood from cell", isOnRecallMode);
 
   const adjustHeight = useCallback(() => {
     const textarea = textareaRef.current;
@@ -43,7 +57,13 @@ const EditableCell = ({ getValue, row, column, table }) => {
   }, [adjustHeight]);
 
   const handleOnChange = (e) => {
-    setValue(e.target.value);
+    const newValue = e.target.value.slice(0, characterLimit);
+    setValue(newValue);
+
+    if (e.target.value.length >= characterLimit) {
+      setShowLimitMessage(true);
+      setTimeout(() => setShowLimitMessage(false), 2000);
+    }
     adjustHeight();
   };
 
@@ -93,6 +113,26 @@ const EditableCell = ({ getValue, row, column, table }) => {
     }
   }, [column.id, row.original._id]);
 
+  // Reset dismissal state when recall mode turns off
+  useEffect(() => {
+    if (!isOnRecallMode) {
+      setIsBlurDismissed(false);
+    }
+  }, [isOnRecallMode]);
+
+  // Handle overlay click
+  const handleOverlayClick = (e) => {
+    if (showBlur) {
+      e.preventDefault();
+      setIsBlurDismissed(true);
+      return;
+    }
+    // Focus the textarea only if the blur layer is not active
+    if (textareaRef.current && !showBlur) {
+      textareaRef.current.focus();
+    }
+  };
+
   // dynamic style
   const style = {
     paddingLeft: column.id === "word" ? "12px" : undefined,
@@ -103,17 +143,35 @@ const EditableCell = ({ getValue, row, column, table }) => {
   };
 
   return (
-    <textarea
-      ref={textareaRef}
-      value={value}
-      height={table.options.meta?.rowHeights[row.index]?.curMax}
-      onChange={handleOnChange}
-      onKeyUp={handleOnKeyUp}
-      onBlur={handleOnBlur}
-      className={styles.editableCell}
-      style={style}
-      rows={1}
-    />
+    <div
+      className={`${styles.cellWrapper} ${
+        showBlur && value ? styles.blurred : ""
+      }`}
+      onClick={handleOverlayClick}
+    >
+      <textarea
+        ref={textareaRef}
+        value={value}
+        height={table.options.meta?.rowHeights[row.index]?.curMax}
+        onChange={handleOnChange}
+        onKeyUp={handleOnKeyUp}
+        onBlur={handleOnBlur}
+        className={styles.editableCell}
+        style={style}
+        rows={1}
+        maxLength={characterLimit}
+        onFocus={(e) => {
+          if (showBlur) {
+            e.target.blur();
+          }
+        }}
+      />
+      {showLimitMessage && (
+        <div className={styles.limitMessage}>
+          Maximum {characterLimit} characters
+        </div>
+      )}
+    </div>
   );
 };
 
