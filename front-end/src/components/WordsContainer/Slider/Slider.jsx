@@ -13,9 +13,7 @@ import { wordSchemaForClient } from "../utils";
 import styles from "./Slider.module.css";
 import SliderCard from "./SliderCard/SliderCard";
 
-// TODO: add place holder for empty word array
-
-const Carousel = ({ curMilestone }) => {
+const Carousel = ({ curMilestone, isOnRecallMood }) => {
   const [words, setWords] = useState([]);
   const [swiperInstance, setSwiperInstance] = useState(null);
   const [showNotification, setShowNotification] = useState(false);
@@ -85,6 +83,7 @@ const Carousel = ({ curMilestone }) => {
                   setWords={setWords}
                   wordIdx={index}
                   curMilestone={curMilestone}
+                  isOnRecallMood={isOnRecallMood}
                 />
               </SwiperSlide>
             ))}
