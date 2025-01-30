@@ -4,6 +4,7 @@
   background: #020817;
   box-shadow: 0px 8px 24px rgba(18, 28, 53, 0.1);
 }
+
 .cardContainer {
   padding: 16px;
   display: flex;
@@ -24,18 +25,27 @@
   right: 12px;
   font-size: 22px;
 }
+
 .cardMenu > svg {
   cursor: pointer;
 }
+
 .cardWord {
   display: flex;
   align-items: center;
   justify-content: center;
   border-bottom: 1px solid #293b69;
   margin-bottom: 6px;
-  /* gap: 4px; */
 }
-.cardWord > textarea {
+
+.cardWord .textareaWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.cardWord textarea {
   width: max-content;
   white-space: nowrap;
   word-wrap: normal;
@@ -45,21 +55,23 @@
   outline: none;
   margin-bottom: 6px;
   padding: 6px 8px;
-  font-size: 22px;
+  font-size: 20px;
   resize: none;
   overflow: hidden;
   box-sizing: border-box;
   transition: box-shadow 0.2s;
 }
 
-.cardWord > textarea.empty:not(:focus) {
+/* Update empty state selectors */
+.cardWord textarea.empty:not(:focus) {
   border: 2px dashed #2852bb !important;
   border-radius: 8px;
 }
-.cardMeanings > textarea.empty:not(:focus),
-.cardSynonyms > textarea.empty:not(:focus),
-.cardDefinitions > textarea.empty:not(:focus),
-.cardExamples > textarea.empty:not(:focus) {
+
+.cardMeanings .textareaWrapper textarea.empty:not(:focus),
+.cardSynonyms .textareaWrapper textarea.empty:not(:focus),
+.cardDefinitions .textareaWrapper textarea.empty:not(:focus),
+.cardExamples .textareaWrapper textarea.empty:not(:focus) {
   border: 1px dashed #293b69 !important;
   border-radius: 8px;
 }
@@ -67,12 +79,13 @@
 .wordSound {
   display: flex;
   align-items: center;
-  /* margin-top: 6px; */
   color: #757575;
   font-size: 24px;
+  margin-bottom: 6px;
   cursor: pointer;
   transition: color 0.3s ease;
 }
+
 .wordSound:hover {
   color: #b8b8b8;
 }
@@ -83,21 +96,23 @@
 .cardExamples {
   display: flex;
   flex-direction: column;
+  gap: 4px; /* Added for better spacing */
 }
 
-.cardMeanings > label,
-.cardSynonyms > label,
-.cardDefinitions > label,
-.cardExamples > label {
+.cardMeanings label,
+.cardSynonyms label,
+.cardDefinitions label,
+.cardExamples label {
   font-size: 14px;
   font-weight: 500;
   color: #d0d0d1;
 }
 
-.cardMeanings > textarea,
-.cardSynonyms > textarea,
-.cardDefinitions > textarea,
-.cardExamples > textarea {
+/* Update textarea styles to target through wrapper */
+.cardMeanings textarea,
+.cardSynonyms textarea,
+.cardDefinitions textarea,
+.cardExamples textarea {
   width: 100%;
   background-color: transparent;
   color: #d0d0d1;
@@ -109,14 +124,64 @@
   overflow: hidden;
   box-sizing: border-box;
   transition: box-shadow 0.2s;
+  min-height: 28px; /* Ensure minimum height */
 }
 
-.cardMeanings > textarea:focus,
-.cardSynonyms > textarea:focus,
-.cardDefinitions > textarea:focus,
-.cardExamples > textarea:focus {
-  /* outline: 1px solid #005abb; */
+/* Update focus states */
+.cardMeanings textarea:focus,
+.cardSynonyms textarea:focus,
+.cardDefinitions textarea:focus,
+.cardExamples textarea:focus {
   box-shadow: inset 0 0 0 1px #293b69;
   border-radius: 8px;
   outline-offset: 0;
+}
+
+.textareaWrapper {
+  position: relative;
+  width: 100%;
+  display: flex;
+}
+
+.blurred {
+  position: relative;
+  overflow: hidden;
+}
+
+.blurOverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  backdrop-filter: blur(2px);
+  z-index: 1;
+  cursor: pointer;
+  border-radius: 8px;
+}
+
+.limitMessage {
+  position: absolute;
+  background: #e6cf00;
+  color: #000;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  z-index: 2;
+  bottom: calc(70% + 5px);
+  left: 0;
+  white-space: nowrap;
+}
+
+/* Add margin to prevent overlap with limit message */
+.cardMeanings,
+.cardSynonyms,
+.cardDefinitions,
+.cardExamples {
+  position: relative;
+  margin-top: 8px;
+}
+
+.cardMeanings:first-of-type {
+  margin-top: 0;
 }
