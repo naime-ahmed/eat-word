@@ -10,10 +10,10 @@ import TableHeader from "./TableHeader";
 import TableRow from "./TableRow";
 import TableSkeletonLoader from "./TableSkeletonLoader.jsx";
 
-const WordsContainer = ({ curMilestone }) => {
+const WordsContainer = ({ curMilestone, isOnRecallMood }) => {
   const [words, setWords] = useState([]);
   const [rowHeights, setRowHeights] = useState([]);
-  const { updateWords, missingError, doNotify, setDoNotify } = useUpdateWords();
+  const { updateWords, updateError, doNotify, setDoNotify } = useUpdateWords();
 
   const { data, isLoading, isError, error } = useBringMilestoneWordQuery(
     curMilestone?._id
@@ -167,6 +167,7 @@ const WordsContainer = ({ curMilestone }) => {
       updateWords: handleUpdate,
       updateRowHeight,
       rowHeights,
+      isOnRecallMood,
     },
   });
 
@@ -205,10 +206,10 @@ const WordsContainer = ({ curMilestone }) => {
       ) : (
         <></>
       )}
-      {missingError && (
+      {doNotify && (
         <Notification
           title="An Error Occurred!"
-          message={missingError}
+          message={updateError}
           isOpen={doNotify}
           onClose={() => setDoNotify(false)}
         />
