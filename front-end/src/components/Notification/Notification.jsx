@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { BiMessageAltError } from "react-icons/bi";
+import { IoClose } from "react-icons/io5";
 import { LuCircleCheckBig, LuMessageSquareWarning } from "react-icons/lu";
 import styles from "./Notification.module.css";
 
@@ -10,28 +11,45 @@ const Notification = ({
   iconType = "warning",
   isOpen,
   onClose,
-  duration = 5000,
+  duration = 4000,
+  icon, // New prop for custom icons
 }) => {
   const [visible, setVisible] = useState(isOpen);
+  const [progress, setProgress] = useState(100);
+
+  const handleClose = () => {
+    setVisible(false);
+    onClose();
+  };
+
   useEffect(() => {
     let timeout;
+    let interval;
 
     if (visible) {
+      // Progress bar animation
+      interval = setInterval(() => {
+        setProgress((prev) => Math.max(0, prev - 100 / (duration / 50)));
+      }, 50);
+
+      // Auto-close timeout
       timeout = setTimeout(() => {
-        setVisible(false);
-        onClose();
+        handleClose();
       }, duration);
     }
 
     return () => {
       clearTimeout(timeout);
+      clearInterval(interval);
     };
-  }, [visible, onClose, duration]);
+  }, [visible, duration]);
 
   useEffect(() => {
     setVisible(isOpen);
+    if (isOpen) setProgress(100);
   }, [isOpen]);
-  const icons = {
+
+  const defaultIcons = {
     error: <BiMessageAltError className={styles.error} />,
     warning: <LuMessageSquareWarning className={styles.warning} />,
     success: <LuCircleCheckBig className={styles.success} />,
@@ -41,12 +59,23 @@ const Notification = ({
 
   return createPortal(
     <div className={styles.notification}>
+      <button className={styles.closeButton} onClick={handleClose}>
+        <IoClose />
+      </button>
+
       <div className={styles.content}>
-        {icons[iconType] && icons[iconType]}
-        <div>
-          <h3 className={styles.title}>{title}</h3>
-          <p className={styles.message}>{message}</p>
+        {icon || defaultIcons[iconType]}
+        <div className={styles.textContainer}>
+          {title && <h3 className={styles.title}>{title}</h3>}
+          {message && <p className={styles.message}>{message}</p>}
         </div>
+      </div>
+
+      <div className={styles.progressBar}>
+        <div
+          className={styles.progressFill}
+          style={{ width: `${progress}%` }}
+        />
       </div>
     </div>,
     document.body

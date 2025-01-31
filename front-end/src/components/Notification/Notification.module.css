@@ -1,54 +1,87 @@
 .notification {
-  position: fixed; /* Use fixed positioning */
+  position: fixed;
   top: 20px;
   right: 20px;
-  background-color: white;
-  color: black;
-  border-radius: 6px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  background-color: #0f172a;
+  color: #f8fafc;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
   padding: 16px;
   z-index: 1000;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  width: 300px;
+  width: 320px;
   animation: slideIn 0.3s ease-out;
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .content {
   display: flex;
   align-items: flex-start;
-  gap: 10px;
+  gap: 12px;
+  margin-bottom: 8px;
 }
 
-/* icons style */
-
-.error,
-.success,
-.warning {
-  font-size: 2rem;
-  border-radius: 50%;
-  padding: 2px;
+.textContainer {
+  flex: 1;
 }
+
+.closeButton {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: none;
+  border: none;
+  color: #94a3b8;
+  padding: 4px;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.closeButton:hover {
+  color: #f8fafc;
+}
+
+/* Icon Styling */
 .success {
-  color: rgb(0, 185, 15);
+  color: #34d399;
 }
+
 .error {
-  color: rgb(255, 2, 78);
+  color: #f87171;
 }
+
 .warning {
-  color: rgb(161, 110, 0);
+  color: #fbbf24;
 }
 
 .title {
-  font-size: 1rem;
+  font-size: 0.95rem;
   font-weight: 600;
-  margin: 0;
+  margin: 0 0 4px 0;
+  color: #f8fafc;
 }
 
 .message {
-  font-size: 0.8rem;
+  font-size: 0.85rem;
   margin: 0;
+  color: #94a3b8;
+  line-height: 1.4;
+}
+
+.progressBar {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 0 0 8px 8px;
+  overflow: hidden;
+}
+
+.progressFill {
+  height: 100%;
+  background-color: #3b82f6;
+  transition: width 50ms linear;
 }
 
 @keyframes slideIn {
