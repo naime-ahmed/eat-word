@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import Swal from "sweetalert2";
 import PrimaryBtn from "../../components/ui/button/PrimaryBtn/PrimaryBtn";
+import useNotification from "../../hooks/useNotification.js";
 import { useForgotPassMutation } from "../../services/auth.js";
 import styles from "./ForgotPass.module.css";
 
@@ -9,6 +9,7 @@ const ForgotPass = () => {
   const [email, setEmail] = useState("");
   const [emailError, setEmailError] = useState("");
   const [forgotPass, { isLoading, isError, error }] = useForgotPassMutation();
+  const showNotification = useNotification();
 
   // Validate email format
   function validateEmail() {
@@ -27,22 +28,22 @@ const ForgotPass = () => {
       if (!validateEmail()) return;
 
       const res = await forgotPass(email).unwrap();
-      console.log("change email res", res);
       setEmail("");
       // inform the user
-      Swal.fire({
-        title: res.message,
-        icon: "success",
-        confirmButtonText: "Okay",
+      showNotification({
+        title: "",
+        message: res.message,
+        iconType: "success",
+        duration: 4000,
       });
     } catch (error) {
       console.log(error);
       // show the error to user
-      Swal.fire({
+      showNotification({
         title: "Opps something went wrong",
-        text: error.data?.message || "An unexpected error occurred",
-        icon: "error",
-        confirmButtonText: "ok",
+        message: error.data?.message || "An unexpected error occurred",
+        iconType: "error",
+        duration: 4000,
       });
     }
   }
