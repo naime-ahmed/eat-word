@@ -88,10 +88,8 @@
 
 .profile {
   position: relative;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 43px;
+  text-align: center;
+  /* width: 43px; */
   height: 43px;
   background-color: transparent;
   border: 2px solid rgba(75, 103, 173, 0.563);

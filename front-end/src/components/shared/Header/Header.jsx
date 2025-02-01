@@ -1,8 +1,9 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import defaultUserProfile from "../../../assets/defaultUserProfileImage.png";
 import logo from "../../../assets/logo.png";
+import Popup from "../../Popup/Popup";
 import UserProfile from "../../Popup/PopUpContents/UserProfile/UserProfile";
 import PrimaryBtn from "../../ui/button/PrimaryBtn/PrimaryBtn";
 import Skeleton from "../../ui/loader/Skeleton/Skeleton";
@@ -12,14 +13,25 @@ const Header = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isSticky, setIsSticky] = useState(false);
   const [isProfileShown, setIsProfileShown] = useState(false);
-  const profileRef = useRef(null);
-  const profilePicBtnRef = useRef(null);
-
+  const [clickPosition, setClickPosition] = useState(null);
   const { isAuthenticated, isLoading } = useSelector((state) => state.auth);
   const { user } = useSelector((state) => state.user);
 
   const handleSidebarToggle = () => {
     setIsSidebarOpen(!isSidebarOpen);
+  };
+
+  const handleProfileOpen = (e) => {
+    e.stopPropagation();
+    let x = e.clientX + window.scrollX + 16;
+    let y = -4;
+    if (window.innerWidth < 500) {
+      console.log(window.innerWidth);
+      x += 100;
+    }
+    setClickPosition({ x, y: -4 });
+    setIsProfileShown(true);
+    console.log(x, y);
   };
 
   const handleScroll = () => {
@@ -29,26 +41,6 @@ const Header = () => {
       setIsSticky(false);
     }
   };
-
-  // Detect clicks outside the profile card to close it
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (
-        profileRef.current &&
-        !profileRef.current.contains(event.target) &&
-        profilePicBtnRef.current &&
-        !profilePicBtnRef.current.contains(event.target) &&
-        isProfileShown
-      ) {
-        setIsProfileShown(false);
-      }
-    };
-
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [isProfileShown]);
 
   useEffect(() => {
     window.addEventListener("scroll", handleScroll);
@@ -129,11 +121,7 @@ const Header = () => {
               ) : isAuthenticated ? (
                 <>
                   <button
-                    ref={profilePicBtnRef}
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      setIsProfileShown((prev) => !prev);
-                    }}
+                    onClick={handleProfileOpen}
                     className={styles.profile}
                   >
                     <img
@@ -142,9 +130,15 @@ const Header = () => {
                     />
                   </button>
                   {isProfileShown && (
-                    <div ref={profileRef}>
+                    <Popup
+                      isOpen={isProfileShown}
+                      onClose={() => setIsProfileShown(false)}
+                      showCloseButton={false}
+                      popupType="menu"
+                      clickPosition={clickPosition}
+                    >
                       <UserProfile onClose={() => setIsProfileShown(false)} />
-                    </div>
+                    </Popup>
                   )}
                 </>
               ) : (
