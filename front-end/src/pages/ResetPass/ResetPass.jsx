@@ -1,13 +1,14 @@
 import { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import Swal from "sweetalert2";
 import PrimaryBtn from "../../components/ui/button/PrimaryBtn/PrimaryBtn";
+import useNotification from "../../hooks/useNotification";
 import { useResetPassMutation } from "../../services/auth";
 import styles from "./ResetPass.module.css";
 
 const ResetPass = () => {
   const location = useLocation();
   const navigate = useNavigate();
+  const showNotification = useNotification();
 
   // Function to read the token and id from the URL
   const query = new URLSearchParams(location.search);
@@ -60,12 +61,12 @@ const ResetPass = () => {
         newPass: resetPass.newPass,
         token,
       }).unwrap();
-      console.log("resetReqRes", res);
-      Swal.fire({
+
+      showNotification({
         title: res?.message || "reset successful",
-        text: "Now you can sign in with new password",
-        icon: "success",
-        confirmButtonText: "Okay",
+        message: "Now you can sign in with new password",
+        iconType: "success",
+        duration: 4000,
       });
       setResetPass({
         newPass: "",
@@ -77,11 +78,11 @@ const ResetPass = () => {
       });
     } catch (error) {
       console.log("resetReqError", error);
-      Swal.fire({
+      showNotification({
         title: "Something went wrong",
-        text: error.message || "An unexpected error occurred",
-        icon: "error",
-        confirmButtonText: "ok",
+        message: error.message || "An unexpected error occurred",
+        iconType: "error",
+        duration: 4000,
       });
     }
   }
