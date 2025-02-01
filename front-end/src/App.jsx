@@ -2,6 +2,7 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Outlet } from "react-router-dom";
+import NotificationContainer from "./components/Notification/Notification.jsx";
 import { setLoading } from "./features/authSlice";
 import { setUserData, setUserError } from "./features/userSlice.js";
 import { useBringUserByIdQuery } from "./services/user.js";
@@ -47,7 +48,12 @@ function App() {
     }
   }, [userData, userError, dispatch]);
 
-  return <Outlet />;
+  return (
+    <>
+      <Outlet />
+      <NotificationContainer />
+    </>
+  );
 }
 
 export default App;
