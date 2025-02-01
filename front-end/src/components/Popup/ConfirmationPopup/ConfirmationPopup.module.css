@@ -31,9 +31,4 @@
   color: white;
   font-weight: bold;
   cursor: pointer;
-  transition: opacity 0.2s ease;
-}
-
-.confirmationButton:hover {
-  opacity: 0.9;
 }
