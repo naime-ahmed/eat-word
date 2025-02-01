@@ -1,6 +1,5 @@
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
-import Swal from "sweetalert2";
 import GoogleSignIn from "../../components/OAuth/Google/GoogleSignIn";
 import PrimaryBtn from "../../components/ui/button/PrimaryBtn/PrimaryBtn";
 import { setUser } from "../../features/authSlice.js";
@@ -9,6 +8,7 @@ import {
   setUserErrors,
   updateUser,
 } from "../../features/userSignInSlice";
+import useNotification from "../../hooks/useNotification.js";
 import { useSignInUserMutation } from "../../services/auth.js";
 import { parseJwt } from "../../utils/parseJWT.js";
 import style from "./SignIn.module.css";
@@ -17,6 +17,7 @@ const SignIn = () => {
   const { user, userErrors } = useSelector((state) => state.signIn);
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const showNotification = useNotification();
 
   // use the sing-in mutation
   const [signInUser, { isLoading }] = useSignInUserMutation();
@@ -64,21 +65,22 @@ const SignIn = () => {
         localStorage.setItem("access-token", result.accessToken);
 
         // inform the user
-        Swal.fire({
-          title: result.message,
-          icon: "success",
-          confirmButtonText: "Got it",
+        showNotification({
+          title: result?.message,
+          message: "",
+          iconType: "success",
+          duration: 4000,
         });
         dispatch(setUser(parseJwt(result.accessToken)));
         navigate("/my-space");
       } catch (error) {
         console.error("sing-in failed", error);
         // show the error to user
-        Swal.fire({
+        showNotification({
           title: "Unable to sign in",
-          text: error.data?.message || "An unexpected error occurred",
-          icon: "error",
-          confirmButtonText: "ok",
+          message: error.message || "An unexpected error occurred",
+          iconType: "error",
+          duration: 4000,
         });
       }
     }
