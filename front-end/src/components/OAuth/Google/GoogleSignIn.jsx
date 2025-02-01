@@ -2,13 +2,14 @@
 import { GoogleLogin, GoogleOAuthProvider } from "@react-oauth/google";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import Swal from "sweetalert2";
 import { setUser } from "../../../features/authSlice";
+import useNotification from "../../../hooks/useNotification";
 import { parseJwt } from "../../../utils/parseJWT";
 
 function GoogleSignIn() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const showNotification = useNotification();
 
   const handleLoginSuccess = async (response) => {
     try {
@@ -33,22 +34,22 @@ function GoogleSignIn() {
       // save access token into local-storage
       localStorage.setItem("access-token", result.accessToken);
 
-      // inform the user
-      Swal.fire({
-        title: result.message,
-        icon: "success",
-        confirmButtonText: "Got it",
+      showNotification({
+        title: "Success!",
+        message: result?.message,
+        iconType: "success",
+        duration: 4000,
       });
       dispatch(setUser(parseJwt(result.accessToken)));
       navigate("/my-space");
     } catch (error) {
       console.error("Sign in failed:", error);
       // show the error to user
-      Swal.fire({
+      showNotification({
         title: "Unable to sign in",
-        text: error.data?.message || "An unexpected error occurred",
-        icon: "error",
-        confirmButtonText: "ok",
+        message: error.data?.message || "An unexpected error occurred",
+        iconType: "error",
+        duration: 4000,
       });
     }
   };
