@@ -1,5 +1,6 @@
 import { configureStore } from "@reduxjs/toolkit";
 import authReducers from "../features/authSlice";
+import notificationReducer from '../features/notificationSlice';
 import popupZIndexReducer from '../features/popupZIndexSlice';
 import signInReducers from "../features/userSignInSlice";
 import signUpReducers from "../features/userSignUpSlice";
@@ -16,6 +17,7 @@ const store = configureStore({
     auth: authReducers,
     user: userReducers,
     popupZIndex: popupZIndexReducer,
+    notification: notificationReducer,
     [authApi.reducerPath]: authApi.reducer,
     [milestoneApi.reducerPath]: milestoneApi.reducer,
     [userApi.reducerPath]: userApi.reducer,
