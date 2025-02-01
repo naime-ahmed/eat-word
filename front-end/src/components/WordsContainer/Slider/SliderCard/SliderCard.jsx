@@ -3,7 +3,6 @@ import { BiDotsVerticalRounded } from "react-icons/bi";
 import { RiVolumeUpFill } from "react-icons/ri";
 import { debounceUpdate } from "../../../../utils/debounceUpdate";
 import { sliderCardPropTypes } from "../../../../utils/propTypes";
-import Notification from "../../../Notification/Notification";
 import Popup from "../../../Popup/Popup";
 import TableRowMenu from "../../../Popup/PopUpContents/TableRowMenu/TableRowMenu";
 import { useTextToSpeech } from "../../hooks/useTextToSpeech";
@@ -65,7 +64,7 @@ const SliderCard = ({
   const definitionsRef = useRef(null);
   const examplesRef = useRef(null);
 
-  const { updateWords, missingError, doNotify, setDoNotify } = useUpdateWords();
+  const { updateWords } = useUpdateWords();
 
   // Function to auto-resize textareas
   const autoResizeTextarea = (textareaRef) => {
@@ -182,8 +181,7 @@ const SliderCard = ({
   }, []);
 
   // handle text-to-speech
-  const { speckText, speechError, notifySpeechError, setNotifySpeechError } =
-    useTextToSpeech();
+  const { speckText } = useTextToSpeech();
   const handleSpeckText = (text) => {
     speckText(text);
   };
@@ -214,15 +212,6 @@ const SliderCard = ({
               >
                 <RiVolumeUpFill />
               </span>
-            )}
-            {notifySpeechError && (
-              <Notification
-                title="Failed to utter!"
-                message={speechError}
-                iconType="error"
-                isOpen={notifySpeechError}
-                onClose={() => setNotifySpeechError(false)}
-              />
             )}
             {limitMessageField === "word" && (
               <div className={styles.limitMessage}>
@@ -269,7 +258,7 @@ const SliderCard = ({
               }}
             />
             {isOnRecallMood && !dismissedBlurFields.meanings && meanings && (
-              <div className={styles.blurOverlay} />
+              <div className={styles.blurOverlay}>Click to revel</div>
             )}
           </div>
           {limitMessageField === "meanings" && (
@@ -321,7 +310,7 @@ const SliderCard = ({
                 }}
               />
               {isOnRecallMood && !dismissedBlurFields.synonyms && synonyms && (
-                <div className={styles.blurOverlay} />
+                <div className={styles.blurOverlay}>Click to revel</div>
               )}
             </div>
             {limitMessageField === "synonyms" && (
@@ -377,7 +366,9 @@ const SliderCard = ({
               />
               {isOnRecallMood &&
                 !dismissedBlurFields.definitions &&
-                definitions && <div className={styles.blurOverlay} />}
+                definitions && (
+                  <div className={styles.blurOverlay}>Click to revel</div>
+                )}
             </div>
             {limitMessageField === "definitions" && (
               <div className={styles.limitMessage}>
@@ -424,7 +415,7 @@ const SliderCard = ({
               }}
             />
             {isOnRecallMood && !dismissedBlurFields.examples && examples && (
-              <div className={styles.blurOverlay} />
+              <div className={styles.blurOverlay}>Click to revel</div>
             )}
           </div>
           {limitMessageField === "examples" && (
@@ -449,18 +440,6 @@ const SliderCard = ({
           </Popup>
         )}
       </span>
-
-      {/* show notification */}
-      {doNotify && (
-        <Notification
-          title="Failed to update!"
-          message={missingError}
-          iconType="warning"
-          isOpen={doNotify}
-          onClose={() => setDoNotify(false)}
-          duration={5000}
-        />
-      )}
     </div>
   );
 };
