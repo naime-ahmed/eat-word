@@ -47,11 +47,9 @@
 @keyframes scaleUp {
   from {
     transform: translate(-50%, -50%) scale(0.8);
-    opacity: 0;
   }
   to {
     transform: translate(-50%, -50%) scale(1);
-    opacity: 1;
   }
 }
 
@@ -95,6 +93,8 @@
 .modal,
 .dialog {
   animation: scaleUp 0.3s ease-out forwards;
+  backface-visibility: hidden;
+  transform: translate3d(-50%, -50%, 0);
 }
 
 /* Apply animations to menu */
