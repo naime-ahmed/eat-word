@@ -1,6 +1,6 @@
 import { useState } from "react";
+import useNotification from "../../../../hooks/useNotification";
 import { useEditMilestoneMutation } from "../../../../services/milestone";
-import Notification from "../../../Notification/Notification";
 import PrimaryBtn from "../../../ui/button/PrimaryBtn/PrimaryBtn";
 import styles from "./EditMilestone.module.css";
 
@@ -10,7 +10,7 @@ function EditMilestone({ milestone, onClose }) {
     targetWords: milestone?.targetWords,
   });
   const [hasChanges, setHasChanges] = useState(true);
-
+  const showNotification = useNotification();
   const [editMilestone, { isLoading, isError, error }] =
     useEditMilestoneMutation();
 
@@ -43,11 +43,16 @@ function EditMilestone({ milestone, onClose }) {
         setHasChanges(false);
         return;
       }
-    } catch {
-      <Notification
-        title="Failed to Edit!"
-        message={error?.data?.message || "Something went wrong while editing!"}
-      />;
+    } catch (error) {
+      showNotification({
+        title: "Failed to Edit!",
+        message:
+          error.data?.message ||
+          error.message ||
+          "An unexpected error occurred",
+        iconType: "error",
+        duration: 4000,
+      });
     }
   };
 
