@@ -1,18 +1,19 @@
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import Swal from "sweetalert2";
 import {
   setUserNewErrors,
   updateNewUser,
 } from "../../features/userSignUpSlice";
 import { useSignUpUserMutation } from "../../services/auth.js";
 
+import useNotification from "../../hooks/useNotification.js";
 import style from "./SignUp.module.css";
 
 const SignUp = () => {
   // state of new user
   const { newUser, newUserErrors } = useSelector((state) => state.signUp);
   const dispatch = useDispatch();
+  const showNotification = useNotification();
 
   // use the singUp mutation
   const [singUpUser, { isLoading, isError, error }] = useSignUpUserMutation();
@@ -65,21 +66,22 @@ const SignUp = () => {
         };
 
         const result = await singUpUser(formData).unwrap();
-        console.log("fromSignUp", await result);
+
         // inform the user success result
-        Swal.fire({
+        showNotification({
           title: result.msg,
-          icon: "success",
-          confirmButtonText: "I'm going",
+          message: "",
+          iconType: "success",
+          duration: 4000,
         });
       } catch (error) {
         console.error("sing-up failed", error);
         // show the error to user
-        Swal.fire({
+        showNotification({
           title: "Unable to create account!",
-          text: error.data?.message || "An unexpected error occurred",
-          icon: "error",
-          confirmButtonText: "ok",
+          message: error.message || "An unexpected error occurred",
+          iconType: "error",
+          duration: 6000,
         });
       }
     }
