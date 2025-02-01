@@ -6,8 +6,8 @@ import "swiper/css/effect-coverflow";
 import "swiper/css/navigation";
 import { EffectCoverflow, Navigation } from "swiper/modules";
 import { Swiper as SwiperReact, SwiperSlide } from "swiper/react";
+import useNotification from "../../../hooks/useNotification";
 import { useBringMilestoneWordQuery } from "../../../services/milestone";
-import Notification from "../../Notification/Notification";
 import Skeleton from "../../ui/loader/Skeleton/Skeleton";
 import { wordSchemaForClient } from "../utils";
 import styles from "./Slider.module.css";
@@ -16,7 +16,7 @@ import SliderCard from "./SliderCard/SliderCard";
 const Carousel = ({ curMilestone, isOnRecallMood }) => {
   const [words, setWords] = useState([]);
   const [swiperInstance, setSwiperInstance] = useState(null);
-  const [showNotification, setShowNotification] = useState(false);
+  const showNotification = useNotification();
   const { data, isLoading, isError, error } = useBringMilestoneWordQuery(
     curMilestone?._id
   );
@@ -34,8 +34,11 @@ const Carousel = ({ curMilestone, isOnRecallMood }) => {
     const hasUnsavedWord = words.some((word) => !word._id);
 
     if (hasUnsavedWord) {
-      setShowNotification(true);
-      setTimeout(() => setShowNotification(false), 5000);
+      showNotification({
+        title: "There is a unsaved word",
+        message: "Please provide word to save it before adding a new word.",
+        duration: 4000,
+      });
       return;
     }
 
@@ -122,14 +125,6 @@ const Carousel = ({ curMilestone, isOnRecallMood }) => {
           </div>
           <Skeleton width={340} height={23} />
         </div>
-      )}
-      {showNotification && (
-        <Notification
-          title="Warning! "
-          message="Please provide word to save it before adding a new word."
-          isOpen={showNotification}
-          onClose={() => setShowNotification(false)}
-        />
       )}
     </div>
   );
