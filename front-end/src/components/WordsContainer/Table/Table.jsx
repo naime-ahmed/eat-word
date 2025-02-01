@@ -1,7 +1,6 @@
 import { getCoreRowModel, useReactTable } from "@tanstack/react-table";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useBringMilestoneWordQuery } from "../../../services/milestone";
-import Notification from "../../Notification/Notification";
 import { useUpdateWords } from "../hooks/useUpdateWords.js";
 import { calculateColumnWidths, wordSchemaForClient } from "../utils.js";
 import styles from "./Table.module.css";
@@ -13,7 +12,7 @@ import TableSkeletonLoader from "./TableSkeletonLoader.jsx";
 const WordsContainer = ({ curMilestone, isOnRecallMood }) => {
   const [words, setWords] = useState([]);
   const [rowHeights, setRowHeights] = useState([]);
-  const { updateWords, updateError, doNotify, setDoNotify } = useUpdateWords();
+  const { updateWords } = useUpdateWords();
 
   const { data, isLoading, isError, error } = useBringMilestoneWordQuery(
     curMilestone?._id
@@ -205,14 +204,6 @@ const WordsContainer = ({ curMilestone, isOnRecallMood }) => {
         </div>
       ) : (
         <></>
-      )}
-      {doNotify && (
-        <Notification
-          title="An Error Occurred!"
-          message={updateError}
-          isOpen={doNotify}
-          onClose={() => setDoNotify(false)}
-        />
       )}
     </div>
   );
