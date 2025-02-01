@@ -1,12 +1,9 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import Swal from "sweetalert2";
 import defaultProfilePic from "../../assets/defaultUserProfileImage.png";
 import Notification from "../../components/Notification/Notification";
-import ConfirmationPopup, {
-  useConfirmation,
-} from "../../components/Popup/ConfirmationPopup/ConfirmationPopup";
+import ConfirmationPopup from "../../components/Popup/ConfirmationPopup/ConfirmationPopup";
 import Error from "../../components/shared/Error/Error";
 import Footer from "../../components/shared/Footer/Footer";
 import Header from "../../components/shared/Header/Header";
@@ -14,6 +11,8 @@ import PrimaryBtn from "../../components/ui/button/PrimaryBtn/PrimaryBtn";
 import SpinnerForPage from "../../components/ui/loader/SpinnerForPage/SpinnerForPage";
 import { setSignOutUser } from "../../features/authSlice";
 import { setUserData } from "../../features/userSlice";
+import { useConfirmation } from "../../hooks/useConfirmation";
+import useNotification from "../../hooks/useNotification";
 import {
   useBringUserByIdQuery,
   useDeleteUserMutation,
@@ -28,6 +27,7 @@ function Profile() {
   const { data, isLoading, isError, error } = useBringUserByIdQuery(user?.id);
   const [doNotify, setDoNotify] = useState(false);
   const [isChanging, setIsChanging] = useState(false);
+  const showNotification = useNotification();
 
   const [
     updateUser,
@@ -92,29 +92,30 @@ function Profile() {
         isErrorUpdate ||
         [400, 404, 500].includes(updatedUser?.error?.status)
       ) {
-        Swal.fire({
-          title: "Something went wrong",
-          text:
+        showNotification({
+          title: "Something went wrong!",
+          message:
             updatedUser?.error?.data?.message || "An unexpected error occurred",
-          icon: "error",
-          confirmButtonText: "ok",
+          iconType: "error",
+          duration: 4000,
         });
       } else {
         dispatch(setUserData(updatedUser?.data?.user));
-        Swal.fire({
-          title: updatedUser?.data?.message || "Update successful",
-          icon: "success",
-          confirmButtonText: "ok",
+        showNotification({
+          title: "Update successful!",
+          message: updatedUser?.data?.message || "",
+          iconType: "success",
+          duration: 4000,
         });
         setIsChanging(false);
       }
     } catch (error) {
       console.error("Error updating basic info:", error);
-      Swal.fire({
+      showNotification({
         title: "Something went wrong",
-        text: "An unexpected error occurred",
-        icon: "error",
-        confirmButtonText: "ok",
+        message: error.message || "An unexpected error occurred",
+        iconType: "error",
+        duration: 4000,
       });
     }
   };
@@ -205,28 +206,29 @@ export default Profile;
 
 // profile image component
 function ProfileImage({ profilePicture, isChanging, onProfilePicChange }) {
+  const showNotification = useNotification();
   const handleProfilePicChange = async (event) => {
     const file = event.target.files?.[0];
     if (!file) return;
 
     const validImageTypes = ["image/png", "image/jpg", "image/jpeg"];
     if (!validImageTypes.includes(file.type)) {
-      Swal.fire({
+      showNotification({
         title: "Invalid File Type",
-        text: "Please upload a valid image file (PNG or JPEG).",
-        icon: "error",
-        confirmButtonText: "OK",
+        message: "Please upload a valid image file (PNG, JPG or JPEG).",
+        iconType: "error",
+        duration: 4000,
       });
       return;
     }
 
     const maxSizeKB = 300;
     if (file.size > maxSizeKB * 1024) {
-      Swal.fire({
+      showNotification({
         title: "File Too Large",
-        text: `File size must be less than ${maxSizeKB}KB.`,
-        icon: "error",
-        confirmButtonText: "OK",
+        message: `File size must be less than ${maxSizeKB}KB.`,
+        iconType: "error",
+        duration: 4000,
       });
       return;
     }
@@ -256,11 +258,11 @@ function ProfileImage({ profilePicture, isChanging, onProfilePicChange }) {
       onProfilePicChange(resData.secure_url);
     } catch (error) {
       console.error("Error uploading image:", error);
-      Swal.fire({
+      showNotification({
         title: "Upload Failed",
-        text: error.message || "An unexpected error occurred.",
-        icon: "error",
-        confirmButtonText: "OK",
+        message: error.message || "An unexpected error occurred",
+        iconType: "error",
+        duration: 4000,
       });
     }
   };
@@ -428,6 +430,7 @@ function ChangePasswordForm({ setIsChanging }) {
     retypePass: "",
     retypePassError: "",
   });
+  const showNotification = useNotification();
 
   const handlePassChangeClick = async (e) => {
     e.preventDefault();
@@ -469,20 +472,21 @@ function ChangePasswordForm({ setIsChanging }) {
       });
 
       if (res?.data) {
-        Swal.fire({
-          title: res?.data?.message || "Update successful",
-          icon: "success",
-          confirmButtonText: "ok",
+        showNotification({
+          title: "Update successful",
+          message: res?.data?.message || "Your password has been updated!",
+          iconType: "success",
+          duration: 4000,
         });
         setIsChanging(false);
       }
     } catch (error) {
       console.log(error);
-      Swal.fire({
+      showNotification({
         title: "Something went wrong",
-        text: "An unexpected error occurred",
-        icon: "error",
-        confirmButtonText: "ok",
+        message: error.message || "An unexpected error occurred",
+        iconType: "error",
+        duration: 4000,
       });
     }
   };
@@ -557,6 +561,7 @@ function DeleteAccount() {
   const dispatch = useDispatch();
   const [deleteUser, { isLoading, isError, error }] = useDeleteUserMutation();
   const { confirm, confirmationProps } = useConfirmation();
+  const showNotification = useNotification();
 
   const handleDeleteAccount = async () => {
     console.log("del click");
@@ -580,19 +585,21 @@ function DeleteAccount() {
         dispatch(setUserData({}));
         dispatch(setSignOutUser());
         localStorage.removeItem("access-token");
-        Swal.fire({
-          title: res?.data?.message || "Account has been deleted successfully",
-          icon: "success",
-          confirmButtonText: "ok",
+        showNotification({
+          title: "See you in hell!",
+          message:
+            res?.data?.message || "Account has been deleted successfully",
+          iconType: "success",
+          duration: 6000,
         });
       }
     } catch (error) {
       console.error("Error on account deletion:", error);
-      Swal.fire({
+      showNotification({
         title: "Something went wrong",
-        text: "An unexpected error occurred",
-        icon: "error",
-        confirmButtonText: "ok",
+        message: error.message || "An unexpected error occurred",
+        iconType: "error",
+        duration: 4000,
       });
     }
   };
