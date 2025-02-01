@@ -3,24 +3,21 @@ import { createPortal } from "react-dom";
 import { BiMessageAltError } from "react-icons/bi";
 import { IoClose } from "react-icons/io5";
 import { LuCircleCheckBig, LuMessageSquareWarning } from "react-icons/lu";
+import { useDispatch, useSelector } from "react-redux";
+import { removeNotification } from "../../features/notificationSlice";
 import styles from "./Notification.module.css";
 
 const Notification = ({
-  title,
-  message,
+  id,
+  icon = null,
+  title = "",
+  message = "",
   iconType = "warning",
-  isOpen,
   onClose,
   duration = 4000,
-  icon, // New prop for custom icons
 }) => {
-  const [visible, setVisible] = useState(isOpen);
+  const [visible, setVisible] = useState(true);
   const [progress, setProgress] = useState(100);
-
-  const handleClose = () => {
-    setVisible(false);
-    onClose();
-  };
 
   useEffect(() => {
     let timeout;
@@ -44,10 +41,10 @@ const Notification = ({
     };
   }, [visible, duration]);
 
-  useEffect(() => {
-    setVisible(isOpen);
-    if (isOpen) setProgress(100);
-  }, [isOpen]);
+  const handleClose = () => {
+    setVisible(false);
+    onClose(id);
+  };
 
   const defaultIcons = {
     error: <BiMessageAltError className={styles.error} />,
@@ -82,4 +79,25 @@ const Notification = ({
   );
 };
 
-export default Notification;
+const NotificationContainer = () => {
+  const notifications = useSelector((state) => state.notification);
+  const dispatch = useDispatch();
+
+  const handleClose = (id) => {
+    dispatch(removeNotification(id));
+  };
+
+  return (
+    <>
+      {notifications.map((notification) => (
+        <Notification
+          key={notification.id}
+          {...notification}
+          onClose={handleClose}
+        />
+      ))}
+    </>
+  );
+};
+
+export default NotificationContainer;
