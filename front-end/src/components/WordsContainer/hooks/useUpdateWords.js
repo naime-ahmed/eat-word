@@ -1,14 +1,13 @@
-import { useRef, useState } from "react";
+import { useRef } from "react";
+import useNotification from "../../../hooks/useNotification";
 import {
   useAppendWordMutation,
   useEditWordMutation,
 } from "../../../services/word";
 
 export const useUpdateWords = () => {
-  const [updateError, setUpdateError] = useState("");
-  const [doNotify, setDoNotify] = useState(false);
   const newWordsSet = useRef(new Set());
-
+  const showNotification = useNotification();
   const [appendWord] = useAppendWordMutation();
   const [editWord] = useEditWordMutation();
 
@@ -33,21 +32,25 @@ export const useUpdateWords = () => {
 
     setWords((prev) => {
       // Ensure `prev` is defined and is an array
-      console.log("track dup set",newWordsSet.current);
+      console.log("track dup set", newWordsSet.current);
       if (!Array.isArray(prev)) {
         console.error("Invalid `words` state:", prev);
         return prev || [];
       }
 
       // handle duplicate word
-      if(columnId === "word"){
-      for(const word of prev){
-        if(word["word"] === value){
-          setDoNotify(true);
-          setUpdateError(`${value} already existing in the milestone!`);
-          return prev;
+      if (columnId === "word") {
+        for (const word of prev) {
+          if (word["word"] === value) {
+            showNotification({
+              title: "Failed to save",
+              message: `${value} already existing in the milestone!`,
+              duration: 4000,
+            });
+            return prev;
+          }
         }
-      }}
+      }
 
       // Create a copy of the previous state
       const updatedWords = prev.map((row, index) =>
@@ -66,8 +69,11 @@ export const useUpdateWords = () => {
       // If the word is new (no _id), append it to the server
       if (!wordToUpdate._id) {
         if (wordToUpdate.word === "") {
-          setDoNotify(true);
-          setUpdateError("word is required! fill the word.");
+          showNotification({
+            title: "Failed to save",
+            message: "word is required! fill the word.",
+            duration: 4000,
+          });
           return prev;
         }
 
@@ -75,13 +81,20 @@ export const useUpdateWords = () => {
         if (newWordsSet.current.has(value)) return prev;
         newWordsSet.current.add(value);
 
-        appendWord(wordToUpdate).then(() => {
-          newWordsSet.current.delete(value);
-        }).catch((error) => {
-          setDoNotify(true);
-          setUpdateError(error?.message || "something went wrong while updating word");
-          newWordsSet.current.delete(value);
-        });
+        appendWord(wordToUpdate)
+          .then(() => {
+            newWordsSet.current.delete(value);
+          })
+          .catch((error) => {
+            showNotification({
+              title: "Failed to save",
+              message:
+                error?.message || "something went wrong while updating word",
+              iconType: "error",
+              duration: 4000,
+            });
+            newWordsSet.current.delete(value);
+          });
       } else {
         // If the word exists, update it on the server
         editWord({
@@ -89,8 +102,13 @@ export const useUpdateWords = () => {
           milestoneId,
           updates: { [columnId]: value },
         }).catch((error) => {
-          setDoNotify(true);
-          setUpdateError(error?.message || "something went wrong while updating word");
+          showNotification({
+            title: "Failed to save",
+            message:
+              error?.message || "something went wrong while updating word",
+            iconType: "error",
+            duration: 4000,
+          });
         });
       }
 
@@ -98,5 +116,5 @@ export const useUpdateWords = () => {
     });
   };
 
-  return { updateWords, updateError, doNotify, setDoNotify };
+  return { updateWords };
 };
