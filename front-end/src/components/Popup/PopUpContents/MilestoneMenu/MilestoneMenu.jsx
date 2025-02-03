@@ -2,29 +2,23 @@ import { useState } from "react";
 import { BsPinAngle, BsPinAngleFill } from "react-icons/bs";
 import { LiaEditSolid } from "react-icons/lia";
 import { MdOutlineDeleteOutline } from "react-icons/md";
+import { useConfirmation } from "../../../../hooks/useConfirmation";
+import useNotification from "../../../../hooks/useNotification";
 import {
   useEditMilestoneMutation,
   useRemoveMilestoneMutation,
 } from "../../../../services/milestone";
 import Notification from "../../../Notification/Notification";
+import ConfirmationPopup from "../../../Popup/ConfirmationPopup/ConfirmationPopup";
 import Popup from "../../Popup";
 import EditMilestone from "../EditMilestone/EditMilestone";
 import styles from "./MilestoneMenu.module.css";
-import { useConfirmation } from "../../../../components/Popup/ConfirmationPopup/ConfirmationPopup";
-import ConfirmationPopup from "../../../Popup/ConfirmationPopup/ConfirmationPopup";
 const MilestoneMenu = ({ milestone, onMenuClose }) => {
-  const [isDoNotify, setIsDoNotify] = useState(false);
-  const [doNotifyTitle, setDoNotifyTitle] = useState("");
-  const [doNotifyMessage, setDoNotifyMessage] = useState("");
   const [doWantEdit, setDoWantEdit] = useState(false);
   const [removeMilestone] = useRemoveMilestoneMutation();
   const [editMilestone] = useEditMilestoneMutation();
   const { confirm, confirmationProps } = useConfirmation();
-
-  // handle do notify close
-  const handleDoNotifyClose = () => {
-    setIsDoNotify(false);
-  };
+  const showNotification = useNotification();
 
   // handle edit milestone popup
   const handleOpenEdit = () => {
@@ -69,14 +63,14 @@ const MilestoneMenu = ({ milestone, onMenuClose }) => {
       onMenuClose();
     } catch (error) {
       // show the error to user
-      setDoNotifyTitle("Deletion failed");
-      setDoNotifyMessage(error?.data?.message || "Milestone has been deleted");
-      <Notification
-        title={doNotifyTitle}
-        message={doNotifyMessage}
-        isOpen={isDoNotify}
-        onClose={handleDoNotifyClose}
-      />;
+      showNotification({
+        title: "Failed to delete",
+        message:
+          error?.data?.message ||
+          `Something went wrong while deleting ${milestone?.name}`,
+        iconType: "error",
+        duration: 4000,
+      });
     }
   };
   return (
