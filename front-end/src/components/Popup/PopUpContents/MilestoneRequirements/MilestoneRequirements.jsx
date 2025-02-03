@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useSelector } from "react-redux";
+import useNotification from "../../../../hooks/useNotification.js";
 import { useAddMilestoneMutation } from "../../../../services/milestone.js";
-import Notification from "../../../Notification/Notification.jsx";
 import PrimaryBtn from "../../../ui/button/PrimaryBtn/PrimaryBtn.jsx";
 import styles from "./MilestoneRequirements.module.css";
 
@@ -13,8 +13,7 @@ const MilestoneRequirements = ({ handleViewMilestone, onClose }) => {
     learnSynonyms: false,
     includeDefinition: false,
   });
-  const [doNotify, setDoNotify] = useState(false);
-
+  const showNotification = useNotification();
   const { user } = useSelector((user) => user.auth);
 
   const [addMilestone, { isLoading, isError, error }] =
@@ -27,10 +26,6 @@ const MilestoneRequirements = ({ handleViewMilestone, onClose }) => {
         ? event.target.checked
         : event.target.value;
     setNewWeekFormData({ ...newWeekFormData, [name]: value });
-  };
-
-  const handleNotificationClose = () => {
-    setDoNotify(false);
   };
 
   const handleSubmit = async (event) => {
@@ -58,10 +53,15 @@ const MilestoneRequirements = ({ handleViewMilestone, onClose }) => {
       });
       handleViewMilestone(newWeekFormData.milestoneType);
       localStorage.setItem("selectedMS", newWeekFormData.milestoneType);
-      setDoNotify(false);
+
       onClose();
     } catch (error) {
-      setDoNotify(true);
+      showNotification({
+        title: "Request failed",
+        message: "An error occurred while creating new challenge!",
+        iconType: "error",
+        duration: 4000,
+      });
       console.log("error on append new challenge", error);
     }
   };
@@ -153,17 +153,6 @@ const MilestoneRequirements = ({ handleViewMilestone, onClose }) => {
           </PrimaryBtn>
         </div>
       </form>
-      {doNotify && (
-        <Notification
-          title="Request failed"
-          message={
-            error?.data?.message ||
-            "An error occurred while creating new challenge!"
-          }
-          isOpen={doNotify}
-          onClose={handleNotificationClose}
-        />
-      )}
     </div>
   );
 };
