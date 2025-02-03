@@ -149,6 +149,11 @@
 }
 
 .blurOverlay {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 15px;
+  color: #b8d7ffd2;
   position: absolute;
   top: 0;
   left: 0;
