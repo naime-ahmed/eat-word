@@ -1,76 +1,79 @@
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
-import Swal from "sweetalert2";
 import defaultUserProfileImage from "../../../../assets/defaultUserProfileImage.png";
 import { setSignOutUser } from "../../../../features/authSlice";
+import { useConfirmation } from "../../../../hooks/useConfirmation";
 import { useSignOutUserMutation } from "../../../../services/auth";
+
+import useNotification from "../../../../hooks/useNotification";
 import FancyBtn from "../../../ui/button/FancyBtn/FancyBtn";
+import ConfirmationPopup from "../../ConfirmationPopup/ConfirmationPopup";
 import styles from "./UserProfile.module.css";
 
 const UserProfile = ({ onClose }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const showNotification = useNotification();
+  const { confirm, confirmationProps } = useConfirmation();
 
   const [signOutUser, { isLoading }] = useSignOutUserMutation();
   const { user } = useSelector((state) => state.user);
 
   const handleSignOut = async () => {
     try {
-      // Wait for the Swal result
-      const warningResult = await Swal.fire({
+      // Ask for the confirmation
+      const warningResult = await confirm({
         title: "Are you sure?",
-        text: "You will be signed out if you press yes!",
-        icon: "warning",
-        showCancelButton: true,
-        confirmButtonColor: "#d33",
-        cancelButtonColor: "#3085d6",
-        confirmButtonText: "Yes, sign out",
+        message: "You will be logged out of your account.",
+        confirmText: "Yes, Log Out",
+        cancelText: "Cancel",
+        confirmColor: "#d33",
+        cancelColor: "#3085d6",
       });
-
-      // console.log(warningResult);
-
-      // Check if the user confirmed the sign-out
-      if (!warningResult.isConfirmed) {
+      if (warningResult !== true) {
         return;
       }
 
       // Perform sign-out logic
-      const result = await signOutUser();
+      await signOutUser();
+
+      // Redirect to home page
+      navigate("/");
 
       // Update auth state
       dispatch(setSignOutUser());
 
-      console.log(result);
       // Clear local storage
       localStorage.removeItem("access-token");
 
       // Confirm the user has been signed out
-      Swal.fire({
-        title: result.data?.message,
-        icon: "success",
-        confirmButtonText: "Got it",
+      showNotification({
+        title: "Sign out successful",
+        message: "You have been logged out successfully.",
+        iconType: "success",
+        duration: 4000,
       });
 
-      // Redirect to home page
-      navigate("/");
+      onClose();
     } catch (error) {
       console.log("Error during sign out:", error);
 
       // Show error message to the user
-      Swal.fire({
+      showNotification({
         title: "Unable to sign out",
-        text:
+        message:
           error.data?.message ||
           error.message ||
           "An unexpected error occurred",
-        icon: "error",
-        confirmButtonText: "Ok",
+        iconType: "error",
+        duration: 4000,
       });
     }
   };
 
   return (
     <div className={styles.userProfile}>
+      <ConfirmationPopup {...confirmationProps} />
       <div className={styles.profilePicture}>
         <img
           src={user?.profilePicture || defaultUserProfileImage}
@@ -96,7 +99,7 @@ const UserProfile = ({ onClose }) => {
           <li onClick={onClose}>
             <Link to="/my-space"> My Space</Link>
           </li>
-          <li onClick={onClose}>
+          <li>
             <i className="fas fa-sign-out-alt"></i>{" "}
             <span onClick={handleSignOut}>
               {isLoading ? "sign outing..." : "sign out"}
