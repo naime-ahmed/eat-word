@@ -55,7 +55,6 @@ const TableRow = ({ row, rowHeights, updateRowHeight }) => {
               curWord={row?.original}
               onClose={handleOneClose}
               rowIdx={row?.index}
-              rowHeights={rowHeights}
               updateRowHeight={updateRowHeight}
             />
           </Popup>
