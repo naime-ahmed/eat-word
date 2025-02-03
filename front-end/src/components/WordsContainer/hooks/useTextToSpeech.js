@@ -1,11 +1,11 @@
 import { useState } from "react";
+import useNotification from "../../../hooks/useNotification";
 
 export const useTextToSpeech = () => {
   // state for text to speech
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [utteranceRate, setUtteranceRate] = useState(0.5);
-  const [speechError, setSpeechError] = useState(null);
-  const [notifySpeechError, setNotifySpeechError] = useState(false);
+  const showNotification = useNotification();
 
   const speckText = (text) => {
     if ("speechSynthesis" in window) {
@@ -25,18 +25,30 @@ export const useTextToSpeech = () => {
 
       // event listener for error
       utterance.onerror = (e) => {
-        setNotifySpeechError(true);
         switch (e.error) {
           case "language-not-supported":
-            setSpeechError("The selected language is not supported");
+            showNotification({
+              title: "Unsupported Langue",
+              message: "The selected language is not supported",
+              iconType: "error",
+              duration: 3000,
+            });
             break;
           case "language-unavailable":
-            setSpeechError("The selected language is unavailable");
+            showNotification({
+              title: "Langue unavailable",
+              message: "The selected language is unavailable",
+              iconType: "error",
+              duration: 3000,
+            });
             break;
           default:
-            setSpeechError(
-              "An error occurred while trying to speak this text."
-            );
+            showNotification({
+              title: "Failed to recite",
+              message: "An error occurred while trying to speak this text.",
+              iconType: "error",
+              duration: 3000,
+            });
         }
         setIsSpeaking(false);
       };
@@ -47,10 +59,17 @@ export const useTextToSpeech = () => {
         setIsSpeaking(false);
       };
     } else {
-      setNotifySpeechError(true);
-      setSpeechError("Your browser does not support text-to-speech.");
+      showNotification({
+        title: "Failed to recite",
+        message: "Your browser does not support text-to-speech.",
+        iconType: "error",
+        duration: 3000,
+      });
     }
   };
 
-  return { speckText, isSpeaking, speechError, notifySpeechError, setNotifySpeechError };
+  return {
+    speckText,
+    isSpeaking,
+  };
 };
