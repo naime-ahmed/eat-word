@@ -1,0 +1,219 @@
+/* Existing styles */
+.introContainer {
+  width: 1250px;
+  margin-bottom: 150px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.introWrapper {
+  max-width: 1200px;
+  padding: 8px;
+  background-color: rgba(58, 55, 165, 0.322);
+  border: 2px solid rgba(58, 55, 165, 0.822);
+  border-radius: 12px;
+  overflow: hidden;
+  position: relative;
+}
+
+.introImage {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.introImage img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 8px;
+  transition: transform 0.3s ease;
+}
+
+.imageOverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(26, 24, 88, 0.1);
+  z-index: 1;
+  transition: background-color 0.3s ease;
+}
+
+/* Play button styles */
+.playButtonContainer {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 2;
+}
+
+.playButton {
+  background: rgba(255, 255, 255, 0.9);
+  border: 2px solid rgba(58, 55, 165, 0.8);
+  border-radius: 50%;
+  width: 80px;
+  height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 8px 25px rgba(58, 55, 165, 0.3);
+  position: relative;
+  overflow: visible;
+}
+
+.playButton:hover {
+  transform: scale(1.1);
+  background: rgba(255, 255, 255, 1);
+  box-shadow: 0 12px 35px rgba(58, 55, 165, 0.4);
+}
+
+.playButton::before,
+.playButton::after {
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  pointer-events: none;
+  animation: ripple 1.5s infinite;
+}
+
+.playButton::before {
+  border: 2px solid rgba(58, 55, 165, 0.6);
+}
+
+.playButton::after {
+  border: 2px solid rgba(58, 55, 165, 0.6);
+  animation-delay: 0.5s;
+}
+
+.playButton:hover::before,
+.playButton:hover::after {
+  animation-play-state: paused;
+  border: none;
+}
+
+.playIcon {
+  color: rgba(58, 55, 165, 1);
+  font-size: 28px;
+  padding-left: 5px;
+}
+
+@keyframes ripple {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1.8);
+    opacity: 0;
+  }
+}
+
+.videoContainer {
+  width: 100%;
+  max-width: 920px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 2px solid #ddd;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.videoContainer > video {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+  object-fit: cover;
+}
+
+/* CSS to make it responsive for all devices */
+@media (max-width: 399.98px) {
+  .introContainer {
+    max-width: 330px;
+  }
+  .playButton {
+    width: 40px;
+    height: 40px;
+  }
+  .playIcon {
+    font-size: 18px;
+  }
+  .videoContainer {
+    max-width: 300px;
+    padding: 6px;
+  }
+}
+
+@media (max-width: 599.98px) {
+  .introContainer {
+    max-width: 350px;
+  }
+  .playButton {
+    width: 60px;
+    height: 60px;
+  }
+  .playIcon {
+    font-size: 20px;
+  }
+  .videoContainer {
+    max-width: 320px;
+    padding: 10px;
+  }
+}
+/* Small Devices (tablets) - 576px to 767px wide: */
+@media (min-width: 600px) and (max-width: 767.98px) {
+  .introContainer {
+    max-width: 550px;
+  }
+  .playButton {
+    width: 70px;
+    height: 70px;
+  }
+  .playIcon {
+    font-size: 24px;
+  }
+  .videoContainer {
+    max-width: 520px;
+    padding: 15px;
+  }
+}
+
+/* Medium Devices (laptops) - 768px to 991px wide: */
+@media (min-width: 768px) and (max-width: 999.98px) {
+  .introContainer {
+    max-width: 700px;
+  }
+  .videoContainer {
+    max-width: 800px;
+  }
+}
+@media (min-width: 1000px) and (max-width: 1199.98px) {
+  .introContainer {
+    max-width: 900px;
+  }
+  .videoContainer {
+    max-width: 900px;
+  }
+}
+/* Large Devices (desktops) - 1000px to 1199px wide: */
+@media (min-width: 1200px) and (max-width: 1399.98px) {
+  .introContainer {
+    max-width: 1050px;
+  }
+  .videoContainer {
+    max-width: 920px;
+  }
+}
