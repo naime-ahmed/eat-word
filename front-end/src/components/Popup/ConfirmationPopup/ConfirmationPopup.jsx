@@ -18,7 +18,7 @@ const ConfirmationPopup = ({
       onClose={onCancel}
       closeOnOutsideClick={false}
       showCloseButton={true}
-      popupType="dialog"
+      popupType="modal"
     >
       <div className={styles.confirmationContent}>
         <h3 className={styles.confirmationTitle}>{title}</h3>
