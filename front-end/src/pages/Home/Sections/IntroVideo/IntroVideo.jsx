@@ -32,7 +32,7 @@ const IntroVideo = () => {
           <Popup
             isOpen={isPresentVideo}
             onClose={handleIsPresentVideoClose}
-            popupType="modal"
+            popupType="dialog"
           >
             <div className={styles.videoContainer}>
               <video src={placeholderVideo} autoPlay controls>
