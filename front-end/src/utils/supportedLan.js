@@ -1,0 +1,17 @@
+export const LANGUAGE_MAP = () => ({
+  en: "English",
+  bn: "Bengali",
+  ja: "Japanese",
+  es: "Spanish",
+  zh: "Mandarin",
+  hi: "Hindi",
+  fr: "French",
+  ar: "Arabic",
+  ru: "Russian",
+  pt: "Portuguese",
+  de: "German",
+  ko: "Korean",
+  it: "Italian",
+  tr: "Turkish",
+  vi: "Vietnamese",
+});
