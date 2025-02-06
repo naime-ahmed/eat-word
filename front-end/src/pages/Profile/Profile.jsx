@@ -2,12 +2,12 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import defaultProfilePic from "../../assets/defaultUserProfileImage.png";
-import Notification from "../../components/Notification/Notification";
 import ConfirmationPopup from "../../components/Popup/ConfirmationPopup/ConfirmationPopup";
 import Error from "../../components/shared/Error/Error";
 import Footer from "../../components/shared/Footer/Footer";
 import Header from "../../components/shared/Header/Header";
 import PrimaryBtn from "../../components/ui/button/PrimaryBtn/PrimaryBtn";
+import LanguageSearch from "../../components/ui/input/LanguageSearch/LanguageSearch";
 import SpinnerForPage from "../../components/ui/loader/SpinnerForPage/SpinnerForPage";
 import { setSignOutUser } from "../../features/authSlice";
 import { setUserData } from "../../features/userSlice";
@@ -19,13 +19,13 @@ import {
   useUpdatePasswordMutation,
   useUpdateUserMutation,
 } from "../../services/user";
+import { LANGUAGE_MAP } from "../../utils/supportedLan";
 import styles from "./Profile.module.css";
 
 function Profile() {
   const { user } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
   const { data, isLoading, isError, error } = useBringUserByIdQuery(user?.id);
-  const [doNotify, setDoNotify] = useState(false);
   const [isChanging, setIsChanging] = useState(false);
   const showNotification = useNotification();
 
@@ -39,24 +39,44 @@ function Profile() {
     name: "",
     email: "",
     profilePicture: "",
-    preferredLang: "",
-    preferredDevice: "",
+    preferences: {
+      language: "",
+      device: "",
+    },
   });
 
+  // Update useEffect
   useEffect(() => {
     if (userData) {
       setBasicInfo({
         name: userData.name || "",
         email: userData.email || "",
         profilePicture: userData.profilePicture || "",
-        preferredLang: userData.preferredLang || "",
-        preferredDevice: userData.preferredDevice || "",
+        preferences: {
+          language: userData.preferences?.language || "",
+          device: userData.preferences?.device || "",
+        },
       });
     }
   }, [userData]);
 
+  console.log("basic info", basicInfo);
+
   const handleBasicInfoChange = (name, value) => {
-    setBasicInfo((prev) => ({ ...prev, [name]: value }));
+    console.log("on change value", value);
+    if (name.startsWith("preferences.")) {
+      const [parent, child] = name.split(".");
+      console.log("preference filed:", parent, child, value);
+      setBasicInfo((prev) => ({
+        ...prev,
+        [parent]: {
+          ...prev[parent],
+          [child]: value,
+        },
+      }));
+    } else {
+      setBasicInfo((prev) => ({ ...prev, [name]: value }));
+    }
   };
 
   const handleProfilePicChange = (newProfilePic) => {
@@ -65,28 +85,47 @@ function Profile() {
 
   const handleBasicInfoChangeClick = async () => {
     try {
-      setDoNotify(false);
-      const changedBasicInfo = {};
+      const changedBasicInfo = {
+        preferences: {},
+      };
+
+      // Name
       if (userData?.name !== basicInfo?.name) {
-        changedBasicInfo.name = basicInfo?.name;
+        changedBasicInfo.name = basicInfo.name;
       }
+
+      // Profile Picture
       if (userData?.profilePicture !== basicInfo?.profilePicture) {
-        changedBasicInfo.profilePicture = basicInfo?.profilePicture;
+        changedBasicInfo.profilePicture = basicInfo.profilePicture;
       }
-      if (userData?.preferredLang !== basicInfo?.preferredLang) {
-        changedBasicInfo.preferredLang = basicInfo?.preferredLang;
+
+      // Language
+      if (userData?.preferences?.language !== basicInfo.preferences?.language) {
+        changedBasicInfo.preferences.language = basicInfo.preferences.language;
       }
-      if (userData?.preferredDevice !== basicInfo?.preferredDevice) {
-        changedBasicInfo.preferredDevice = basicInfo?.preferredDevice;
+
+      // Device
+      if (userData?.preferences?.device !== basicInfo.preferences?.device) {
+        changedBasicInfo.preferences.device = basicInfo.preferences.device;
+      }
+
+      // Clean empty preferences object
+      if (Object.keys(changedBasicInfo.preferences).length === 0) {
+        delete changedBasicInfo.preferences;
       }
 
       if (Object.keys(changedBasicInfo).length === 0) {
         console.log("No changes detected, skipping server update.");
-        setDoNotify(true);
+        showNotification({
+          title: "No changes detected",
+          message: "",
+          duration: 4000,
+        });
         return;
       }
+      console.log("sending new user data", changedBasicInfo);
 
-      const updatedUser = await updateUser(changedBasicInfo);
+      const updatedUser = await updateUser(changedBasicInfo).unwrap();
 
       if (
         isErrorUpdate ||
@@ -95,15 +134,15 @@ function Profile() {
         showNotification({
           title: "Something went wrong!",
           message:
-            updatedUser?.error?.data?.message || "An unexpected error occurred",
+            updatedUser?.error?.message || "An unexpected error occurred",
           iconType: "error",
           duration: 4000,
         });
       } else {
-        dispatch(setUserData(updatedUser?.data?.user));
+        dispatch(setUserData(updatedUser?.user));
         showNotification({
           title: "Update successful!",
-          message: updatedUser?.data?.message || "",
+          message: updatedUser?.message || "",
           iconType: "success",
           duration: 4000,
         });
@@ -177,14 +216,6 @@ function Profile() {
                   >
                     Save changes
                   </PrimaryBtn>
-                  {doNotify && (
-                    <Notification
-                      title="Nothing to Edit!"
-                      message="You did not change anything!"
-                      isOpen={doNotify}
-                      onClose={() => setDoNotify(false)}
-                    />
-                  )}
                 </div>
               )}
               {isChanging && userData?.authProvider === "local" && (
@@ -336,51 +367,28 @@ function NameAndEmail({ isChanging, basicInfo, onBasicInfoChange }) {
 
 // This component responsible for preferred settings
 function PreferredSettings({ isChanging, basicInfo, onBasicInfoChange }) {
-  const handleBasicInfoChange = (event) => {
-    const { name, value } = event.target;
-    onBasicInfoChange(name, value); // Notify parent of the change
+  // console.log(LANGUAGE_MAP[basicInfo?.preferences?.language]);
+  const handleSelectLanguage = (languageCode) => {
+    // For example, update your state or call a handler:
+    onBasicInfoChange("preferences.language", languageCode);
   };
+  const language_map = LANGUAGE_MAP();
 
   return (
     <div className={isChanging ? styles.preferredEdit : styles.preferredShow}>
       {isChanging ? (
         <div>
-          <input
-            list="languages"
-            name="preferredLang"
-            onChange={handleBasicInfoChange}
-            value={basicInfo?.preferredLang || ""}
-            className={styles.inputField}
-            placeholder="What’s your comfortable language?"
+          <LanguageSearch
+            onSelectLanguage={handleSelectLanguage}
+            curLang={language_map[[basicInfo?.preferences?.language]] || ""}
           />
-          <datalist id="languages">
-            {[
-              "English",
-              "Spanish",
-              "Mandarin",
-              "Hindi",
-              "French",
-              "Arabic",
-              "Bengali",
-              "Russian",
-              "Portuguese",
-              "Japanese",
-              "German",
-              "Korean",
-              "Italian",
-              "Turkish",
-              "Vietnamese",
-            ].map((lang) => (
-              <option key={lang} value={lang} />
-            ))}
-          </datalist>
         </div>
       ) : (
         <div>
           <p>Your language:</p>
           <p>
-            {basicInfo?.preferredLang
-              ? basicInfo?.preferredLang
+            {basicInfo?.preferences.language
+              ? language_map[[basicInfo?.preferences?.language]]
               : "You haven't given yet"}
           </p>
         </div>
@@ -389,24 +397,25 @@ function PreferredSettings({ isChanging, basicInfo, onBasicInfoChange }) {
         {isChanging ? (
           <select
             name="preferredDevice"
-            onChange={handleBasicInfoChange}
-            value={basicInfo?.preferredDevice || ""}
+            onChange={(e) =>
+              onBasicInfoChange("preferences.device", e.target.value)
+            }
+            value={basicInfo?.preferences.device || ""}
             className={styles.selectField}
           >
             <option value="" disabled>
               what device you will use often?
             </option>
-            <option value="phone">Phone</option>
+            <option value="mobile">Mobile</option>
             <option value="tablet">Tablet</option>
-            <option value="laptop">Laptop</option>
-            <option value="pc">PC</option>
+            <option value="desktop">Desktop</option>
           </select>
         ) : (
           <div>
             <p>preferred device:</p>
             <p>
-              {basicInfo?.preferredDevice
-                ? basicInfo?.preferredDevice
+              {basicInfo?.preferences.device
+                ? basicInfo?.preferences.device
                 : "you haven't selected yet"}
             </p>
           </div>
