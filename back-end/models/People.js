@@ -1,40 +1,38 @@
 import mongoose from "mongoose";
 
-// Define default usage limits for each subscription type
 const USAGE_LIMITS = {
-  regular: {
-    apiCalls: 1000,
-    storage: 1024, // in MB
-  },
-  premium: {
-    apiCalls: 5000,
-    storage: 5120, // in MB
-  },
-  elite: {
-    apiCalls: 10000,
-    storage: 10240, // in MB
-  },
+  regular: { apiCalls: 1000, storage: 1024 },
+  premium: { apiCalls: 5000, storage: 5120 },
+  elite: { apiCalls: 10000, storage: 10240 },
 };
 
-const peopleSchema = mongoose.Schema(
+const LANGUAGE_CODES = ["en", "bn", "es","zh", "hi", "ar", "ru", "pt", "ko", "tr", "vi", "fr", "de", "it", "ja"]; // ISO 639-1 codes
+
+const peopleSchema = new mongoose.Schema(
   {
     name: {
       type: String,
-      required: true,
+      required: [true, "Name is required"],
       trim: true,
+      maxLength: [50, "Name cannot exceed 50 characters"],
     },
     email: {
       type: String,
-      required: true,
+      required: [true, "Email is required"],
+      unique: true,
       trim: true,
       lowercase: true,
-      unique: true,
+      validate: {
+        validator: (v) => /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/.test(v),
+        message: "Invalid email format",
+      },
     },
     password: {
       type: String,
       required: function () {
-        return this.authProvider !== "google";
+        return this.authProvider === "local";
       },
+      select: false,
     },
     authProvider: {
       type: String,
@@ -45,77 +43,120 @@ const peopleSchema = mongoose.Schema(
       type: String,
       enum: ["admin", "user"],
       default: "user",
+      immutable: true,
     },
     subscriptionType: {
       type: String,
       enum: ["regular", "premium", "elite"],
       default: "regular",
     },
-    subscriptionStartDate: {
-      type: Date,
-    },
-    subscriptionEndDate: {
-      type: Date,
+    subscriptionDates: {
+      start: {
+        type: Date,
+        validate: {
+          validator: function(v) {
+            return !this.subscriptionDates?.end || v < this.subscriptionDates.end;
+          },
+          message: "Start date must be before end date"
+        }
+      },
+      end: {
+        type: Date,
+        validate: {
+          validator: function(v) {
+            return !this.subscriptionDates?.start || v > this.subscriptionDates.start;
+          },
+          message: "End date must be after start date"
+        }
+      }
     },
     profilePicture: {
       type: String,
       default: "",
+      validate: {
+        validator: (v) => /^(https?|ftp):\/\/[^\s/$.?#].[^\s]*$/.test(v),
+        message: "Invalid URL format",
+      },
     },
-    preferredNotificationsType: {
+    notifications: {
       email: { type: Boolean, default: true },
       push: { type: Boolean, default: true },
     },
-    preferredLang: {
-      type: String,
-      default: "",
+    preferences: {
+      language: {
+        type: String,
+        enum: LANGUAGE_CODES,
+        default: "en",
+      },
+      device: {
+        type: String,
+        enum: ["desktop", "mobile", "tablet", "unspecified"],
+        default: "unspecified",
+      },
     },
-    preferredDevice: {
-      type: String,
-      default: "",
-    },
-    lastLogin: {
-      type: Date,
-    },
-    failedLoginAttempts: {
-      type: Number,
-      default: 0,
-    },
-    accountLocked: {
-      type: Boolean,
-      default: false,
+    security: {
+      lastLogin: Date,
+      failedAttempts: {
+        type: Number,
+        default: 0,
+        max: [5, "Maximum failed attempts reached"],
+      },
+      lockedUntil: Date,
     },
     signupSource: {
       type: String,
       enum: ["organic", "referral", "google", "facebook"],
       default: "organic",
     },
-    usageLimit: {
-      apiCalls: { type: Number, default: 1000 },
-      storage: { type: Number, default: 1024 }, // in MB
-    },
-    usageCurrent: {
-      apiCalls: { type: Number, default: 0 },
-      storage: { type: Number, default: 0 }, // in MB
+    usage: {
+      limit: {
+        apiCalls: Number,
+        storage: Number,
+      },
+      current: {
+        apiCalls: { type: Number, default: 0, min: 0 },
+        storage: { type: Number, default: 0, min: 0 },
+      },
     },
     status: {
       type: String,
-      enum: ["Active", "Suspended"],
-      default: "Active",
+      enum: ["active", "suspended", "locked"],
+      default: "active",
     },
   },
   {
     timestamps: true,
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true },
   }
 );
 
-// Pre-save middleware to set usage limits dynamically
+// Virtual for subscription status
+peopleSchema.virtual("isSubscriptionActive").get(function () {
+  if (!this.subscriptionDates || !this.subscriptionDates.end) return false;
+  return this.subscriptionDates.end > new Date();
+});
+
+// Indexes
+peopleSchema.index({ email: 1 });
+peopleSchema.index({ subscriptionType: 1, status: 1 });
+peopleSchema.index({ "security.lockedUntil": 1 });
+
+// Pre-save hooks
 peopleSchema.pre("save", function (next) {
-  // Treat admins as elite users
+  // Admin override logic
   if (this.role === "admin") {
     this.subscriptionType = "elite";
   }
 
-  this.usageLimit = USAGE_LIMITS[this.subscriptionType];
+  // Set usage limits
+  this.usage.limit = USAGE_LIMITS[this.subscriptionType];
+
+  // Auto-unlock account after 1 hour
+  if (this.security.failedAttempts >= 5) {
+    this.security.lockedUntil = new Date(Date.now() + 3600000);
+    this.status = "locked";
+  }
 
   next();
 });
