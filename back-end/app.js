@@ -13,6 +13,7 @@ import {
 import adminRouter from "./router/adminRouter.js";
 import authRouter from "./router/authRouter.js";
 import milestonesRouter from "./router/milestonesRouter.js";
+import testimonialRouter from './router/testimonialRouter.js';
 import usersRouter from "./router/usersRouter.js";
 import wordRouter from "./router/wordRouter.js";
 
@@ -51,6 +52,9 @@ app.use("/words", wordRouter);
 
 // handle admin request
 app.use("/admin", adminRouter);
+
+// handle testimonial request
+app.use("/testimonial", testimonialRouter);
 
 app.get("/", (req, res) => {
   res.send({
