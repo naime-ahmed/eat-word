@@ -7,18 +7,19 @@ import styles from "./Testimonials.module.css";
 const Testimonials = () => {
   const [testimonials, setTestimonials] = useState([]);
   useEffect(() => {
-    fetch("/DB/testimonials.json")
+    fetch(`${import.meta.env.VITE_EAT_WORD_BACKEND_URL}/testimonial`)
       .then((response) => response.json())
       .then((data) => {
-        setTestimonials(data);
+        setTestimonials(data?.testimonials);
       })
       .catch((error) => {
         console.log("Error fetching testimonials", error);
       });
   }, []);
 
-  const firstRow = testimonials.slice(0, testimonials.length / 2);
-  const secondRow = testimonials.slice(testimonials.length / 2);
+  console.log(testimonials);
+  const firstRow = testimonials?.slice(0, testimonials.length / 2);
+  const secondRow = testimonials?.slice(testimonials.length / 2);
 
   return (
     <div className={styles.container}>
@@ -34,12 +35,12 @@ const Testimonials = () => {
 
       <Marquee pauseOnHover>
         {firstRow.map((review) => (
-          <Testimonial key={review.username} {...review} />
+          <Testimonial key={review?._id} {...review} />
         ))}
       </Marquee>
       <Marquee reverse pauseOnHover>
         {secondRow.map((review) => (
-          <Testimonial key={review.username} {...review} />
+          <Testimonial key={review?._id} {...review} />
         ))}
       </Marquee>
       <div className={styles.gradientLeft} />
