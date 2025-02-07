@@ -1,6 +1,9 @@
-import { suspendUser } from "../controller/admin/suspendUserController";
-import { verifyAccessToken } from "../middlewares/validate/verifyAccessToken";
-import { verifyIsAdmin } from "../middlewares/validate/verifyIsAdmin";
+// external imports
+import express from "express";
+
+import { suspendUser } from "../controller/admin/suspendUserController.js";
+import { verifyAccessToken } from "../middlewares/validate/verifyAccessToken.js";
+import { verifyIsAdmin } from "../middlewares/validate/verifyIsAdmin.js";
 // external imports
 const router = express.Router();
 
