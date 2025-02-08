@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import MilestoneCard from "../../components/dynamicComponents/MilestoneCard/MilestoneCard";
+import MilestoneCard from "../../components/MilestoneCard/MilestoneCard";
 import Popup from "../../components/Popup/Popup";
 import MilestoneRequirements from "../../components/Popup/PopUpContents/MilestoneRequirements/MilestoneRequirements";
 import Error from "../../components/shared/Error/Error";
