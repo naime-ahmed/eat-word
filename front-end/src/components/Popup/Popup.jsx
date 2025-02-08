@@ -129,7 +129,12 @@ const Popup = ({
       >
         <div ref={contentRef} className={styles.content}>
           {showCloseButton && (
-            <button className={styles.closeButton} onClick={handleClose}>
+            <button
+              className={`${styles.closeButton} ${
+                popupType === "dialog" ? styles.dialogClose : ""
+              }`}
+              onClick={handleClose}
+            >
               <IoClose />
             </button>
           )}
