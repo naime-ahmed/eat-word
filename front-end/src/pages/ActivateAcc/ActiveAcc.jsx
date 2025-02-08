@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate, useParams } from "react-router";
-import ActivateACCCard from "../../components/dynamicComponents/ActivateACCCard/ActivateACCCard";
+import ActivateACCCard from "../../components/ActivateACCCard/ActivateACCCard";
 import SpinnerForPage from "../../components/ui/loader/SpinnerForPage/SpinnerForPage";
 import { setUser } from "../../features/authSlice.js";
 import { resetNewUserForm } from "../../features/userSignUpSlice";
