@@ -1,47 +1,114 @@
 .card {
   position: relative;
-  width: 16rem;
+  width: 18rem;
   cursor: pointer;
   overflow: hidden;
-  border-radius: 0.75rem;
-  padding: 1rem;
+  border-radius: 1rem;
+  padding: 1.2rem;
   background: linear-gradient(
     25deg,
-    rgba(72, 73, 148, 0) 0%,
-    rgba(152, 191, 254, 0.12) 100%
+    rgba(72, 73, 148, 0.1) 0%,
+    rgba(152, 191, 254, 0.2) 100%
   );
   color: #fff;
-  border: 1px solid #293b69;
+  border: 1px solid #3a4b7a;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
+    0 2px 4px -2px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
 }
 
 .card:hover {
-  background-color: rgba(3, 7, 18, 0.05);
+  background-color: rgba(152, 191, 254, 0.1);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 12px -2px rgba(41, 59, 105, 0.2),
+    0 4px 6px -4px rgba(41, 59, 105, 0.2);
 }
 
 .avatar {
   border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  object-fit: cover;
 }
 
 .content {
   display: flex;
   flex-direction: row;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.75rem;
+}
+
+.userInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
 }
 
 .name {
-  font-size: 0.875rem;
-  font-weight: 500;
-  color: #eeeeee;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #fff;
+  letter-spacing: 0.5px;
 }
 
 .username {
   font-size: 0.75rem;
   font-weight: 500;
-  color: rgba(231, 231, 231, 0.562);
+  color: rgba(255, 255, 255, 0.7);
 }
 
 .quote {
-  margin-top: 0.5rem;
   font-size: 0.875rem;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.stars {
+  display: flex;
+  gap: 0.25rem;
+  margin-top: 0.75rem;
+}
+
+.star {
+  width: 1rem;
+  height: 1rem;
+}
+
+@media (max-width: 600px) {
+  .card {
+    width: 16rem;
+    padding: 1rem;
+    border-radius: 0.75rem;
+  }
+
+  .avatar {
+    width: 32px;
+    height: 32px;
+  }
+
+  .name {
+    font-size: 0.875rem;
+  }
+
+  .username {
+    font-size: 0.6875rem;
+  }
+
+  .quote {
+    font-size: 0.8125rem;
+    line-height: 1.4;
+  }
+
+  .stars {
+    margin-top: 0.5rem;
+  }
+
+  .star {
+    width: 0.875rem;
+    height: 0.875rem;
+  }
+
+  .content {
+    gap: 0.5rem;
+  }
 }
