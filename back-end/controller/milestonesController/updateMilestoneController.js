@@ -11,7 +11,7 @@ async function updateMilestone(req, res) {
       return res.status(400).json({ message: "Invalid milestone ID format" });
     }
 
-    const allowedFields = ['name', 'targetWords', 'wordsCount', 'memorizedCount', "revisionCount", "pinned"];
+    const allowedFields = ['name', 'targetWords', 'wordsCount', 'memorizedCount', "revisionCount", "pinned", "lastRecalled"];
     const invalidFields = Object.keys(updateData).filter(
       field => !allowedFields.includes(field)
     );
