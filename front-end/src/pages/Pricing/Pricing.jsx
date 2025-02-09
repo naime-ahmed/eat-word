@@ -101,7 +101,7 @@ const Pricing = () => {
             <small>
               /month{" "}
               <span className={styles.billingNote}>
-                ($5.50/month billed annually)
+                ($3.33/month billed annually)
               </span>
             </small>
           </div>
