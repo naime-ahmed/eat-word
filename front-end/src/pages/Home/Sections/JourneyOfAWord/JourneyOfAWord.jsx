@@ -8,7 +8,7 @@ import style from "./JourneyOfAWord.module.css";
 
 const JourneyOfAWord = () => {
   return (
-    <div className={style.JourneyOfAWordContainer}>
+    <section className={style.JourneyOfAWordContainer}>
       <div className={style.gradientLine}></div>
       <div className={style.gradientBackground}></div>
       <div className={style.JourneyOfAWordHeading}>
@@ -23,19 +23,34 @@ const JourneyOfAWord = () => {
       <div className={style.JourneyOfAWordPath}>
         <div className={style.card0}>
           <div>
-            <img src={imgForFindWord} alt="Image of word search" />
+            <img
+              src={imgForFindWord}
+              alt="Image of word search"
+              width="80px"
+              height="100%"
+            />
           </div>
           <div>Clashed with unknown word?</div>
         </div>
         <div className={style.card1}>
           <div>
-            <img src={imgForListWord} alt="image of word list" />
+            <img
+              src={imgForListWord}
+              alt="image of word list"
+              width="80px"
+              height="100%"
+            />
           </div>
           <div>List it down and learn</div>
         </div>
         <div className={style.card2}>
           <div>
-            <img src={imgForShortMemo} alt="image of short time memory" />
+            <img
+              src={imgForShortMemo}
+              alt="image of short time memory"
+              width="80px"
+              height="100%"
+            />
           </div>
           <div>Now it&#39;s living in your short time memory</div>
         </div>
@@ -44,6 +59,8 @@ const JourneyOfAWord = () => {
             <img
               src={imgForRevised}
               alt="image of revise the word for a week"
+              width="80px"
+              height="100%"
             />
           </div>
           <div>
@@ -52,7 +69,12 @@ const JourneyOfAWord = () => {
         </div>
         <div className={style.card4}>
           <div>
-            <img src={imgForTestOnSelf} alt="image of test on self" />
+            <img
+              src={imgForTestOnSelf}
+              alt="image of test on self"
+              width="80px"
+              height="100%"
+            />
           </div>
           <div>
             Each week, test yourself on all the words you&#39;ve learned. Mark
@@ -61,7 +83,12 @@ const JourneyOfAWord = () => {
         </div>
         <div className={style.card5}>
           <div>
-            <img src={imgForLongMemo} alt="image of long time memory" />
+            <img
+              src={imgForLongMemo}
+              alt="image of long time memory"
+              width="80px"
+              height="100%"
+            />
           </div>
           <div>
             Successfully remembering words in your self-test indicates
@@ -175,7 +202,7 @@ const JourneyOfAWord = () => {
           </svg>
         </div>
       </div>
-    </div>
+    </section>
   );
 };
 
