@@ -4,7 +4,9 @@ import Footer from "../../components/shared/Footer/Footer";
 import Header from "../../components/shared/Header/Header";
 import FancyBtn from "../../components/ui/button/FancyBtn/FancyBtn";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { FaCheck } from "react-icons/fa6";
+import { IoCloseOutline } from "react-icons/io5";
 import { useSelector } from "react-redux";
 import Popup from "../../components/Popup/Popup";
 import GeneralMessage from "../../components/Popup/PopUpContents/GeneralMessage/GeneralMessage";
@@ -14,6 +16,11 @@ const Pricing = () => {
   const { isAuthenticated } = useSelector((state) => state.auth);
   const [showMessageToPro, setShowMessageToPro] = useState(false);
   const [showMessageToLifeT, setShowMessageToLifeT] = useState(false);
+
+  // Auto-scroll to top on component mount
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   const navigate = useNavigate();
 
@@ -55,25 +62,28 @@ const Pricing = () => {
           <div className={styles.freePriceCardFeatures}>
             <ul>
               <li>
-                <i className="fa-solid fa-check"></i>500 words/month
+                <FaCheck className={styles.iconCheck} /> 500 words/month
               </li>
               <li>
-                <i className="fa-solid fa-check"></i>Basic Definitions
+                <FaCheck className={styles.iconCheck} /> Basic Definitions
               </li>
               <li>
-                <i className="fa-solid fa-check"></i>Community Support
+                <FaCheck className={styles.iconCheck} /> Community Support
               </li>
               <li>
-                <i className="fa-solid fa-xmark"></i>AI-Powered Learning Tools
+                <IoCloseOutline className={styles.iconClose} /> AI-Powered
+                Learning Tools
               </li>
               <li>
-                <i className="fa-solid fa-xmark"></i>Spaced Repetition System
+                <IoCloseOutline className={styles.iconClose} /> Spaced
+                Repetition System
               </li>
               <li>
-                <i className="fa-solid fa-xmark"></i>Progress Analytics
+                <IoCloseOutline className={styles.iconClose} /> Progress
+                Analytics
               </li>
               <li>
-                <i className="fa-solid fa-xmark"></i>Priority Support
+                <IoCloseOutline className={styles.iconClose} /> Priority Support
               </li>
             </ul>
           </div>
@@ -108,25 +118,27 @@ const Pricing = () => {
           <div className={styles.paidPriceCardFeatures}>
             <ul>
               <li>
-                <i className="fa-solid fa-check"></i>Unlimited Words
+                <FaCheck className={styles.iconCheck} /> Unlimited Words
               </li>
               <li>
-                <i className="fa-solid fa-check"></i>Advanced AI Suggestions
+                <FaCheck className={styles.iconCheck} /> Advanced AI Suggestions
               </li>
               <li>
-                <i className="fa-solid fa-check"></i>Smart Spaced Repetition
+                <FaCheck className={styles.iconCheck} /> Smart Spaced Repetition
               </li>
               <li>
-                <i className="fa-solid fa-check"></i>Contextual Learning Engine
+                <FaCheck className={styles.iconCheck} /> Contextual Learning
+                Engine
               </li>
               <li>
-                <i className="fa-solid fa-check"></i>Detailed Progress Reports
+                <FaCheck className={styles.iconCheck} /> Detailed Progress
+                Reports
               </li>
               <li>
-                <i className="fa-solid fa-check"></i>Priority Email Support
+                <FaCheck className={styles.iconCheck} /> Priority Email Support
               </li>
               <li>
-                <i className="fa-solid fa-check"></i>Cross-Device Sync
+                <FaCheck className={styles.iconCheck} /> Cross-Device Sync
               </li>
             </ul>
           </div>
@@ -168,25 +180,27 @@ const Pricing = () => {
           <div className={styles.paidPriceCardFeatures}>
             <ul>
               <li>
-                <i className="fa-solid fa-check"></i>All Pro Features
+                <FaCheck className={styles.iconCheck} /> All Pro Features
               </li>
               <li>
-                <i className="fa-solid fa-check"></i>Lifetime Updates
+                <FaCheck className={styles.iconCheck} /> Lifetime Updates
               </li>
               <li>
-                <i className="fa-solid fa-check"></i>Personalized Learning Plan
+                <FaCheck className={styles.iconCheck} /> Personalized Learning
+                Plan
               </li>
               <li>
-                <i className="fa-solid fa-check"></i>VIP Support (24h response)
+                <FaCheck className={styles.iconCheck} /> VIP Support (24h
+                response)
               </li>
               <li>
-                <i className="fa-solid fa-check"></i>Exclusive Content
+                <FaCheck className={styles.iconCheck} /> Exclusive Content
               </li>
               <li>
-                <i className="fa-solid fa-check"></i>Beta Feature Access
+                <FaCheck className={styles.iconCheck} /> Beta Feature Access
               </li>
               <li>
-                <i className="fa-solid fa-check"></i>Account Guardianship
+                <FaCheck className={styles.iconCheck} /> Account Guardianship
               </li>
             </ul>
           </div>
