@@ -1,199 +1,296 @@
+import { useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import {
   setUserNewErrors,
   updateNewUser,
 } from "../../features/userSignUpSlice";
-import { useSignUpUserMutation } from "../../services/auth.js";
-
 import useNotification from "../../hooks/useNotification.js";
+import { useSignUpUserMutation } from "../../services/auth.js";
 import style from "./SignUp.module.css";
 
+// Validation constants
+const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const CAPTCHA_ANSWER = "8";
+const ALLOWED_DOMAIN = "gmail.com";
+const isGmail = (email) => {
+  const domain = email.split("@")[1]?.toLowerCase();
+  return domain === ALLOWED_DOMAIN;
+};
+
 const SignUp = () => {
-  // state of new user
   const { newUser, newUserErrors } = useSelector((state) => state.signUp);
+  const { fName, email, password, surePass, captcha, agree } = newUser;
+  const {
+    fName: fNameError,
+    email: emailError,
+    password: passwordError,
+    surePass: surePassError,
+    captcha: captchaError,
+    agree: agreeError,
+  } = newUserErrors;
+
   const dispatch = useDispatch();
   const showNotification = useNotification();
+  const [signUpUser, { isLoading }] = useSignUpUserMutation();
 
-  // use the singUp mutation
-  const [singUpUser, { isLoading, isError, error }] = useSignUpUserMutation();
+  const handleChange = useCallback(
+    (event) => {
+      const { name, value, type, checked } = event.target;
+      dispatch(
+        updateNewUser({
+          name,
+          value: type === "checkbox" ? checked : value,
+        })
+      );
+    },
+    [dispatch]
+  );
 
-  // handle the form field change
-  function handleChange(event) {
-    const name = event.target.name;
-    let value = event.target.value;
+  const validateForm = useCallback(() => {
+    const errors = {};
 
-    if (event.target.type === "checkbox") {
-      value = event.target.checked;
+    if (!fName.trim()) errors.fName = "Full name is required";
+    // Email validation
+    if (!EMAIL_REGEX.test(email)) {
+      errors.email = "Valid email required";
+    } else if (!isGmail(email)) {
+      errors.email = "Only Gmail accounts allowed";
     }
 
-    dispatch(updateNewUser({ name, value }));
-  }
-
-  // validate the provided data
-  function validateFrom() {
-    let errors = {};
-    if (!newUser.fName) errors.fName = "Full name is required";
-    if (!newUser.email || !/\S+@\S+\.\S+/.test(newUser.email)) {
-      errors.email = "Valid email is required";
-    }
-
-    if (!newUser.password || newUser.password.length < 6) {
-      errors.password = "Too weak password";
-    }
-    if (!newUser.surePass || newUser.password != newUser.surePass) {
-      errors.surePass = "Password dose not match";
-    }
-    if (!newUser.captcha || newUser.captcha !== "8") {
-      errors.captcha = "Captcha failed!";
-    }
-    if (!newUser.agree) errors.agree = "You must agree to continue";
+    if (password.length < 6) errors.password = "Password must be 6+ characters";
+    if (password !== surePass) errors.surePass = "Passwords don't match";
+    if (captcha !== CAPTCHA_ANSWER) errors.captcha = "Captcha failed!";
+    if (!agree) errors.agree = "You must agree to continue";
 
     dispatch(setUserNewErrors(errors));
     return Object.keys(errors).length === 0;
-  }
+  }, [fName, email, password, surePass, captcha, agree, dispatch]);
 
-  // request sever to create user
-  async function handelSubmit(event) {
-    event.preventDefault();
+  const handleSubmit = useCallback(
+    async (event) => {
+      event.preventDefault();
 
-    if (validateFrom()) {
-      try {
-        const formData = {
-          name: newUser.fName,
-          email: newUser.email,
-          password: newUser.password,
-        };
+      if (validateForm()) {
+        // Additional Gmail check for valid formatted emails
+        if (!isGmail(email)) {
+          showNotification({
+            title: "Email Restriction",
+            message: "We currently only accept Gmail accounts for registration",
+            iconType: "error",
+            duration: 6000,
+          });
+          return;
+        }
 
-        const result = await singUpUser(formData).unwrap();
+        try {
+          const result = await signUpUser({
+            name: fName,
+            email,
+            password,
+          }).unwrap();
 
-        // inform the user success result
-        showNotification({
-          title: result.msg,
-          message: "",
-          iconType: "success",
-          duration: 4000,
-        });
-      } catch (error) {
-        console.error("sing-up failed", error);
-        // show the error to user
-        showNotification({
-          title: "Unable to create account!",
-          message: error.message || "An unexpected error occurred",
-          iconType: "error",
-          duration: 6000,
-        });
+          showNotification({
+            title: result.msg,
+            iconType: "success",
+            duration: 4000,
+          });
+        } catch (error) {
+          showNotification({
+            title: "Account creation failed",
+            message: error.data?.message || "Please check your details",
+            iconType: "error",
+            duration: 6000,
+          });
+        }
       }
-    }
-  }
+    },
+    [validateForm, signUpUser, fName, email, password, showNotification]
+  );
+
   return (
     <div className={style.signUpContainer}>
       <div className={style.formContainer}>
-        <h2>Create Your Account</h2>
-        <form onSubmit={handelSubmit}>
+        <h2 aria-live="polite">Create Your Account</h2>
+
+        <form onSubmit={handleSubmit} noValidate>
+          {/* Name Field */}
           <div>
             <input
               type="text"
-              name="fName"
               id="fName"
-              placeholder="Enter Full Name"
+              name="fName"
+              value={fName}
               onChange={handleChange}
-              value={newUser.fName}
               className={style.inputField}
+              placeholder="Enter Full Name"
+              autoComplete="name"
               required
+              aria-required="true"
+              aria-invalid={!!fNameError}
+              aria-describedby={fNameError ? "name-error" : undefined}
             />
             <label htmlFor="fName" className={style.formLabel}>
               Your full name
             </label>
-            {newUserErrors.fName && <p>{newUserErrors.fName}</p>}
+            {fNameError && (
+              <p id="name-error" role="alert" className={style.errorMessage}>
+                {fNameError}
+              </p>
+            )}
           </div>
+
+          {/* Email Field */}
           <div>
             <input
               type="email"
-              name="email"
               id="email"
-              placeholder="Enter email"
+              name="email"
+              value={email}
               onChange={handleChange}
-              value={newUser.email}
               className={style.inputField}
+              placeholder="Enter email"
+              autoComplete="email"
               required
+              aria-required="true"
+              aria-invalid={!!emailError}
+              aria-describedby={emailError ? "email-error" : undefined}
             />
             <label htmlFor="email" className={style.formLabel}>
               Your email
             </label>
-            {newUserErrors.email && <p>{newUserErrors.email}</p>}
+            {emailError && (
+              <p id="email-error" role="alert" className={style.errorMessage}>
+                {emailError}
+              </p>
+            )}
           </div>
 
+          {/* Password Fields */}
           <div>
             <input
               type="password"
-              name="password"
               id="password"
-              placeholder="Enter password"
+              name="password"
+              value={password}
               onChange={handleChange}
-              value={newUser.password}
               className={style.inputField}
+              placeholder="Enter password"
+              autoComplete="new-password"
               required
+              aria-required="true"
+              aria-invalid={!!passwordError}
+              aria-describedby={passwordError ? "password-error" : undefined}
             />
             <label htmlFor="password" className={style.formLabel}>
-              your password
+              Your password
             </label>
-            {newUserErrors.password && <p>{newUserErrors.password}</p>}
+            {passwordError && (
+              <p
+                id="password-error"
+                role="alert"
+                className={style.errorMessage}
+              >
+                {passwordError}
+              </p>
+            )}
           </div>
+
+          {/* Confirm Password */}
           <div>
             <input
               type="password"
-              name="surePass"
               id="surePass"
-              placeholder="confirm password"
+              name="surePass"
+              value={surePass}
               onChange={handleChange}
-              value={newUser.surePass}
               className={style.inputField}
+              placeholder="Confirm password"
+              autoComplete="new-password"
               required
+              aria-required="true"
+              aria-invalid={!!surePassError}
+              aria-describedby={
+                surePassError ? "confirm-password-error" : undefined
+              }
             />
             <label htmlFor="surePass" className={style.formLabel}>
               Confirm Password
             </label>
-            {newUserErrors.surePass && <p>{newUserErrors.surePass}</p>}
+            {surePassError && (
+              <p
+                id="confirm-password-error"
+                role="alert"
+                className={style.errorMessage}
+              >
+                {surePassError}
+              </p>
+            )}
           </div>
+
+          {/* Captcha Field */}
           <div>
             <input
               type="number"
-              name="captcha"
               id="captcha"
-              placeholder="Answer"
+              name="captcha"
+              value={captcha}
               onChange={handleChange}
-              value={newUser.captcha}
               className={style.inputField}
+              placeholder="Answer"
+              inputMode="numeric"
               required
+              aria-required="true"
+              aria-invalid={!!captchaError}
+              aria-describedby={captchaError ? "captcha-error" : undefined}
             />
             <label htmlFor="captcha" className={style.formLabel}>
               What is 3 + 5?
             </label>
-            {newUserErrors.captcha && <p>{newUserErrors.captcha}</p>}
+            {captchaError && (
+              <p id="captcha-error" role="alert" className={style.errorMessage}>
+                {captchaError}
+              </p>
+            )}
           </div>
+
+          {/* Terms Checkbox */}
           <div className={style.termsBox}>
             <input
               type="checkbox"
-              name="agree"
               id="terms"
-              checked={newUser.agree}
+              name="agree"
+              checked={agree}
               onChange={handleChange}
+              aria-invalid={!!agreeError}
+              aria-describedby={agreeError ? "terms-error" : undefined}
             />
             <label htmlFor="terms">
               I agree to the <Link to="/tac">terms and conditions</Link>.
             </label>
-            {newUserErrors.agree && <p>{newUserErrors.agree}</p>}
+            {agreeError && (
+              <p id="terms-error" role="alert" className={style.errorMessage}>
+                {agreeError}
+              </p>
+            )}
           </div>
+
+          {/* Submit Section */}
           <div className={style.submitBtn}>
-            <button type="submit" disabled={isLoading}>
-              {" "}
-              {isLoading ? "submitting..." : "Submit"}
+            <button
+              type="submit"
+              disabled={isLoading}
+              aria-disabled={isLoading}
+              aria-busy={isLoading}
+            >
+              {isLoading ? "Creating account..." : "Submit"}
             </button>
-            {isError && <p style={{ margin: "0 19px" }}>{error.message}</p>}
-            <br />
+
             <p>
-              Have an account? <Link to="/sign-in">Sign in</Link>
+              Have an account?{" "}
+              <Link to="/sign-in" className={style.signInLink}>
+                Sign in
+              </Link>
             </p>
           </div>
         </form>
