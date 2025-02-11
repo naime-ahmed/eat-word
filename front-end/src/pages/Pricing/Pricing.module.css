@@ -120,34 +120,30 @@
 
 .freePriceCardFeatures > ul > li,
 .paidPriceCardFeatures > ul > li {
+  display: flex;
+  justify-content: start;
+  align-items: center;
   list-style: none;
   margin: 12px 0;
   font-size: 0.95rem;
 }
 
-.freePriceCardFeatures > ul > li > i,
-.paidPriceCardFeatures > ul > li > i {
-  margin-right: 12px;
+.iconCheck {
+  font-size: 1.5rem;
+  color: rgb(0, 184, 0);
+  background-color: rgba(0, 211, 0, 0.09);
+  border-radius: 50%;
   padding: 6px;
-  font-size: 0.9rem;
+  margin-right: 12px;
 }
 
-.freePriceCardFeatures > ul > li:nth-child(-n + 3) i {
-  color: rgb(0, 177, 0);
-  background-color: rgba(0, 211, 0, 0.13);
-  border-radius: 50%;
-}
-
-.paidPriceCardFeatures > ul > li > i {
-  color: rgb(0, 177, 0);
-  background-color: rgba(0, 211, 0, 0.13);
-  border-radius: 50%;
-}
-
-.freePriceCardFeatures > ul > li:nth-child(n + 4) i {
+.iconClose {
+  font-size: 1.6rem;
   color: red;
   background-color: rgba(255, 0, 0, 0.13);
   border-radius: 50%;
+  padding: 6px;
+  margin-right: 12px;
 }
 
 .crownImg {
