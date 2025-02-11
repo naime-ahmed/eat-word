@@ -15,7 +15,7 @@ import Milestone from "./pages/Milestone/Milestone";
 import MySpace from "./pages/MySpace/MySpace";
 import NotFound from "./pages/NotFound/NotFound";
 import Pricing from "./pages/Pricing/Pricing";
-import PrivacyPolicy from "./pages/PrivacyPolicy/PrivacyPolicy";
+import PrivacyInfo from "./pages/PrivacyInfo/PrivacyInfo";
 import Profile from "./pages/Profile/Profile";
 import ResetPass from "./pages/ResetPass/ResetPass";
 import SignIn from "./pages/SignIn/SignIn";
@@ -86,7 +86,7 @@ const router = createBrowserRouter([
       },
       {
         path: "/privacyPolicy",
-        element: <PrivacyPolicy />,
+        element: <PrivacyInfo />,
       },
     ],
   },
