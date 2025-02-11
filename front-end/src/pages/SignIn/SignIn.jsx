@@ -1,7 +1,9 @@
+import { Suspense, lazy, useCallback } from "react";
+import { IoArrowBack } from "react-icons/io5";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
-import GoogleSignIn from "../../components/OAuth/Google/GoogleSignIn";
 import PrimaryBtn from "../../components/ui/button/PrimaryBtn/PrimaryBtn";
+import Skeleton from "../../components/ui/loader/Skeleton/Skeleton.jsx";
 import { setUser } from "../../features/authSlice.js";
 import {
   resetForm,
@@ -13,144 +15,181 @@ import { useSignInUserMutation } from "../../services/auth.js";
 import { parseJwt } from "../../utils/parseJWT.js";
 import style from "./SignIn.module.css";
 
+const GoogleSignIn = lazy(() =>
+  import("../../components/OAuth/Google/GoogleSignIn")
+);
+
+const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
 const SignIn = () => {
   const { user, userErrors } = useSelector((state) => state.signIn);
+  const { email, password } = user;
+  const { email: emailError, password: passwordError } = userErrors;
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const showNotification = useNotification();
 
-  // use the sing-in mutation
   const [signInUser, { isLoading }] = useSignInUserMutation();
 
-  // handle the form field change
-  function handleChange(event) {
-    const name = event.target.name;
-    let value = event.target.value;
-    dispatch(updateUser({ name, value }));
-  }
+  const handleChange = useCallback(
+    (event) => {
+      const { name, value } = event.target;
+      dispatch(updateUser({ name, value }));
+    },
+    [dispatch]
+  );
 
-  // validate the provided data
-  function validateFrom() {
+  const validateForm = useCallback(() => {
     let errors = {};
-    if (!user.email || !/\S+@\S+\.\S+/.test(user.email)) {
+
+    if (!EMAIL_REGEX.test(email)) {
       errors.email = "Valid email is required";
     }
-    if (!user.password) {
-      errors.password = "password required";
-    }
-    if (user.password && user.password.length < 6) {
-      errors.password = "incorrect password";
+    if (!password) {
+      errors.password = "Password required";
+    } else if (password.length < 6) {
+      errors.password = "Password must be at least 6 characters";
     }
 
     dispatch(setUserErrors(errors));
     return Object.keys(errors).length === 0;
-  }
+  }, [email, password, dispatch]);
 
-  // request server to sign-in user
-  async function handelSubmit(event) {
-    event.preventDefault();
+  const handleSubmit = useCallback(
+    async (event) => {
+      event.preventDefault();
 
-    if (validateFrom()) {
-      try {
-        const formData = {
-          email: user.email,
-          password: user.password,
-        };
+      if (validateForm()) {
+        try {
+          const result = await signInUser({ email, password }).unwrap();
+          dispatch(resetForm());
 
-        const result = await signInUser(formData).unwrap();
-        // Reset the form to default values
-        dispatch(resetForm());
+          localStorage.setItem("access-token", result.accessToken);
+          dispatch(setUser(parseJwt(result.accessToken)));
 
-        // save access token into local-storage
-        localStorage.setItem("access-token", result.accessToken);
+          showNotification({
+            title: result?.message,
+            iconType: "success",
+            duration: 4000,
+          });
 
-        // inform the user
-        showNotification({
-          title: result?.message,
-          message: "",
-          iconType: "success",
-          duration: 4000,
-        });
-        dispatch(setUser(parseJwt(result.accessToken)));
-        navigate("/my-space");
-      } catch (error) {
-        console.error("sing-in failed", error);
-        // show the error to user
-        showNotification({
-          title: "Unable to sign in",
-          message: error.message || "An unexpected error occurred",
-          iconType: "error",
-          duration: 4000,
-        });
+          navigate("/my-space");
+        } catch (error) {
+          showNotification({
+            title: "Unable to sign in",
+            message: error.data?.message || "Please check your credentials",
+            iconType: "error",
+            duration: 4000,
+          });
+        }
       }
-    }
-  }
+    },
+    [
+      email,
+      password,
+      validateForm,
+      signInUser,
+      dispatch,
+      showNotification,
+      navigate,
+    ]
+  );
+
   return (
     <div className={style.signInContainer}>
-      <div className={style.backToHomeButton}>
-        <PrimaryBtn>
-          <Link to="/">
-            <i className="fa fa-long-arrow-left" aria-hidden="true"></i> Back
-            Home
-          </Link>
+      <nav className={style.backToHomeButton}>
+        <PrimaryBtn handleClick={() => navigate("/")}>
+          <IoArrowBack aria-hidden="true" />
+          <span>Back Home</span>
         </PrimaryBtn>
-      </div>
-      <div className={style.formContainer}>
-        <h2>Sign In</h2>
-        <form onSubmit={handelSubmit}>
+      </nav>
+
+      <main className={style.formContainer}>
+        <h2 aria-live="polite">Sign In</h2>
+
+        <form onSubmit={handleSubmit} noValidate>
           <div>
             <input
               type="email"
-              name="email"
               id="email"
-              placeholder="Enter email"
+              name="email"
+              value={email}
               onChange={handleChange}
-              value={user.email}
               className={style.inputField}
-              autoComplete="on"
+              autoComplete="email"
               required
+              aria-required="true"
+              aria-invalid={!!emailError}
+              aria-describedby={emailError ? "email-error" : undefined}
+              placeholder="Enter email"
             />
             <label htmlFor="email" className={style.formLabel}>
               Your email
             </label>
-            {userErrors.email && <p>{userErrors.email}</p>}
+            {emailError && (
+              <p id="email-error" role="alert">
+                {emailError}
+              </p>
+            )}
           </div>
 
           <div className={style.passwordSection}>
             <input
               type="password"
-              name="password"
               id="password"
-              placeholder="Enter password"
+              name="password"
+              value={password}
               onChange={handleChange}
-              value={user.password}
               className={style.inputField}
-              autoComplete="on"
+              autoComplete="current-password"
               required
+              aria-required="true"
+              aria-invalid={!!passwordError}
+              aria-describedby={passwordError ? "password-error" : undefined}
+              placeholder="Enter password"
             />
             <label htmlFor="password" className={style.formLabel}>
-              your password
+              Your password
             </label>
-            {userErrors.password && <p>{userErrors.password}</p>}
+            {passwordError && (
+              <p id="password-error" role="alert">
+                {passwordError}
+              </p>
+            )}
             <Link to="/forgot-password" className={style.forgotPass}>
               Forgot Password?
             </Link>
           </div>
+
           <div className={style.submitBtn}>
-            <button type="submit" disabled={isLoading}>
-              {" "}
-              {isLoading ? "submitting..." : "Submit"}
+            <button
+              type="submit"
+              disabled={isLoading}
+              aria-disabled={isLoading}
+              aria-busy={isLoading}
+            >
+              {isLoading ? "Signing in..." : "Submit"}
             </button>
-            <p className={style.separator}>or</p>
-            <div className={style.googleLogin}>
-              <GoogleSignIn />
-            </div>
+
+            <p className={style.separator} aria-hidden="true">
+              or
+            </p>
+
+            <Suspense fallback={<Skeleton width={280} height={42} />}>
+              <div className={style.googleLogin}>
+                <GoogleSignIn />
+              </div>
+            </Suspense>
+
             <p>
-              New here? <Link to="/sign-up">Create account</Link>
+              New here?{" "}
+              <Link to="/sign-up" className={style.signUpLink}>
+                Create account
+              </Link>
             </p>
           </div>
         </form>
-      </div>
+      </main>
     </div>
   );
 };
