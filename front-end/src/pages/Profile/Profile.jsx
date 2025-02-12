@@ -1,4 +1,7 @@
 import { useEffect, useState } from "react";
+import { HiMiniXMark } from "react-icons/hi2";
+import { LiaEditSolid } from "react-icons/lia";
+import { MdOutlineEdit } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import defaultProfilePic from "../../assets/defaultUserProfileImage.png";
@@ -181,11 +184,11 @@ function Profile() {
                   <PrimaryBtn handleClick={handleIsChanging}>
                     {isChanging ? (
                       <>
-                        <i className="fa-solid fa-xmark"></i> Cancel Edit
+                        <HiMiniXMark /> Cancel Edit
                       </>
                     ) : (
                       <>
-                        <i className="far fa-edit"></i> Edit
+                        <LiaEditSolid /> Edit
                       </>
                     )}
                   </PrimaryBtn>
@@ -303,7 +306,7 @@ function ProfileImage({ profilePicture, isChanging, onProfilePicChange }) {
       <img src={profilePicture || defaultProfilePic} alt="profile picture" />
       {isChanging && (
         <label htmlFor="file-upload" className={styles.updateImgBtn}>
-          <i className="fa-solid fa-pen"></i>
+          <MdOutlineEdit />
           <input
             id="file-upload"
             onChange={handleProfilePicChange}

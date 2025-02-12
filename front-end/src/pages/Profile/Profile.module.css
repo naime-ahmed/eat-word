@@ -81,7 +81,7 @@
   display: none;
 }
 
-.updateImgBtn i {
+.updateImgBtn {
   transform: rotate(-20deg);
 }
 .nameAndEmailEdit,
