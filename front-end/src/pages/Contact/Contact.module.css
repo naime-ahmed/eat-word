@@ -162,8 +162,8 @@
   background-color: #006eff2f;
   border-radius: 50%;
 }
-.contactInfo > div > div > i {
-  font-size: 18px;
+.contactInfo > div > div {
+  font-size: 22px;
   color: #006eff;
 }
 
@@ -195,7 +195,7 @@
     width: 40px;
     height: 40px;
   }
-  .contactInfo > div > div > i {
+  .contactInfo > div > div {
     font-size: 18px;
   }
 }
@@ -264,7 +264,7 @@
     width: 35px;
     height: 35px;
   }
-  .contactInfo > div > div > i {
+  .contactInfo > div > div {
     font-size: 16px;
   }
 }

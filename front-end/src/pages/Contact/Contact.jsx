@@ -1,4 +1,7 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { LuPhoneCall } from "react-icons/lu";
+import { MdOutlineLocationOn } from "react-icons/md";
+import { PiTelegramLogoFill } from "react-icons/pi";
 import Footer from "../../components/shared/Footer/Footer";
 import Header from "../../components/shared/Header/Header";
 import styles from "./Contact.module.css";
@@ -11,6 +14,11 @@ const Contact = () => {
     captcha: "",
   });
   const [userMessageError, setUserMessageError] = useState({});
+
+  // Auto-scroll to top on component mount
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   function handleChange(event) {
     const name = event.target.name;
@@ -128,19 +136,19 @@ const Contact = () => {
           <h2>Contact Us</h2>
           <div>
             <div>
-              <i className="fa-solid fa-location-dot"></i>
+              <MdOutlineLocationOn />
             </div>
             <p>Location: 2^#, Orion, Mars </p>
           </div>
           <div>
             <div>
-              <i className="fa-solid fa-phone"></i>
+              <LuPhoneCall />
             </div>
             <p>Phone: +8801926527995</p>
           </div>
           <div>
             <div>
-              <i className="fa-solid fa-paper-plane"></i>
+              <PiTelegramLogoFill />
             </div>
             <p>Email: support@eatword.com</p>
           </div>
