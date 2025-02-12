@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
+import { FaArrowRightToBracket, FaBars, FaXmark } from "react-icons/fa6";
+
 import { useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import defaultUserProfile from "../../../assets/defaultUserProfileImage.png";
 import logo from "../../../assets/logo.png";
 import Popup from "../../Popup/Popup";
@@ -16,7 +18,7 @@ const Header = () => {
   const [clickPosition, setClickPosition] = useState(null);
   const { isAuthenticated, isLoading } = useSelector((state) => state.auth);
   const { user } = useSelector((state) => state.user);
-
+  const navigate = useNavigate();
   const handleSidebarToggle = () => {
     setIsSidebarOpen(!isSidebarOpen);
   };
@@ -44,29 +46,28 @@ const Header = () => {
 
   useEffect(() => {
     window.addEventListener("scroll", handleScroll);
-
     return () => {
       window.removeEventListener("scroll", handleScroll);
     };
   }, []);
 
   return (
-    <nav
+    <header
       className={`${styles.nav} ${isSticky ? styles.sticky : ""} ${
         isSidebarOpen ? styles.active : ""
       }`}
     >
       <div className={styles.navBar}>
-        <i
-          className={`fa-solid fa-bars ${styles.sidebarOpen}`}
+        <FaBars
+          className={`${styles.sidebarOpen}`}
           onClick={handleSidebarToggle}
-        ></i>
+          aria-label="Toggle Sidebar"
+        />
         <span className={`${styles.logo} ${styles.navLogo}`}>
           <Link to="/">
-            <img src={logo} alt="Brand logo" />
+            <img src={logo} alt="Eat Word Logo" width="100px" height="40px" />
           </Link>
         </span>
-
         <div className={`${styles.menu} ${isSidebarOpen ? styles.active : ""}`}>
           <div className={styles.logoToggle}>
             <span className={styles.logo}>
@@ -74,86 +75,102 @@ const Header = () => {
                 <img src={logo} alt="Brand logo" />
               </Link>
             </span>
-            <i
-              className={`fa-solid fa-xmark ${styles.sidebarClose}`}
+            <FaXmark
+              className={`${styles.sidebarClose}`}
               onClick={handleSidebarToggle}
-            ></i>
+              aria-label="Close Sidebar"
+            />
           </div>
-
-          <ul className={styles.navLinks}>
-            <li>
-              {isLoading ? (
-                <Skeleton width={"80px"} height={"20px"} />
-              ) : (
-                <Link to="/" onClick={handleSidebarToggle}>
-                  Home
-                </Link>
-              )}
-            </li>
-            {isAuthenticated && (
+          <nav aria-label="Main Navigation">
+            <ul className={styles.navLinks}>
               <li>
-                <Link to="/my-space" onClick={handleSidebarToggle}>
-                  My Space
-                </Link>
-              </li>
-            )}
-            <li>
-              {isLoading ? (
-                <Skeleton width={"80px"} height={"20px"} />
-              ) : (
-                <Link to="/price" onClick={handleSidebarToggle}>
-                  Pricing
-                </Link>
-              )}
-            </li>
-            <li>
-              {isLoading ? (
-                <Skeleton width={"80px"} height={"20px"} />
-              ) : (
-                <Link to="/about" onClick={handleSidebarToggle}>
-                  About
-                </Link>
-              )}
-            </li>
-            <li>
-              {isLoading ? (
-                <Skeleton width={"80px"} height={"20px"} />
-              ) : isAuthenticated ? (
-                <>
-                  <button
-                    onClick={handleProfileOpen}
-                    className={styles.profile}
+                {isLoading ? (
+                  <Skeleton width={"80px"} height={"20px"} />
+                ) : (
+                  <Link
+                    to="/"
+                    onClick={handleSidebarToggle}
+                    aria-label="Home Page"
                   >
-                    <img
-                      src={user?.profilePicture || defaultUserProfile}
-                      alt="user profile picture"
-                    />
-                  </button>
-                  {isProfileShown && (
-                    <Popup
-                      isOpen={isProfileShown}
-                      onClose={() => setIsProfileShown(false)}
-                      showCloseButton={false}
-                      popupType="menu"
-                      clickPosition={clickPosition}
-                    >
-                      <UserProfile onClose={() => setIsProfileShown(false)} />
-                    </Popup>
-                  )}
-                </>
-              ) : (
-                <PrimaryBtn handleClick={handleSidebarToggle}>
-                  <Link to="/sign-in">
-                    Sign In{" "}
-                    <i className="fa-solid fa-arrow-right-to-bracket"></i>
+                    Home
                   </Link>
-                </PrimaryBtn>
+                )}
+              </li>
+              {isAuthenticated && (
+                <li>
+                  <Link
+                    to="/my-space"
+                    onClick={handleSidebarToggle}
+                    aria-label="My Space Page"
+                  >
+                    My Space
+                  </Link>
+                </li>
               )}
-            </li>
-          </ul>
+              <li>
+                {isLoading ? (
+                  <Skeleton width={"80px"} height={"20px"} />
+                ) : (
+                  <Link
+                    to="/price"
+                    onClick={handleSidebarToggle}
+                    aria-label="Pricing Page"
+                  >
+                    Pricing
+                  </Link>
+                )}
+              </li>
+              <li>
+                {isLoading ? (
+                  <Skeleton width={"80px"} height={"20px"} />
+                ) : (
+                  <Link
+                    to="/about"
+                    onClick={handleSidebarToggle}
+                    aria-label="About Page"
+                  >
+                    About
+                  </Link>
+                )}
+              </li>
+              <li>
+                {isLoading ? (
+                  <Skeleton width={"80px"} height={"20px"} />
+                ) : isAuthenticated ? (
+                  <>
+                    <button
+                      onClick={handleProfileOpen}
+                      className={styles.profile}
+                      aria-label="User Profile"
+                    >
+                      <img
+                        src={user?.profilePicture || defaultUserProfile}
+                        alt="User Profile"
+                      />
+                    </button>
+                  </>
+                ) : (
+                  <PrimaryBtn handleClick={() => navigate("/sign-in")}>
+                    Sign In <FaArrowRightToBracket />
+                  </PrimaryBtn>
+                )}
+              </li>
+            </ul>
+          </nav>
+          {isProfileShown && (
+            <Popup
+              isOpen={isProfileShown}
+              onClose={() => setIsProfileShown(false)}
+              showCloseButton={false}
+              popupType="menu"
+              clickPosition={clickPosition}
+            >
+              <UserProfile onClose={() => setIsProfileShown(false)} />
+            </Popup>
+          )}
         </div>
       </div>
-    </nav>
+    </header>
   );
 };
 

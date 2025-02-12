@@ -1,5 +1,6 @@
 import { getCoreRowModel, useReactTable } from "@tanstack/react-table";
 import { useCallback, useEffect, useMemo, useState } from "react";
+import { IoAddOutline } from "react-icons/io5";
 import { useBringMilestoneWordQuery } from "../../../services/milestone";
 import { useUpdateWords } from "../hooks/useUpdateWords.js";
 import { calculateColumnWidths, wordSchemaForClient } from "../utils.js";
@@ -199,7 +200,8 @@ const WordsContainer = ({ curMilestone, isOnRecallMood }) => {
       {words[words.length - 1]?._id || words.length === 0 ? (
         <div className={styles.addNewWord}>
           <button onClick={handleAppendWord}>
-            <i className="fa-solid fa-plus"></i> Add new word
+            <IoAddOutline />
+            Add new word
           </button>
         </div>
       ) : (

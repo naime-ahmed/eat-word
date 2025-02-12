@@ -1,5 +1,6 @@
 import { useCallback, useRef, useState } from "react";
 import { BsPinAngleFill } from "react-icons/bs";
+import { HiDotsVertical } from "react-icons/hi";
 import { useNavigate } from "react-router-dom";
 import { formatTimeAgo } from "../../utils/formateTimeAgo";
 import Popup from "../Popup/Popup";
@@ -52,9 +53,9 @@ const MilestoneCard = ({ milestone }) => {
         <div
           ref={ellipsisRef}
           onClick={handleMenusOpen}
-          style={{ cursor: "pointer" }}
+          className={styles.editEllipsis}
         >
-          <i className="fa-solid fa-ellipsis-vertical"></i>
+          <HiDotsVertical />
         </div>
         {isMenuOpen && (
           <Popup

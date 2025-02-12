@@ -45,12 +45,16 @@
   color: #e3e8ff;
 }
 
-.milestoneNameAndEdit i {
-  padding: 3px 6px;
+.editEllipsis {
+  display: flex;
+  justify-content: center;
+  padding: 6px;
+  font-size: 17px;
   border: 1px solid #9277a32d;
-  border-radius: 3px;
+  border-radius: 50px;
+  cursor: pointer;
 }
-.milestoneNameAndEdit i:hover {
+.editEllipsis:hover {
   border: 1px solid #9277a377;
 }
 .floatCard {
