@@ -45,8 +45,8 @@ function Hero() {
   }, []);
 
   return (
-    <div className={styles.container}>
-      <div className={styles.header}>
+    <section className={styles.container}>
+      <div className={styles.heroContent}>
         <div className={styles.title}>
           <span className={styles.staticText}>Eat Word—Elevate</span>
           <span>Your</span>
@@ -72,18 +72,21 @@ function Hero() {
           repetition, contextual learning, and AI, vocabulary becomes second
           nature.
         </p>
-        <div className={styles.ctaBtn}>
-          {isLoading ? (
-            <Skeleton width="180px" height="45px" />
-          ) : (
-            <CTABtn handleClick={handleNavigation}>
-              {isAuthenticated ? "My Space" : "Get started - free"}
-            </CTABtn>
-          )}
-        </div>
+        {isLoading ? (
+          <Skeleton width="180px" height="63px" />
+        ) : (
+          <CTABtn
+            handleClick={handleNavigation}
+            aria-label={
+              isAuthenticated ? "Go to My Space" : "Get Started - Free"
+            }
+          >
+            {isAuthenticated ? "My Space" : "Get started - free"}
+          </CTABtn>
+        )}
       </div>
       <div className={styles.curvedMask}></div>
-    </div>
+    </section>
   );
 }
 
