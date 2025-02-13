@@ -1,16 +1,24 @@
 .container {
   height: calc(100vh - 265px);
   max-height: 44rem;
+  min-height: 42rem;
   width: calc(100vw - 50px);
   margin-top: 168px;
   overflow: hidden;
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-areas: "stack";
   align-items: center;
-  justify-content: center;
+  justify-items: center;
+  padding: 100px 0;
+}
+.heroContent,
+.curvedMask {
+  grid-area: stack;
+  min-height: min-content;
+  transition: transform 0.3s ease;
 }
 
-.header {
+.heroContent {
   width: calc(100vw - 50px);
   max-width: 1250px;
   position: relative;
@@ -19,6 +27,7 @@
   align-items: center;
   justify-content: center;
   z-index: 10;
+  transform: translateY(-100px);
 }
 
 .title {
@@ -62,7 +71,6 @@
   -webkit-background-clip: text;
   text-fill-color: transparent;
   -webkit-text-fill-color: transparent;
-  cursor: pointer;
   transition: transform 0.2s ease;
 }
 
@@ -79,14 +87,9 @@
   color: hsl(239, 100%, 88%);
 }
 
-.ctaBtn {
-  display: flex;
-  justify-content: center;
-}
-
 .curvedMask {
-  position: relative;
-  margin-top: -9rem;
+  transform: translateY(72px);
+  z-index: 1;
   height: 26rem;
   width: calc(100vw - 50px);
   overflow: hidden;
@@ -139,15 +142,6 @@
 
 /* Media queries for responsiveness */
 
-@media (min-width: 1200px) and (max-width: 1400px) {
-  /* .header {
-    padding-top: 1rem;
-  }
-  .title {
-    font-size: 38px;
-  } */
-}
-
 @media (min-width: 1000px) and (max-width: 1199.98px) {
   .title {
     font-size: 42px;
@@ -175,7 +169,7 @@
 }
 
 @media (min-width: 600px) and (max-width: 767.98px) {
-  .header {
+  .heroContent {
     max-width: 560px;
   }
   .title {
@@ -193,9 +187,14 @@
 }
 
 @media (max-width: 599.98px) {
-  .header {
-    max-width: 340px;
+  .container {
+    margin-top: 108px;
   }
+  .heroContent {
+    max-width: 340px;
+    transform: translateY(-120px);
+  }
+
   .title {
     width: 340px;
     margin-left: 0;
@@ -232,7 +231,10 @@
 }
 
 @media (max-width: 391.98px) {
-  /*  */
+  .heroContent {
+    max-width: 340px;
+    transform: translateY(-110px);
+  }
   .title {
     font-size: 26px;
   }
