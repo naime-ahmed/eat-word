@@ -7,14 +7,14 @@
 /* CSS for gradient bg */
 .gradientLine {
   position: absolute;
-  top: -0.5px; /* Adjust as needed */
+  top: -0.5px;
   left: 50%;
-  height: 1px; /* Use a suitable value if 'h-px' doesn't translate directly */
-  width: 80%; /* Equivalent to w-4/5 */
+  height: 1px;
+  width: 80%;
   max-width: 500px;
-  transform: translate(-50%, -50%) translateZ(0); /* Combine transform functions */
-  pointer-events: none; /* Equivalent to pointer-events-none */
-  user-select: none; /* Equivalent to user-select-none */
+  transform: translate(-50%, -50%) translateZ(0);
+  pointer-events: none;
+  user-select: none;
   background: linear-gradient(
     90deg,
     rgba(0, 0, 0, 0) 0%,
@@ -25,14 +25,14 @@
 
 .gradientBackground {
   position: absolute;
-  top: -1px; /* Adjust as necessary */
+  top: -1px;
   left: 50%;
-  height: 200px; /* Equivalent to h-[200px] */
-  width: 100%; /* Equivalent to w-full */
-  max-width: 300px; /* Base style */
-  transform: translate(-50%, -50%) translateZ(0); /* Combine transformation functions */
-  pointer-events: none; /* Equivalent to pointer-events-none */
-  user-select: none; /* Equivalent to user-select-none */
+  height: 200px;
+  width: 100%;
+  max-width: 300px;
+  transform: translate(-50%, -50%) translateZ(0);
+  pointer-events: none;
+  user-select: none;
   background: conic-gradient(
       from 90deg at 50% 50%,
       rgb(0 0 0 / 0%) 50%,
@@ -41,11 +41,9 @@
     radial-gradient(rgb(62 73 219 / 23%) 0%, transparent 70%);
 }
 
-/* Optional media query for responsive max-width */
 @media (min-width: 768px) {
-  /* Assuming md is for medium devices */
   .gradientBackground {
-    max-width: 600px; /* Changes max width on medium devices and up */
+    max-width: 600px;
   }
 }
 
@@ -88,6 +86,7 @@
   color: #d4d5d6;
   font-size: 18px;
 }
+
 .card0 {
   grid-area: item0;
   flex-direction: row-reverse;
@@ -145,6 +144,7 @@
   margin: 20px;
 }
 
+/* Positioning for the SVG containers */
 .dashBorder0 {
   grid-area: svg0;
 }
@@ -153,9 +153,31 @@
   grid-area: svg1;
   position: relative;
 }
-.dashBorder1 > svg {
+.dashBorder1 > svg,
+.dashBorder2 > svg,
+.dashBorder3 > svg,
+.dashBorder4 > svg,
+.dashBorder5 > svg {
   width: 182px;
   height: 182px;
+}
+
+/* Set dashed stroke style */
+.dashBorder0 > svg path,
+.dashBorder1 > svg path,
+.dashBorder2 > svg path,
+.dashBorder3 > svg path,
+.dashBorder4 > svg path,
+.dashBorder5 > svg path {
+  fill: none;
+  stroke-width: 2;
+  /* Set a dash pattern (e.g., 5px dash, 5px gap) */
+  stroke-dasharray: 5 5;
+  stroke-dashoffset: 0;
+}
+
+/* Position adjustments for each SVG */
+.dashBorder1 > svg {
   position: absolute;
   left: 380px;
   bottom: 78px;
@@ -165,8 +187,6 @@
   position: relative;
 }
 .dashBorder2 > svg {
-  width: 182px;
-  height: 182px;
   position: absolute;
   left: -110px;
   bottom: 80px;
@@ -176,8 +196,6 @@
   position: relative;
 }
 .dashBorder3 > svg {
-  width: 182px;
-  height: 182px;
   position: absolute;
   left: 380px;
   bottom: 78px;
@@ -187,8 +205,6 @@
   position: relative;
 }
 .dashBorder4 > svg {
-  width: 182px;
-  height: 182px;
   position: absolute;
   left: -110px;
   bottom: 80px;
@@ -198,12 +214,53 @@
   position: relative;
 }
 .dashBorder5 > svg {
-  width: 182px;
-  height: 182px;
   position: absolute;
   left: 380px;
   bottom: 78px;
 }
+
+/* Keyframes for dash-stream animation */
+@keyframes dashStream {
+  0% {
+    stroke-dashoffset: 0;
+  }
+  100% {
+    stroke-dashoffset: -20;
+  }
+}
+
+/* Different colors and animation delays for each path */
+.path0 {
+  stroke: cyan;
+  animation: dashStream 2s linear infinite;
+}
+
+.path1 {
+  stroke: rgb(117, 223, 255);
+  animation: dashStream 2.5s linear infinite;
+}
+
+.path2 {
+  stroke: rgb(35, 252, 169);
+  animation: dashStream 3s linear infinite;
+}
+
+.path3 {
+  stroke: rgb(35, 147, 252);
+  animation: dashStream 2.8s linear infinite;
+}
+
+.path4 {
+  stroke: rgb(255, 0, 98);
+  animation: dashStream 3.2s linear infinite;
+}
+
+.path5 {
+  stroke: rgb(2, 168, 2);
+  animation: dashStream 2.2s linear infinite;
+}
+
+/* Animation: draw from dashoffset 300 to 0 (i.e. drawing the path) */
 
 /* Responsive style for all devices */
 @media (max-width: 599.98px) {

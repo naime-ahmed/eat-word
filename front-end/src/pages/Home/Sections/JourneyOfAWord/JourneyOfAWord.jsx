@@ -105,12 +105,7 @@ const JourneyOfAWord = () => {
           >
             <path
               d="M1.72656 1.86328C1.72656 100.386 81.5642 180.193 180.125 180.193"
-              stroke="#9F9F9F"
-              strokeWidth="2"
-              strokeMiterlimit="22.9256"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeDasharray="5 5"
+              className={style.path0}
             ></path>
           </svg>
         </div>
@@ -122,12 +117,7 @@ const JourneyOfAWord = () => {
           >
             <path
               d="M1.72656 1.86328C1.72656 100.386 81.5642 180.193 180.125 180.193"
-              stroke="#9F9F9F"
-              strokeWidth="2"
-              strokeMiterlimit="22.9256"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeDasharray="5 5"
+              className={style.path1}
             ></path>
           </svg>
         </div>
@@ -139,16 +129,10 @@ const JourneyOfAWord = () => {
           >
             <path
               d="M180.273 1.42188C180.273 99.9447 100.436 179.752 1.875 179.752"
-              stroke="#9F9F9F"
-              strokeWidth="2"
-              strokeMiterlimit="22.9256"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeDasharray="5 5"
+              className={style.path2}
             ></path>
           </svg>
         </div>
-
         <div className={style.dashBorder3}>
           <svg
             viewBox="0 0 182 182"
@@ -157,16 +141,10 @@ const JourneyOfAWord = () => {
           >
             <path
               d="M1.72656 1.86328C1.72656 100.386 81.5642 180.193 180.125 180.193"
-              stroke="#9F9F9F"
-              strokeWidth="2"
-              strokeMiterlimit="22.9256"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeDasharray="5 5"
+              className={style.path3}
             ></path>
           </svg>
         </div>
-
         <div className={style.dashBorder4}>
           <svg
             viewBox="0 0 182 181"
@@ -175,12 +153,7 @@ const JourneyOfAWord = () => {
           >
             <path
               d="M180.273 1.42188C180.273 99.9447 100.436 179.752 1.875 179.752"
-              stroke="#9F9F9F"
-              strokeWidth="2"
-              strokeMiterlimit="22.9256"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeDasharray="5 5"
+              className={style.path4}
             ></path>
           </svg>
         </div>
@@ -192,12 +165,7 @@ const JourneyOfAWord = () => {
           >
             <path
               d="M1.72656 1.86328C1.72656 100.386 81.5642 180.193 180.125 180.193"
-              stroke="#9F9F9F"
-              strokeWidth="2"
-              strokeMiterlimit="22.9256"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeDasharray="5 5"
+              className={style.path5}
             ></path>
           </svg>
         </div>
