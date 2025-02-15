@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import crown from "../../assets/crown.png";
+import crown from "../../assets/crown.webp";
 import Footer from "../../components/shared/Footer/Footer";
 import Header from "../../components/shared/Header/Header";
 import FancyBtn from "../../components/ui/button/FancyBtn/FancyBtn";
