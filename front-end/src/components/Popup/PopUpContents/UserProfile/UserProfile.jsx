@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
-import defaultUserProfileImage from "../../../../assets/defaultUserProfileImage.png";
+import defaultUserProfileImage from "../../../../assets/defaultUserProfileImage.webp";
 import { setSignOutUser } from "../../../../features/authSlice";
 import { useConfirmation } from "../../../../hooks/useConfirmation";
 import { useSignOutUserMutation } from "../../../../services/auth";
