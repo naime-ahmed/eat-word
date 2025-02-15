@@ -3,7 +3,7 @@ import { FaArrowRightToBracket, FaBars, FaXmark } from "react-icons/fa6";
 
 import { useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
-import defaultUserProfile from "../../../assets/defaultUserProfileImage.png";
+import defaultUserProfile from "../../../assets/defaultUserProfileImage.webp";
 import logo from "../../../assets/logo.png";
 import Popup from "../../Popup/Popup";
 import UserProfile from "../../Popup/PopUpContents/UserProfile/UserProfile";
