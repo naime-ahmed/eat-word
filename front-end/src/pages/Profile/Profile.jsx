@@ -4,7 +4,7 @@ import { LiaEditSolid } from "react-icons/lia";
 import { MdOutlineEdit } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import defaultProfilePic from "../../assets/defaultUserProfileImage.png";
+import defaultProfilePic from "../../assets/defaultUserProfileImage.webp";
 import ConfirmationPopup from "../../components/Popup/ConfirmationPopup/ConfirmationPopup";
 import Error from "../../components/shared/Error/Error";
 import Footer from "../../components/shared/Footer/Footer";
