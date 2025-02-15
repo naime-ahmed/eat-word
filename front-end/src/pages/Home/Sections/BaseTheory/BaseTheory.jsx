@@ -1,7 +1,7 @@
-import fewMoreThings from "../../../../assets//fewMoreThings.png";
-import activeRecall from "../../../../assets/activeRecall.png";
-import contextualLearning from "../../../../assets/contextualLearning.png";
-import spacedRepetition from "../../../../assets/spacedRepetition.png";
+import fewMoreThings from "../../../../assets//fewMoreThings.webp";
+import activeRecall from "../../../../assets/activeRecall.webp";
+import contextualLearning from "../../../../assets/contextualLearning.webp";
+import spacedRepetition from "../../../../assets/spacedRepetition.webp";
 import style from "./BaseTheory.module.css";
 
 const BaseTheory = () => {
