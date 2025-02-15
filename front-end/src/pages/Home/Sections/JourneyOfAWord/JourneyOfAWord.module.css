@@ -230,33 +230,28 @@
 }
 
 /* Different colors and animation delays for each path */
-.path0 {
-  stroke: cyan;
-  animation: dashStream 2s linear infinite;
-}
-
 .path1 {
-  stroke: rgb(117, 223, 255);
+  stroke: url(#gradient-stroke1);
   animation: dashStream 2.5s linear infinite;
 }
 
 .path2 {
-  stroke: rgb(35, 252, 169);
+  stroke: url(#gradient-stroke2);
   animation: dashStream 3s linear infinite;
 }
 
 .path3 {
-  stroke: rgb(35, 147, 252);
+  stroke: url(#gradient-stroke3);
   animation: dashStream 2.8s linear infinite;
 }
 
 .path4 {
-  stroke: rgb(255, 0, 98);
+  stroke: url(#gradient-stroke4);
   animation: dashStream 3.2s linear infinite;
 }
 
 .path5 {
-  stroke: rgb(2, 168, 2);
+  stroke: url(#gradient-stroke5);
   animation: dashStream 2.2s linear infinite;
 }
 
