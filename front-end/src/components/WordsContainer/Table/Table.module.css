@@ -72,6 +72,17 @@
   background-color: #1c294d;
 }
 
+/* error message style */
+.errorOnWordLoad {
+  padding: 12px;
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  background-color: #1c294d;
+  border-radius: 4px;
+  color: rgb(255, 73, 73);
+}
+
 /* skelton style */
 .tableSkeleton {
   box-sizing: border-box;

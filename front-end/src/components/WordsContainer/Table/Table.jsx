@@ -1,7 +1,10 @@
 import { getCoreRowModel, useReactTable } from "@tanstack/react-table";
+import PropTypes from "prop-types";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { IoAddOutline } from "react-icons/io5";
 import { useBringMilestoneWordQuery } from "../../../services/milestone";
+import { milestonePropTypes } from "../../../utils/propTypes.js";
+import PrimaryBtn from "../../ui/button/PrimaryBtn/PrimaryBtn.jsx";
 import { useUpdateWords } from "../hooks/useUpdateWords.js";
 import { calculateColumnWidths, wordSchemaForClient } from "../utils.js";
 import styles from "./Table.module.css";
@@ -14,6 +17,11 @@ const WordsContainer = ({ curMilestone, isOnRecallMood }) => {
   const [words, setWords] = useState([]);
   const [rowHeights, setRowHeights] = useState([]);
   const { updateWords } = useUpdateWords();
+
+  // Auto-scroll to top on component mount
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   const { data, isLoading, isError, error } = useBringMilestoneWordQuery(
     curMilestone?._id
@@ -155,9 +163,7 @@ const WordsContainer = ({ curMilestone, isOnRecallMood }) => {
     examplesSize,
     meaningSize,
   ]);
-  console.log("words", words);
-  console.log("row height after: ", rowHeights);
-  // console.log("rowHeight", rowHeights);
+
   // Table instance
   const table = useReactTable({
     columns,
@@ -171,6 +177,10 @@ const WordsContainer = ({ curMilestone, isOnRecallMood }) => {
     },
   });
 
+  // refresh the page
+  function refreshPage() {
+    window.location.reload();
+  }
   if (isLoading) {
     return <TableSkeletonLoader />;
   }
@@ -178,8 +188,26 @@ const WordsContainer = ({ curMilestone, isOnRecallMood }) => {
   if (isError) {
     console.log(error);
   }
-  // if (isError) return <div>Error: {error.data.message}</div>;
-  console.log("table after insert", table?.getRowModel()?.rows);
+  // handle the error message
+  if (isError)
+    return (
+      <div className={styles.errorOnWordLoad}>
+        <span>
+          {error?.data?.message ||
+            "Somethings went wrong while fetching words!"}
+        </span>
+        <PrimaryBtn
+          btnType="button"
+          handleClick={refreshPage}
+          isLoading={isLoading}
+          loadingText="loading..."
+          colorOne="rgb(255 26 34)"
+          colorTwo="rgb(143 9 13)"
+        >
+          Try again reloading
+        </PrimaryBtn>
+      </div>
+    );
   return (
     <div>
       <table className={styles.table}>
@@ -209,6 +237,11 @@ const WordsContainer = ({ curMilestone, isOnRecallMood }) => {
       )}
     </div>
   );
+};
+
+WordsContainer.propTypes = {
+  curMilestone: milestonePropTypes,
+  isOnRecallMood: PropTypes.Boolean,
 };
 
 export default WordsContainer;
