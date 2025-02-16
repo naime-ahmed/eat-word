@@ -19,6 +19,11 @@ const MySpace = () => {
 
   const { data, isLoading, isError, error } = useBringMilestonesQuery();
 
+  // Auto-scroll to top on component mount
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   // Update milestones state when data is fetched
   useEffect(() => {
     if (data?.milestones) {
@@ -38,11 +43,10 @@ const MySpace = () => {
 
   // Sort milestones: pinned milestones first
   const sortedMilestones = filteredMilestones?.sort((a, b) => {
-    if (a.pinned && !b.pinned) return -1; // a comes first
-    if (!a.pinned && b.pinned) return 1; // b comes first
-    return 0; // no change in order
+    if (a.pinned && !b.pinned) return -1;
+    if (!a.pinned && b.pinned) return 1;
+    return 0;
   });
-  console.log("sorted milestone", sortedMilestones);
 
   const openReqModal = useCallback(() => setIsTakingRequirements(true), []);
   const closeReqModal = useCallback(() => setIsTakingRequirements(false), []);
