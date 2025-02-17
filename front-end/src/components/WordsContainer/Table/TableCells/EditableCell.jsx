@@ -1,3 +1,4 @@
+import PropTypes from "prop-types";
 import { useCallback, useEffect, useRef, useState } from "react";
 import styles from "./EditableCell.module.css";
 const CHARACTER_LIMITS = {
@@ -13,13 +14,14 @@ const EditableCell = ({ getValue, row, column, table }) => {
   const textareaRef = useRef(null);
   const hasFocusedRef = useRef(false);
   const [isBlurDismissed, setIsBlurDismissed] = useState(false);
-  const isOnRecallMode = table.options.meta?.isOnRecallMood;
   const [showLimitMessage, setShowLimitMessage] = useState(false);
-  const characterLimit = CHARACTER_LIMITS[column.id] || 0;
+  const timeoutRef = useRef(null);
 
+  // Derived values
+  const characterLimit = CHARACTER_LIMITS[column.id] || 0;
+  const isOnRecallMode = table.options.meta?.isOnRecallMood;
   const showBlur =
     isOnRecallMode && column.id !== "word" && !isBlurDismissed && value;
-  console.log("is on blur mood from cell", isOnRecallMode);
 
   const adjustHeight = useCallback(() => {
     const textarea = textareaRef.current;
@@ -35,61 +37,7 @@ const EditableCell = ({ getValue, row, column, table }) => {
     }
   }, [row.index, table, column.id]);
 
-  // Add zoom detection
-  useEffect(() => {
-    const handleZoom = () => {
-      requestAnimationFrame(adjustHeight);
-    };
-
-    // Listen for keyboard zoom
-    window.addEventListener("keydown", (e) => {
-      if ((e.ctrlKey || e.metaKey) && (e.key === "+" || e.key === "-")) {
-        handleZoom();
-      }
-    });
-
-    // Listen for resize (catches both keyboard and mouse wheel zoom)
-    window.visualViewport.addEventListener("resize", handleZoom);
-
-    return () => {
-      window.visualViewport.removeEventListener("resize", handleZoom);
-    };
-  }, [adjustHeight]);
-
-  const handleOnChange = (e) => {
-    const newValue = e.target.value.slice(0, characterLimit);
-    setValue(newValue);
-
-    if (e.target.value.length >= characterLimit) {
-      setShowLimitMessage(true);
-      setTimeout(() => setShowLimitMessage(false), 2000);
-    }
-    adjustHeight();
-  };
-
-  const handleOnKeyUp = () => {
-    adjustHeight();
-  };
-
-  const handleOnBlur = useCallback(() => {
-    if (initialValue !== value) {
-      table.options.meta?.updateWords(row.index, column.id, value);
-      adjustHeight();
-    }
-  }, [
-    column.id,
-    row.index,
-    value,
-    table.options.meta,
-    adjustHeight,
-    initialValue,
-  ]);
-
-  useEffect(() => {
-    setValue(initialValue);
-    adjustHeight();
-  }, [initialValue, adjustHeight]);
-
+  // set the height to rows max height on mount
   useEffect(() => {
     const textarea = textareaRef.current;
     if (textarea) {
@@ -100,7 +48,33 @@ const EditableCell = ({ getValue, row, column, table }) => {
     }
   }, [row.index, table.options.meta?.rowHeights]);
 
-  // Auto-focus the word cell if it's a new placeholder row
+  // Zoom/resize handler
+  useEffect(() => {
+    const handleZoom = () => requestAnimationFrame(adjustHeight);
+
+    const zoomHandler = (e) => {
+      if ((e.ctrlKey || e.metaKey) && (e.key === "+" || e.key === "-")) {
+        handleZoom();
+      }
+    };
+
+    window.addEventListener("keydown", zoomHandler);
+    window.visualViewport?.addEventListener("resize", handleZoom);
+
+    return () => {
+      window.removeEventListener("keydown", zoomHandler);
+      window.visualViewport?.removeEventListener("resize", handleZoom);
+      clearTimeout(timeoutRef.current);
+    };
+  }, [adjustHeight]);
+
+  // Value synchronization
+  useEffect(() => {
+    setValue(initialValue);
+    adjustHeight();
+  }, [initialValue, adjustHeight]);
+
+  // Initial focus for new rows
   useEffect(() => {
     if (
       column.id === "word" &&
@@ -120,6 +94,31 @@ const EditableCell = ({ getValue, row, column, table }) => {
     }
   }, [isOnRecallMode]);
 
+  const handleOnChange = (e) => {
+    const newValue = e.target.value.slice(0, characterLimit);
+    setValue(newValue);
+
+    if (e.target.value.length >= characterLimit) {
+      setShowLimitMessage(true);
+      timeoutRef.current = setTimeout(() => setShowLimitMessage(false), 2000);
+    }
+    adjustHeight();
+  };
+
+  const handleOnBlur = useCallback(() => {
+    if (initialValue !== value) {
+      table.options.meta?.updateWords(row.index, column.id, value);
+      adjustHeight();
+    }
+  }, [
+    initialValue,
+    value,
+    row.index,
+    column.id,
+    table.options.meta,
+    adjustHeight,
+  ]);
+
   // Handle overlay click
   const handleOverlayClick = (e) => {
     if (showBlur) {
@@ -127,10 +126,7 @@ const EditableCell = ({ getValue, row, column, table }) => {
       setIsBlurDismissed(true);
       return;
     }
-    // Focus the textarea only if the blur layer is not active
-    if (textareaRef.current && !showBlur) {
-      textareaRef.current.focus();
-    }
+    textareaRef.current?.focus();
   };
 
   // dynamic style
@@ -152,9 +148,8 @@ const EditableCell = ({ getValue, row, column, table }) => {
       <textarea
         ref={textareaRef}
         value={value}
-        height={table.options.meta?.rowHeights[row.index]?.curMax}
         onChange={handleOnChange}
-        onKeyUp={handleOnKeyUp}
+        onKeyUp={adjustHeight}
         onBlur={handleOnBlur}
         className={styles.editableCell}
         style={style}
@@ -173,6 +168,30 @@ const EditableCell = ({ getValue, row, column, table }) => {
       )}
     </div>
   );
+};
+
+EditableCell.propTypes = {
+  getValue: PropTypes.func.isRequired,
+  row: PropTypes.shape({
+    index: PropTypes.number.isRequired,
+    original: PropTypes.shape({
+      _id: PropTypes.string,
+      difficultyLevel: PropTypes.string,
+    }).isRequired,
+  }).isRequired,
+  column: PropTypes.shape({
+    id: PropTypes.string.isRequired,
+  }).isRequired,
+  table: PropTypes.shape({
+    options: PropTypes.shape({
+      meta: PropTypes.shape({
+        isOnRecallMood: PropTypes.bool,
+        updateRowHeight: PropTypes.func,
+        updateWords: PropTypes.func,
+        rowHeights: PropTypes.array,
+      }),
+    }).isRequired,
+  }).isRequired,
 };
 
 export default EditableCell;
