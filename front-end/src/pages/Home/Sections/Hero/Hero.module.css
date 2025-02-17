@@ -26,6 +26,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  gap: 18px;
   z-index: 10;
   transform: translateY(-100px);
 }
@@ -35,7 +36,6 @@
   font-size: 52px;
   font-weight: 800;
   margin-left: -50px;
-  margin-bottom: 20px;
   color: #ffffff;
   background-image: -webkit-linear-gradient(270deg, #ffffff 39%, #6f65fc 78%);
   background-clip: text;
@@ -74,17 +74,17 @@
   transition: transform 0.2s ease;
 }
 
-.animatedText:hover {
-  transform: scale(1.1);
-}
-
 .HeroDescription {
   max-width: 700px;
   text-align: center;
   font-size: 1.2rem;
   line-height: 2rem;
-  margin-bottom: 20px;
   color: hsl(239, 100%, 88%);
+}
+
+.heroContent > div:last-of-type,
+.heroContent > button:last-of-type {
+  margin-top: 14px;
 }
 
 .curvedMask {
