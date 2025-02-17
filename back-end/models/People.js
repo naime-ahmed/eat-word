@@ -32,7 +32,6 @@ const peopleSchema = new mongoose.Schema(
       required: function () {
         return this.authProvider === "local";
       },
-      select: false,
     },
     authProvider: {
       type: String,
