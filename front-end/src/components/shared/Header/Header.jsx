@@ -26,12 +26,12 @@ const Header = () => {
   const handleProfileOpen = (e) => {
     e.stopPropagation();
     let x = e.clientX + window.scrollX + 16;
-    let y = -4;
+    let y = window.scrollY - 4;
     if (window.innerWidth < 500) {
       console.log(window.innerWidth);
       x += 100;
     }
-    setClickPosition({ x, y: -4 });
+    setClickPosition({ x, y });
     setIsProfileShown(true);
     console.log(x, y);
   };
@@ -67,6 +67,7 @@ const Header = () => {
           <Link to="/">
             <img src={logo} alt="Eat Word Logo" width="100px" height="40px" />
           </Link>
+          <small>Beta</small>
         </span>
         <div className={`${styles.menu} ${isSidebarOpen ? styles.active : ""}`}>
           <div className={styles.logoToggle}>
@@ -74,6 +75,7 @@ const Header = () => {
               <Link to="/">
                 <img src={logo} alt="Brand logo" />
               </Link>
+              <small>Beta</small>
             </span>
             <FaXmark
               className={`${styles.sidebarClose}`}
@@ -164,6 +166,7 @@ const Header = () => {
               showCloseButton={false}
               popupType="menu"
               clickPosition={clickPosition}
+              isPreventScroll={true}
             >
               <UserProfile onClose={() => setIsProfileShown(false)} />
             </Popup>
