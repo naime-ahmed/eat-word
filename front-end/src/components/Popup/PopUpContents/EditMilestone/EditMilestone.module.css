@@ -64,7 +64,7 @@ select.inputField:focus {
 }
 
 .EditButton {
-  text-align: end;
+  align-self: flex-end;
 }
 
 @media screen and (max-width: 510px) {
@@ -77,7 +77,7 @@ select.inputField:focus {
     height: 240px;
   }
   .modalContent {
-    padding: 18px;
+    padding: 36px 22px 18px 22px;
     border-radius: 8px;
     max-width: 340px;
   }
@@ -86,6 +86,6 @@ select.inputField:focus {
   }
   .inputField,
   select.inputField {
-    width: 290px;
+    width: 286px;
   }
 }

@@ -1,6 +1,8 @@
+import PropTypes from "prop-types";
 import { useState } from "react";
 import useNotification from "../../../../hooks/useNotification";
 import { useEditMilestoneMutation } from "../../../../services/milestone";
+import { milestonePropTypes } from "../../../../utils/propTypes";
 import PrimaryBtn from "../../../ui/button/PrimaryBtn/PrimaryBtn";
 import styles from "./EditMilestone.module.css";
 
@@ -102,5 +104,10 @@ function EditMilestone({ milestone, onClose }) {
     </div>
   );
 }
+
+EditMilestone.propTypes = {
+  milestone: milestonePropTypes,
+  onClose: PropTypes.func.isRequired,
+};
 
 export default EditMilestone;
