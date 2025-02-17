@@ -241,7 +241,7 @@ const WordsContainer = ({ curMilestone, isOnRecallMood }) => {
 
 WordsContainer.propTypes = {
   curMilestone: milestonePropTypes,
-  isOnRecallMood: PropTypes.Boolean,
+  isOnRecallMood: PropTypes.bool,
 };
 
 export default WordsContainer;
