@@ -1,4 +1,5 @@
 import { flexRender } from "@tanstack/react-table";
+import PropTypes from "prop-types";
 import { useCallback, useState } from "react";
 import { RxDragHandleDots2 } from "react-icons/rx";
 import Popup from "../../Popup/Popup";
@@ -8,7 +9,6 @@ import styles from "./Table.module.css";
 const TableRow = ({ row, rowHeights, updateRowHeight }) => {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [clickPosition, setClickPosition] = useState(null);
-  // console.log("row data", row.original);
 
   const handleButtonClick = (e) => {
     // Calculate click position with scroll offset
@@ -42,7 +42,7 @@ const TableRow = ({ row, rowHeights, updateRowHeight }) => {
         </td>
       ))}
       {row?.original?._id && (
-        <span className={styles.rowAction} onClick={handleButtonClick}>
+        <td className={styles.rowAction} onClick={handleButtonClick}>
           <RxDragHandleDots2 />
           <Popup
             isOpen={isPopupOpen}
@@ -58,10 +58,24 @@ const TableRow = ({ row, rowHeights, updateRowHeight }) => {
               updateRowHeight={updateRowHeight}
             />
           </Popup>
-        </span>
+        </td>
       )}
     </tr>
   );
+};
+
+TableRow.propTypes = {
+  row: PropTypes.shape({
+    id: PropTypes.string.isRequired,
+    index: PropTypes.number.isRequired,
+    original: PropTypes.shape({
+      _id: PropTypes.string,
+    }).isRequired,
+    getVisibleCells: PropTypes.func.isRequired,
+  }).isRequired,
+  rowHeights: PropTypes.arrayOf(PropTypes.objectOf(PropTypes.number))
+    .isRequired,
+  updateRowHeight: PropTypes.func.isRequired,
 };
 
 export default TableRow;
