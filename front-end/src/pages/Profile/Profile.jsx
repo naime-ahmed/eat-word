@@ -48,6 +48,11 @@ function Profile() {
     },
   });
 
+  // Auto-scroll to top on component mount
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   // Update useEffect
   useEffect(() => {
     if (userData) {
@@ -62,8 +67,6 @@ function Profile() {
       });
     }
   }, [userData]);
-
-  console.log("basic info", basicInfo);
 
   const handleBasicInfoChange = (name, value) => {
     console.log("on change value", value);
