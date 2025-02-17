@@ -1,3 +1,4 @@
+import PropTypes from "prop-types";
 import styles from "./CTABtn.module.css";
 
 const StartBtn = ({ children, handleClick = () => {} }) => {
@@ -21,6 +22,11 @@ const StartBtn = ({ children, handleClick = () => {} }) => {
       </svg>
     </button>
   );
+};
+
+StartBtn.propTypes = {
+  children: PropTypes.node.isRequired,
+  handleClick: PropTypes.func,
 };
 
 export default StartBtn;
