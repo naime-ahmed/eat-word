@@ -12,6 +12,7 @@ import {
 } from "./middlewares/common/errorHandler.js";
 import adminRouter from "./router/adminRouter.js";
 import authRouter from "./router/authRouter.js";
+import emailRouter from './router/emailRouter.js';
 import milestonesRouter from "./router/milestonesRouter.js";
 import testimonialRouter from './router/testimonialRouter.js';
 import usersRouter from "./router/usersRouter.js";
@@ -55,6 +56,9 @@ app.use("/admin", adminRouter);
 
 // handle testimonial request
 app.use("/testimonial", testimonialRouter);
+
+// handle email service
+app.use("/email", emailRouter)
 
 app.get("/", (req, res) => {
   res.send({
