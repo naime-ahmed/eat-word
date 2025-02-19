@@ -1,15 +1,14 @@
-import { useEffect } from "react";
 import img1 from "../../assets/eatWordForAbout.webp";
 import planImg from "../../assets/imageForAboutUsFPlan.webp";
 import Footer from "../../components/shared/Footer/Footer";
 import Header from "../../components/shared/Header/Header";
+import { useScrollRestoration } from "../../hooks/useScrollRestoration";
 import styles from "./About.module.css";
 
 const About = () => {
-  // Auto-scroll to top on component mount
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, []);
+  // manage the scroll position
+  useScrollRestoration();
+
   return (
     <div className={styles.aboutUsPage}>
       <Header />

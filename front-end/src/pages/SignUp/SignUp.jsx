@@ -6,6 +6,7 @@ import {
   updateNewUser,
 } from "../../features/userSignUpSlice";
 import useNotification from "../../hooks/useNotification.js";
+import { useScrollRestoration } from "../../hooks/useScrollRestoration.js";
 import { useSignUpUserMutation } from "../../services/auth.js";
 import style from "./SignUp.module.css";
 
@@ -33,6 +34,9 @@ const SignUp = () => {
   const dispatch = useDispatch();
   const showNotification = useNotification();
   const [signUpUser, { isLoading }] = useSignUpUserMutation();
+
+  // manage the scroll position
+  useScrollRestoration();
 
   const handleChange = useCallback(
     (event) => {

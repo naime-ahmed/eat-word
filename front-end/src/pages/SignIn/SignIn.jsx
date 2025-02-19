@@ -11,6 +11,7 @@ import {
   updateUser,
 } from "../../features/userSignInSlice";
 import useNotification from "../../hooks/useNotification.js";
+import { useScrollRestoration } from "../../hooks/useScrollRestoration.js";
 import { useSignInUserMutation } from "../../services/auth.js";
 import { parseJwt } from "../../utils/parseJWT.js";
 import style from "./SignIn.module.css";
@@ -30,6 +31,9 @@ const SignIn = () => {
   const showNotification = useNotification();
 
   const [signInUser, { isLoading }] = useSignInUserMutation();
+
+  // manage the scroll position
+  useScrollRestoration();
 
   const handleChange = useCallback(
     (event) => {

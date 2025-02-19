@@ -7,6 +7,7 @@ import Header from "../../components/shared/Header/Header";
 import SpinnerForPage from "../../components/ui/loader/SpinnerForPage/SpinnerForPage";
 import Slider from "../../components/WordsContainer/Slider/Slider";
 import Table from "../../components/WordsContainer/Table/Table";
+import { useScrollRestoration } from "../../hooks/useScrollRestoration";
 import {
   useBringMilestonesQuery,
   useEditMilestoneMutation,
@@ -25,6 +26,9 @@ const Milestone = () => {
   const { milestoneId } = useParams();
   const { data, isLoading, isError, error } = useBringMilestonesQuery();
   const [editMilestone] = useEditMilestoneMutation();
+
+  // manage the scroll position
+  useScrollRestoration();
 
   // measure the screen size
   useEffect(() => {

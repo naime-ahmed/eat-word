@@ -1,14 +1,12 @@
-import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import Footer from "../../components/shared/Footer/Footer";
 import Header from "../../components/shared/Header/Header";
+import { useScrollRestoration } from "../../hooks/useScrollRestoration";
 import styles from "./PrivacyInfo.module.css";
 
 const PrivacyInfo = () => {
-  // Auto-scroll to top on component mount
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, []);
+  // manage the scroll position
+  useScrollRestoration();
 
   return (
     <div className={styles.PPContainer}>

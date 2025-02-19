@@ -1,6 +1,7 @@
 import { Suspense, lazy } from "react";
 import Footer from "../../components/shared/Footer/Footer";
 import Header from "../../components/shared/Header/Header";
+import { useScrollRestoration } from "../../hooks/useScrollRestoration";
 import style from "./Home.module.css";
 import BaseTheory from "./Sections/BaseTheory/BaseTheory";
 import Hero from "./Sections/Hero/Hero";
@@ -9,6 +10,8 @@ import JourneyOfAWord from "./Sections/JourneyOfAWord/JourneyOfAWord";
 const Testimonials = lazy(() => import("./Sections/Testimonials/Testimonials"));
 
 const Home = () => {
+  useScrollRestoration();
+
   return (
     <div className={style.homeContainer}>
       <Header />

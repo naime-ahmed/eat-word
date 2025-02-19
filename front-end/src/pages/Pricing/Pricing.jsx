@@ -4,12 +4,13 @@ import Footer from "../../components/shared/Footer/Footer";
 import Header from "../../components/shared/Header/Header";
 import FancyBtn from "../../components/ui/button/FancyBtn/FancyBtn";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { FaCheck } from "react-icons/fa6";
 import { IoCloseOutline } from "react-icons/io5";
 import { useSelector } from "react-redux";
 import Popup from "../../components/Popup/Popup";
 import GeneralMessage from "../../components/Popup/PopUpContents/GeneralMessage/GeneralMessage";
+import { useScrollRestoration } from "../../hooks/useScrollRestoration";
 import styles from "./Pricing.module.css";
 
 const Pricing = () => {
@@ -17,10 +18,8 @@ const Pricing = () => {
   const [showMessageToPro, setShowMessageToPro] = useState(false);
   const [showMessageToLifeT, setShowMessageToLifeT] = useState(false);
 
-  // Auto-scroll to top on component mount
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, []);
+  // manage the scroll position
+  useScrollRestoration();
 
   const navigate = useNavigate();
 

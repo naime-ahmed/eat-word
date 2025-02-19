@@ -1,9 +1,13 @@
 import { Link } from "react-router-dom";
 import Footer from "../../components/shared/Footer/Footer";
 import Header from "../../components/shared/Header/Header";
+import { useScrollRestoration } from "../../hooks/useScrollRestoration";
 import styles from "./TermsAndConditions.module.css";
 
 const TermsAndConditions = () => {
+  // manage the scroll position
+  useScrollRestoration();
+
   return (
     <div className={styles.tacContainer}>
       <Header />
