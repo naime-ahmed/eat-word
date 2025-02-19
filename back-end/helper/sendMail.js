@@ -1,7 +1,7 @@
 import { OAuth2Client } from "google-auth-library";
 import nodemailer from "nodemailer";
 
-const REDIRECT_URI = "https://developers.google.com/oauthplayground"; // Replace if different
+const REDIRECT_URI = "https://developers.google.com/oauthplayground";
 
 const sendEmailRegister = async (to, subject, text, url) => {
   // Configuration
@@ -327,5 +327,99 @@ return error;
 
 }
 
-export { sendEmailForgotPass, sendEmailRegister };
+const sendEmailContact = async (name, senderEmail, message) => {
+  const G_CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
+  const G_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET;
+  const G_REFRESH_TOKEN = process.env.GOOGLE_REFRESH_TOKEN;
+  const A_EMAIL = process.env.ADMIN_EMAIL;
+
+  // Create an OAuth2 client
+  const oAuth2Client = new OAuth2Client(
+    G_CLIENT_ID,
+    G_CLIENT_SECRET,
+    REDIRECT_URI
+  );
+
+  try {
+    oAuth2Client.setCredentials({ refresh_token: G_REFRESH_TOKEN });
+    // Get access token
+    const accessToken = await oAuth2Client.getAccessToken();
+
+    // Create a Nodemailer transporter using OAuth2
+    const transporter = nodemailer.createTransport({
+      service: "gmail",
+      auth: {
+        type: "OAuth2",
+        user: A_EMAIL,
+        clientId: G_CLIENT_ID,
+        clientSecret: G_CLIENT_SECRET,
+        refreshToken: G_REFRESH_TOKEN,
+        accessToken: accessToken.token,
+      },
+    });
+
+    const mailOptions = {
+      from: A_EMAIL,
+      to: A_EMAIL,
+      subject: "New Contact Message Received",
+      html: `
+      <html lang="en">
+      <head>
+        <meta charset="UTF-8" />
+        <title>New Contact Message</title>
+        <style>
+          body {
+            background-color: #f2f2f2;
+            font-family: Arial, sans-serif;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+          }
+          .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+          }
+          h1 {
+            font-size: 24px;
+            margin-bottom: 20px;
+          }
+          .info {
+            margin-bottom: 10px;
+            font-size: 16px;
+          }
+          .message {
+            margin-top: 20px;
+            font-size: 16px;
+            line-height: 1.5;
+          }
+        </style>
+      </head>
+      <body>
+        <div class="container">
+          <h1>New Contact Message</h1>
+          <p class="info"><strong>Name:</strong> ${name}</p>
+          <p class="info"><strong>Email:</strong> ${senderEmail}</p>
+          <p class="info"><strong>Message:</strong></p>
+          <p class="message">${message}</p>
+        </div>
+      </body>
+      </html>
+      `,
+    };
+
+    // Send the email
+    const result = await transporter.sendMail(mailOptions);
+    console.log("Contact email sent successfully:", result);
+    return result;
+  } catch (error) {
+    console.error("Error sending contact email:", error);
+    return error;
+  }
+};
+
+export { sendEmailContact, sendEmailForgotPass, sendEmailRegister };
 
