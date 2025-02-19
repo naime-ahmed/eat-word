@@ -38,7 +38,6 @@ const IntroVideo = () => {
             decoding="async"
             width="1200"
             height="675"
-            fetchPriority="high"
           />
           <div className={styles.imageOverlay} aria-hidden="true"></div>
           <div className={styles.playButtonContainer}>
