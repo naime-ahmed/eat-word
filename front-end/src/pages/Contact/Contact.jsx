@@ -2,58 +2,111 @@ import { useEffect, useState } from "react";
 import { LuPhoneCall } from "react-icons/lu";
 import { MdOutlineLocationOn } from "react-icons/md";
 import { PiTelegramLogoFill } from "react-icons/pi";
+import { useSelector } from "react-redux";
 import Footer from "../../components/shared/Footer/Footer";
 import Header from "../../components/shared/Header/Header";
+import useNotification from "../../hooks/useNotification";
+import { useScrollRestoration } from "../../hooks/useScrollRestoration";
 import styles from "./Contact.module.css";
 
+// TODO: Add reCAPTCHA from google after getting real domain
+
 const Contact = () => {
+  const { user } = useSelector((state) => state.user);
+  const showNotification = useNotification();
+
   const [userMessage, setUserMessage] = useState({
+    name: "",
     email: "",
-    subject: "",
     message: "",
-    captcha: "",
   });
+  const [isSending, setIsSending] = useState(false);
+
+  useEffect(() => {
+    setUserMessage((prev) => ({
+      ...prev,
+      name: user.name || prev.name,
+      email: user.email || prev.email,
+    }));
+  }, [user]);
+
   const [userMessageError, setUserMessageError] = useState({});
 
-  // Auto-scroll to top on component mount
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, []);
+  // manage the scroll position
+  useScrollRestoration();
 
   function handleChange(event) {
-    const name = event.target.name;
-    let value = event.target.value;
-
+    const { name, value } = event.target;
     setUserMessage({ ...userMessage, [name]: value });
   }
 
-  function validateFrom() {
+  function validateForm() {
     let errors = {};
 
+    if (!userMessage.name.trim()) {
+      errors.name = "Name is required";
+    }
     if (!userMessage.email || !/\S+@\S+\.\S+/.test(userMessage.email)) {
       errors.email = "Valid email is required";
     }
-
-    if (!userMessage.captcha || userMessage.captcha !== "16") {
-      errors.captcha = "Captcha failed!";
+    if (!userMessage.message.trim()) {
+      errors.message = "Message is required";
     }
-
-    setUserMessageError({ ...errors });
+    setUserMessageError(errors);
     return Object.keys(errors).length === 0;
   }
 
-  function handelSubmit(event) {
+  async function handleSubmit(event) {
     event.preventDefault();
-
-    if (validateFrom()) {
-      console.log(userMessage);
-      // Reset the form to default values
-      setUserMessage({
-        email: "",
-        subject: "",
-        message: "",
-        captcha: "",
-      });
+    if (validateForm()) {
+      const { name, email, message } = userMessage;
+      try {
+        setIsSending(true);
+        const response = await fetch(
+          `${
+            import.meta.env.VITE_EAT_WORD_BACKEND_URL
+          }/email/send-contact-email`,
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ name, email, message }),
+          }
+        );
+        const data = await response.json();
+        if (data.success) {
+          showNotification({
+            title: "We got you!",
+            message:
+              data?.message || "I got you. I will respond as soon as possible.",
+            iconType: "success",
+            duration: 4000,
+          });
+        } else {
+          showNotification({
+            title: "Error sending message",
+            message:
+              data?.error || "something went wrong while sending your message",
+            iconType: "error",
+            duration: 4000,
+          });
+        }
+      } catch (error) {
+        showNotification({
+          title: "Error sending message",
+          message:
+            error?.message || "something went wrong while sending your message",
+          iconType: "error",
+          duration: 4000,
+        });
+      } finally {
+        // Reset the form state after sending.
+        setUserMessage({
+          name: user.name || "",
+          email: user.email || "",
+          message: "",
+        });
+        setIsSending(false);
+      }
     }
   }
 
@@ -62,7 +115,27 @@ const Contact = () => {
       <Header />
       <div className={styles.contactContainer}>
         <div className={styles.contactForm}>
-          <form onSubmit={handelSubmit}>
+          <form onSubmit={handleSubmit}>
+            <div>
+              <br />
+              <input
+                type="text"
+                name="name"
+                id="name"
+                onChange={handleChange}
+                value={userMessage.name}
+                required
+                placeholder="Your Name"
+                className={styles.inputField}
+                disabled={user?.name}
+              />
+              <label htmlFor="name" className={styles.formLabel}>
+                Your Name
+              </label>
+              {userMessageError.name && (
+                <p className={styles.errorText}>{userMessageError.name}</p>
+              )}
+            </div>
             <div>
               <br />
               <input
@@ -72,28 +145,16 @@ const Contact = () => {
                 onChange={handleChange}
                 value={userMessage.email}
                 required
-                placeholder="email"
+                placeholder="Your Email"
                 className={styles.inputField}
+                disabled={user?.email}
               />
               <label htmlFor="email" className={styles.formLabel}>
                 Your Email
               </label>
-              {userMessageError.email && <p>{userMessageError.email}</p>}
-            </div>
-            <div>
-              <br />
-              <input
-                type="text"
-                name="subject"
-                id="subject"
-                onChange={handleChange}
-                value={userMessage.subject}
-                placeholder="message about?"
-                className={styles.inputField}
-              />
-              <label htmlFor="subject" className={styles.formLabel}>
-                Message about?
-              </label>
+              {userMessageError.email && (
+                <p className={styles.errorText}>{userMessageError.email}</p>
+              )}
             </div>
             <div>
               <br />
@@ -109,26 +170,14 @@ const Contact = () => {
               <label htmlFor="message" className={styles.formLabel}>
                 Write your message
               </label>
-            </div>
-            <div>
-              <br />
-              <input
-                type="number"
-                name="captcha"
-                id="captcha"
-                onChange={handleChange}
-                value={userMessage.captcha}
-                required
-                placeholder="What is 9+7?"
-                className={styles.inputField}
-              />
-              <label htmlFor="captcha" className={styles.formLabel}>
-                What is 9+7?
-              </label>
-              {userMessageError.captcha && <p>{userMessageError.captcha}</p>}
+              {userMessageError.message && (
+                <p className={styles.errorText}>{userMessageError.message}</p>
+              )}
             </div>
             <div className={styles.contactBtn}>
-              <button type="submit">Send message</button>
+              <button type="submit" disabled={isSending}>
+                {isSending ? "sending..." : "Send message"}
+              </button>
             </div>
           </form>
         </div>
@@ -138,7 +187,7 @@ const Contact = () => {
             <div>
               <MdOutlineLocationOn />
             </div>
-            <p>Location: 2^#, Orion, Mars </p>
+            <p>Location: 2^#, Orion, Mars</p>
           </div>
           <div>
             <div>
