@@ -16,6 +16,7 @@ import { setSignOutUser } from "../../features/authSlice";
 import { setUserData } from "../../features/userSlice";
 import { useConfirmation } from "../../hooks/useConfirmation";
 import useNotification from "../../hooks/useNotification";
+import { useScrollRestoration } from "../../hooks/useScrollRestoration";
 import {
   useBringUserByIdQuery,
   useDeleteUserMutation,
@@ -48,10 +49,8 @@ function Profile() {
     },
   });
 
-  // Auto-scroll to top on component mount
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, []);
+  // manage the scroll position
+  useScrollRestoration();
 
   // Update useEffect
   useEffect(() => {
@@ -69,10 +68,8 @@ function Profile() {
   }, [userData]);
 
   const handleBasicInfoChange = (name, value) => {
-    console.log("on change value", value);
     if (name.startsWith("preferences.")) {
       const [parent, child] = name.split(".");
-      console.log("preference filed:", parent, child, value);
       setBasicInfo((prev) => ({
         ...prev,
         [parent]: {
@@ -121,7 +118,6 @@ function Profile() {
       }
 
       if (Object.keys(changedBasicInfo).length === 0) {
-        console.log("No changes detected, skipping server update.");
         showNotification({
           title: "No changes detected",
           message: "",
@@ -129,7 +125,6 @@ function Profile() {
         });
         return;
       }
-      console.log("sending new user data", changedBasicInfo);
 
       const updatedUser = await updateUser(changedBasicInfo).unwrap();
 
@@ -140,7 +135,7 @@ function Profile() {
         showNotification({
           title: "Something went wrong!",
           message:
-            updatedUser?.error?.message || "An unexpected error occurred",
+            errorUpdate?.error?.message || "An unexpected error occurred",
           iconType: "error",
           duration: 4000,
         });
@@ -155,7 +150,6 @@ function Profile() {
         setIsChanging(false);
       }
     } catch (error) {
-      console.error("Error updating basic info:", error);
       showNotification({
         title: "Something went wrong",
         message: error.message || "An unexpected error occurred",
@@ -169,6 +163,9 @@ function Profile() {
     setIsChanging((prev) => !prev);
   };
 
+  // retry fetching profile data
+  const retry = () => window.location.reload();
+
   return (
     <div className={styles.profilePage}>
       <Header />
@@ -177,7 +174,15 @@ function Profile() {
       ) : (
         <div className={styles.profileContent}>
           {isError ? (
-            <Error error={error}></Error>
+            <Error
+              message={
+                error?.message ||
+                "some thing went wrong while bringing profile info!"
+              }
+              showRetry={true}
+              onRetry={retry}
+              retryLabel="try again later"
+            ></Error>
           ) : (
             <>
               <div className={styles.profileHead}>
