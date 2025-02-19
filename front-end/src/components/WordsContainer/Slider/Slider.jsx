@@ -1,3 +1,4 @@
+import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 import { IoIosAdd } from "react-icons/io";
 import { IoArrowBackOutline, IoArrowForward } from "react-icons/io5";
@@ -8,6 +9,8 @@ import { EffectCoverflow, Navigation } from "swiper/modules";
 import { Swiper as SwiperReact, SwiperSlide } from "swiper/react";
 import useNotification from "../../../hooks/useNotification";
 import { useBringMilestoneWordQuery } from "../../../services/milestone";
+import { milestonePropTypes } from "../../../utils/propTypes";
+import Error from "../../shared/Error/Error";
 import Skeleton from "../../ui/loader/Skeleton/Skeleton";
 import { wordSchemaForClient } from "../utils";
 import styles from "./Slider.module.css";
@@ -52,9 +55,33 @@ const Carousel = ({ curMilestone, isOnRecallMood }) => {
     }, 0);
   };
 
+  // retry on error
+  const retry = () => window.location.reload();
+
   return (
     <div className={styles.container}>
-      {!isLoading ? (
+      {isLoading ? (
+        <div className={styles.sliderSkeletonLoader}>
+          <Skeleton width={340} height={46} />
+          <Skeleton width={340} height={46} />
+          <Skeleton width={340} height={46} />
+          <Skeleton width={340} height={46} />
+          <Skeleton width={340} height={46} />
+          <div className={styles.sliderController}>
+            <Skeleton width={340} height={46} />
+            <Skeleton width={340} height={46} />
+          </div>
+          <Skeleton width={340} height={23} />
+        </div>
+      ) : isError ? (
+        <Error
+          message={
+            error?.message || "something went wrong while bringing words"
+          }
+          showRetry={true}
+          onRetry={retry}
+        />
+      ) : (
         <>
           <SwiperReact
             effect={"coverflow"}
@@ -112,22 +139,14 @@ const Carousel = ({ curMilestone, isOnRecallMood }) => {
             </button>
           </div>
         </>
-      ) : (
-        <div className={styles.sliderSkeletonLoader}>
-          <Skeleton width={340} height={46} />
-          <Skeleton width={340} height={46} />
-          <Skeleton width={340} height={46} />
-          <Skeleton width={340} height={46} />
-          <Skeleton width={340} height={46} />
-          <div className={styles.sliderController}>
-            <Skeleton width={340} height={46} />
-            <Skeleton width={340} height={46} />
-          </div>
-          <Skeleton width={340} height={23} />
-        </div>
       )}
     </div>
   );
+};
+
+Carousel.propTypes = {
+  curMilestone: milestonePropTypes,
+  isOnRecallMood: PropTypes.bool,
 };
 
 export default Carousel;
