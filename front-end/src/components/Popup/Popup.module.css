@@ -48,11 +48,17 @@
   top: -38px;
   right: 6px;
   font-size: 28px;
+  background-color: transparent;
+  border: none;
 }
 .dialogClose > svg {
-  background-color: #666666ef;
+  background-color: #9c9c9cef;
+  border-radius: 4px;
+  cursor: pointer;
 }
-
+.dialogClose:hover > svg {
+  background-color: #c7c7c7;
+}
 /* Keyframes for scaling up (for modal and dialog) */
 @keyframes scaleUp {
   from {
