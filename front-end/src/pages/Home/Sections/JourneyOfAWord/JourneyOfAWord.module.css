@@ -255,8 +255,6 @@
   animation: dashStream 2.2s linear infinite;
 }
 
-/* Animation: draw from dashoffset 300 to 0 (i.e. drawing the path) */
-
 /* Responsive style for all devices */
 @media (max-width: 599.98px) {
   .JourneyOfAWordContainer {
@@ -310,7 +308,7 @@
     bottom: 90px;
     rotate: -22deg;
   }
-
+  .dashBorder0 > svg,
   .dashBorder1 > svg,
   .dashBorder2 > svg,
   .dashBorder3 > svg,
@@ -372,7 +370,7 @@
     bottom: 95px;
     rotate: -15deg;
   }
-
+  .dashBorder0 > svg,
   .dashBorder1 > svg,
   .dashBorder2 > svg,
   .dashBorder3 > svg,
@@ -421,7 +419,7 @@
     left: -60px;
     bottom: 90px;
   }
-
+  .dashBorder0 > svg,
   .dashBorder1 > svg,
   .dashBorder2 > svg,
   .dashBorder3 > svg,
@@ -449,6 +447,6 @@
   .dashBorder1 > svg,
   .dashBorder3 > svg,
   .dashBorder5 > svg {
-    left: 340px;
+    left: 316px;
   }
 }
