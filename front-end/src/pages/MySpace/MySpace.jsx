@@ -7,6 +7,7 @@ import Footer from "../../components/shared/Footer/Footer";
 import Header from "../../components/shared/Header/Header";
 import AddBtn from "../../components/ui/button/AddBtn/AddBtn";
 import Skeleton from "../../components/ui/loader/Skeleton/Skeleton";
+import { useScrollRestoration } from "../../hooks/useScrollRestoration";
 import { useBringMilestonesQuery } from "../../services/milestone";
 import styles from "./MySpace.module.css";
 
@@ -19,10 +20,8 @@ const MySpace = () => {
 
   const { data, isLoading, isError, error } = useBringMilestonesQuery();
 
-  // Auto-scroll to top on component mount
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, []);
+  // manage the scroll position
+  useScrollRestoration();
 
   // Update milestones state when data is fetched
   useEffect(() => {
@@ -50,6 +49,9 @@ const MySpace = () => {
 
   const openReqModal = useCallback(() => setIsTakingRequirements(true), []);
   const closeReqModal = useCallback(() => setIsTakingRequirements(false), []);
+
+  // retry on error
+  const retry = () => window.location.reload();
 
   return (
     <div className={styles.myspacePage}>
@@ -87,7 +89,13 @@ const MySpace = () => {
             </div>
           </div>
         ) : isError ? (
-          <Error error={error} />
+          <Error
+            message={
+              error?.message || "something went wrong while bringing milestones"
+            }
+            showRetry={true}
+            onRetry={retry}
+          />
         ) : (
           <div className={styles.mySpaceContent}>
             <div className={styles.tabs}>
