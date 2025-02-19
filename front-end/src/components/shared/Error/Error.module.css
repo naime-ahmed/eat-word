@@ -1,6 +1,30 @@
 .errorContainer {
   width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.errorContent {
+  max-width: 400px;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.errorIcon {
+  margin-bottom: 1rem;
+  color: rgb(255, 83, 140);
+}
+
+.errorMessage {
+  margin-bottom: 1rem;
   text-align: center;
-  color: #ffff;
+  color: #fff;
   font-size: 1.3rem;
+}
+
+.errorAction {
+  margin-top: 1rem;
 }
