@@ -1,11 +1,23 @@
 import mongoose from "mongoose";
 
 const connectToDb = async () => {
-  await mongoose
-    .connect(process.env.MONGO_CONNECTION_STRING)
-    .then(() => {
-      console.log("Mongodb is connected");
-    })
-    .catch((err) => console.log(err));
+  let mongoConnectionString;
+
+  if (process.env.NODE_ENV === "production") {
+    // Atlas connection (production)
+    mongoConnectionString = `mongodb+srv://${process.env.MONGO_ATLAS_USER}:${process.env.MONGO_ATLAS_PASS}@eatword-disk.ijsua.mongodb.net/eatWord?retryWrites=true&w=majority`;
+  } else {
+    // Local MongoDB (development)
+    mongoConnectionString = "mongodb://localhost:27017/eatWord";
+  }
+
+  try {
+    await mongoose.connect(mongoConnectionString);
+    console.log("MongoDB is connected");
+  } catch (err) {
+    console.error("Connection error:", err);
+    process.exit(1);
+  }
 };
+
 export default connectToDb;
