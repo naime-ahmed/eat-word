@@ -1,0 +1,5 @@
+name = "eat-word"
+type = "javascript"
+account_id = "${CF_ACCOUNT_ID}"
+workers_dev = true
+compatibility_date = "2025-02-20"
