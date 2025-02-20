@@ -82,7 +82,7 @@
   color: hsl(239, 100%, 88%);
 }
 
-.heroContent > div:last-of-type,
+.heroContent > div:not(:first-child),
 .heroContent > button:last-of-type {
   margin-top: 14px;
 }

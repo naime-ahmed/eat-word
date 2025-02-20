@@ -54,8 +54,6 @@ const ResetPass = () => {
       setResetPass((prev) => ({ ...prev, newPassError, retypePassError }));
       if (newPassError || retypePassError) return;
 
-      console.log(resetPass);
-
       // try to send token, id, new password
       const res = await resetPassword({
         newPass: resetPass.newPass,
@@ -77,7 +75,6 @@ const ResetPass = () => {
         retypePassError: "",
       });
     } catch (error) {
-      console.log("resetReqError", error);
       showNotification({
         title: "Something went wrong",
         message: error.message || "An unexpected error occurred",

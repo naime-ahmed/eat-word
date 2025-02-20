@@ -96,6 +96,13 @@
   pointer-events: none;
 }
 
+.skeletonLoader {
+  max-width: calc(100vw - 40px);
+  overflow: hidden;
+  display: flex;
+  gap: 16px;
+}
+
 /* Extra Large Devices (large desktops) - 1200px and above: */
 @media (min-width: 1200px) and (max-width: 1400px) {
   .container {
