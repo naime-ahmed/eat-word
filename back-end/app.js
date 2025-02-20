@@ -34,7 +34,7 @@ app.use(cookieParser(process.env.COOKIE_SECRET));
 // Enable CORS for all routes
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: ["http://localhost:5173", "https://eat-word.pages.dev"],
     credentials: true,
   })
 );
@@ -54,8 +54,8 @@ app.use("/words", wordRouter);
 // handle admin request
 app.use("/admin", adminRouter);
 
-// handle testimonial request
-app.use("/testimonial", testimonialRouter);
+// handle review request
+app.use("/review", testimonialRouter);
 
 // handle email service
 app.use("/email", emailRouter)

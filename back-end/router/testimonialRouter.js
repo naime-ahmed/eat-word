@@ -9,16 +9,16 @@ import { verifyAccessToken } from "../middlewares/validate/verifyAccessToken.js"
 
 const router = express.Router();
 
-// get testimonials
+// get reviews
 router.get("/", getTestimonials);
 
-// post new testimonials
+// post new reviews
 router.post("/", verifyAccessToken, addTestimonial);
 
-// update testimonial
-router.patch("/:testimonialId", verifyAccessToken, updateTestimonial);
+// update reviews
+router.patch("/:id", verifyAccessToken, updateTestimonial);
 
-// delete testimonial
-router.delete("/:testimonialId", verifyAccessToken, deleteTestimonial);
+// delete reviews
+router.delete("/:id", verifyAccessToken, deleteTestimonial);
 
 export default router;
