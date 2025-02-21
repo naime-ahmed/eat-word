@@ -5,13 +5,13 @@ import { PiTelegramLogoFill } from "react-icons/pi";
 import { useSelector } from "react-redux";
 import Footer from "../../components/shared/Footer/Footer";
 import Header from "../../components/shared/Header/Header";
+import TurnstileWidget from "../../components/TurnstileWidget";
 import useNotification from "../../hooks/useNotification";
 import { useScrollRestoration } from "../../hooks/useScrollRestoration";
 import styles from "./Contact.module.css";
 
-// TODO: Add reCAPTCHA from google after getting real domain
-
 const Contact = () => {
+  const [captchaToken, setCaptchaToken] = useState("");
   const { user } = useSelector((state) => state.user);
   const showNotification = useNotification();
 
@@ -58,6 +58,17 @@ const Contact = () => {
 
   async function handleSubmit(event) {
     event.preventDefault();
+
+    if (!captchaToken) {
+      showNotification({
+        title: "CAPTCHA Required",
+        message: "Please complete the CAPTCHA verification",
+        iconType: "error",
+        duration: 4000,
+      });
+      return;
+    }
+
     if (validateForm()) {
       const { name, email, message } = userMessage;
       try {
@@ -69,10 +80,16 @@ const Contact = () => {
           {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ name, email, message }),
+            body: JSON.stringify({
+              name,
+              email,
+              message,
+              turnstileToken: captchaToken,
+            }),
           }
         );
         const data = await response.json();
+
         if (data.success) {
           showNotification({
             title: "We got you!",
@@ -174,6 +191,16 @@ const Contact = () => {
                 <p className={styles.errorText}>{userMessageError.message}</p>
               )}
             </div>
+            {/* Turnstile Widget */}
+            <TurnstileWidget
+              onVerify={setCaptchaToken}
+              onError={(error) => console.error("CAPTCHA Error:", error)}
+              options={{
+                theme: "dark",
+                action: "contact",
+              }}
+            />
+
             <div className={styles.contactBtn}>
               <button type="submit" disabled={isSending}>
                 {isSending ? "sending..." : "Send message"}
