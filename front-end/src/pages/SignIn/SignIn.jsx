@@ -1,7 +1,8 @@
-import { Suspense, lazy, useCallback } from "react";
+import { Suspense, lazy, useCallback, useState } from "react";
 import { IoArrowBack } from "react-icons/io5";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
+import TurnstileWidget from "../../components/TurnstileWidget.jsx";
 import PrimaryBtn from "../../components/ui/button/PrimaryBtn/PrimaryBtn";
 import Skeleton from "../../components/ui/loader/Skeleton/Skeleton.jsx";
 import { setUser } from "../../features/authSlice.js";
@@ -23,6 +24,7 @@ const GoogleSignIn = lazy(() =>
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 const SignIn = () => {
+  const [captchaToken, setCaptchaToken] = useState("");
   const { user, userErrors } = useSelector((state) => state.signIn);
   const { email, password } = user;
   const { email: emailError, password: passwordError } = userErrors;
@@ -63,9 +65,23 @@ const SignIn = () => {
     async (event) => {
       event.preventDefault();
 
+      if (!captchaToken) {
+        showNotification({
+          title: "CAPTCHA Required",
+          message: "Please complete the CAPTCHA verification",
+          iconType: "error",
+          duration: 4000,
+        });
+        return;
+      }
+
       if (validateForm()) {
         try {
-          const result = await signInUser({ email, password }).unwrap();
+          const result = await signInUser({
+            email,
+            password,
+            turnstileToken: captchaToken,
+          }).unwrap();
           dispatch(resetForm());
 
           localStorage.setItem("access-token", result.accessToken);
@@ -81,7 +97,7 @@ const SignIn = () => {
         } catch (error) {
           showNotification({
             title: "Unable to sign in",
-            message: error.data?.message || "Please check your credentials",
+            message: error?.message || "Please check your credentials",
             iconType: "error",
             duration: 4000,
           });
@@ -96,6 +112,7 @@ const SignIn = () => {
       dispatch,
       showNotification,
       navigate,
+      captchaToken,
     ]
   );
 
@@ -164,6 +181,16 @@ const SignIn = () => {
               Forgot Password?
             </Link>
           </div>
+
+          {/* Turnstile Widget */}
+          <TurnstileWidget
+            onVerify={setCaptchaToken}
+            onError={(error) => console.error("CAPTCHA Error:", error)}
+            options={{
+              theme: "dark",
+              action: "signin",
+            }}
+          />
 
           <div className={style.submitBtn}>
             <button
