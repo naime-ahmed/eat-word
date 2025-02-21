@@ -4,10 +4,11 @@ import express from "express";
 // internal imports
 import { sendEmailContact } from '../helper/sendMail.js';
 import { emailLimiter } from "../middlewares/rateLimiter/emailLimit.js";
+import { verifyCaptcha } from '../middlewares/validate/verifyCaptcha.js';
 
 const router = express.Router();
 
-router.post("/send-contact-email", emailLimiter, async (req, res) => {
+router.post("/send-contact-email", verifyCaptcha , emailLimiter, async (req, res) => {
   const { name, email, message } = req.body;
   console.log(req.body);
   

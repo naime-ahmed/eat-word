@@ -13,6 +13,8 @@ import {
   signUp,
 } from "../controller/authController/signUpController.js";
 import { verifyAccessToken } from "../middlewares/validate/verifyAccessToken.js";
+import { verifyCaptcha } from "../middlewares/validate/verifyCaptcha.js";
+
 
 const router = express.Router();
 
@@ -20,10 +22,10 @@ const router = express.Router();
 router.post("/", verifyAccessToken, isUserValid);
 
 // sing up user
-router.post("/sign-up", signUp);
+router.post("/sign-up", verifyCaptcha , signUp);
 
 // sign in user
-router.post("/sign-in", signIn);
+router.post("/sign-in", verifyCaptcha, signIn);
 
 // activate the user
 router.post("/activate", activate);

@@ -1,6 +1,7 @@
-import { useCallback } from "react";
+import { useCallback, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import TurnstileWidget from "../../components/TurnstileWidget";
 import {
   setUserNewErrors,
   updateNewUser,
@@ -20,6 +21,8 @@ const isGmail = (email) => {
 };
 
 const SignUp = () => {
+  const [captchaToken, setCaptchaToken] = useState("");
+
   const { newUser, newUserErrors } = useSelector((state) => state.signUp);
   const { fName, email, password, surePass, captcha, agree } = newUser;
   const {
@@ -75,6 +78,16 @@ const SignUp = () => {
     async (event) => {
       event.preventDefault();
 
+      if (!captchaToken) {
+        showNotification({
+          title: "CAPTCHA Required",
+          message: "Please complete the CAPTCHA verification",
+          iconType: "error",
+          duration: 4000,
+        });
+        return;
+      }
+
       if (validateForm()) {
         // Additional Gmail check for valid formatted emails
         if (!isGmail(email)) {
@@ -92,6 +105,7 @@ const SignUp = () => {
             name: fName,
             email,
             password,
+            turnstileToken: captchaToken,
           }).unwrap();
 
           showNotification({
@@ -102,14 +116,22 @@ const SignUp = () => {
         } catch (error) {
           showNotification({
             title: "Account creation failed",
-            message: error.data?.message || "Please check your details",
+            message: error?.message || "Please check your details",
             iconType: "error",
             duration: 6000,
           });
         }
       }
     },
-    [validateForm, signUpUser, fName, email, password, showNotification]
+    [
+      captchaToken,
+      validateForm,
+      signUpUser,
+      fName,
+      email,
+      password,
+      showNotification,
+    ]
   );
 
   return (
@@ -279,12 +301,22 @@ const SignUp = () => {
             )}
           </div>
 
+          {/* Turnstile Widget */}
+          <TurnstileWidget
+            onVerify={setCaptchaToken}
+            onError={(error) => console.error("CAPTCHA Error:", error)}
+            options={{
+              theme: "dark",
+              action: "signup",
+            }}
+          />
+
           {/* Submit Section */}
           <div className={style.submitBtn}>
             <button
               type="submit"
-              disabled={isLoading}
-              aria-disabled={isLoading}
+              disabled={isLoading || !captchaToken}
+              aria-disabled={isLoading || !captchaToken}
               aria-busy={isLoading}
             >
               {isLoading ? "Creating account..." : "Submit"}
