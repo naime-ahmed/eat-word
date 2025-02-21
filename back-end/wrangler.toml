@@ -3,3 +3,4 @@ type = "javascript"
 account_id = "ae2990cd182dcc7486eac63fce6688bc"
 workers_dev = true
 compatibility_date = "2025-02-20"
+compatibility_flags = ["nodejs_compat"]
