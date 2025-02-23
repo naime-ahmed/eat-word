@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
+import { TbFaceIdError } from "react-icons/tb";
 import MilestoneCard from "../../components/MilestoneCard/MilestoneCard";
 import Popup from "../../components/Popup/Popup";
 import MilestoneRequirements from "../../components/Popup/PopUpContents/MilestoneRequirements/MilestoneRequirements";
@@ -119,12 +120,8 @@ const MySpace = () => {
             <div className={styles.milestonesSection}>
               {filteredMilestones?.length === 0 ? (
                 <Error
-                  error={{
-                    data: {
-                      message: "You've not taken this challenge yet!",
-                    },
-                    status: 404,
-                  }}
+                  message="You've not taken this challenge yet!"
+                  icon={TbFaceIdError}
                 />
               ) : (
                 <div className={styles.milestones}>
