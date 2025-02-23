@@ -13,7 +13,6 @@ import style from "./SignUp.module.css";
 
 // Validation constants
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-const CAPTCHA_ANSWER = "8";
 const ALLOWED_DOMAIN = "gmail.com";
 const isGmail = (email) => {
   const domain = email.split("@")[1]?.toLowerCase();
@@ -24,13 +23,12 @@ const SignUp = () => {
   const [captchaToken, setCaptchaToken] = useState("");
 
   const { newUser, newUserErrors } = useSelector((state) => state.signUp);
-  const { fName, email, password, surePass, captcha, agree } = newUser;
+  const { fName, email, password, surePass, agree } = newUser;
   const {
     fName: fNameError,
     email: emailError,
     password: passwordError,
     surePass: surePassError,
-    captcha: captchaError,
     agree: agreeError,
   } = newUserErrors;
 
@@ -67,12 +65,12 @@ const SignUp = () => {
 
     if (password.length < 6) errors.password = "Password must be 6+ characters";
     if (password !== surePass) errors.surePass = "Passwords don't match";
-    if (captcha !== CAPTCHA_ANSWER) errors.captcha = "Captcha failed!";
+
     if (!agree) errors.agree = "You must agree to continue";
 
     dispatch(setUserNewErrors(errors));
     return Object.keys(errors).length === 0;
-  }, [fName, email, password, surePass, captcha, agree, dispatch]);
+  }, [fName, email, password, surePass, agree, dispatch]);
 
   const handleSubmit = useCallback(
     async (event) => {
@@ -250,32 +248,6 @@ const SignUp = () => {
                 className={style.errorMessage}
               >
                 {surePassError}
-              </p>
-            )}
-          </div>
-
-          {/* Captcha Field */}
-          <div>
-            <input
-              type="number"
-              id="captcha"
-              name="captcha"
-              value={captcha}
-              onChange={handleChange}
-              className={style.inputField}
-              placeholder="Answer"
-              inputMode="numeric"
-              required
-              aria-required="true"
-              aria-invalid={!!captchaError}
-              aria-describedby={captchaError ? "captcha-error" : undefined}
-            />
-            <label htmlFor="captcha" className={style.formLabel}>
-              What is 3 + 5?
-            </label>
-            {captchaError && (
-              <p id="captcha-error" role="alert" className={style.errorMessage}>
-                {captchaError}
               </p>
             )}
           </div>
