@@ -158,8 +158,11 @@ input:-webkit-autofill:active {
 }
 /* CSS for mobile devices */
 @media (max-width: 599.98px) {
+  .formContainer {
+    border: 3px solid #1e293b;
+    padding: 18px;
+  }
   .inputField {
-    width: 280px;
     height: 35px;
   }
   .backToHomeButton {
@@ -167,7 +170,6 @@ input:-webkit-autofill:active {
     top: 50px;
   }
   .submitBtn button {
-    width: 280px;
     height: 35px;
   }
 

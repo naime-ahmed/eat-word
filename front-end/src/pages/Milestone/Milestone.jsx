@@ -60,13 +60,11 @@ const Milestone = () => {
     setIsOnReCallMood(e.target.checked);
   };
 
-  // Update lastRecalled effect - Fixed version
   useEffect(() => {
     let tooltipTimeout;
 
     const handleRecallCompletion = async () => {
       try {
-        // Correct mutation call format based on RTK Query expectations
         await editMilestone([
           curMilestone._id,
           { lastRecalled: new Date().toISOString() },
@@ -97,6 +95,13 @@ const Milestone = () => {
       }
     };
   }, [isOnRecallMood, curMilestone?._id, hasUpdated]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // forcing to disappear tool tip on isOnRecallMood off
+  useEffect(() => {
+    if (!isOnRecallMood) {
+      setShowTooltip(false);
+    }
+  }, [isOnRecallMood]);
 
   const formattedDate = curMilestone?.lastRecalled
     ? formatDate(curMilestone?.lastRecalled)

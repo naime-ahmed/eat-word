@@ -3,6 +3,7 @@ import { BsPinAngleFill } from "react-icons/bs";
 import { HiDotsVertical } from "react-icons/hi";
 import { useNavigate } from "react-router-dom";
 import { formatTimeAgo } from "../../utils/formateTimeAgo";
+import { milestonePropTypes } from "../../utils/propTypes";
 import Popup from "../Popup/Popup";
 import MilestoneMenu from "../Popup/PopUpContents/MilestoneMenu/MilestoneMenu";
 import styles from "./MilestoneCard.module.css";
@@ -98,6 +99,10 @@ const MilestoneCard = ({ milestone }) => {
       </div>
     </div>
   );
+};
+
+MilestoneCard.propTypes = {
+  milestone: milestonePropTypes,
 };
 
 export default MilestoneCard;

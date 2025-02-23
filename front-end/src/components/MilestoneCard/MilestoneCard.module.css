@@ -15,9 +15,10 @@
   cursor: pointer;
 }
 
-.milestoneCard:hover {
+.milestoneCard:hover:not(:has(.editEllipsis:hover)) {
   border: 1px solid #9277a367;
 }
+
 .pinned {
   position: absolute;
   top: -18px;
@@ -55,7 +56,7 @@
   cursor: pointer;
 }
 .editEllipsis:hover {
-  border: 1px solid #9277a377;
+  border: 1px solid #aa7bc7a4;
 }
 .floatCard {
   position: absolute;

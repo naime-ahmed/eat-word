@@ -128,12 +128,13 @@ input:-webkit-autofill:active {
 }
 /* CSS for mobile devices */
 @media (max-width: 599.98px) {
+  .formContainer {
+    padding: 18px;
+  }
   .inputField {
-    width: 280px;
     height: 35px;
   }
   .submitBtn button {
-    width: 280px;
     height: 35px;
   }
 
