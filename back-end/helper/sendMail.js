@@ -151,10 +151,8 @@ const oAuthTwoClient = new OAuth2Client(
     };
     // Send email
     const result = await transporter.sendMail(mailOptions);
-    console.log("Email sent successfully:", result);
     return result;
   } catch (error) {
-    console.error("Error sending email:", error);
     return error;
   }
 };
@@ -318,7 +316,6 @@ const mailOptions = {
 
 // Send email
 const result = await transporter.sendMail(mailOptions);
-console.log("Email sent successfully:", result);
 return result;
 } catch (error) {
 console.error("Error sending email:", error);
@@ -413,10 +410,8 @@ const sendEmailContact = async (name, senderEmail, message) => {
 
     // Send the email
     const result = await transporter.sendMail(mailOptions);
-    console.log("Contact email sent successfully:", result);
     return result;
   } catch (error) {
-    console.error("Error sending contact email:", error);
     return error;
   }
 };
