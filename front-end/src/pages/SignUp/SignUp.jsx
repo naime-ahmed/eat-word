@@ -1,4 +1,6 @@
 import { useCallback, useState } from "react";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { FaEnvelopeCircleCheck } from "react-icons/fa6";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import TurnstileWidget from "../../components/TurnstileWidget";
@@ -9,7 +11,7 @@ import {
 import useNotification from "../../hooks/useNotification.js";
 import { useScrollRestoration } from "../../hooks/useScrollRestoration.js";
 import { useSignUpUserMutation } from "../../services/auth.js";
-import style from "./SignUp.module.css";
+import styles from "./SignUp.module.css";
 
 // Validation constants
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -20,8 +22,10 @@ const isGmail = (email) => {
 };
 
 const SignUp = () => {
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [captchaToken, setCaptchaToken] = useState("");
-
+  const [hasEmailSent, setHasEmailSent] = useState(false);
   const { newUser, newUserErrors } = useSelector((state) => state.signUp);
   const { fName, email, password, surePass, agree } = newUser;
   const {
@@ -105,12 +109,12 @@ const SignUp = () => {
             password,
             turnstileToken: captchaToken,
           }).unwrap();
-
           showNotification({
             title: result.msg,
             iconType: "success",
             duration: 4000,
           });
+          setHasEmailSent(true);
         } catch (error) {
           showNotification({
             title: "Account creation failed",
@@ -118,6 +122,7 @@ const SignUp = () => {
             iconType: "error",
             duration: 6000,
           });
+          setHasEmailSent(false);
         }
       }
     },
@@ -133,176 +138,293 @@ const SignUp = () => {
   );
 
   return (
-    <div className={style.signUpContainer}>
-      <div className={style.formContainer}>
-        <h2 aria-live="polite">Create Your Account</h2>
+    <div className={styles.signUpContainer}>
+      {hasEmailSent ? (
+        <VerifyYourEmail email={newUser?.email} />
+      ) : (
+        <div className={styles.formContainer}>
+          <h2 aria-live="polite">Create Your Account</h2>
 
-        <form onSubmit={handleSubmit} noValidate>
-          {/* Name Field */}
-          <div>
-            <input
-              type="text"
-              id="fName"
-              name="fName"
-              value={fName}
-              onChange={handleChange}
-              className={style.inputField}
-              placeholder="Enter Full Name"
-              autoComplete="name"
-              required
-              aria-required="true"
-              aria-invalid={!!fNameError}
-              aria-describedby={fNameError ? "name-error" : undefined}
-            />
-            <label htmlFor="fName" className={style.formLabel}>
-              Your full name
-            </label>
-            {fNameError && (
-              <p id="name-error" role="alert" className={style.errorMessage}>
-                {fNameError}
-              </p>
-            )}
-          </div>
+          <form onSubmit={handleSubmit} noValidate>
+            {/* Name Field */}
+            <div>
+              <input
+                type="text"
+                id="fName"
+                name="fName"
+                value={fName}
+                onChange={handleChange}
+                className={styles.inputField}
+                placeholder="Enter Full Name"
+                autoComplete="name"
+                required
+                aria-required="true"
+                aria-invalid={!!fNameError}
+                aria-describedby={fNameError ? "name-error" : undefined}
+              />
+              <label htmlFor="fName" className={styles.formLabel}>
+                Your full name
+              </label>
+              {fNameError && (
+                <p id="name-error" role="alert" className={styles.errorMessage}>
+                  {fNameError}
+                </p>
+              )}
+            </div>
 
-          {/* Email Field */}
-          <div>
-            <input
-              type="email"
-              id="email"
-              name="email"
-              value={email}
-              onChange={handleChange}
-              className={style.inputField}
-              placeholder="Enter email"
-              autoComplete="email"
-              required
-              aria-required="true"
-              aria-invalid={!!emailError}
-              aria-describedby={emailError ? "email-error" : undefined}
-            />
-            <label htmlFor="email" className={style.formLabel}>
-              Your email
-            </label>
-            {emailError && (
-              <p id="email-error" role="alert" className={style.errorMessage}>
-                {emailError}
-              </p>
-            )}
-          </div>
+            {/* Email Field */}
+            <div>
+              <input
+                type="email"
+                id="email"
+                name="email"
+                value={email}
+                onChange={handleChange}
+                className={styles.inputField}
+                placeholder="Enter email"
+                autoComplete="email"
+                required
+                aria-required="true"
+                aria-invalid={!!emailError}
+                aria-describedby={emailError ? "email-error" : undefined}
+              />
+              <label htmlFor="email" className={styles.formLabel}>
+                Your email
+              </label>
+              {emailError && (
+                <p
+                  id="email-error"
+                  role="alert"
+                  className={styles.errorMessage}
+                >
+                  {emailError}
+                </p>
+              )}
+            </div>
 
-          {/* Password Fields */}
-          <div>
-            <input
-              type="password"
-              id="password"
-              name="password"
-              value={password}
-              onChange={handleChange}
-              className={style.inputField}
-              placeholder="Enter password"
-              autoComplete="new-password"
-              required
-              aria-required="true"
-              aria-invalid={!!passwordError}
-              aria-describedby={passwordError ? "password-error" : undefined}
-            />
-            <label htmlFor="password" className={style.formLabel}>
-              Your password
-            </label>
-            {passwordError && (
-              <p
-                id="password-error"
-                role="alert"
-                className={style.errorMessage}
+            {/* Password Fields */}
+            <div>
+              <input
+                type={showPassword ? "text" : "password"}
+                id="password"
+                name="password"
+                value={password}
+                onChange={handleChange}
+                className={styles.inputField}
+                placeholder="Enter password"
+                autoComplete="new-password"
+                required
+                aria-required="true"
+                aria-invalid={!!passwordError}
+                aria-describedby={passwordError ? "password-error" : undefined}
+              />
+              <label htmlFor="password" className={styles.formLabel}>
+                Your password
+              </label>
+
+              {/* Password toggle icon */}
+              <span
+                className={styles.passEyeIcon}
+                style={{ bottom: passwordError ? "26px" : undefined }}
+                onClick={() => setShowPassword(!showPassword)}
+                role="button"
+                aria-label={showPassword ? "Hide password" : "Show password"}
+                tabIndex={0}
               >
-                {passwordError}
-              </p>
-            )}
-          </div>
+                {showPassword ? (
+                  <FaEyeSlash className={styles.eyeIcon} />
+                ) : (
+                  <FaEye className={styles.eyeIcon} />
+                )}
+              </span>
 
-          {/* Confirm Password */}
-          <div>
-            <input
-              type="password"
-              id="surePass"
-              name="surePass"
-              value={surePass}
-              onChange={handleChange}
-              className={style.inputField}
-              placeholder="Confirm password"
-              autoComplete="new-password"
-              required
-              aria-required="true"
-              aria-invalid={!!surePassError}
-              aria-describedby={
-                surePassError ? "confirm-password-error" : undefined
-              }
-            />
-            <label htmlFor="surePass" className={style.formLabel}>
-              Confirm Password
-            </label>
-            {surePassError && (
-              <p
-                id="confirm-password-error"
-                role="alert"
-                className={style.errorMessage}
+              {passwordError && (
+                <p
+                  id="password-error"
+                  role="alert"
+                  className={styles.errorMessage}
+                >
+                  {passwordError}
+                </p>
+              )}
+            </div>
+
+            {/* Confirm Password */}
+            <div>
+              <input
+                type={showConfirmPassword ? "text" : "password"}
+                id="surePass"
+                name="surePass"
+                value={surePass}
+                onChange={handleChange}
+                className={styles.inputField}
+                placeholder="Confirm password"
+                autoComplete="new-password"
+                required
+                aria-required="true"
+                aria-invalid={!!surePassError}
+                aria-describedby={
+                  surePassError ? "confirm-password-error" : undefined
+                }
+              />
+              <label htmlFor="surePass" className={styles.formLabel}>
+                Confirm Password
+              </label>
+
+              <span
+                className={styles.passEyeIcon}
+                style={{ bottom: surePassError ? "26px" : undefined }}
+                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                role="button"
+                aria-label={
+                  showConfirmPassword
+                    ? "Hide confirm password"
+                    : "Show confirm password"
+                }
+                tabIndex={0}
               >
-                {surePassError}
-              </p>
-            )}
-          </div>
+                {showConfirmPassword ? (
+                  <FaEyeSlash className={styles.eyeIcon} />
+                ) : (
+                  <FaEye className={styles.eyeIcon} />
+                )}
+              </span>
 
-          {/* Terms Checkbox */}
-          <div className={style.termsBox}>
-            <input
-              type="checkbox"
-              id="terms"
-              name="agree"
-              checked={agree}
-              onChange={handleChange}
-              aria-invalid={!!agreeError}
-              aria-describedby={agreeError ? "terms-error" : undefined}
+              {surePassError && (
+                <p
+                  id="confirm-password-error"
+                  role="alert"
+                  className={styles.errorMessage}
+                >
+                  {surePassError}
+                </p>
+              )}
+            </div>
+
+            {/* Terms Checkbox */}
+            <div className={styles.termsBox}>
+              <input
+                type="checkbox"
+                id="terms"
+                name="agree"
+                checked={agree}
+                onChange={handleChange}
+                aria-invalid={!!agreeError}
+                aria-describedby={agreeError ? "terms-error" : undefined}
+              />
+              <label htmlFor="terms">
+                I agree to the <Link to="/tac">terms and conditions</Link>.
+              </label>
+              {agreeError && (
+                <p
+                  id="terms-error"
+                  role="alert"
+                  className={styles.errorMessage}
+                >
+                  {agreeError}
+                </p>
+              )}
+            </div>
+
+            {/* Turnstile Widget */}
+            <TurnstileWidget
+              onVerify={setCaptchaToken}
+              onError={(error) => console.error("CAPTCHA Error:", error)}
+              options={{
+                theme: "dark",
+                action: "signup",
+              }}
             />
-            <label htmlFor="terms">
-              I agree to the <Link to="/tac">terms and conditions</Link>.
-            </label>
-            {agreeError && (
-              <p id="terms-error" role="alert" className={style.errorMessage}>
-                {agreeError}
+
+            {/* Submit Section */}
+            <div className={styles.submitBtn}>
+              <button
+                type="submit"
+                disabled={isLoading}
+                aria-disabled={isLoading}
+                aria-busy={isLoading}
+              >
+                {isLoading ? "Creating account..." : "Submit"}
+              </button>
+
+              <p>
+                Have an account?{" "}
+                <Link to="/sign-in" className={styles.signInLink}>
+                  Sign in
+                </Link>
               </p>
-            )}
-          </div>
+            </div>
+          </form>
+        </div>
+      )}
+    </div>
+  );
+};
 
-          {/* Turnstile Widget */}
-          <TurnstileWidget
-            onVerify={setCaptchaToken}
-            onError={(error) => console.error("CAPTCHA Error:", error)}
-            options={{
-              theme: "dark",
-              action: "signup",
-            }}
-          />
+const VerifyYourEmail = ({ email }) => {
+  const getEmailProviderLink = (email) => {
+    if (!email || !email.includes("@")) return `mailto:${email}`;
+    const domain = email.split("@")[1].toLowerCase();
+    switch (domain) {
+      case "gmail.com":
+        return "https://mail.google.com/";
+      case "yahoo.com":
+        return "https://mail.yahoo.com/";
+      case "outlook.com":
+      case "hotmail.com":
+        return "https://outlook.live.com/";
+      default:
+        return `mailto:${email}`;
+    }
+  };
 
-          {/* Submit Section */}
-          <div className={style.submitBtn}>
-            <button
-              type="submit"
-              disabled={isLoading || !captchaToken}
-              aria-disabled={isLoading || !captchaToken}
-              aria-busy={isLoading}
-            >
-              {isLoading ? "Creating account..." : "Submit"}
-            </button>
-
-            <p>
-              Have an account?{" "}
-              <Link to="/sign-in" className={style.signInLink}>
-                Sign in
-              </Link>
-            </p>
-          </div>
-        </form>
+  return (
+    <div className={styles.verifyEmailSection}>
+      <div className={styles.verifyEmailIcons}>
+        <FaEnvelopeCircleCheck />
       </div>
+      <h2>Please verify your email</h2>
+      <p>
+        You&#39;re almost there! We sent an email to{" "}
+        {email ? (
+          <a
+            href={getEmailProviderLink(email)}
+            target="_blank"
+            rel="noopener noreferrer"
+            className={styles.verifyEmailHighlight}
+          >
+            {email}
+          </a>
+        ) : (
+          <span className={styles.verifyEmailHighlight}>
+            your provided email
+          </span>
+        )}
+      </p>
+
+      <p>
+        Just click on the link in that email to complete sign up. If you
+        don&#39;t see it, you may need to{" "}
+        {email ? (
+          <a
+            href={getEmailProviderLink(email)}
+            target="_blank"
+            rel="noopener noreferrer"
+            className={styles.verifyEmailHighlight}
+          >
+            check your spam
+          </a>
+        ) : (
+          <span className={styles.verifyEmailHighlight}>check your spam</span>
+        )}{" "}
+        folder.
+      </p>
+      <p>
+        Still can&#39;t find the email?{" "}
+        <Link to="/contact" className={styles.contactLink}>
+          Contact us
+        </Link>
+      </p>
     </div>
   );
 };
