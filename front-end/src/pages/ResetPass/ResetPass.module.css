@@ -1,10 +1,13 @@
-.ForgotPassPage {
+.forgotPassPage {
   width: 100vw;
   height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
   background-color: #020817;
+}
+.forgotPassPage > div {
+  transform: translateY(-70px);
 }
 .formContainer {
   width: 380px;
@@ -47,13 +50,25 @@
   color: rgb(236, 236, 236);
 }
 
-.newPassEyeIcon,
-.retypePassEyeIcon {
+.passEyeIcon {
   position: absolute;
-  right: 10px;
-  bottom: 10px;
-  color: #0496ff;
+  right: 2px;
+  bottom: 6px;
+  background-color: #020817;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  padding: 4px;
+  transition: opacity 0.2s ease;
 }
+
+.eyeIcon {
+  color: #666;
+  width: 1.25rem;
+  height: 1.25rem;
+  vertical-align: middle;
+}
+
 .newPass > p,
 .retypePass > p {
   font-size: 12px;
@@ -83,4 +98,33 @@
 }
 .errorMessage > button {
   margin-top: 16px;
+}
+
+.resetPassSuccess {
+  transform: translateY(-100px);
+  width: 336px;
+  max-width: 336px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  row-gap: 16px;
+  color: #fff;
+  text-align: center;
+}
+
+.resetPassSucIcon > svg {
+  font-size: 92px;
+  padding: 20px;
+  background-color: rgba(0, 255, 0, 0.08);
+  color: rgb(0, 199, 0);
+  border-radius: 50%;
+  margin-bottom: 16px;
+}
+
+.resetPassSuccess > p {
+  color: #c5c5c5;
+  line-height: 1.5;
+}
+.resetPassSuccess button {
+  width: 250px;
 }
