@@ -1,4 +1,5 @@
-import { useCallback, useState } from "react";
+import PropTypes from "prop-types";
+import { useCallback, useRef, useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { FaEnvelopeCircleCheck } from "react-icons/fa6";
 import { useDispatch, useSelector } from "react-redux";
@@ -22,6 +23,7 @@ const isGmail = (email) => {
 };
 
 const SignUp = () => {
+  const captchaWidgetRef = useRef(null);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [captchaToken, setCaptchaToken] = useState("");
@@ -328,11 +330,34 @@ const SignUp = () => {
 
             {/* Turnstile Widget */}
             <TurnstileWidget
+              ref={captchaWidgetRef}
               onVerify={setCaptchaToken}
-              onError={(error) => console.error("CAPTCHA Error:", error)}
+              onError={(error) => {
+                showNotification({
+                  title: "CAPTCHA Error",
+                  message:
+                    error?.message ||
+                    "CAPTCHA verification failed. Please try again.",
+                  iconType: "error",
+                  duration: 4000,
+                });
+                setCaptchaToken("");
+                captchaWidgetRef.current?.reset();
+              }}
+              onExpire={() => {
+                showNotification({
+                  title: "CAPTCHA Expired",
+                  message:
+                    "The CAPTCHA challenge has expired. Please verify again.",
+                  iconType: "warning",
+                  duration: 4000,
+                });
+                setCaptchaToken("");
+                captchaWidgetRef.current?.reset();
+              }}
               options={{
                 theme: "dark",
-                action: "signup",
+                action: "signin",
               }}
             />
 
@@ -427,6 +452,10 @@ const VerifyYourEmail = ({ email }) => {
       </p>
     </div>
   );
+};
+
+VerifyYourEmail.propTypes = {
+  email: PropTypes.string,
 };
 
 export default SignUp;

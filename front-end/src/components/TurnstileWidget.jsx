@@ -1,13 +1,20 @@
 import PropTypes from "prop-types";
+import { forwardRef, useImperativeHandle } from "react";
 import { useTurnstile } from "../hooks/useTurnstile";
 
-const TurnstileWidget = (props) => {
-  const { containerRef } = useTurnstile({
+const TurnstileWidget = forwardRef((props, ref) => {
+  const { containerRef, reset, token } = useTurnstile({
     onVerify: props.onVerify,
     onError: props.onError,
     onExpire: props.onExpire,
     ...props.options,
   });
+
+  // Expose reset method to parent via ref
+  useImperativeHandle(ref, () => ({
+    reset,
+    token,
+  }));
 
   return (
     <div
@@ -16,7 +23,10 @@ const TurnstileWidget = (props) => {
       aria-label="Cloudflare Turnstile CAPTCHA"
     />
   );
-};
+});
+
+// display name required for forwardRef component
+TurnstileWidget.displayName = "TurnstileWidget";
 
 TurnstileWidget.propTypes = {
   onVerify: PropTypes.func.isRequired,

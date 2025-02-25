@@ -1,4 +1,4 @@
-import { Suspense, lazy, useCallback, useState } from "react";
+import { Suspense, lazy, useCallback, useRef, useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { IoArrowBack } from "react-icons/io5";
 import { useDispatch, useSelector } from "react-redux";
@@ -25,6 +25,7 @@ const GoogleSignIn = lazy(() =>
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 const SignIn = () => {
+  const captchaWidgetRef = useRef(null);
   const [captchaToken, setCaptchaToken] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const { user, userErrors } = useSelector((state) => state.signIn);
@@ -89,6 +90,9 @@ const SignIn = () => {
           localStorage.setItem("access-token", result.accessToken);
           dispatch(setUser(parseJwt(result.accessToken)));
 
+          // Reset on success
+          captchaWidgetRef.current?.reset();
+          setCaptchaToken("");
           showNotification({
             title: result?.message,
             iconType: "success",
@@ -97,7 +101,9 @@ const SignIn = () => {
 
           navigate("/my-space");
         } catch (error) {
-          console.log("unable to sign in error", error);
+          // Reset on failure
+          captchaWidgetRef.current?.reset();
+          setCaptchaToken("");
           showNotification({
             title: "Unable to sign in",
             message:
@@ -207,8 +213,31 @@ const SignIn = () => {
 
           {/* Turnstile Widget */}
           <TurnstileWidget
+            ref={captchaWidgetRef}
             onVerify={setCaptchaToken}
-            onError={(error) => console.error("CAPTCHA Error:", error)}
+            onError={(error) => {
+              showNotification({
+                title: "CAPTCHA Error",
+                message:
+                  error?.message ||
+                  "CAPTCHA verification failed. Please try again.",
+                iconType: "error",
+                duration: 4000,
+              });
+              setCaptchaToken("");
+              captchaWidgetRef.current?.reset();
+            }}
+            onExpire={() => {
+              showNotification({
+                title: "CAPTCHA Expired",
+                message:
+                  "The CAPTCHA challenge has expired. Please verify again.",
+                iconType: "warning",
+                duration: 4000,
+              });
+              setCaptchaToken("");
+              captchaWidgetRef.current?.reset();
+            }}
             options={{
               theme: "dark",
               action: "signin",

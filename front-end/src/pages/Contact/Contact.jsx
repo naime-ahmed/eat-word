@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { LuPhoneCall } from "react-icons/lu";
 import { MdOutlineLocationOn } from "react-icons/md";
 import { PiTelegramLogoFill } from "react-icons/pi";
@@ -11,6 +11,7 @@ import { useScrollRestoration } from "../../hooks/useScrollRestoration";
 import styles from "./Contact.module.css";
 
 const Contact = () => {
+  const captchaWidgetRef = useRef(null);
   const [captchaToken, setCaptchaToken] = useState("");
   const { user } = useSelector((state) => state.user);
   const showNotification = useNotification();
@@ -193,11 +194,34 @@ const Contact = () => {
             </div>
             {/* Turnstile Widget */}
             <TurnstileWidget
+              ref={captchaWidgetRef}
               onVerify={setCaptchaToken}
-              onError={(error) => console.error("CAPTCHA Error:", error)}
+              onError={(error) => {
+                showNotification({
+                  title: "CAPTCHA Error",
+                  message:
+                    error?.message ||
+                    "CAPTCHA verification failed. Please try again.",
+                  iconType: "error",
+                  duration: 4000,
+                });
+                setCaptchaToken("");
+                captchaWidgetRef.current?.reset();
+              }}
+              onExpire={() => {
+                showNotification({
+                  title: "CAPTCHA Expired",
+                  message:
+                    "The CAPTCHA challenge has expired. Please verify again.",
+                  iconType: "warning",
+                  duration: 4000,
+                });
+                setCaptchaToken("");
+                captchaWidgetRef.current?.reset();
+              }}
               options={{
                 theme: "dark",
-                action: "contact",
+                action: "signin",
               }}
             />
 
