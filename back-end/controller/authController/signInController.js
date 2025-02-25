@@ -48,7 +48,6 @@ async function signIn(req, res, next) {
     });
   } catch (err) {
     // Handle any server error
-    console.error("Error during sign-in:", err);
     res.status(500).json({
       message: "An unknown error occurred during sign-in",
     });

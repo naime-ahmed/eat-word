@@ -1,4 +1,5 @@
 import { Suspense, lazy, useCallback, useState } from "react";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { IoArrowBack } from "react-icons/io5";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
@@ -25,6 +26,7 @@ const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 const SignIn = () => {
   const [captchaToken, setCaptchaToken] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const { user, userErrors } = useSelector((state) => state.signIn);
   const { email, password } = user;
   const { email: emailError, password: passwordError } = userErrors;
@@ -95,9 +97,13 @@ const SignIn = () => {
 
           navigate("/my-space");
         } catch (error) {
+          console.log("unable to sign in error", error);
           showNotification({
             title: "Unable to sign in",
-            message: error?.message || "Please check your credentials",
+            message:
+              error?.message ||
+              error?.data?.message ||
+              "Please check your credentials",
             iconType: "error",
             duration: 4000,
           });
@@ -156,7 +162,7 @@ const SignIn = () => {
 
           <div className={style.passwordSection}>
             <input
-              type="password"
+              type={showPassword ? "text" : "password"}
               id="password"
               name="password"
               value={password}
@@ -172,6 +178,23 @@ const SignIn = () => {
             <label htmlFor="password" className={style.formLabel}>
               Your password
             </label>
+
+            {/* Password toggle icon */}
+            <span
+              className={style.passEyeIcon}
+              style={{ bottom: passwordError ? "26px" : undefined }}
+              onClick={() => setShowPassword(!showPassword)}
+              role="button"
+              aria-label={showPassword ? "Hide password" : "Show password"}
+              tabIndex={0}
+            >
+              {showPassword ? (
+                <FaEyeSlash className={style.eyeIcon} />
+              ) : (
+                <FaEye className={style.eyeIcon} />
+              )}
+            </span>
+
             {passwordError && (
               <p id="password-error" role="alert">
                 {passwordError}

@@ -27,7 +27,7 @@ async function signUp(req, res, next) {
 
     // generate activation token
     const potentialUser = { name, email, password: hashedPassword };
-    console.log(potentialUser);
+
     const activation_token = generateTempToken(potentialUser);
 
     // send verification email
@@ -37,9 +37,6 @@ async function signUp(req, res, next) {
     // registration success
     res.status(200).json({ msg: "Welcome! Please check your email." });
   } catch (err) {
-    // Log the error for further investigation
-    console.error("Error during user registration:", err);
-
     // Send a generic error message to the client
     res.status(500).json({
       message: "An unknown error occurred during registration",
@@ -61,7 +58,6 @@ const activate = async (req, res) => {
     // Check for existing user
     const existingUser = await Users.findOne({ email });
     if (existingUser) {
-      console.log("inside dup email");
       return res.status(400).json({ msg: "This email is already registered." });
     }
 
@@ -86,8 +82,6 @@ const activate = async (req, res) => {
       accessToken,
     });
   } catch (err) {
-    console.error("Error during account activation:", err);
-
     //  Check for duplicate key error (development mode only)
     if(process.env.NODE_ENV === "development" && err.code === 11000){
       // Generate JWT tokens

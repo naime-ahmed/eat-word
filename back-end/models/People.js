@@ -32,6 +32,13 @@ const peopleSchema = new mongoose.Schema(
       required: function () {
         return this.authProvider === "local";
       },
+      validate: {
+        validator: function(v) {
+          // Ensure password is undefined/empty for non-local auth
+          return this.authProvider !== "local" || !!v;
+        },
+        message: "Password must be provided for local auth",
+      },
     },
     authProvider: {
       type: String,
@@ -56,8 +63,8 @@ const peopleSchema = new mongoose.Schema(
           validator: function(v) {
             return !this.subscriptionDates?.end || v < this.subscriptionDates.end;
           },
-          message: "Start date must be before end date"
-        }
+          message: "Start date must be before end date",
+        },
       },
       end: {
         type: Date,
@@ -65,15 +72,17 @@ const peopleSchema = new mongoose.Schema(
           validator: function(v) {
             return !this.subscriptionDates?.start || v > this.subscriptionDates.start;
           },
-          message: "End date must be after start date"
-        }
-      }
+          message: "End date must be after start date",
+        },
+      },
     },
     profilePicture: {
       type: String,
       default: "",
       validate: {
-        validator: (v) => /^(https?|ftp):\/\/[^\s/$.?#].[^\s]*$/.test(v),
+        validator: function(v) {
+          return v === "" || /^(https?|ftp):\/\/[^\s/$.?#].[^\s]*$/.test(v);
+        },
         message: "Invalid URL format",
       },
     },
@@ -98,7 +107,6 @@ const peopleSchema = new mongoose.Schema(
       failedAttempts: {
         type: Number,
         default: 0,
-        max: [5, "Maximum failed attempts reached"],
       },
       lockedUntil: Date,
     },
@@ -109,8 +117,24 @@ const peopleSchema = new mongoose.Schema(
     },
     usage: {
       limit: {
-        apiCalls: Number,
-        storage: Number,
+        apiCalls: {
+          type: Number,
+          validate: {
+            validator: function(v) {
+              return USAGE_LIMITS[this.subscriptionType]?.apiCalls === v;
+            },
+            message: "API call limit does not match subscription type",
+          },
+        },
+        storage: {
+          type: Number,
+          validate: {
+            validator: function(v) {
+              return USAGE_LIMITS[this.subscriptionType]?.storage === v;
+            },
+            message: "Storage limit does not match subscription type",
+          },
+        },
       },
       current: {
         apiCalls: { type: Number, default: 0, min: 0 },
@@ -151,14 +175,16 @@ peopleSchema.pre("save", function (next) {
   // Set usage limits
   this.usage.limit = USAGE_LIMITS[this.subscriptionType];
 
-  // Auto-unlock account after 1 hour
+  // Cap failed attempts at 5 and handle locking
   if (this.security.failedAttempts >= 5) {
+    this.security.failedAttempts = 5; // Prevent exceeding limit
     this.security.lockedUntil = new Date(Date.now() + 3600000);
     this.status = "locked";
   }
 
   next();
 });
+
 
 const People = mongoose.model("People", peopleSchema);
 export default People;

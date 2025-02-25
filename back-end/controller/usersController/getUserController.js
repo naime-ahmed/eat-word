@@ -45,7 +45,6 @@ export async function getUserById(req, res) {
     });
     
   } catch (error) {
-    console.error("Error while retrieving user:", error);
     res.status(500).json({
       message: "Server error while processing request",
       errorCode: "USER_FETCH_ERROR"

@@ -20,7 +20,7 @@ export async function updatePassword(req, res) {
 
     // Validate the provided current password
     const isMatch = await bcrypt.compare(curPass, user.password);
-    console.log("isMatch", isMatch);
+    
     if (!isMatch) {
       return res
         .status(401)
@@ -49,8 +49,6 @@ export async function updatePassword(req, res) {
       message: "Password has been updated successfully.",
     });
   } catch (error) {
-    console.error("Error updating password:", error);
-
     res.status(500).json({
       message: "An unknown error occurred while updating the password.",
     });

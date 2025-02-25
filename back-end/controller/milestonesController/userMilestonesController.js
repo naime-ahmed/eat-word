@@ -11,8 +11,9 @@ async function userMilestones(req, res, next) {
     const milestones = await Milestones.find({ addedBy: userId });
 
     if (!milestones || milestones.length === 0) {
-      return res.status(404).json({
+      return res.status(200).json({
         message: "Get out of comfort zone, take challenge, become strong",
+        milestones:[]
       });
     }
 

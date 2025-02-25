@@ -8,7 +8,6 @@ export const resetPassword = {
   forgot: async (req, res) => {
     try {
       const { email } = req.body;
-      console.log("forgotEmail pass",email);
       // Verify if email is registered
       const user = await Users.findOne({ email });
       if (!user) {
@@ -34,7 +33,6 @@ export const resetPassword = {
       // Success response
       res.status(200).json({ message: "If the email is registered, you will receive a reset link." });
     } catch (error) {
-      console.error("Forgot Password Error:", error);
       res.status(500).json({ message: "Something went wrong! Please try again." });
     }
   },
@@ -42,7 +40,6 @@ export const resetPassword = {
   reset: async (req, res) => {
     try {
       const { newPass, token } = req.body;
-      console.log("reset newPass token",newPass, token);
       // Validate token
       const payload = verifyToken(token);
       if (!payload) {
@@ -63,7 +60,6 @@ export const resetPassword = {
       // Success response
       res.status(204).json({message: "Successful, Use new password to sign In"}); // No content
     } catch (error) {
-      console.error("Reset Password Error:", error);
       res.status(500).json({ message: "Something went wrong while resetting the password." });
     }
   },
