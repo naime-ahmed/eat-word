@@ -9,8 +9,14 @@
   border-radius: 12px;
 }
 
-.ActivateACCCard > small > i {
+.ActivateACCCard > small {
   font-size: 64px;
+}
+.successIcon {
+  color: rgb(1, 165, 1);
+}
+.errorIcon {
+  color: rgb(224, 0, 0);
 }
 .ActivateACCCardText > p:first-child {
   font-size: 22px;
