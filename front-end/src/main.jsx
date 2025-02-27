@@ -17,6 +17,7 @@ import NotFound from "./pages/NotFound/NotFound";
 import Pricing from "./pages/Pricing/Pricing";
 import PrivacyInfo from "./pages/PrivacyInfo/PrivacyInfo";
 import Profile from "./pages/Profile/Profile";
+import Release from "./pages/Release/Release";
 import ResetPass from "./pages/ResetPass/ResetPass";
 import SignIn from "./pages/SignIn/SignIn";
 import SignUp from "./pages/SignUp/SignUp";
@@ -87,6 +88,10 @@ const router = createBrowserRouter([
       {
         path: "/privacyPolicy",
         element: <PrivacyInfo />,
+      },
+      {
+        path: "/release",
+        element: <Release />,
       },
     ],
   },
