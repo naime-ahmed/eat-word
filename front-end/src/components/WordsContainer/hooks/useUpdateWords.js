@@ -8,7 +8,7 @@ import {
 export const useUpdateWords = () => {
   const newWordsSet = useRef(new Set());
   const showNotification = useNotification();
-  const [appendWord] = useAppendWordMutation();
+  const [appendWord, {isLoading: isAppendLoading}] = useAppendWordMutation();
   const [editWord] = useEditWordMutation();
 
   const updateWords = (setWords, rowIndex, columnId, value, milestoneId) => {
@@ -116,5 +116,5 @@ export const useUpdateWords = () => {
     });
   };
 
-  return { updateWords };
+  return { updateWords, isAppendLoading };
 };

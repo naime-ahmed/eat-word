@@ -5,6 +5,7 @@ import { IoAddOutline } from "react-icons/io5";
 import { useBringMilestoneWordQuery } from "../../../services/milestone";
 import { milestonePropTypes } from "../../../utils/propTypes.js";
 import PrimaryBtn from "../../ui/button/PrimaryBtn/PrimaryBtn.jsx";
+import Skeleton from "../../ui/loader/Skeleton/Skeleton.jsx";
 import { useUpdateWords } from "../hooks/useUpdateWords.js";
 import { calculateColumnWidths, wordSchemaForClient } from "../utils.js";
 import styles from "./Table.module.css";
@@ -16,7 +17,7 @@ import TableSkeletonLoader from "./TableSkeletonLoader.jsx";
 const WordsContainer = ({ curMilestone, isOnRecallMood }) => {
   const [words, setWords] = useState([]);
   const [rowHeights, setRowHeights] = useState([]);
-  const { updateWords } = useUpdateWords();
+  const { updateWords, isAppendLoading } = useUpdateWords();
 
   // Auto-scroll to top on component mount
   useEffect(() => {
@@ -225,16 +226,18 @@ const WordsContainer = ({ curMilestone, isOnRecallMood }) => {
           </tbody>
         )}
       </table>
-      {words[words.length - 1]?._id || words.length === 0 ? (
+      {isAppendLoading ? (
+        <div className={styles.loadingSpinner}>
+          <Skeleton width="100%" height={26} label="saving word..." />
+        </div>
+      ) : words[words.length - 1]?._id || words.length === 0 ? (
         <div className={styles.addNewWord}>
           <button onClick={handleAppendWord}>
             <IoAddOutline />
             Add new word
           </button>
         </div>
-      ) : (
-        <></>
-      )}
+      ) : null}
     </div>
   );
 };

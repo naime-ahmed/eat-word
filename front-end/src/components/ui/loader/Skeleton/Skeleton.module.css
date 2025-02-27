@@ -1,4 +1,7 @@
 .skeleton {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   background-color: #313380;
   border-radius: 4px;
   position: relative;

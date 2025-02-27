@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
+import { IoArrowForward } from "react-icons/io5";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import CTABtn from "../../../../components/ui/button/CTABtn/CTABtn";
@@ -44,9 +45,21 @@ function Hero() {
     return () => clearInterval(id);
   }, []);
 
+  const handleNavigate = useCallback(() => {
+    navigate("/release");
+  }, [navigate]);
+
   return (
     <section className={styles.container}>
       <div className={styles.heroContent}>
+        <div className={styles.shinyText}>
+          <div onClick={handleNavigate} className={styles.shinyTextBg}>
+            <span className={styles.shinyAnimatedText}>
+              <span>✨ Introducing Active Recall</span>
+              <IoArrowForward className={styles.arrowIcon} />
+            </span>
+          </div>
+        </div>
         <div className={styles.title}>
           <span className={styles.staticText}>Eat Word—Elevate</span>
           <span>Your</span>
