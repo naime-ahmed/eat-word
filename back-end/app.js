@@ -31,11 +31,29 @@ app.use(express.urlencoded({ extended: true }));
 // parse cookies
 app.use(cookieParser(process.env.COOKIE_SECRET));
 
-// Enable CORS for all routes
+// Trust Proxies
+app.set("trust proxy", 1);
+
+// Enable CORS for specific uris
 app.use(
   cors({
-    origin: ["http://localhost:5173", "https://eat-word.pages.dev"],
+    origin: ["http://localhost:5173", "https://eat-word.pages.dev", "https://eatword.com"],
     credentials: true,
+    allowedHeaders: [
+      'Content-Type',
+      'Authorization',
+      'Accept',
+      'X-Requested-With',
+      'Origin',
+      'Cache-Control',
+      'If-Modified-Since',
+      'If-None-Match',
+      'Accept-Language',
+      'User-Agent',
+      'Cookie',
+      'X-CSRF-Token'
+    ],
+    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS']
   })
 );
 
