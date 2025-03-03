@@ -42,6 +42,9 @@ async function signInWithGoogle(req, res, next) {
       httpOnly: true,
       signed: true,
       maxAge: refreshTokenExpiry,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+      path: "/",
     });
 
     // Send success response with tokens and user details

@@ -12,20 +12,18 @@ import {
   generateTempToken
 } from "../../utils/tokenUtils.js";
 
-// register user
+
 async function signUp(req, res, next) {
   try {
     const { name, email, password } = req.body;
-    // Check if the email is already registered
+
     const existingUser = await Users.findOne({ email });
     if (existingUser) {
       return res.status(400).json({ message: "Email is already registered" });
     }
 
-    // Hash password
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    // generate activation token
     const potentialUser = { name, email, password: hashedPassword };
 
     const activation_token = generateTempToken(potentialUser);
@@ -34,10 +32,8 @@ async function signUp(req, res, next) {
     const url = `${process.env.FRONT_END_URL}/activate/${activation_token}`;
     sendEmailRegister(email, "ACTIVATE YOUR ACCOUNT", "Activate Now", url);
 
-    // registration success
     res.status(200).json({ msg: "Welcome! Please check your email." });
   } catch (err) {
-    // Send a generic error message to the client
     res.status(500).json({
       message: "An unknown error occurred during registration",
     });
@@ -48,20 +44,17 @@ const activate = async (req, res) => {
   const { activation_token } = req.body;
 
   try {
-    // Verify token
     const user = jwt.verify(
       activation_token,
       process.env.JWT_ACTIVATION_TOKEN_SECRET
     );
     const { name, email, password } = user;
 
-    // Check for existing user
     const existingUser = await Users.findOne({ email });
     if (existingUser) {
       return res.status(400).json({ msg: "This email is already registered." });
     }
 
-    // Create new user
     const newUser = new Users({ name, email, password });
     const savedUser = await newUser.save();
 
@@ -75,8 +68,11 @@ const activate = async (req, res) => {
       httpOnly: true,
       signed: true,
       maxAge: refreshTokenExpiry,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+      path: "/",
     });
-    // Success response
+
     res.status(201).json({
       message: "Your account has been successfully activated.",
       accessToken,
@@ -95,6 +91,9 @@ const activate = async (req, res) => {
         httpOnly: true,
         signed: true,
         maxAge: refreshTokenExpiry,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+        path: "/",
       });
       return res.status(201).json({
         message: "Your account has been successfully activated.",
