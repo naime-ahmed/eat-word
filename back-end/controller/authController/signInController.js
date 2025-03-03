@@ -11,7 +11,11 @@ import {
 
 async function signIn(req, res, next) {
   try {
-    // Check if user is available or not
+
+    if (!req.body.email || !req.body.password) {
+      return res.status(400).json({ message: "Email and password are required" });
+    }
+
     const hasUser = await Users.findOne({ email: req.body.email });
 
     if (!hasUser) {
@@ -25,7 +29,7 @@ async function signIn(req, res, next) {
     );
 
     if (!isSamePass) {
-      return res.status(401).json({ message: "Password is incorrect!" });
+      return res.status(401).json({ message: "Invalid Password or Email!" });
     }
 
     // grant access to account and generate tokens
@@ -39,11 +43,14 @@ async function signIn(req, res, next) {
       httpOnly: true,
       signed: true,
       maxAge: refreshTokenExpiry,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+      path: "/",
     });
 
     // Send success response with access token
     res.status(200).json({
-      message: "You're now logged in",
+      message: "Authentication successful",
       accessToken,
     });
   } catch (err) {
