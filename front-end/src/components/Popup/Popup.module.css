@@ -15,7 +15,7 @@
 .dialog,
 .modal {
   max-height: 90vh;
-  max-width: 60vw;
+  max-width: 80vw;
   position: absolute;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5);
 }

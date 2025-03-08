@@ -1,15 +1,19 @@
 /* From Uiverse.io by niat786 */
 .fancyBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
   border: none;
   color: #fff;
   border-radius: 20px;
   background-size: 100% auto;
   font-family: inherit;
-  font-size: 17px;
   cursor: pointer;
-  padding: 6px 10px;
+  padding: 8px 14px;
   transition: all 0.8s ease;
 }
+/* resolve the underline in user profile btn issue, It goes away when we remove the flex from this btn */
 
 .fancyBtn:hover {
   background-position: right center;

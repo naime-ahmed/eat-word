@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 
+<<<<<<< HEAD
 const CHARACTER_LIMITS = {
   word: 35,
   meanings: 100,
@@ -7,6 +8,9 @@ const CHARACTER_LIMITS = {
   definitions: 250,
   examples: 255,
 };
+=======
+import { wordFieldsAndLimit as CHARACTER_LIMITS } from "../utils/wordFieldsAndLimit.js";
+>>>>>>> dev
 
 const wordSchema = new mongoose.Schema(
   {

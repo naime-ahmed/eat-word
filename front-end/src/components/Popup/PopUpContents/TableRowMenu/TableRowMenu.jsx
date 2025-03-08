@@ -1,13 +1,21 @@
+import PropTypes from "prop-types";
 import { useRef, useState } from "react";
+import { HiOutlineSparkles } from "react-icons/hi2";
 import { IoReloadSharp } from "react-icons/io5";
 import { MdFavorite, MdFavoriteBorder } from "react-icons/md";
-import { RiDeleteBin4Line } from "react-icons/ri";
+import {
+  RiAiGenerate,
+  RiArrowRightSLine,
+  RiDeleteBin4Line,
+} from "react-icons/ri";
 import { VscCircleFilled } from "react-icons/vsc";
 import {
   useDeleteWordMutation,
   useEditWordMutation,
 } from "../../../../services/word";
+import { wordPropTypes } from "../../../../utils/propTypes";
 import Notification from "../../../Notification/Notification";
+import FancyBtn from "../../../ui/button/FancyBtn/FancyBtn";
 import styles from "./TableRowMenu.module.css";
 
 const TableRowMenu = ({
@@ -19,7 +27,17 @@ const TableRowMenu = ({
   const [doNotify, setDoNotify] = useState(false);
   const [notificationTitle, setNotificationTitle] = useState("");
   const [notificationMessage, setNotificationMessage] = useState("");
-  const menuItemsRef = useRef([]); // Ref to store menu item elements
+  const menuItemsRef = useRef([]);
+  const [showSubmenu, setShowSubmenu] = useState(false);
+  const [isClosing, setIsClosing] = useState(false);
+  const closeTimeout = useRef(null);
+
+  const [selectedFields, setSelectedFields] = useState({
+    meaning: false,
+    synonyms: false,
+    definition: false,
+    example: false,
+  });
 
   const [editWord, { isLoading: isEditing }] = useEditWordMutation();
   const [deleteWord, { isLoading: isDeleting }] = useDeleteWordMutation();
@@ -78,12 +96,24 @@ const TableRowMenu = ({
     }
   };
 
+  const handleFieldChange = (field) => {
+    setSelectedFields((prev) => ({
+      ...prev,
+      [field]: !prev[field],
+    }));
+  };
+
+  const handleApply = (e) => {
+    e.stopPropagation();
+    console.log("Selected Fields:", selectedFields);
+    onClose();
+  };
+
   // Handle arrow key navigation
   const handleKeyDown = (e) => {
     if (e.key === "ArrowDown" || e.key === "ArrowUp") {
-      e.preventDefault(); // Prevent default scrolling behavior
+      e.preventDefault();
 
-      // Get the currently focused item index
       const currentIndex = menuItemsRef.current.indexOf(document.activeElement);
 
       let nextIndex;
@@ -105,6 +135,82 @@ const TableRowMenu = ({
   return (
     <div className={styles.rowMenuContainer}>
       <ul onKeyDown={handleKeyDown}>
+        {/* Nested list for field selection */}
+        <li
+          ref={(el) => (menuItemsRef.current[0] = el)}
+          className={styles.parentMenuItem}
+          onMouseEnter={() => {
+            if (closeTimeout.current) {
+              clearTimeout(closeTimeout.current);
+              setIsClosing(false);
+            }
+            setShowSubmenu(true);
+          }}
+          onMouseLeave={() => {
+            setIsClosing(true);
+            closeTimeout.current = setTimeout(() => {
+              setShowSubmenu(false);
+              setIsClosing(false);
+            }, 500);
+          }}
+          onClick={(e) => {
+            if (e.target === e.currentTarget) {
+              setShowSubmenu(!showSubmenu);
+            }
+          }}
+          role="button"
+          tabIndex={0}
+        >
+          <HiOutlineSparkles className={styles.sparkleIcon} /> Generate with Ai
+          <span className={styles.arrowIcon}>
+            <RiArrowRightSLine />
+          </span>
+          {showSubmenu && (
+            <ul
+              className={`${styles.nestedList} ${
+                isClosing ? styles.closing : ""
+              }`}
+              onClick={(e) => e.stopPropagation()}
+              onMouseEnter={() => {
+                if (closeTimeout.current) {
+                  clearTimeout(closeTimeout.current);
+                  setIsClosing(false);
+                }
+              }}
+            >
+              {["meaning", "synonyms", "definition", "example"].map(
+                (field, index) => (
+                  <li key={field}>
+                    <label className={styles.inputWrapper}>
+                      <input
+                        type="checkbox"
+                        checked={selectedFields[field]}
+                        onChange={(e) => {
+                          e.stopPropagation();
+                          handleFieldChange(field);
+                        }}
+                        ref={(el) => (menuItemsRef.current[index] = el)}
+                      />
+                      <span className={styles.checkmark} />
+                      {field.charAt(0).toUpperCase() + field.slice(1)}
+                    </label>
+                  </li>
+                )
+              )}
+              <li>
+                <FancyBtn
+                  clickHandler={handleApply}
+                  btnWidth="100%"
+                  fontSize="15px"
+                  leftColor="#f672ff"
+                  rightColor="#2b1fff"
+                >
+                  <RiAiGenerate /> Generate Selected
+                </FancyBtn>
+              </li>
+            </ul>
+          )}
+        </li>
         <li
           ref={(el) => (menuItemsRef.current[0] = el)}
           onClick={() => handleEditClick("favorite")}
@@ -163,6 +269,13 @@ const TableRowMenu = ({
       )}
     </div>
   );
+};
+
+TableRowMenu.propTypes = {
+  curWord: wordPropTypes.isRequired,
+  onClose: PropTypes.func.isRequired,
+  rowIdx: PropTypes.number,
+  updateRowHeight: PropTypes.func,
 };
 
 export default TableRowMenu;

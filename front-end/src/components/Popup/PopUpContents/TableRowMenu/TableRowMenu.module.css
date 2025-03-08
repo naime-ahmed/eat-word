@@ -1,4 +1,5 @@
-.rowMenuContainer {
+.rowMenuContainer,
+.nestedList {
   width: max-content;
   height: max-content;
   padding: 12px 8px;
@@ -61,9 +62,11 @@
     color: red;
     background-color: #ff00001f;
   }
+  .parentMenuItem:hover .sparkleIcon {
+    color: rgb(229, 100, 255);
+  }
 }
 
-/* Styles for icons */
 [data-icon="favorite"] {
   color: rgb(243, 0, 142);
 }
@@ -71,3 +74,140 @@
 [data-icon="hard"] {
   color: red;
 }
+
+.parentMenuItem {
+  position: relative;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 12px;
+  transition: background-color 0.2s;
+  user-select: none;
+}
+
+.parentMenuItem:hover {
+  background-color: #f5f5f5;
+}
+.sparkleIcon {
+  transform: scale(1.3);
+}
+.arrowIcon {
+  display: flex;
+  align-items: center;
+  font-size: 1.2em;
+  transition: transform 0.2s;
+}
+
+.nestedList {
+  position: absolute;
+  top: 0;
+  left: 108%;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  font-size: 14px;
+  list-style: none;
+  z-index: 1;
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.inputWrapper {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  position: relative;
+  padding-left: 32px;
+}
+
+.nestedList.closing {
+  opacity: 0;
+  visibility: hidden;
+  transition-delay: 0s;
+}
+
+.parentMenuItem:not(:hover) .nestedList:not(.closing) {
+  transition-delay: 0.5s;
+  opacity: 0;
+  visibility: hidden;
+}
+
+.inputWrapper input {
+  opacity: 0;
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.checkmark {
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  height: 20px;
+  width: 20px;
+  border: 2px solid #ccc;
+  border-radius: 6px;
+  transition: all 0.2s;
+}
+
+.inputWrapper:hover input ~ .checkmark {
+  border-color: #2196f3;
+}
+
+.inputWrapper input:checked ~ .checkmark {
+  background: #2196f3;
+  border-color: #2196f3;
+}
+
+.checkmark:after {
+  content: "";
+  position: absolute;
+  display: none;
+  left: 6px;
+  top: 2px;
+  width: 5px;
+  height: 10px;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+
+.inputWrapper input:checked ~ .checkmark:after {
+  display: block;
+}
+
+.nestedList > li:last-child {
+  margin-top: 6px;
+}
+
+.generateButton {
+  background: #2196f3;
+  color: rgb(255, 255, 255);
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  width: 100%;
+  font-weight: 500;
+  transition: background 0.2s;
+}
+
+.generateButton:hover {
+  background: #1976d2;
+}
+
+@media (max-width: 1000px) {
+  .nestedList {
+    left: auto;
+    right: 105%;
+    top: 0;
+    transition: none;
+  }
+}
+
+/* reduce the size for small devices width < 600px */

@@ -13,6 +13,7 @@ import {
 import adminRouter from "./router/adminRouter.js";
 import authRouter from "./router/authRouter.js";
 import emailRouter from './router/emailRouter.js';
+import generativeAIRouter from './router/generativeAIRouter.js';
 import milestonesRouter from "./router/milestonesRouter.js";
 import testimonialRouter from './router/testimonialRouter.js';
 import usersRouter from "./router/usersRouter.js";
@@ -20,7 +21,6 @@ import wordRouter from "./router/wordRouter.js";
 
 const app = express();
 dotenv.config();
-
 // database connection
 connectDb();
 
@@ -76,7 +76,10 @@ app.use("/admin", adminRouter);
 app.use("/review", testimonialRouter);
 
 // handle email service
-app.use("/email", emailRouter)
+app.use("/email", emailRouter);
+
+// Generate Learning Materials
+app.use("/generative", generativeAIRouter)
 
 app.get("/", (req, res) => {
   res.send({

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FaPlay } from "react-icons/fa";
 import img1200 from "../../../../assets/imageForIntroVideo-1200.avif";
 import img400 from "../../../../assets/imageForIntroVideo-400.webp";
@@ -20,8 +20,23 @@ const IntroVideo = () => {
     setIsPresentVideo(false);
   };
 
+  useEffect(() => {
+    const { hash } = window.location;
+    if (hash === "#introvideo") {
+      const introVideoElement = document.getElementById("introvideo");
+      if (introVideoElement) {
+        const targetPosition = introVideoElement.offsetTop - 150;
+
+        window.scrollTo({
+          top: targetPosition,
+          behavior: "smooth",
+        });
+      }
+    }
+  }, []);
+
   return (
-    <section className={styles.introContainer}>
+    <section id="introvideo" className={styles.introContainer}>
       <div className={styles.introWrapper}>
         <div className={styles.introImage}>
           <img

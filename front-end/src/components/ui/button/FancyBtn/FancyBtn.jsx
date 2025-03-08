@@ -7,9 +7,9 @@ const FancyBtn = ({
   btnHeight,
   leftColor = "#0400ff",
   rightColor = "#4ce3f7",
+  fontSize = "16px",
   degree = "30deg",
 }) => {
-  // Implementing the linearGradient function
   const linearGradient = (degree, leftColor, rightColor) =>
     `linear-gradient(${degree}, ${leftColor}, ${rightColor})`;
 
@@ -19,6 +19,7 @@ const FancyBtn = ({
       style={{
         width: btnWidth,
         height: btnHeight,
+        fontSize: fontSize,
         backgroundImage: linearGradient(degree, leftColor, rightColor),
       }}
       className={styles.fancyBtn}
