@@ -1,10 +1,17 @@
-import React, { useEffect, useState } from "react";
+import PropTypes from "prop-types";
+import { useEffect, useState } from "react";
 import { LANGUAGE_MAP } from "../../../../utils/supportedLan";
 import styles from "./LanguageSearch.module.css";
 
 const language_map = LANGUAGE_MAP();
 
-const LanguageSearch = ({ onSelectLanguage, curLang }) => {
+const LanguageSearch = ({
+  onSelectLanguage,
+  curLang,
+  inlineStyles = null,
+  fieldId = "",
+  isRequired = false,
+}) => {
   const [inputValue, setInputValue] = useState(curLang);
   const [suggestions, setSuggestions] = useState([]);
 
@@ -16,10 +23,14 @@ const LanguageSearch = ({ onSelectLanguage, curLang }) => {
       return;
     }
 
-    const exactMatch = Object.values(language_map).some(
-      (langName) => langName.toLowerCase() === lowerInput
+    // Find exact match and auto-select
+    const exactMatchEntry = Object.entries(language_map).find(
+      ([, name]) => name.toLowerCase() === lowerInput
     );
-    if (exactMatch) {
+
+    if (exactMatchEntry) {
+      const [code] = exactMatchEntry;
+      onSelectLanguage(code);
       setSuggestions([]);
       return;
     }
@@ -30,11 +41,11 @@ const LanguageSearch = ({ onSelectLanguage, curLang }) => {
       .sort((a, b) => {
         const aStarts = a[1].toLowerCase().startsWith(lowerInput);
         const bStarts = b[1].toLowerCase().startsWith(lowerInput);
-        if (aStarts && !bStarts) return -1;
-        if (!aStarts && bStarts) return 1;
-        return a[1].localeCompare(b[1]);
+        return bStarts - aStarts || a[1].localeCompare(b[1]);
       });
+
     setSuggestions(filtered);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [inputValue]);
 
   const handleSelect = (code, name) => {
@@ -48,10 +59,13 @@ const LanguageSearch = ({ onSelectLanguage, curLang }) => {
       <input
         type="text"
         name="preferredLang"
-        placeholder="What's your comfortable language?"
+        id={fieldId}
+        placeholder="Search the language and select"
         className={styles.inputField}
         value={inputValue}
+        style={inlineStyles}
         onChange={(e) => setInputValue(e.target.value)}
+        required={isRequired}
       />
       {inputValue &&
         !Object.values(language_map).includes(inputValue) &&
@@ -73,6 +87,14 @@ const LanguageSearch = ({ onSelectLanguage, curLang }) => {
       )}
     </div>
   );
+};
+
+LanguageSearch.propTypes = {
+  onSelectLanguage: PropTypes.func.isRequired,
+  curLang: PropTypes.string,
+  inlineStyles: PropTypes.object,
+  fieldId: PropTypes.string,
+  isRequired: PropTypes.bool,
 };
 
 export default LanguageSearch;
