@@ -1,18 +1,25 @@
+import PropTypes from "prop-types";
 import { useState } from "react";
 import { useSelector } from "react-redux";
 import useNotification from "../../../../hooks/useNotification.js";
 import { useAddMilestoneMutation } from "../../../../services/milestone.js";
+import { LANGUAGE_MAP } from "../../../../utils/supportedLan.js";
 import PrimaryBtn from "../../../ui/button/PrimaryBtn/PrimaryBtn.jsx";
+import LanguageSearch from "../../../ui/input/LanguageSearch/LanguageSearch.jsx";
 import styles from "./MilestoneRequirements.module.css";
 
 const MilestoneRequirements = ({ handleViewMilestone, onClose }) => {
   const [newWeekFormData, setNewWeekFormData] = useState({
     milestoneType: "",
     name: "",
+    comfortableLang: "",
+    learningLang: "",
     targetWords: 35,
     learnSynonyms: false,
     includeDefinition: false,
   });
+  const language_map = LANGUAGE_MAP();
+
   const showNotification = useNotification();
   const { user } = useSelector((user) => user.auth);
 
@@ -28,11 +35,25 @@ const MilestoneRequirements = ({ handleViewMilestone, onClose }) => {
     setNewWeekFormData({ ...newWeekFormData, [name]: value });
   };
 
+  const handleSelectComfortableLanguage = (languageCode) => {
+    console.log("comp lang", languageCode);
+    setNewWeekFormData((prev) => ({
+      ...prev,
+      comfortableLang: language_map[languageCode],
+    }));
+  };
+
+  const handleSelectLearningLanguage = (languageCode) => {
+    console.log("learning lang", languageCode);
+    setNewWeekFormData((prev) => ({
+      ...prev,
+      learningLang: language_map[languageCode],
+    }));
+  };
+
   const handleSubmit = async (event) => {
     event.preventDefault();
-    // try catch
     try {
-      console.log(newWeekFormData);
       const newMilestoneData = {
         ...newWeekFormData,
         addedBy: user.id,
@@ -89,7 +110,9 @@ const MilestoneRequirements = ({ handleViewMilestone, onClose }) => {
           <label htmlFor="milestoneType" className={styles.formLabel}>
             Choose your learning plan
           </label>
+          <div className={styles.selectArrow}></div>
         </div>
+
         <div className={styles.inputGroup}>
           <input
             type="text"
@@ -104,6 +127,41 @@ const MilestoneRequirements = ({ handleViewMilestone, onClose }) => {
             Give it a name
           </label>
         </div>
+
+        <div className={styles.inputGroup}>
+          <label htmlFor="comfortableLang" className={styles.LangFormLabel}>
+            Language you know
+          </label>
+          <LanguageSearch
+            onSelectLanguage={handleSelectComfortableLanguage}
+            curLang={newWeekFormData.comfortableLang}
+            inlineStyles={{
+              width: "100%",
+              padding: "14px 16px",
+              backgroundColor: "#151e2d",
+            }}
+            fieldId="comfortableLang"
+            isRequired={true}
+          />
+        </div>
+
+        <div className={styles.inputGroup}>
+          <label htmlFor="learningLang" className={styles.LangFormLabel}>
+            Language you want learn
+          </label>
+          <LanguageSearch
+            onSelectLanguage={handleSelectLearningLanguage}
+            curLang={newWeekFormData.learningLang}
+            inlineStyles={{
+              width: "100%",
+              padding: "14px 16px",
+              backgroundColor: "#151e2d",
+            }}
+            fieldId="learningLang"
+            isRequired={true}
+          />
+        </div>
+
         <div className={styles.inputGroup}>
           <input
             type="number"
@@ -120,6 +178,7 @@ const MilestoneRequirements = ({ handleViewMilestone, onClose }) => {
             How many words you want to learn?
           </label>
         </div>
+
         <div className={styles.checkboxGroup}>
           <input
             type="checkbox"
@@ -133,6 +192,7 @@ const MilestoneRequirements = ({ handleViewMilestone, onClose }) => {
             Want to learn synonyms as well?
           </label>
         </div>
+
         <div className={styles.checkboxGroup}>
           <input
             type="checkbox"
@@ -146,8 +206,10 @@ const MilestoneRequirements = ({ handleViewMilestone, onClose }) => {
             Want to include English definition?
           </label>
         </div>
-        {isError && <p>{error.data.message}</p>}
-        <div className={styles.SubmitButton}>
+
+        {isError && <p className={styles.errorMessage}>{error.data.message}</p>}
+
+        <div className={styles.submitButton}>
           <PrimaryBtn btnType="submit" isLoading={isLoading}>
             Let&#39;s goo
           </PrimaryBtn>
@@ -155,6 +217,11 @@ const MilestoneRequirements = ({ handleViewMilestone, onClose }) => {
       </form>
     </div>
   );
+};
+
+MilestoneRequirements.propTypes = {
+  handleViewMilestone: PropTypes.func.isRequired,
+  onClose: PropTypes.func.isRequired,
 };
 
 export default MilestoneRequirements;
