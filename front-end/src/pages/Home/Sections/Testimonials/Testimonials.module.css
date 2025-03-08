@@ -1,0 +1,166 @@
+.container {
+  position: relative;
+  max-width: 1250px;
+  margin-top: 110px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  padding: 5rem 0;
+}
+
+/* CSS for gradient bg */
+.gradientLine {
+  position: absolute;
+  top: -0.5px;
+  left: 50%;
+  height: 3px;
+  width: 80%;
+  max-width: 500px;
+  transform: translate(-50%, -50%) translateZ(0);
+  pointer-events: none;
+  user-select: none;
+  background: linear-gradient(
+    90deg,
+    rgba(0, 0, 0, 0) 0%,
+    rgba(2, 132, 199, 0.65) 50%,
+    rgba(0, 0, 0, 0) 100%
+  );
+}
+
+.gradientBackground {
+  position: absolute;
+  top: -1px;
+  left: 50%;
+  height: 200px;
+  width: 100%;
+  max-width: 300px; /* Base style */
+  transform: translate(-50%, -50%) translateZ(0);
+  pointer-events: none;
+  user-select: none;
+  background: conic-gradient(
+      from 90deg at 50% 50%,
+      rgb(0 0 0 / 0%) 50%,
+      #020817 50%
+    ),
+    radial-gradient(rgb(62 73 219 / 23%) 0%, transparent 70%);
+}
+
+/* Optional media query for responsive max-width */
+@media (min-width: 768px) {
+  .gradientBackground {
+    max-width: 600px;
+  }
+}
+
+.testimonialHead {
+  text-align: center;
+  margin-top: -45px;
+  margin-bottom: 22px;
+}
+.testimonialHead h1 {
+  font-size: 44px;
+
+  color: #ffffff;
+  background-image: -webkit-linear-gradient(90deg, #ffffff 38%, #0037ff 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  text-fill-color: transparent;
+  -webkit-text-fill-color: transparent;
+}
+.testimonialHead p {
+  margin-top: 20px;
+  margin-bottom: 30px;
+  font-size: 20px;
+  color: #d4d5d6;
+}
+
+.gradientLeft {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 33%;
+  background: linear-gradient(to right, #020817, transparent);
+  pointer-events: none;
+}
+
+.gradientRight {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 33%;
+  background: linear-gradient(to left, #020817, transparent);
+  pointer-events: none;
+}
+
+.skeletonLoader {
+  max-width: calc(100vw - 40px);
+  overflow: hidden;
+  display: flex;
+  gap: 16px;
+}
+
+/* Extra Large Devices (large desktops) - 1200px and above: */
+@media (min-width: 1200px) and (max-width: 1400px) {
+  .container {
+    max-width: 1150px;
+  }
+}
+
+/* Large Devices (desktops) - 1000px to 1199px wide: */
+@media (min-width: 1000px) and (max-width: 1199.98px) {
+  .container {
+    max-width: 950px;
+  }
+  .testimonialHead > h1 {
+    font-size: 38px;
+  }
+  .testimonialHead > p {
+    font-size: 18px;
+  }
+}
+
+/* Medium Devices (laptops) - 768px to 991px wide: */
+@media (min-width: 768px) and (max-width: 999.98px) {
+  .container {
+    max-width: 750px;
+  }
+  .testimonialHead > h1 {
+    font-size: 34px;
+  }
+  .testimonialHead > p {
+    font-size: 17px;
+  }
+}
+
+/* Small Devices (tablets) - 576px to 767px wide: */
+@media (min-width: 600px) and (max-width: 767.98px) {
+  .container {
+    max-width: 560px;
+  }
+  .testimonialHead > h1 {
+    font-size: 28px;
+  }
+  .testimonialHead > p {
+    font-size: 16px;
+  }
+}
+/* Extra Small Devices (phones) - Up to 576px wide: */
+@media (max-width: 599.98px) {
+  .container {
+    max-width: 340px;
+  }
+  .testimonialHead > h1 {
+    font-size: 28px;
+  }
+  .testimonialHead > p {
+    font-size: 16px;
+  }
+  .gradientLeft,
+  .gradientRight {
+    width: 16%;
+  }
+}

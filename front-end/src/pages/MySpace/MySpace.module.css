@@ -1,0 +1,198 @@
+/* my space page style */
+.myspacePage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: #020817;
+}
+
+/* my space container style */
+.myspaceContainer {
+  width: 100%;
+  max-width: 1250px;
+  min-height: calc(100vh - 250px);
+  margin: 80px auto;
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  row-gap: 50px;
+  box-sizing: border-box;
+}
+
+/* Style for my space heading */
+.mySpaceHeading {
+  width: 100%;
+  min-width: 300px;
+  min-height: 150px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* style for my space content */
+.mySpaceContent {
+  width: 100%;
+  padding: 16px 24px;
+  border-radius: 12px;
+  color: #fff;
+  background-color: #c77ff711;
+  border: 1px solid #9277a32d;
+}
+
+.tabs {
+  width: 100%;
+  overflow: hidden;
+}
+
+.tabs > ul {
+  display: flex;
+  gap: 16px;
+  margin: 8px 0 20px 0;
+  padding: 4px;
+  overflow-x: auto;
+  scrollbar-width: thin;
+  -webkit-overflow-scrolling: touch;
+  scroll-behavior: smooth;
+  overflow-y: hidden;
+  flex-wrap: nowrap;
+  padding-bottom: 12px;
+}
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+.tabs > ul::-webkit-scrollbar {
+  height: 6px;
+}
+
+.tabs > ul::-webkit-scrollbar-track {
+  background: #1e1b2e;
+  border-radius: 100vh;
+}
+
+.tabs > ul::-webkit-scrollbar-thumb {
+  background: #9277a3;
+  border-radius: 100vh;
+}
+
+/* For Firefox */
+.tabs > ul {
+  scrollbar-color: #9277a3 #1e1b2e;
+}
+
+.tabs > ul > li {
+  list-style: none;
+  font-size: 15px;
+  font-weight: 500;
+  padding: 12px 16px;
+  height: 48px;
+  background-color: #64527c11;
+  cursor: pointer;
+  border: 1px solid #9277a32d;
+  border-radius: 8px;
+  /* Prevent shrinking of tabs */
+  flex-shrink: 0;
+  /* Center content vertically */
+  display: flex;
+  align-items: center;
+  /* Ensure minimum width */
+  min-width: max-content;
+  /* Smooth transition for hover effects */
+  transition: all 0.2s ease-in-out;
+}
+
+.tabs > ul > li.active {
+  color: #dfc3ff;
+  border: 1px solid #8e7deb98;
+}
+
+.divider {
+  width: 100%;
+  height: 1px;
+  background-color: #9277a32d;
+}
+.milestonesSection {
+  margin: 24px 0 8px 0;
+}
+
+.milestones {
+  display: flex;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+/* Skeleton loader */
+.contentSkeleton {
+  width: 100%;
+  max-width: 1250px;
+  padding: 16px 24px;
+  border-radius: 12px;
+  color: #fff;
+  background-color: #c77ff711;
+  border: 1px solid #9277a32d;
+}
+.headerSkeleton {
+  display: flex;
+  gap: 16px;
+  margin: 8px 0 20px 0;
+  overflow-x: auto;
+  scrollbar-width: thin;
+  -webkit-overflow-scrolling: touch;
+  scroll-behavior: smooth;
+  overflow-y: hidden;
+  flex-wrap: nowrap;
+  padding-bottom: 12px;
+}
+.milestoneSkeleton {
+  display: flex;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+@media (min-width: 1000px) and (max-width: 1199.98px) {
+  .myspaceContainer {
+    max-width: 950px;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 999.98px) {
+  .myspaceContainer {
+    max-width: 750px;
+  }
+  .milestones {
+    justify-content: center;
+  }
+}
+@media (max-width: 767.98px) {
+  .myspaceContainer {
+    max-width: 560px;
+  }
+  .mySpaceContent {
+    padding: 12px;
+  }
+  .tabs > ul {
+    margin: 4px 0 24px 0;
+    gap: 12px;
+  }
+  .tabs > ul > li {
+    padding: 10px 14px;
+    height: 42px;
+    font-size: 14px;
+  }
+  .milestones {
+    justify-content: center;
+  }
+}
+@media (max-width: 599.98px) {
+  .myspaceContainer {
+    max-width: 360px;
+  }
+  .mySpaceContent {
+    padding: 8px;
+  }
+  .tabs > ul {
+    gap: 8px;
+    margin: 4px 0 20px 0;
+  }
+}

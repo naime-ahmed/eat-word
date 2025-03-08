@@ -1,0 +1,236 @@
+.milestonePage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: #020817;
+  color: #f8fafc;
+}
+.milestoneContent {
+  width: 100%;
+  max-width: 1250px;
+  min-height: calc(100vh - 450px);
+  margin: 120px auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  row-gap: 16px;
+  box-sizing: border-box;
+}
+
+/* milestone  heading style*/
+.milestoneHeading {
+  width: 100%;
+  padding: 16px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  background: linear-gradient(
+    178deg,
+    rgb(68 68 131 / 0%) 0%,
+    rgb(152 191 254 / 15%) 100%
+  );
+  border: 1px solid #293b69;
+}
+.nameAndLeftTime {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  gap: 12px;
+}
+
+.recallAndLastRecall {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  gap: 12px;
+}
+
+.checkboxAndLabels {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  position: relative;
+}
+
+.switch {
+  position: relative;
+  width: 55px;
+  height: 15px;
+}
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: 34px;
+  background-color: #ccc;
+  -webkit-transition: 0.4s;
+  transition: 0.4s;
+}
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 26px;
+  width: 26px;
+  left: 0px;
+  bottom: -5px;
+  background-color: red;
+  -webkit-transition: 0.4s;
+  transition: 0.4s;
+  box-sizing: border-box;
+  border: 10px solid white;
+  border-radius: 50%;
+}
+input:checked + .slider {
+  background-color: #06a606;
+}
+input:checked + .slider:before {
+  -webkit-transform: translateX(26px);
+  -ms-transform: translateX(26px);
+  transform: translateX(30px);
+  background: limegreen;
+  box-sizing: border-box;
+  border: 10px solid white;
+}
+
+.tooltip {
+  position: absolute;
+  bottom: 150%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #263b61;
+  color: white;
+  padding: 5px 10px;
+  border-radius: 4px;
+  font-size: 12px;
+  white-space: nowrap;
+  z-index: 100;
+}
+
+.tooltip::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: #263b61 transparent transparent transparent;
+}
+
+/* divider style*/
+.divider {
+  width: 100%;
+  height: 2px;
+  background-color: #293b69;
+}
+
+.error {
+  font-size: 13px;
+  color: rgb(255, 67, 67);
+}
+
+/* Extra Large Devices (large desktops) - 1200px and above: */
+@media (min-width: 1200px) and (max-width: 1400px) {
+  .milestoneContent {
+    max-width: 1150px;
+  }
+}
+
+/* Large Devices (desktops) - 1000px to 1199px wide: */
+@media (min-width: 1000px) and (max-width: 1199.98px) {
+  .milestoneContent {
+    max-width: 950px;
+  }
+  .milestoneTimeLeft {
+    font-size: 15px;
+  }
+  .lastRecalled {
+    font-size: 15px;
+  }
+}
+
+/* Medium Devices (laptops) - 768px to 991px wide: */
+@media (min-width: 768px) and (max-width: 999.98px) {
+  .milestoneContent {
+    max-width: 750px;
+  }
+  .milestoneHeading {
+    border-radius: 16px;
+  }
+  .milestoneTimeLeft {
+    font-size: 14px;
+  }
+  .lastRecalled {
+    font-size: 14px;
+  }
+}
+
+/* Small Devices (tablets) - 576px to 767px wide: */
+@media (min-width: 600px) and (max-width: 767.98px) {
+  .milestoneContent {
+    max-width: 560px;
+  }
+  .milestoneHeading {
+    border-radius: 16px;
+  }
+  .milestoneTimeLeft {
+    font-size: 13px;
+  }
+  .lastRecalled {
+    font-size: 13px;
+  }
+}
+
+/* Extra Small Devices (phones) - Up to 576px wide: */
+@media (max-width: 599.98px) {
+  .milestoneContent {
+    max-width: 340px;
+  }
+  .milestoneHeading {
+    padding: 12px;
+    border-radius: 16px;
+  }
+  .milestoneName > h3 {
+    font-size: 16px;
+  }
+  .milestoneTimeLeft {
+    font-size: 13px;
+  }
+
+  .switch {
+    position: relative;
+    width: 40px;
+    height: 10px;
+  }
+  .slider:before {
+    content: "";
+    height: 18px;
+    width: 20px;
+  }
+  input:checked + .slider:before {
+    -webkit-transform: translateX(18px);
+    -ms-transform: translateX(18px);
+    transform: translateX(22px);
+    background: limegreen;
+    box-sizing: border-box;
+    border: 10px solid white;
+  }
+  .checkboxAndLabels {
+    font-size: 15px;
+  }
+  .lastRecalled {
+    font-size: 13px;
+  }
+  .divider {
+    width: 98%;
+  }
+}

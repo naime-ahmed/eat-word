@@ -1,0 +1,234 @@
+.profilePage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: #020817;
+  overflow: hidden;
+  color: #fff;
+}
+
+.profileContent {
+  width: 1250px;
+  max-width: 1250px;
+  min-height: calc(100vh - 200px);
+  margin-top: 100px;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  padding: 24px;
+}
+.profileHead {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.profileHead p {
+  font-size: 28px;
+  font-weight: 800;
+  color: #0f77ff;
+  background-image: linear-gradient(180deg, #0f77ff 4%, #e0e4ff 74%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.profileActionBtns {
+  display: flex;
+  gap: 22px;
+}
+.basicInfo {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.profileImg {
+  position: relative;
+  flex-basis: 200px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.profileImg img {
+  width: 160px;
+  border: 3px solid rgba(75, 109, 196, 0.337);
+  border-radius: 100%;
+}
+.updateImgBtn {
+  position: absolute;
+  bottom: 20px;
+  right: 40px;
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  background-color: #020817;
+  color: #e1e3ff; /* Icon color */
+  border: 1px solid rgba(75, 109, 196, 0.337);
+  outline: none;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  transition: background-color 0.3s;
+}
+
+.updateImgBtn:hover {
+  background-color: #1d2c4d;
+}
+
+/* Hide the actual file input */
+.updateImgBtn > input {
+  display: none;
+}
+
+.updateImgBtn {
+  transform: rotate(-20deg);
+}
+.nameAndEmailEdit,
+.preferredEdit {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: end;
+  gap: 2rem;
+}
+.nameAndEmailShow,
+.preferredShow {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: end;
+  gap: 2rem;
+}
+.nameAndEmailShow > div,
+.preferredShow > div {
+  min-width: 300px;
+}
+.nameAndEmailShow > div p:first-child,
+.preferredShow > div p:first-child {
+  opacity: 0.7;
+  margin-bottom: 8px;
+}
+.nameAndEmailShow > div p:last-child,
+.preferredShow > div p:last-child {
+  font-size: 18px;
+  font-weight: 500;
+}
+.inputField {
+  width: 300px;
+  padding: 0.625rem;
+  background-color: transparent;
+  border: 1px solid rgba(75, 103, 173, 0.363);
+  color: #e1e3ff;
+  font-size: 0.875rem;
+  border-radius: 0.5rem;
+  box-sizing: border-box;
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.inputField:focus {
+  outline: none;
+  border-color: rgba(75, 103, 173, 0.663);
+}
+
+.inputLabel {
+  margin-bottom: 8px;
+  margin-left: 2px;
+  display: block;
+  color: #e1e3ff;
+}
+.inputLabel small {
+  color: rgb(255, 65, 65);
+}
+/* 
+.preferred {
+  flex: 1;
+} */
+
+.selectField {
+  width: 300px;
+  padding: 0.625rem;
+  background-color: transparent;
+  border: 1px solid rgba(75, 103, 173, 0.363);
+  color: #e1e3ff;
+  font-size: 0.875rem;
+  border-radius: 0.5rem;
+  box-sizing: border-box;
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+.selectField option {
+  background-color: #020817;
+  color: #e1e3ff;
+}
+.selectField:focus {
+  outline: none;
+  border-color: rgba(75, 103, 173, 0.663);
+}
+
+.saveBasicInfo,
+.changePassBtn {
+  display: flex;
+  justify-content: end;
+}
+.changePassBtn {
+  margin-top: 32px;
+}
+.divider {
+  width: 100%;
+  height: 2px;
+  background-color: rgba(75, 103, 173, 0.363);
+}
+
+.changePass {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.changePass > div > small {
+  display: block;
+  color: rgb(255, 124, 124);
+  margin-left: 2px;
+}
+
+/* Extra Large Devices (large desktops) - 1200px and above: */
+@media (min-width: 1200px) and (max-width: 1400px) {
+  /* CSS for Hero Container */
+  .profileContent {
+    max-width: 1150px;
+  }
+}
+
+/* Large Devices (desktops) - 1000px to 1199px wide: */
+@media (min-width: 1000px) and (max-width: 1199.98px) {
+  .profileContent {
+    max-width: 950px;
+  }
+  .inputField,
+  .selectField {
+    width: 250px;
+  }
+}
+
+@media (max-width: 999.98px) {
+  .profileActionBtns {
+    flex-direction: column-reverse;
+  }
+  .profileContent {
+    width: 100%;
+    max-width: 750px;
+  }
+  .basicInfo {
+    flex-direction: column;
+    gap: 32px;
+  }
+  .updateImgBtn {
+    bottom: 35px;
+    right: 2px;
+  }
+  .changePass {
+    flex-direction: column;
+    gap: 20px;
+  }
+}

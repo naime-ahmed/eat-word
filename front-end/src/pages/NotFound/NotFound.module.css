@@ -1,0 +1,49 @@
+.errorPage {
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgb(7, 0, 26);
+  color: #e6e6e6;
+}
+.errorPage > div {
+  width: 400px;
+  border: 3px solid #2e374459;
+  border-radius: 15px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+.errorPage > div > p > a {
+  margin-left: 10px;
+  color: rgb(88, 88, 255);
+}
+
+.buttons {
+  text-align: end;
+}
+.buttons button:first-child {
+  margin: 0 20px;
+  border: none;
+  outline: none;
+  background: transparent;
+  color: #e6e6e6;
+  font-size: 17px;
+  cursor: pointer;
+}
+
+.buttons button:first-child:hover i {
+  margin-right: 6px;
+  transition: margin-right 0.3s ease;
+}
+.buttons button:last-child {
+  padding: 6px 16px;
+  font-size: 17px;
+  border: none;
+  outline: none;
+  border-radius: 4px;
+  background-color: rgb(12, 98, 179);
+  color: #e6e6e6;
+  cursor: pointer;
+}

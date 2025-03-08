@@ -1,0 +1,28 @@
+.ActivateACCCard {
+  max-width: 460px;
+  display: flex;
+  flex-direction: column;
+  row-gap: 28px;
+  padding: 28px;
+  text-align: center;
+  color: #fff;
+  border-radius: 12px;
+}
+
+.ActivateACCCard > small {
+  font-size: 64px;
+}
+.successIcon {
+  color: rgb(1, 165, 1);
+}
+.errorIcon {
+  color: rgb(224, 0, 0);
+}
+.ActivateACCCardText > p:first-child {
+  font-size: 22px;
+  margin-bottom: 4px;
+}
+
+.ActivateACCCardText > p:nth-child(2) {
+  font-size: 13px;
+}

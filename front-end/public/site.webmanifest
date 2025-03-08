@@ -1,0 +1,15 @@
+{
+  "name": "Eat Word",
+  "short_name": "EatWord",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#020817",
+  "theme_color": "#6F64FC",
+  "icons": [
+    {
+      "src": "/favIcon.png",
+      "sizes": "32x32",
+      "type": "image/png"
+    }
+  ]
+}

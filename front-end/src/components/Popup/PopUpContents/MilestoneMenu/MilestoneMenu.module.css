@@ -1,0 +1,51 @@
+.milestoneMenuContainer {
+  width: max-content;
+  height: max-content;
+  padding: 12px 8px;
+  background-color: #141e3b;
+  color: #d4d4d4;
+  border: 1px solid #343463;
+  border-radius: 6px;
+}
+.milestoneMenuContainer > ul {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 0;
+  margin: 0;
+}
+.milestoneMenuContainer > ul > li {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+/* Add a separator between list items */
+.milestoneMenuContainer > ul > li:not(:last-child)::after {
+  content: "";
+  position: absolute;
+  bottom: -8px;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background-color: #343463;
+}
+
+/* Hover effect for list items */
+.milestoneMenuContainer > ul > li:hover {
+  background-color: #1e2a4d;
+  border-radius: 4px;
+}
+
+.milestoneMenuContainer > ul > li:hover {
+  background-color: #1a274d;
+}
+.milestoneMenuContainer > ul > li:last-child:hover {
+  color: red;
+  background-color: #ff00001f;
+}

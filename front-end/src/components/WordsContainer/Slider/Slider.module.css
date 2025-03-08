@@ -1,0 +1,138 @@
+.container {
+  max-width: 1250px;
+  padding: 0 0 1rem 0;
+  margin: 0 auto;
+}
+
+.swiperContainer {
+  height: min-content;
+  position: relative;
+}
+
+.swiperSlide {
+  width: max-content;
+  max-width: 340px;
+  height: min-content;
+  min-height: fit-content;
+  max-height: fit-content;
+  position: relative;
+}
+
+.swiperSlideShadowLeft,
+.swiperSlideShadowRight {
+  display: none;
+}
+
+.sliderControler {
+  margin-top: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.sliderArrow {
+  width: 9.3rem;
+  height: 3rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+  border-radius: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  background: rgba(72, 142, 255, 0.12);
+  border: 1px solid #293b69;
+}
+
+.sliderControler .sliderArrow svg {
+  font-size: 1.5rem;
+  color: #c4c4c4;
+}
+
+.swiperButtonNext,
+.swiperButtonPrev {
+  color: #fff;
+}
+
+/* add new word style */
+.addNewWord {
+  text-align: center;
+}
+.addNewWord > button {
+  width: 315px;
+  padding: 2px 0;
+  margin-top: 1.5rem;
+  background: linear-gradient(
+    192deg,
+    rgba(72, 73, 148, 0) 0%,
+    rgba(152, 191, 254, 0.12) 100%
+  );
+  color: #fff;
+  border: 1px solid #293b69;
+  border-radius: 12px;
+  outline: none;
+  cursor: pointer;
+}
+
+/* skeleton loader*/
+.sliderSkeletonLoader {
+  max-width: 340;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
+.sliderSkeletonLoader > div:first-child {
+  width: 200px !important;
+  margin-bottom: 12px;
+}
+.sliderSkeletonLoader > div:last-child {
+  margin-top: 12px;
+}
+.sliderSkeletonLoader > div {
+  width: 100%;
+  border-radius: 8px;
+}
+.sliderController {
+  max-width: 340px;
+  display: flex;
+  gap: 12px;
+  margin-top: 12px;
+}
+/* Extra Large Devices (large desktops) - 1200px and above: */
+@media (min-width: 1200px) and (max-width: 1400px) {
+  .container {
+    max-width: 1150px;
+  }
+}
+/* Large Devices (desktops) - 1000px to 1199px wide: */
+@media (min-width: 1000px) and (max-width: 1199.98px) {
+  .container {
+    max-width: 950px;
+  }
+}
+
+/* Medium Devices (laptops) - 768px to 991px wide: */
+@media (min-width: 768px) and (max-width: 999.98px) {
+  .container {
+    max-width: 750px;
+  }
+}
+
+/* Small Devices (tablets) - 576px to 767px wide: */
+@media (min-width: 600px) and (max-width: 767.98px) {
+  .container {
+    max-width: 560px;
+  }
+}
+
+/* Extra Small Devices (phones) - Up to 576px wide: */
+@media (max-width: 599.98px) {
+  .container {
+    max-width: 340px;
+  }
+}

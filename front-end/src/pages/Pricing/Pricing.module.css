@@ -1,0 +1,271 @@
+.pricingPage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: #020817;
+  overflow: hidden;
+}
+
+/* style for card section */
+.pricingSection {
+  max-width: 1250px;
+  min-height: 80vh;
+  margin-top: 120px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 32px;
+  position: relative;
+}
+
+.free,
+.premium,
+.elite {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 32px;
+  min-width: 320px;
+  min-height: 550px;
+  backdrop-filter: blur(6px) saturate(130%);
+  -webkit-backdrop-filter: blur(6px) saturate(130%);
+  background-color: rgba(17, 25, 40, 0.41);
+  color: #fff;
+  position: relative;
+  transition: transform 0.3s ease;
+}
+
+.premium:hover {
+  transform: translateY(-10px);
+}
+
+.free {
+  border-radius: 12px;
+  border: 2px solid rgba(255, 255, 255, 0.125);
+}
+
+.premium {
+  border: 2px solid #4759f7;
+  border-radius: 12px;
+  position: relative;
+  /* overflow: hidden; */
+}
+
+.elite {
+  border: 2px solid #cb57ff;
+  border-radius: 12px 24px 12px 12px;
+}
+
+.popularBadge {
+  position: absolute;
+  top: -18px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: linear-gradient(45deg, #a264ff, #2d35d3);
+  color: white;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.freePriceCardTitle h3,
+.PaidPriceCardTitle h3 {
+  font-size: 1.8rem;
+  margin-bottom: 8px;
+}
+
+.freePriceCardTitle p,
+.PaidPriceCardTitle p {
+  font-size: 1rem;
+  opacity: 0.8;
+}
+
+.freePriceCardAmount,
+.paidPriceCardAmount {
+  margin: 16px 0;
+}
+
+.freePriceCardAmount > span,
+.paidPriceCardAmount > span {
+  font-size: 3.5rem;
+  font-weight: 700;
+}
+
+.freePriceCardAmount > small,
+.paidPriceCardAmount > small {
+  font-size: 1.1rem;
+  opacity: 0.7;
+}
+
+.billingNote {
+  display: block;
+  font-size: 0.9rem;
+  margin-top: 4px;
+  color: #e4e4e4;
+}
+
+.freePriceCardFeatures,
+.paidPriceCardFeatures {
+  margin: 20px 0;
+  flex-grow: 1;
+}
+
+.freePriceCardFeatures > ul,
+.paidPriceCardFeatures > ul {
+  padding-left: 0;
+}
+
+.freePriceCardFeatures > ul > li,
+.paidPriceCardFeatures > ul > li {
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  list-style: none;
+  margin: 12px 0;
+  font-size: 0.95rem;
+}
+
+.iconCheck {
+  font-size: 1.5rem;
+  color: rgb(0, 184, 0);
+  background-color: rgba(0, 211, 0, 0.09);
+  border-radius: 50%;
+  padding: 6px;
+  margin-right: 12px;
+}
+
+.iconClose {
+  font-size: 1.6rem;
+  color: red;
+  background-color: rgba(255, 0, 0, 0.13);
+  border-radius: 50%;
+  padding: 6px;
+  margin-right: 12px;
+}
+
+.crownImg {
+  position: absolute;
+  top: -45px;
+  right: -43px;
+  transform: rotate(45deg);
+}
+
+.crownImg img {
+  width: 80px;
+}
+
+.guaranteeNote {
+  text-align: center;
+  margin-top: 12px;
+  font-size: 0.9rem;
+  color: #6c93ff;
+}
+
+.valueNote {
+  position: absolute;
+  bottom: -12px;
+  left: 50%;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  font-size: 0.9rem;
+  color: #b3e3ff;
+  background: #cb57ff;
+  background: linear-gradient(45deg, #6804ff, #cb57ff);
+  padding: 2px 12px;
+  border-radius: 20px;
+}
+
+/* radial gradient bg styles */
+.radialGradPaid {
+  z-index: -100;
+  width: 800px;
+  height: 600px;
+  position: absolute;
+  top: -300px;
+  left: -90px;
+  background: rgb(100, 15, 144);
+  background: radial-gradient(
+    ellipse 80% 40% at center,
+    rgba(100, 15, 144, 0.32) 0%,
+    rgba(100, 15, 144, 0.26) 9%,
+    rgba(0, 212, 255, 0) 66%
+  );
+  transform: rotate(-45deg);
+}
+
+.pricingCTA {
+  text-align: center;
+}
+
+/* Responsive Styles */
+@media (min-width: 1000px) and (max-width: 1199.98px) {
+  .pricingSection {
+    max-width: 950px;
+    gap: 24px;
+  }
+  .free,
+  .premium,
+  .elite {
+    padding: 24px;
+  }
+  .elite {
+    margin-top: 26px;
+  }
+  .freePriceCardTitle h3,
+  .PaidPriceCardTitle h3 {
+    font-size: 1.5rem;
+  }
+  .freePriceCardAmount > span,
+  .paidPriceCardAmount > span {
+    font-size: 3rem;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 999.98px) {
+  .pricingSection {
+    max-width: 750px;
+    flex-wrap: wrap;
+  }
+  .elite {
+    margin-top: 26px;
+  }
+}
+
+@media (min-width: 600px) and (max-width: 767.98px) {
+  .pricingSection {
+    max-width: 560px;
+    flex-wrap: wrap;
+  }
+  .elite {
+    margin-top: 16px;
+  }
+}
+
+@media (max-width: 699.99px) {
+  .pricingSection {
+    flex-direction: column;
+    column-gap: 0;
+    row-gap: 54px;
+    margin: 120px 0;
+  }
+
+  .free,
+  .premium,
+  .elite {
+    min-width: 280px;
+    min-height: auto;
+    padding: 24px;
+  }
+
+  .crownImg {
+    top: -35px;
+    right: -35px;
+  }
+
+  .crownImg img {
+    width: 60px;
+  }
+}

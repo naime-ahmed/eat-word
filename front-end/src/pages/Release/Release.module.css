@@ -1,0 +1,349 @@
+.releasePage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: #020817;
+  overflow: hidden;
+  color: #fff;
+}
+.container {
+  width: 1250px;
+  max-width: 1250px;
+  min-height: calc(100vh - 200px);
+  margin-top: 100px;
+}
+
+.title {
+  font-size: 2.5rem;
+  color: #6366f1;
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.subtitle {
+  color: #94a3b8;
+  text-align: center;
+  margin-bottom: 3rem;
+  font-size: 1.1rem;
+}
+
+.timeline {
+  margin: 0 auto;
+  position: relative;
+}
+
+.releaseItem {
+  display: flex;
+  position: relative;
+  padding-left: 80px;
+  margin-bottom: 3rem;
+}
+
+.progressWrapper {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 80px;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.progressLine {
+  position: absolute;
+  width: 2px;
+  background: #2a297c;
+  top: 24px;
+  bottom: 0;
+}
+
+.progressIndicator {
+  width: 16px;
+  height: 16px;
+  border: 3px solid #4f46e5;
+  background: #020817;
+  border-radius: 50%;
+  position: relative;
+  z-index: 2;
+}
+
+.releaseItem:not(:first-child)::before {
+  content: "";
+  position: absolute;
+  left: 39px;
+  width: 2px;
+  background: #2a297c;
+  top: -24px;
+  height: calc(100% + 24px);
+}
+
+.releaseCard {
+  background: #0f172a;
+  border-radius: 12px;
+  padding: 1.5rem;
+  flex: 1;
+  border: 1px solid #1e293b;
+  transition: transform 0.2s ease;
+  position: relative;
+  margin-left: 2rem;
+}
+
+.releaseCard:hover {
+  transform: translateY(-3px);
+}
+
+.releaseHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #2a297c55;
+}
+
+.versionWrapper {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.versionIcon {
+  color: #4f46e5;
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+.version {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #818cf8;
+}
+
+.tag {
+  background: #6563ff14;
+  color: #628aff;
+  padding: 0.25rem 0.75rem;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  margin-left: 1rem;
+}
+
+.meta {
+  display: flex;
+  gap: 1.5rem;
+  color: #64748b;
+}
+
+.date,
+.wanted {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.featureList {
+  margin: 1rem 0;
+  padding-left: 1.5rem;
+}
+
+.featureItem {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 0;
+  color: #cbd5e1;
+  border-bottom: 1px solid #1e293b55;
+}
+
+.featureIcon {
+  color: #4f46e5;
+  min-width: 1.25rem;
+}
+
+.detailsButton {
+  background: #2a297c;
+  color: #e0e7ff;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 1rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.detailsButton:hover {
+  background: #3730a3;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.buttonArrow {
+  transition: transform 0.2s ease;
+}
+
+.detailsButton:hover .buttonArrow {
+  transform: translateX(3px);
+}
+
+@media (min-width: 1200px) and (max-width: 1399.98px) {
+  .container {
+    max-width: 1150px;
+  }
+}
+
+@media (min-width: 1000px) and (max-width: 1199.98px) {
+  .container {
+    max-width: 950px;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 999.98px) {
+  .container {
+    max-width: 750px;
+  }
+  .releaseItem {
+    padding-left: 50px;
+  }
+  .releaseCard {
+    padding: 1rem;
+    margin-left: 1.6rem;
+  }
+}
+
+@media (max-width: 767.98px) {
+  .container {
+    max-width: 560px;
+  }
+  .releaseItem {
+    padding-left: 50px;
+  }
+  .releaseCard {
+    padding: 1rem;
+    margin-left: 1.6rem;
+  }
+
+  .versionWrapper {
+    gap: 0.35rem;
+  }
+  .version {
+    font-size: 1rem;
+  }
+  .tag {
+    padding: 0.25rem 0.55rem;
+    font-size: 0.65rem;
+    margin-left: 0.7rem;
+  }
+  .meta {
+    font-size: 12px;
+    gap: 1rem;
+  }
+
+  .featureList {
+    margin: 0.8rem 0;
+    padding-left: 1rem;
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 599.98px) {
+  .container {
+    max-width: 390px;
+  }
+  .title {
+    font-size: 1.8rem;
+    margin-bottom: 0.8rem;
+  }
+
+  .subtitle {
+    font-size: 1rem;
+  }
+  .releaseItem {
+    padding-left: 20px;
+  }
+  .releaseCard {
+    padding: 1rem;
+    margin-left: 1.6rem;
+  }
+
+  .versionWrapper {
+    gap: 0.35rem;
+  }
+  .version {
+    font-size: 1rem;
+  }
+  .tag {
+    padding: 0.25rem 0.55rem;
+    font-size: 0.65rem;
+    margin-left: 0.7rem;
+  }
+  .meta {
+    font-size: 12px;
+    flex-direction: column;
+    gap: 0.8rem;
+  }
+
+  .featureList {
+    margin: 0.8rem 0;
+    padding-left: 1rem;
+    font-size: 14px;
+  }
+  .progressWrapper {
+    width: 40px;
+  }
+  .progressIndicator {
+    width: 12px;
+    height: 12px;
+  }
+
+  .releaseItem:not(:first-child)::before {
+    left: 19px;
+  }
+}
+@media (max-width: 399.98px) {
+  .container {
+    max-width: 340px;
+  }
+  .title {
+    font-size: 1.6rem;
+    margin-bottom: 0.8rem;
+  }
+  .subtitle {
+    font-size: 0.9rem;
+  }
+  .releaseItem {
+    padding-left: 14px;
+    margin-bottom: 2rem;
+  }
+  .releaseCard {
+    padding: 0.8rem;
+    margin-left: 1.4rem;
+  }
+
+  .tag {
+    padding: 0.25rem 0.45rem;
+    margin-left: 0.4rem;
+  }
+  .meta {
+    gap: 0.4rem;
+  }
+  .releaseHeader {
+    margin-bottom: 1rem;
+    padding-bottom: 0.4rem;
+  }
+
+  .featureList {
+    margin: 0.8rem 0;
+    padding-left: 1rem;
+    font-size: 12px;
+  }
+  .progressWrapper {
+    width: 30px;
+  }
+
+  .releaseItem:not(:first-child)::before {
+    left: 14px;
+  }
+}
