@@ -77,7 +77,7 @@ function processFieldResponse(field, text) {
 export async function generateWordInfo(req, res) {
   try {
     const { wordId } = req.params;
-    const { fields, preferredLang, learningLang } = req.body;
+    const { fields, comfortableLang, learningLang } = req.body;
 
     // Validate input
     if (!Array.isArray(fields)) {
@@ -95,7 +95,7 @@ export async function generateWordInfo(req, res) {
         generateFieldWithRetry(
           field,
           word.word,
-          field === "meanings" ? preferredLang : learningLang
+          field === "meanings" ? comfortableLang : learningLang
         )
       )
     );
@@ -122,7 +122,8 @@ export async function generateWordInfo(req, res) {
 
     return res.status(200).json({
       message: "Word updated successfully",
-      word: updatedWord,
+      updateData,
+      milestoneId: updatedWord.addedMilestone,
     });
   } catch (error) {
     console.error("Update error:", error);
