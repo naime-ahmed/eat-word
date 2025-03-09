@@ -221,6 +221,8 @@ const WordsContainer = ({ curMilestone, isOnRecallMood }) => {
                 row={row}
                 rowHeights={rowHeights}
                 updateRowHeight={updateRowHeight}
+                comfortableLang={curMilestone?.comfortableLang}
+                learningLang={curMilestone?.learningLang}
               />
             ))}
           </tbody>
