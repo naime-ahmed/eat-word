@@ -7,6 +7,8 @@ export const milestonePropTypes = PropTypes.shape({
   addedBy: PropTypes.string,
   learnSynonyms: PropTypes.bool,
   includeDefinition: PropTypes.bool,
+  comfortableLang: PropTypes.string,
+  learningLang: PropTypes.string,
   createdAt: PropTypes.string,
   memorizedCount: PropTypes.number,
   milestoneType: PropTypes.string,
