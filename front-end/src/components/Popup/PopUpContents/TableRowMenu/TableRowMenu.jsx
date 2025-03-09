@@ -3,12 +3,10 @@ import { useRef, useState } from "react";
 import { HiOutlineSparkles } from "react-icons/hi2";
 import { IoReloadSharp } from "react-icons/io5";
 import { MdFavorite, MdFavoriteBorder } from "react-icons/md";
-import {
-  RiAiGenerate,
-  RiArrowRightSLine,
-  RiDeleteBin4Line,
-} from "react-icons/ri";
+import { PiCheckSquareOffset } from "react-icons/pi";
+import { RiArrowRightSLine, RiDeleteBin4Line } from "react-icons/ri";
 import { VscCircleFilled } from "react-icons/vsc";
+import { useGenerateWordInfoMutation } from "../../../../services/generativeAi";
 import {
   useDeleteWordMutation,
   useEditWordMutation,
@@ -23,6 +21,8 @@ const TableRowMenu = ({
   onClose,
   rowIdx = undefined,
   updateRowHeight = () => {},
+  comfortableLang,
+  learningLang,
 }) => {
   const [doNotify, setDoNotify] = useState(false);
   const [notificationTitle, setNotificationTitle] = useState("");
@@ -33,12 +33,19 @@ const TableRowMenu = ({
   const closeTimeout = useRef(null);
 
   const [selectedFields, setSelectedFields] = useState({
-    meaning: false,
+    meanings: false,
     synonyms: false,
-    definition: false,
-    example: false,
+    definitions: false,
+    examples: false,
   });
-
+  const [
+    generateWordInfo,
+    {
+      isLoading: isGenerating,
+      isError: isGeneratingError,
+      error: generartingError,
+    },
+  ] = useGenerateWordInfoMutation();
   const [editWord, { isLoading: isEditing }] = useEditWordMutation();
   const [deleteWord, { isLoading: isDeleting }] = useDeleteWordMutation();
 
@@ -103,10 +110,22 @@ const TableRowMenu = ({
     }));
   };
 
-  const handleApply = (e) => {
+  const handleApply = async (e) => {
     e.stopPropagation();
-    console.log("Selected Fields:", selectedFields);
     onClose();
+    const fieldsAndLangs = {
+      fields: Object.keys(selectedFields).filter(
+        (field) => selectedFields[field]
+      ),
+      comfortableLang,
+      learningLang,
+    };
+    try {
+      const res = await generateWordInfo([curWord?._id, fieldsAndLangs]);
+      console.log("generated infos", res);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   // Handle arrow key navigation
@@ -178,7 +197,7 @@ const TableRowMenu = ({
                 }
               }}
             >
-              {["meaning", "synonyms", "definition", "example"].map(
+              {["meanings", "synonyms", "definitions", "examples"].map(
                 (field, index) => (
                   <li key={field}>
                     <label className={styles.inputWrapper}>
@@ -205,7 +224,9 @@ const TableRowMenu = ({
                   leftColor="#f672ff"
                   rightColor="#2b1fff"
                 >
-                  <RiAiGenerate /> Generate Selected
+                  {/* <RiAiGenerate />*/}
+                  <PiCheckSquareOffset />
+                  Generate
                 </FancyBtn>
               </li>
             </ul>
@@ -276,6 +297,8 @@ TableRowMenu.propTypes = {
   onClose: PropTypes.func.isRequired,
   rowIdx: PropTypes.number,
   updateRowHeight: PropTypes.func,
+  comfortableLang: PropTypes.string,
+  learningLang: PropTypes.string,
 };
 
 export default TableRowMenu;
