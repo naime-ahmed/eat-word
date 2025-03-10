@@ -19,11 +19,13 @@ import SliderCard from "./SliderCard/SliderCard";
 const Carousel = ({ curMilestone, isOnRecallMood }) => {
   const [words, setWords] = useState([]);
   const [swiperInstance, setSwiperInstance] = useState(null);
+  const [generatingCells, setGeneratingCells] = useState([]); // [[rowIdx,colId],[rowIdx,colId]]
+  console.log("words from carousel: ", words);
   const showNotification = useNotification();
   const { data, isLoading, isError, error } = useBringMilestoneWordQuery(
     curMilestone?._id
   );
-  // Effect to update words when data is available
+
   useEffect(() => {
     if (data?.words.length > 0) {
       setWords(data?.words);
@@ -31,6 +33,13 @@ const Carousel = ({ curMilestone, isOnRecallMood }) => {
       setWords([wordSchemaForClient(curMilestone)]);
     }
   }, [data, curMilestone]);
+
+  useEffect(() => {
+    if (swiperInstance && words.length > 0) {
+      swiperInstance.update();
+      swiperInstance.slideTo(swiperInstance.activeIndex, 0);
+    }
+  }, [words, swiperInstance]);
 
   // Append new word
   const handleAppendWord = async () => {
@@ -103,17 +112,21 @@ const Carousel = ({ curMilestone, isOnRecallMood }) => {
             modules={[EffectCoverflow, Navigation]}
             className={styles.swiperContainer}
             onSwiper={setSwiperInstance}
-            key={words[0]?._id}
           >
             {words.map((word, index) => (
-              <SwiperSlide key={word?._id} className={styles.swiperSlide}>
+              <SwiperSlide
+                key={word._id || `temp-${index}`}
+                className={styles.swiperSlide}
+              >
                 <SliderCard
-                  key={word?._id}
+                  key={word._id || `temp-card-${index}`}
                   word={word}
                   setWords={setWords}
                   wordIdx={index}
                   curMilestone={curMilestone}
                   isOnRecallMood={isOnRecallMood}
+                  generatingCells={generatingCells}
+                  setGeneratingCells={setGeneratingCells}
                 />
               </SwiperSlide>
             ))}
