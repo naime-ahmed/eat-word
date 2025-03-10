@@ -49,4 +49,10 @@ export const sliderCardPropTypes = {
   wordIdx: PropTypes.number.isRequired,
   setWords: PropTypes.func.isRequired,
   curMilestone: milestonePropTypes,
+  setGeneratingCells: PropTypes.func,
+  generatingCells: PropTypes.arrayOf(
+    PropTypes.arrayOf(
+      PropTypes.oneOfType([PropTypes.number, PropTypes.string])
+    )
+  ),
 };
