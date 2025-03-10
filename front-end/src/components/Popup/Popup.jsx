@@ -26,7 +26,7 @@ const POPUP_TYPES = {
       let top = clickPosition.y + 15;
 
       if (isMobile) {
-        left = clickPosition.x - popupDimensions.width - 15;
+        left = clickPosition.x - popupDimensions.width;
       }
 
       if (left + popupDimensions.width > window.innerWidth) {
