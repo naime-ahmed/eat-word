@@ -12,6 +12,7 @@ const TableRow = ({
   updateRowHeight,
   comfortableLang,
   learningLang,
+  setGeneratingCells,
 }) => {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [clickPosition, setClickPosition] = useState(null);
@@ -64,6 +65,7 @@ const TableRow = ({
               updateRowHeight={updateRowHeight}
               comfortableLang={comfortableLang}
               learningLang={learningLang}
+              setGeneratingCells={setGeneratingCells}
             />
           </Popup>
         </td>
@@ -86,6 +88,7 @@ TableRow.propTypes = {
   updateRowHeight: PropTypes.func.isRequired,
   comfortableLang: PropTypes.string,
   learningLang: PropTypes.string,
+  setGeneratingCells: PropTypes.func,
 };
 
 export default TableRow;
