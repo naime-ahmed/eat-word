@@ -24,24 +24,41 @@ const SliderCard = ({
   wordIdx,
   curMilestone,
   isOnRecallMood,
+  generatingCells,
+  setGeneratingCells,
 }) => {
-  // Initialize state with default values to avoid undefined issues
-  const [wordReplica, setWordReplica] = useState({
+  const [wordReplica, setWordReplica] = useState(() => ({
     word: word?.word || "",
     meanings: word?.meanings || "",
     synonyms: word?.synonyms || "",
     definitions: word?.definitions || "",
     examples: word?.examples || "",
-  });
+  }));
 
-  // Destructure wordReplica for cleaner code
-  const {
-    word: wordText,
-    meanings,
-    synonyms,
-    definitions,
-    examples,
-  } = wordReplica;
+  useEffect(() => {
+    setWordReplica({
+      word: word?.word || "",
+      meanings: word?.meanings || "",
+      synonyms: word?.synonyms || "",
+      definitions: word?.definitions || "",
+      examples: word?.examples || "",
+    });
+
+    // Reset textarea sizes when word updates
+    const textareas = [
+      wordRef,
+      meaningsRef,
+      synonymsRef,
+      definitionsRef,
+      examplesRef,
+    ];
+    textareas.forEach((ref) => {
+      if (ref.current) {
+        ref.current.style.height = "auto";
+        ref.current.style.height = `${ref.current.scrollHeight}px`;
+      }
+    });
+  }, [word]);
 
   // Add state for showing limit messages
   const [limitMessageField, setLimitMessageField] = useState(null);
@@ -186,6 +203,13 @@ const SliderCard = ({
     speckText(text);
   };
 
+  const isGenerating = useCallback(
+    (columnId) =>
+      generatingCells.some(([r, c]) => r === wordIdx && c === columnId),
+    [generatingCells, wordIdx]
+  );
+
+  console.log("generating cells ", generatingCells);
   return (
     <div className={styles.card}>
       <div className={styles.cardContainer}>
@@ -195,18 +219,20 @@ const SliderCard = ({
             <textarea
               ref={wordRef}
               name="word"
-              value={wordText}
+              value={wordReplica.word}
               onChange={handleOnChange}
               onKeyDown={handleKeyDown}
               placeholder="Your Word"
-              className={`${wordText ? "" : styles.empty}`}
+              className={`${wordReplica.word ? "" : styles.empty} ${
+                word.difficultyLevel === "hard" ? styles.itsHard : ""
+              }`}
               rows={1}
             />
-            {wordText && (
+            {wordReplica.word && (
               <span
                 className={styles.wordSound}
                 aria-label="sound"
-                onClick={() => handleSpeckText(wordText)}
+                onClick={() => handleSpeckText(wordReplica.word)}
                 role="button"
                 tabIndex={0}
               >
@@ -221,17 +247,23 @@ const SliderCard = ({
           </div>
         </div>
 
-        {/* Meanings Section Example */}
+        {/* Meanings Section*/}
         <div className={styles.cardMeanings}>
           <label htmlFor={`meanings-${wordIdx}`}>MEANINGS: </label>
           <div
             className={`${styles.textareaWrapper} ${
-              isOnRecallMood && !dismissedBlurFields.meanings && meanings
+              isOnRecallMood &&
+              !dismissedBlurFields.meanings &&
+              wordReplica.meanings
                 ? styles.blurred
                 : ""
-            }`}
+            } ${isGenerating("meanings") ? styles.generating : ""} `}
             onClick={(e) => {
-              if (isOnRecallMood && !dismissedBlurFields.meanings && meanings) {
+              if (
+                isOnRecallMood &&
+                !dismissedBlurFields.meanings &&
+                wordReplica.meanings
+              ) {
                 e.preventDefault();
                 handleBlurDismiss("meanings");
               } else {
@@ -243,23 +275,27 @@ const SliderCard = ({
               ref={meaningsRef}
               name="meanings"
               id={`meanings-${wordIdx}`}
-              value={meanings}
+              value={wordReplica.meanings}
               onChange={handleOnChange}
-              className={`${meanings ? "" : styles.empty}`}
+              className={`${wordReplica.meanings ? "" : styles.empty} ${
+                isGenerating("meanings") ? styles.pulsingText : ""
+              } `}
               rows={1}
               onFocus={(e) => {
                 if (
                   isOnRecallMood &&
                   !dismissedBlurFields.meanings &&
-                  meanings
+                  wordReplica.meanings
                 ) {
                   e.target.blur();
                 }
               }}
             />
-            {isOnRecallMood && !dismissedBlurFields.meanings && meanings && (
-              <div className={styles.blurOverlay}>Click to revel</div>
-            )}
+            {isOnRecallMood &&
+              !dismissedBlurFields.meanings &&
+              wordReplica.meanings && (
+                <div className={styles.blurOverlay}>Click to revel</div>
+              )}
           </div>
           {limitMessageField === "meanings" && (
             <div className={styles.limitMessage}>
@@ -274,15 +310,17 @@ const SliderCard = ({
             <label htmlFor={`synonyms-${wordIdx}`}>SYNONYMS: </label>
             <div
               className={`${styles.textareaWrapper} ${
-                isOnRecallMood && !dismissedBlurFields.synonyms && synonyms
+                isOnRecallMood &&
+                !dismissedBlurFields.synonyms &&
+                wordReplica.synonyms
                   ? styles.blurred
                   : ""
-              }`}
+              } ${isGenerating("synonyms") ? styles.generating : ""}`}
               onClick={(e) => {
                 if (
                   isOnRecallMood &&
                   !dismissedBlurFields.synonyms &&
-                  synonyms
+                  wordReplica.synonyms
                 ) {
                   e.preventDefault();
                   handleBlurDismiss("synonyms");
@@ -295,23 +333,27 @@ const SliderCard = ({
                 ref={synonymsRef}
                 name="synonyms"
                 id={`synonyms-${wordIdx}`}
-                value={synonyms}
+                value={wordReplica.synonyms}
                 onChange={handleOnChange}
-                className={`${synonyms ? "" : styles.empty}`}
+                className={`${wordReplica.synonyms ? "" : styles.empty} ${
+                  isGenerating("synonyms") ? styles.pulsingText : ""
+                }`}
                 rows={1}
                 onFocus={(e) => {
                   if (
                     isOnRecallMood &&
                     !dismissedBlurFields.synonyms &&
-                    synonyms
+                    wordReplica.synonyms
                   ) {
                     e.target.blur();
                   }
                 }}
               />
-              {isOnRecallMood && !dismissedBlurFields.synonyms && synonyms && (
-                <div className={styles.blurOverlay}>Click to revel</div>
-              )}
+              {isOnRecallMood &&
+                !dismissedBlurFields.synonyms &&
+                wordReplica.synonyms && (
+                  <div className={styles.blurOverlay}>Click to revel</div>
+                )}
             </div>
             {limitMessageField === "synonyms" && (
               <div className={styles.limitMessage}>
@@ -329,15 +371,15 @@ const SliderCard = ({
               className={`${styles.textareaWrapper} ${
                 isOnRecallMood &&
                 !dismissedBlurFields.definitions &&
-                definitions
+                wordReplica.definitions
                   ? styles.blurred
                   : ""
-              }`}
+              } ${isGenerating("definitions") ? styles.generating : ""} `}
               onClick={(e) => {
                 if (
                   isOnRecallMood &&
                   !dismissedBlurFields.definitions &&
-                  definitions
+                  wordReplica.definitions
                 ) {
                   e.preventDefault();
                   handleBlurDismiss("definitions");
@@ -350,15 +392,17 @@ const SliderCard = ({
                 ref={definitionsRef}
                 name="definitions"
                 id={`definitions-${wordIdx}`}
-                value={definitions}
+                value={wordReplica.definitions}
                 onChange={handleOnChange}
-                className={`${definitions ? "" : styles.empty}`}
+                className={`${wordReplica.definitions ? "" : styles.empty} ${
+                  isGenerating("definitions") ? styles.pulsingText : ""
+                } `}
                 rows={1}
                 onFocus={(e) => {
                   if (
                     isOnRecallMood &&
                     !dismissedBlurFields.definitions &&
-                    definitions
+                    wordReplica.definitions
                   ) {
                     e.target.blur();
                   }
@@ -366,7 +410,7 @@ const SliderCard = ({
               />
               {isOnRecallMood &&
                 !dismissedBlurFields.definitions &&
-                definitions && (
+                wordReplica.definitions && (
                   <div className={styles.blurOverlay}>Click to revel</div>
                 )}
             </div>
@@ -383,12 +427,18 @@ const SliderCard = ({
           <label htmlFor={`examples-${wordIdx}`}>EXAMPLES: </label>
           <div
             className={`${styles.textareaWrapper} ${
-              isOnRecallMood && !dismissedBlurFields.examples && examples
+              isOnRecallMood &&
+              !dismissedBlurFields.examples &&
+              wordReplica.examples
                 ? styles.blurred
                 : ""
-            }`}
+            } ${isGenerating("examples") ? styles.generating : ""}`}
             onClick={(e) => {
-              if (isOnRecallMood && !dismissedBlurFields.examples && examples) {
+              if (
+                isOnRecallMood &&
+                !dismissedBlurFields.examples &&
+                wordReplica.examples
+              ) {
                 e.preventDefault();
                 handleBlurDismiss("examples");
               } else {
@@ -400,23 +450,27 @@ const SliderCard = ({
               ref={examplesRef}
               name="examples"
               id={`examples-${wordIdx}`}
-              value={examples}
+              value={wordReplica.examples}
               onChange={handleOnChange}
-              className={`${examples ? "" : styles.empty}`}
+              className={`${wordReplica.examples ? "" : styles.empty} ${
+                isGenerating("examples") ? styles.pulsingText : ""
+              } `}
               rows={1}
               onFocus={(e) => {
                 if (
                   isOnRecallMood &&
                   !dismissedBlurFields.examples &&
-                  examples
+                  wordReplica.examples
                 ) {
                   e.target.blur();
                 }
               }}
             />
-            {isOnRecallMood && !dismissedBlurFields.examples && examples && (
-              <div className={styles.blurOverlay}>Click to revel</div>
-            )}
+            {isOnRecallMood &&
+              !dismissedBlurFields.examples &&
+              wordReplica.examples && (
+                <div className={styles.blurOverlay}>Click to revel</div>
+              )}
           </div>
           {limitMessageField === "examples" && (
             <div className={styles.limitMessage}>
@@ -436,7 +490,14 @@ const SliderCard = ({
             clickPosition={clickPosition}
             popupType="menu"
           >
-            <TableRowMenu curWord={word} onClose={handleMenuClose} />
+            <TableRowMenu
+              curWord={word}
+              rowIdx={wordIdx}
+              onClose={handleMenuClose}
+              setGeneratingCells={setGeneratingCells}
+              learningLang={curMilestone.learningLang}
+              comfortableLang={curMilestone.comfortableLang}
+            />
           </Popup>
         )}
       </span>
@@ -446,32 +507,5 @@ const SliderCard = ({
 
 // Add PropTypes for validation
 SliderCard.propTypes = sliderCardPropTypes;
-
-// Default props to handle undefined `word`
-SliderCard.defaultProps = {
-  word: {
-    addedBy: "",
-    addedMilestone: "",
-    contextTags: "",
-    word: "",
-    meanings: "",
-    synonyms: "",
-    definitions: "",
-    examples: "",
-    difficultyLevel: "",
-    frequency: 0,
-    isFavorite: false,
-    learnedScore: 0,
-    memorized: false,
-    notes: "",
-    createdAt: "",
-    updatedAt: "",
-    _id: "",
-    __v: 0,
-  },
-  setWords: () => {},
-  wordIdx: 0,
-  curMilestone: {},
-};
 
 export default SliderCard;
