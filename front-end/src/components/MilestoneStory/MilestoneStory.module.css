@@ -1,0 +1,54 @@
+.storyContainer {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  font-family: "Roboto", sans-serif;
+  line-height: 1.6;
+  color: #e1e3ff;
+  background-color: #020817;
+}
+
+.chapter {
+  margin-bottom: 20px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #7986cb;
+}
+
+.chapterHeading {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 5px;
+  color: #c5cae9;
+}
+
+.chapterText {
+  margin: 0;
+  white-space: pre-wrap;
+  font-size: 18px;
+}
+
+.seeMoreBtn {
+  display: block;
+  margin: 20px auto;
+  padding: 10px 20px;
+  background-color: #0056cc;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.seeMoreBtn:hover {
+  background-color: #003a8c;
+}
+
+@media (max-width: 768px) {
+  .chapterHeading {
+    font-size: 20px;
+  }
+  .chapterText {
+    font-size: 16px;
+  }
+}
