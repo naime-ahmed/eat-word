@@ -144,7 +144,7 @@ const EditableCell = ({ getValue, row, column, table }) => {
   return (
     <div
       className={`${styles.cellWrapper} ${
-        showBlur && value ? styles.blurred : ""
+        (showBlur && value) || isGenerating ? styles.blurred : ""
       } ${isGenerating ? styles.generating : ""}`}
       onClick={handleOverlayClick}
     >
