@@ -28,6 +28,12 @@ const WordsContainer = ({ curMilestone, isOnRecallMood }) => {
     setWords(data?.words || []);
   }, [data]);
 
+  // reached the milestone?
+  const hasReached =
+    curMilestone?.wordsCount ===
+    Math.max(curMilestone?.targetWords, words?.length);
+
+  console.log("has reached", hasReached);
   // Update row height for a specific row and column
   const updateRowHeight = useCallback(
     (rowIndex, colId, value, action = "rerender") => {
@@ -223,7 +229,9 @@ const WordsContainer = ({ curMilestone, isOnRecallMood }) => {
           </tbody>
         )}
       </table>
-      {isAppendLoading ? (
+      {hasReached ? (
+        <></>
+      ) : isAppendLoading ? (
         <div className={styles.loadingSpinner}>
           <Skeleton width="100%" height={26} label="saving word..." />
         </div>
