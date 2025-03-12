@@ -1,7 +1,6 @@
 import PropTypes from "prop-types";
 
 // milestone prop types
-
 export const milestonePropTypes = PropTypes.shape({
   _id: PropTypes.string,
   addedBy: PropTypes.string,
@@ -9,6 +8,7 @@ export const milestonePropTypes = PropTypes.shape({
   includeDefinition: PropTypes.bool,
   comfortableLang: PropTypes.string,
   learningLang: PropTypes.string,
+  story: PropTypes.string,
   createdAt: PropTypes.string,
   memorizedCount: PropTypes.number,
   milestoneType: PropTypes.string,
