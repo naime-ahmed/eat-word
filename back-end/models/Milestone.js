@@ -12,6 +12,7 @@ const milestoneSchema = new mongoose.Schema(
     comfortableLang: {type: String, required: true},
     learningLang: {type: String, required: true},
     targetWords: { type: Number, required: true },
+    story: {type: String},
     wordsCount: {
       type: Number,
       required: true,
