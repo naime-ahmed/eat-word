@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import useNotification from "../../../../hooks/useNotification";
 import { useGenerateStoryMutation } from "../../../../services/generativeAi";
 import FancyBtn from "../../../ui/button/FancyBtn/FancyBtn";
+import ClassicSpinner from "../../../ui/loader/ClassicSpinner/ClassicSpinner";
 import styles from "./MilestoneStoryGenerator.module.css";
 
 const STORY_TYPES = [
@@ -53,24 +54,8 @@ const CookingAnimation = () => {
 
   return (
     <div className={styles.loadingContainer}>
-      <div className={styles.potAnimation}>
-        <svg width="80" height="80" viewBox="0 0 100 100">
-          {/* Pot */}
-          <path d="M20 65 L20 35 L80 35 L80 65 Q50 85 20 65" fill="#4a4a4a" />
-          {/* Smoke particles */}
-          {[0, 1, 2, 3].map((i) => (
-            <circle
-              key={i}
-              cx="50"
-              cy="30"
-              r="5"
-              fill="rgba(255,255,255,0.4)"
-              className={styles.smoke}
-              style={{ animationDelay: `${i * 0.5}s` }}
-            />
-          ))}
-        </svg>
-      </div>
+      <ClassicSpinner />
+
       <div className={styles.progressMessagesContainer}>
         {progressMessages.map((message, index) => (
           <div
@@ -152,7 +137,7 @@ const MilestoneStoryGenerator = ({ onClose, milestoneId }) => {
               );
             })}
           </div>
-          <FancyBtn clickHandler={handleGenerateStory}>Let&#39;s go!</FancyBtn>
+          <FancyBtn clickHandler={handleGenerateStory}>Let&#39;s go</FancyBtn>
         </>
       ) : (
         <CookingAnimation />

@@ -63,7 +63,6 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  background-color: rgba(106, 27, 154, 0.1);
   border-radius: 12px;
 }
 
@@ -80,18 +79,12 @@
   text-align: center;
   opacity: 0;
   transition: opacity 0.5s ease;
-  color: #d1c4e9;
+  color: #ffffff;
   font-size: 16px;
 }
 
 .progressMessage.active {
   opacity: 1;
-}
-
-.potAnimation {
-  position: relative;
-  width: 80px;
-  height: 80px;
 }
 
 .smoke {
