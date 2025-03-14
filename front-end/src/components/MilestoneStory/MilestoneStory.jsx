@@ -10,7 +10,7 @@ const MilestoneStory = ({ story }) => {
   const handleSeeMoreLess = () => setShowFullStory((prev) => !prev);
 
   const parseBold = (text) => {
-    const regex = /\*(.*?)\*/g;
+    const regex = /\*\*(.*?)\*\*/g;
     const parts = [];
     let lastIndex = 0;
     let match;
@@ -32,6 +32,9 @@ const MilestoneStory = ({ story }) => {
 
   return (
     <div className={styles.storyContainer}>
+      <h1 className={styles.storyHeading}>
+        Here is your story, a gift from Eat Word
+      </h1>
       <div className={styles.storyContent}>
         {chapters.map((chapter, index) => {
           if (!showFullStory && index >= 2) return null;
