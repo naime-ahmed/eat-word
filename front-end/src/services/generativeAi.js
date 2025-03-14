@@ -102,7 +102,44 @@ export const generativeApi = createApi({
         }
       },
     }),
+
+    generateStory: builder.mutation({
+      query: ([milestoneId, aboutStory]) => ({
+        url: `/story/${milestoneId}`,
+        method: "PATCH",
+        body: aboutStory,
+      }),
+      async onQueryStarted(
+        [milestoneId, aboutStory],
+        { dispatch, queryFulfilled }
+      ) {
+        try {
+          // Wait for the API call to complete
+          const { data } = await queryFulfilled;
+          console.log("story data", data);
+          console.log("mile id: ", milestoneId);
+          // Update the cache with the response
+          dispatch(
+            milestoneApi.util.updateQueryData(
+              "bringMilestones",
+              undefined,
+              (draft) => {
+                const milestoneEntry = Object.values(draft?.milestones).find(
+                  (m) => m._id === milestoneId
+                );
+                if (milestoneEntry) {
+                  milestoneEntry.story = data.story;
+                }
+              }
+            )
+          );
+        } catch (error) {
+          console.log("generating story error: ", error);
+        }
+      },
+    }),
   }),
 });
 
-export const { useGenerateWordInfoMutation } = generativeApi;
+export const { useGenerateWordInfoMutation, useGenerateStoryMutation } =
+  generativeApi;
