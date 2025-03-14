@@ -1,6 +1,9 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 import MilestoneDeadline from "../../components/MilestoneDeadline";
+import MilestoneStory from "../../components/MilestoneStory/MilestoneStory";
+import Popup from "../../components/Popup/Popup";
+import MilestoneStoryGenerator from "../../components/Popup/PopUpContents/MilestoneStoryGenerator/MilestoneStoryGenerator";
 import Error from "../../components/shared/Error/Error";
 import Footer from "../../components/shared/Footer/Footer";
 import Header from "../../components/shared/Header/Header";
@@ -15,6 +18,20 @@ import {
 import { formatDate } from "../../utils/formateDate";
 import styles from "./Milestone.module.css";
 
+const confettiColors = [
+  "#FF5733",
+  "#FFC300",
+  "#28B463",
+  "#3498DB",
+  "#9B59B6",
+  "#E74C3C",
+  "#F1C40F",
+  "#2ECC71",
+];
+
+const getRandomColor = () =>
+  confettiColors[Math.floor(Math.random() * confettiColors.length)];
+
 const Milestone = () => {
   const [wordContainerType, setWordContainerType] = useState("table");
 
@@ -22,10 +39,16 @@ const Milestone = () => {
   const timeoutRef = useRef(null);
   const [showTooltip, setShowTooltip] = useState(false);
   const [hasUpdated, setHasUpdated] = useState(false);
+  const [isTakingStoryType, setIsTakingStoryType] = useState(false);
 
   const { milestoneId } = useParams();
   const { data, isLoading, isError, error } = useBringMilestonesQuery();
   const [editMilestone] = useEditMilestoneMutation();
+
+  let confettiCount = 20;
+  if (wordContainerType === "slider") {
+    confettiCount = 14;
+  }
 
   // manage the scroll position
   useScrollRestoration();
@@ -107,6 +130,13 @@ const Milestone = () => {
     ? formatDate(curMilestone?.lastRecalled)
     : "";
 
+  // reached the milestone?
+  const hasReached = curMilestone?.wordsCount === curMilestone?.targetWords;
+
+  const handleOpenGenerateStory = () => {
+    setIsTakingStoryType(true);
+  };
+  console.log(curMilestone);
   return (
     <div className={styles.milestonePage}>
       <Header />
@@ -116,7 +146,13 @@ const Milestone = () => {
       ) : (
         <div className={styles.milestoneContent}>
           {isError ? (
-            <Error error={error} />
+            <Error
+              message={
+                error?.message || "something went wrong! Try reloading the page"
+              }
+              showRetry={true}
+              onRetry={() => window.location.reload()}
+            />
           ) : (
             <>
               <div className={styles.milestoneHeading}>
@@ -125,10 +161,14 @@ const Milestone = () => {
                     <h3>{curMilestone?.name}</h3>
                   </div>
                   <div className={styles.milestoneTimeLeft}>
-                    <MilestoneDeadline
-                      createdAt={curMilestone?.createdAt}
-                      duration={duration}
-                    />
+                    {curMilestone.milestoneType !== "zero" ? (
+                      <MilestoneDeadline
+                        createdAt={curMilestone?.createdAt}
+                        duration={duration}
+                      />
+                    ) : (
+                      <span>Time left: Infinite</span>
+                    )}
                   </div>
                 </div>
                 <div className={styles.recallAndLastRecall}>
@@ -175,6 +215,43 @@ const Milestone = () => {
                   curMilestone={curMilestone}
                   isOnRecallMood={isOnRecallMood}
                 />
+              )}
+
+              {hasReached && curMilestone?.story === "" && (
+                <div
+                  className={styles.hasReached}
+                  onClick={handleOpenGenerateStory}
+                >
+                  <p>
+                    Yay! You&#39;ve successfully reached the milestone! Click to
+                    get a story with your words
+                  </p>
+                  <div className={styles.confettiContainer}>
+                    {Array.from({ length: confettiCount }).map((_, i) => (
+                      <div
+                        key={i}
+                        className={styles.confetti}
+                        style={{
+                          left: `${Math.random() * 100}%`,
+                          animationDelay: `${Math.random() * 2}s`,
+                          backgroundColor: getRandomColor(),
+                        }}
+                      />
+                    ))}
+                  </div>
+                  <Popup
+                    isOpen={isTakingStoryType}
+                    onClose={() => setIsTakingStoryType(false)}
+                  >
+                    <MilestoneStoryGenerator
+                      onClose={() => setIsTakingStoryType(false)}
+                      milestoneId={curMilestone._id}
+                    />
+                  </Popup>
+                </div>
+              )}
+              {curMilestone.story && (
+                <MilestoneStory story={curMilestone?.story} />
               )}
             </>
           )}
