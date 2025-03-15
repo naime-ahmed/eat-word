@@ -23,14 +23,6 @@ function Hero() {
   const { isAuthenticated, isLoading } = useSelector((state) => state.auth);
   const navigate = useNavigate();
 
-  const handleNavigation = () => {
-    if (isAuthenticated) {
-      navigate("/my-space");
-    } else {
-      navigate("/sign-in");
-    }
-  };
-
   useEffect(() => {
     const id = setInterval(() => {
       setCurrentIndex((prev) => {
@@ -45,7 +37,15 @@ function Hero() {
     return () => clearInterval(id);
   }, []);
 
-  const handleNavigate = useCallback(() => {
+  const handleNavigation = () => {
+    if (isAuthenticated) {
+      navigate("/my-space");
+    } else {
+      navigate("/sign-in");
+    }
+  };
+
+  const handleNavigateToHotNews = useCallback(() => {
     navigate("/release");
   }, [navigate]);
 
@@ -53,9 +53,9 @@ function Hero() {
     <section className={styles.container}>
       <div className={styles.heroContent}>
         <div className={styles.shinyText}>
-          <div onClick={handleNavigate} className={styles.shinyTextBg}>
+          <div onClick={handleNavigateToHotNews} className={styles.shinyTextBg}>
             <span className={styles.shinyAnimatedText}>
-              <span>✨ Introducing Active Recall</span>
+              <span>✨ Generate with AI is here</span>
               <IoArrowForward className={styles.arrowIcon} />
             </span>
           </div>
@@ -98,7 +98,7 @@ function Hero() {
           </CTABtn>
         )}
       </div>
-      <div className={styles.curvedMask}></div>
+      <div className={`${styles.curvedMask} ${styles.animated}`}></div>
     </section>
   );
 }
