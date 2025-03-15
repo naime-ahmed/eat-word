@@ -33,7 +33,6 @@ const WordsContainer = ({ curMilestone, isOnRecallMood }) => {
     curMilestone?.wordsCount ===
     Math.max(curMilestone?.targetWords, words?.length);
 
-  console.log("has reached", hasReached);
   // Update row height for a specific row and column
   const updateRowHeight = useCallback(
     (rowIndex, colId, value, action = "rerender") => {
@@ -186,9 +185,6 @@ const WordsContainer = ({ curMilestone, isOnRecallMood }) => {
     return <TableSkeletonLoader />;
   }
 
-  if (isError) {
-    console.log(error);
-  }
   // handle the error message
   if (isError)
     return (
