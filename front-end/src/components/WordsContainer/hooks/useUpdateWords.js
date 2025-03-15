@@ -12,7 +12,6 @@ export const useUpdateWords = () => {
   const [editWord] = useEditWordMutation();
 
   const updateWords = (setWords, rowIndex, columnId, value, milestoneId) => {
-    console.log("on Update", rowIndex, columnId, value);
 
     // Early return if inputs are invalid
     if (
@@ -31,8 +30,6 @@ export const useUpdateWords = () => {
     }
 
     setWords((prev) => {
-      // Ensure `prev` is defined and is an array
-      console.log("track dup set", newWordsSet.current);
       if (!Array.isArray(prev)) {
         console.error("Invalid `words` state:", prev);
         return prev || [];

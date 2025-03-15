@@ -39,11 +39,9 @@ const baseQueryWithReAuth = async (args, api, extraOptions) => {
 
     if (refreshResult.ok) {
       const refreshData = await refreshResult.json();
-      // Store the new token
       const { accessToken, ...userData } = refreshData;
       localStorage.setItem("access-token", accessToken);
 
-      // Update user data in Redux store
       api.dispatch(setUser(userData));
 
       // Retry the original request with new token
@@ -70,16 +68,13 @@ export const wordApi = createApi({
       }),
       // Optimistic update
       async onQueryStarted(wordData, { dispatch, queryFulfilled }) {
-        // Optimistically add the new word to the milestoneApi cache
         const patchResult = dispatch(
           milestoneApi.util.updateQueryData(
             "bringMilestoneWord",
             wordData.addedMilestone,
             (draft) => {
-              console.log("append word", draft);
               if (draft && draft.words) {
-                console.log("new word went inside cache", draft.words);
-                draft.words.push(wordData); // Add the temporary word
+                draft.words.push(wordData);
               }
             }
           )
@@ -87,7 +82,7 @@ export const wordApi = createApi({
 
         try {
           const result = await queryFulfilled;
-          const { message, newWord } = result.data;
+          const { newWord } = result.data;
 
           // Update the cache with the server response
           dispatch(
@@ -96,12 +91,10 @@ export const wordApi = createApi({
               newWord.addedMilestone,
               (draft) => {
                 if (draft && draft.words) {
-                  // Find the temporary word in the cache
                   const wordIndex = draft.words.findIndex(
                     (word) => word.word === newWord.word
                   );
                   if (wordIndex !== -1) {
-                    // Replace the temporary word with the server response
                     draft.words[wordIndex] = newWord;
                   }
                 }
@@ -165,13 +158,10 @@ export const wordApi = createApi({
             milestoneId,
             (draft) => {
               if (draft && draft.words) {
-                // Find the word in the words array
                 const wordIndex = draft.words.findIndex(
                   (word) => word._id === wordId
                 );
-                console.log("modified word Idx", wordIndex, wordId);
                 if (wordIndex !== -1) {
-                  // Merge the editedFields into the found word object
                   Object.assign(draft.words[wordIndex], editedFields);
                 }
               }
@@ -198,15 +188,12 @@ export const wordApi = createApi({
         { wordId, milestoneId },
         { dispatch, queryFulfilled }
       ) {
-        // Optimistically remove the word from the milestoneApi cache
         const patchResult = dispatch(
           milestoneApi.util.updateQueryData(
             "bringMilestoneWord",
             milestoneId,
             (draft) => {
               if (draft && draft.words) {
-                console.log("Removing word from cache:", wordId);
-                // Filter out the word with the matching wordId
                 draft.words = draft.words.filter((word) => word._id !== wordId);
               }
             }
