@@ -3,18 +3,16 @@ import { useRef, useState } from "react";
 import { HiOutlineSparkles } from "react-icons/hi2";
 import { IoReloadSharp } from "react-icons/io5";
 import { MdFavorite, MdFavoriteBorder } from "react-icons/md";
-import {
-  RiAiGenerate,
-  RiArrowRightSLine,
-  RiDeleteBin4Line,
-} from "react-icons/ri";
+import { PiCheckSquareOffset } from "react-icons/pi";
+import { RiArrowRightSLine, RiDeleteBin4Line } from "react-icons/ri";
 import { VscCircleFilled } from "react-icons/vsc";
+import useNotification from "../../../../hooks/useNotification";
+import { useGenerateWordInfoMutation } from "../../../../services/generativeAi";
 import {
   useDeleteWordMutation,
   useEditWordMutation,
 } from "../../../../services/word";
 import { wordPropTypes } from "../../../../utils/propTypes";
-import Notification from "../../../Notification/Notification";
 import FancyBtn from "../../../ui/button/FancyBtn/FancyBtn";
 import styles from "./TableRowMenu.module.css";
 
@@ -23,28 +21,26 @@ const TableRowMenu = ({
   onClose,
   rowIdx = undefined,
   updateRowHeight = () => {},
+  comfortableLang,
+  learningLang,
+  setGeneratingCells,
 }) => {
-  const [doNotify, setDoNotify] = useState(false);
-  const [notificationTitle, setNotificationTitle] = useState("");
-  const [notificationMessage, setNotificationMessage] = useState("");
   const menuItemsRef = useRef([]);
   const [showSubmenu, setShowSubmenu] = useState(false);
   const [isClosing, setIsClosing] = useState(false);
   const closeTimeout = useRef(null);
 
-  const [selectedFields, setSelectedFields] = useState({
-    meaning: false,
-    synonyms: false,
-    definition: false,
-    example: false,
-  });
+  const notify = useNotification();
 
+  const [selectedFields, setSelectedFields] = useState({
+    meanings: false,
+    synonyms: false,
+    definitions: false,
+    examples: false,
+  });
+  const [generateWordInfo] = useGenerateWordInfoMutation();
   const [editWord, { isLoading: isEditing }] = useEditWordMutation();
   const [deleteWord, { isLoading: isDeleting }] = useDeleteWordMutation();
-
-  const handleCloseNotify = () => {
-    setDoNotify(false);
-  };
 
   const handleEdit = async (editedField) => {
     try {
@@ -54,9 +50,12 @@ const TableRowMenu = ({
         updates: editedField,
       }).unwrap();
     } catch (error) {
-      setNotificationMessage(error?.data?.message || "Failed to update word.");
-      setNotificationTitle("Action failed!");
-      setDoNotify(true);
+      notify({
+        title: "Action failed!",
+        message: error?.data?.message || "Failed to update word.",
+        iconType: "error",
+        duration: 4000,
+      });
       console.error("Edit error:", error);
     }
   };
@@ -70,9 +69,12 @@ const TableRowMenu = ({
       updateRowHeight(rowIdx, "", "", "delete");
       onClose();
     } catch (error) {
-      setNotificationTitle("Action failed!");
-      setNotificationMessage(error?.data?.message || "Failed to delete word.");
-      setDoNotify(true);
+      notify({
+        title: "Action failed!",
+        message: error?.data?.message || "Failed to delete word.",
+        iconType: "error",
+        duration: 4000,
+      });
       console.error("Delete error:", error);
     }
   };
@@ -103,10 +105,65 @@ const TableRowMenu = ({
     }));
   };
 
-  const handleApply = (e) => {
+  const handleGenerate = async (e) => {
     e.stopPropagation();
-    console.log("Selected Fields:", selectedFields);
     onClose();
+    const fieldsAndLangs = {
+      fields: Object.keys(selectedFields).filter(
+        (field) => selectedFields[field]
+      ),
+      comfortableLang,
+      learningLang,
+    };
+
+    if (fieldsAndLangs.fields.length === 0) {
+      notify({
+        title: "No Fields Selected",
+        message: "Please select at least one field to generate",
+        iconType: "warning",
+        duration: 4000,
+      });
+      return;
+    }
+
+    // Add loading states
+    setGeneratingCells((prev) => [
+      ...prev,
+      ...fieldsAndLangs.fields.map((columnId) => [rowIdx, columnId]),
+    ]);
+
+    try {
+      const res = await generateWordInfo([curWord?._id, fieldsAndLangs]);
+      if (res.error) {
+        notify({
+          title:
+            res.error?.status === "FETCH_ERROR"
+              ? "Network Unavailable"
+              : "Generation Failed",
+          message:
+            "something went wrong while generating fields, please try again later",
+          iconType: "error",
+          duration: 6000,
+        });
+        console.log(res.error);
+      }
+    } catch (error) {
+      const fieldsString = fieldsAndLangs.fields.join(", ");
+      notify({
+        title: "Generation Failed",
+        message: error?.data?.message || `Failed to generate ${fieldsString}`,
+        iconType: "error",
+        duration: 4000,
+      });
+      console.error(error);
+    } finally {
+      // Clear loading states
+      setGeneratingCells((prev) =>
+        prev.filter(
+          ([r, c]) => !(r === rowIdx && fieldsAndLangs.fields.includes(c))
+        )
+      );
+    }
   };
 
   // Handle arrow key navigation
@@ -136,6 +193,7 @@ const TableRowMenu = ({
     <div className={styles.rowMenuContainer}>
       <ul onKeyDown={handleKeyDown}>
         {/* Nested list for field selection */}
+
         <li
           ref={(el) => (menuItemsRef.current[0] = el)}
           className={styles.parentMenuItem}
@@ -178,7 +236,7 @@ const TableRowMenu = ({
                 }
               }}
             >
-              {["meaning", "synonyms", "definition", "example"].map(
+              {["meanings", "synonyms", "definitions", "examples"].map(
                 (field, index) => (
                   <li key={field}>
                     <label className={styles.inputWrapper}>
@@ -199,18 +257,21 @@ const TableRowMenu = ({
               )}
               <li>
                 <FancyBtn
-                  clickHandler={handleApply}
+                  clickHandler={handleGenerate}
                   btnWidth="100%"
                   fontSize="15px"
                   leftColor="#f672ff"
                   rightColor="#2b1fff"
                 >
-                  <RiAiGenerate /> Generate Selected
+                  {/* <RiAiGenerate />*/}
+                  <PiCheckSquareOffset />
+                  Generate
                 </FancyBtn>
               </li>
             </ul>
           )}
         </li>
+
         <li
           ref={(el) => (menuItemsRef.current[0] = el)}
           onClick={() => handleEditClick("favorite")}
@@ -259,14 +320,6 @@ const TableRowMenu = ({
           {isDeleting ? <IoReloadSharp /> : <RiDeleteBin4Line />} Delete word
         </li>
       </ul>
-      {doNotify && (
-        <Notification
-          title={notificationTitle}
-          message={notificationMessage}
-          isOpen={doNotify}
-          onClose={handleCloseNotify}
-        />
-      )}
     </div>
   );
 };
@@ -276,6 +329,9 @@ TableRowMenu.propTypes = {
   onClose: PropTypes.func.isRequired,
   rowIdx: PropTypes.number,
   updateRowHeight: PropTypes.func,
+  comfortableLang: PropTypes.string,
+  learningLang: PropTypes.string,
+  setGeneratingCells: PropTypes.func,
 };
 
 export default TableRowMenu;

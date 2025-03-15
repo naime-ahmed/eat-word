@@ -16,6 +16,9 @@ const EditableCell = ({ getValue, row, column, table }) => {
   const [isBlurDismissed, setIsBlurDismissed] = useState(false);
   const [showLimitMessage, setShowLimitMessage] = useState(false);
   const timeoutRef = useRef(null);
+  const isGenerating = table.options.meta?.generatingCells.some(
+    ([rowIdx, colId]) => rowIdx === row.index && colId === column.id
+  );
 
   // Derived values
   const characterLimit = CHARACTER_LIMITS[column.id] || 0;
@@ -71,7 +74,7 @@ const EditableCell = ({ getValue, row, column, table }) => {
   // Value synchronization
   useEffect(() => {
     setValue(initialValue);
-    adjustHeight();
+    setTimeout(adjustHeight, 10);
   }, [initialValue, adjustHeight]);
 
   // Initial focus for new rows
@@ -141,8 +144,8 @@ const EditableCell = ({ getValue, row, column, table }) => {
   return (
     <div
       className={`${styles.cellWrapper} ${
-        showBlur && value ? styles.blurred : ""
-      }`}
+        (showBlur && value) || isGenerating ? styles.blurred : ""
+      } ${isGenerating ? styles.generating : ""}`}
       onClick={handleOverlayClick}
     >
       <textarea
@@ -151,15 +154,18 @@ const EditableCell = ({ getValue, row, column, table }) => {
         onChange={handleOnChange}
         onKeyUp={adjustHeight}
         onBlur={handleOnBlur}
-        className={styles.editableCell}
+        className={`${styles.editableCell} ${
+          isGenerating ? styles.pulsingText : ""
+        }`}
         style={style}
         rows={1}
         maxLength={characterLimit}
         onFocus={(e) => {
-          if (showBlur) {
+          if (showBlur || isGenerating) {
             e.target.blur();
           }
         }}
+        disabled={isGenerating}
       />
       {showLimitMessage && (
         <div className={styles.limitMessage}>
@@ -189,6 +195,11 @@ EditableCell.propTypes = {
         updateRowHeight: PropTypes.func,
         updateWords: PropTypes.func,
         rowHeights: PropTypes.array,
+        generatingCells: PropTypes.arrayOf(
+          PropTypes.arrayOf(
+            PropTypes.oneOfType([PropTypes.number, PropTypes.string])
+          )
+        ),
       }),
     }).isRequired,
   }).isRequired,

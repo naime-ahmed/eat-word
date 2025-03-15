@@ -77,3 +77,41 @@
   font-size: 0.9em;
   pointer-events: none;
 }
+
+.generating {
+  position: relative;
+  overflow: hidden;
+  filter: blur(3px);
+  animation: generatingBlur 1s infinite alternate;
+}
+
+@keyframes generatingBlur {
+  from {
+    filter: blur(4px);
+  }
+  to {
+    filter: blur(8px);
+  }
+}
+
+@keyframes blink {
+  50% {
+    opacity: 0;
+  }
+}
+
+.pulsingText {
+  animation: pulse-opacity 1s ease-in-out infinite;
+}
+
+@keyframes pulse-opacity {
+  0% {
+    opacity: 0.4;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.4;
+  }
+}

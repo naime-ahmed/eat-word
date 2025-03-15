@@ -1,19 +1,21 @@
 .modalContent {
-  background-color: #141e3b;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  color: #e0e0e0;
-  padding: 2rem 2rem 1.2rem 2rem;
-  border-radius: 8px;
-  font-size: 16px;
-  max-width: 500px;
+  background: #1a2335;
+  border-radius: 16px;
+  padding: 32px;
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
+  color: #e5ecf6;
+  max-width: 520px;
   min-width: 330px;
+  border: 1px solid #2a3652;
 }
 
 .modalTitle {
+  font-size: 1.5rem;
+  font-weight: 600;
   text-align: center;
-  font-size: 1.3rem;
-  margin-bottom: 1.5rem;
+  margin-bottom: 2rem;
   color: #ffffff;
+  letter-spacing: -0.5px;
 }
 
 .form {
@@ -24,95 +26,213 @@
 
 .inputGroup {
   position: relative;
+  margin-bottom: 4px;
 }
 
-.inputField,
-select.inputField {
+.inputField {
   width: 100%;
-  padding: 0.5rem;
-  background-color: #141e3b;
-  border: 1px solid #2a3652;
+  padding: 14px 16px;
+  background: #151e2d;
+  border: 1px solid #2d3a50;
+  border-radius: 8px;
+  color: #e5ecf6;
+  font-size: 15px;
+  transition: all 0.2s ease;
+  appearance: none;
+}
+
+select.inputField {
+  padding-right: 40px;
+  cursor: pointer;
+}
+
+select.inputField option {
+  background-color: #151e2d;
+  color: #e5ecf6;
+  padding: 12px 16px;
+  font-size: 15px;
+}
+
+select.inputField option:hover {
+  background-color: #58a6ff !important;
+  color: #151e2d !important;
+}
+
+select.inputField option:checked {
+  background-color: #2a3652;
+  color: #58a6ff;
+  font-weight: 500;
+}
+
+select.inputField option:first-child {
+  color: #64758b;
+  font-style: italic;
+}
+
+/* For Firefox scrollbar */
+@-moz-document url-prefix() {
+  select.inputField {
+    scrollbar-width: thin;
+    scrollbar-color: #2a3652 #151e2d;
+  }
+}
+
+/* Webkit scrollbar styling */
+select.inputField::-webkit-scrollbar {
+  width: 8px;
+}
+
+select.inputField::-webkit-scrollbar-track {
+  background: #151e2d;
+}
+
+select.inputField::-webkit-scrollbar-thumb {
+  background: #2a3652;
   border-radius: 4px;
-  color: #e0e0e0;
+}
+
+select.inputField::-webkit-scrollbar-thumb:hover {
+  background: #3c4d6e;
+}
+
+.inputField:hover {
+  border-color: #3c4d6e;
+}
+
+.inputField:focus {
+  outline: none;
+  border-color: #58a6ff;
+  box-shadow: 0 0 0 3px rgba(88, 166, 255, 0.15);
 }
 
 .formLabel {
   position: absolute;
-  left: 0.5rem;
-  top: 0.5rem;
-  transition: all 0.2s;
+  left: 12px;
+  top: 14px;
+  color: #64758b;
+  font-size: 15px;
   pointer-events: none;
-  font-size: 0.9rem;
-  color: #8b949e;
+  transition: all 0.2s ease;
+  background: linear-gradient(to bottom, #1a2335 50%, #151e2d 50%);
+  padding: 0 4px;
+  transform-origin: left center;
 }
 
 .inputField:focus + .formLabel,
 .inputField:not(:placeholder-shown) + .formLabel,
-select.inputField:focus + .formLabel,
-select.inputField:not([value=""]) + .formLabel {
-  top: -0.5rem;
-  font-size: 0.8rem;
-  background-color: #141e3b;
-  padding: 0 0.25rem;
+select.inputField:valid + .formLabel {
+  transform: translateY(-24px) scale(0.9);
   color: #58a6ff;
+  background: #1a2335;
 }
 
-.inputField:focus,
-select.inputField:focus {
-  outline: 2px solid #58a6ff;
-  border-color: #58a6ff;
+.LangFormLabel {
+  position: absolute;
+  left: 10px;
+  top: -12px;
+  color: #58a6ff;
+  font-size: 15px;
+  pointer-events: none;
+  transition: all 0.2s ease;
+  background: #1a2335;
+  padding: 0 4px;
+  transform-origin: left center;
+  z-index: 1;
+}
+
+.selectArrow {
+  position: absolute;
+  right: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 28px;
+  height: 28px;
+  background: url('data:image/svg+xml;utf8,<svg viewBox="0 0 24 24" fill="%2364758B" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/></svg>')
+    no-repeat center;
+  pointer-events: none;
+  transition: all 0.2s ease;
+}
+
+select.inputField:focus ~ .selectArrow {
+  background-image: url('data:image/svg+xml;utf8,<svg viewBox="0 0 24 24" fill="%2358A6FF" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/></svg>');
 }
 
 .checkboxGroup {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 12px;
+  padding: 8px 0;
 }
 
 .checkbox {
-  width: 1rem;
-  height: 1rem;
-  accent-color: #58a6ff;
+  width: 18px;
+  height: 18px;
+  border: 1px solid #3c4d6e;
+  border-radius: 4px;
+  background: #151e2d;
+  appearance: none;
+  margin: 0;
+  display: grid;
+  place-content: center;
+}
+
+.checkbox:checked {
+  background: #58a6ff;
+  border-color: #58a6ff;
+}
+
+.checkbox:checked::before {
+  content: "";
+  width: 10px;
+  height: 10px;
+  background: url('data:image/svg+xml;utf8,<svg viewBox="0 0 24 24" fill="none" stroke="%23fff" stroke-width="3" xmlns="http://www.w3.org/2000/svg"><path d="M5 12l5 5L20 7"/></svg>');
 }
 
 .checkboxLabel {
-  font-size: 0.9rem;
-  color: #e0e0e0;
+  font-size: 14px;
+  color: #cbd5e1;
+  line-height: 1.4;
 }
 
-.SubmitButton {
-  align-self: flex-end;
+.errorMessage {
+  color: #f87171;
+  font-size: 14px;
+  margin: -8px 0 12px;
+  text-align: center;
 }
-@media screen and (max-width: 399.98px) {
-  .modalContent {
-    padding: 1rem;
-    border-radius: 8px;
-  }
-  .modalTitle {
-    font-size: 16px;
-  }
-  .checkboxLabel {
-    font-size: 14px;
-  }
+
+.submitButton {
+  margin-top: 8px;
 }
-@media (min-width: 400px) and (max-width: 499.98px) {
+
+@media (min-width: 1200px) {
   .modalContent {
-    padding: 1rem;
-    border-radius: 8px;
-  }
-  .modalTitle {
-    font-size: 17px;
-  }
-  .checkboxLabel {
-    font-size: 14px;
+    padding: 40px;
   }
 }
 
-@media (min-width: 768px) and (max-width: 999.98px) {
-  .modalTitle {
-    font-size: 1rem;
-  }
+@media (max-width: 767px) {
   .modalContent {
+    padding: 24px;
+    min-width: auto;
+    width: 100%;
+  }
+
+  .modalTitle {
+    font-size: 1.3rem;
+  }
+
+  .inputField {
+    padding: 12px 14px;
     font-size: 14px;
+  }
+
+  .formLabel {
+    font-size: 14px;
+  }
+
+  .LangFormLabel {
+    font-size: 13px;
+    top: -10px;
   }
 }

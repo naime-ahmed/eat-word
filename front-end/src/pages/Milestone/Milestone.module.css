@@ -138,6 +138,98 @@ input:checked + .slider:before {
   color: rgb(255, 67, 67);
 }
 
+.hasReached {
+  position: relative;
+  width: 100%;
+  padding: 20px;
+  margin-top: 16px;
+  border-radius: 8px;
+  text-align: center;
+  /* Dark blue gradient based on #0A0C2C */
+  background: linear-gradient(135deg, #0a0c2c, #131740, #0a0c2c);
+  background-size: 300% 300%;
+  color: #fff;
+  cursor: pointer;
+  overflow: hidden;
+  transform: translateZ(0);
+  transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+    box-shadow 0.4s;
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.3);
+  animation: backgroundAnimation 8s ease infinite;
+}
+
+@keyframes backgroundAnimation {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.hasReached:hover {
+  transform: scale(1.03);
+  box-shadow: 0 12px 20px rgba(0, 0, 0, 0.4);
+}
+
+.hasReached p {
+  position: relative;
+  z-index: 2;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  margin: 0;
+  padding: 0 24px;
+  font-size: 1.2em;
+  text-shadow: 0 3px 6px rgba(0, 0, 0, 0.4);
+  animation: floatText 3s ease-in-out infinite;
+}
+
+@keyframes floatText {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-5px);
+  }
+}
+
+/* Confetti container covering the element */
+.confettiContainer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  overflow: visible;
+}
+
+/* Confetti piece */
+.confetti {
+  position: absolute;
+  top: 0;
+  width: 8px;
+  height: 12px;
+  opacity: 0.8;
+  transform: rotate(0deg);
+  animation: confettiFall 3s linear infinite;
+}
+
+@keyframes confettiFall {
+  0% {
+    transform: translate3d(0, -20px, 0) rotate(0deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translate3d(0, 150px, 0) rotate(360deg);
+    opacity: 0;
+  }
+}
+
 /* Extra Large Devices (large desktops) - 1200px and above: */
 @media (min-width: 1200px) and (max-width: 1400px) {
   .milestoneContent {
@@ -172,6 +264,12 @@ input:checked + .slider:before {
   .lastRecalled {
     font-size: 14px;
   }
+  .hasReached p {
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    padding: 0 10px;
+    font-size: 1em;
+  }
 }
 
 /* Small Devices (tablets) - 576px to 767px wide: */
@@ -187,6 +285,16 @@ input:checked + .slider:before {
   }
   .lastRecalled {
     font-size: 13px;
+  }
+  .hasReached {
+    padding: 16px;
+    margin-top: 16px;
+  }
+  .hasReached p {
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    padding: 0 10px;
+    font-size: 1em;
   }
 }
 
@@ -232,5 +340,15 @@ input:checked + .slider:before {
   }
   .divider {
     width: 98%;
+  }
+  .hasReached {
+    padding: 12px;
+    margin-top: 16px;
+  }
+  .hasReached p {
+    font-weight: 400;
+    letter-spacing: 0.02em;
+    padding: 0 8px;
+    font-size: 1em;
   }
 }

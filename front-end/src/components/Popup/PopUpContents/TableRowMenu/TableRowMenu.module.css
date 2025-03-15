@@ -41,7 +41,7 @@
 
 /* Hover effect for list items */
 .rowMenuContainer > ul > li:hover {
-  background-color: #1e2a4d;
+  background-color: #141e3b;
   border-radius: 4px;
 }
 /* Hover effects for desktop */
@@ -185,29 +185,41 @@
   margin-top: 6px;
 }
 
-.generateButton {
-  background: #2196f3;
-  color: rgb(255, 255, 255);
-  border: none;
-  padding: 10px 20px;
-  border-radius: 8px;
-  cursor: pointer;
-  width: 100%;
-  font-weight: 500;
-  transition: background 0.2s;
-}
-
-.generateButton:hover {
-  background: #1976d2;
-}
-
 @media (max-width: 1000px) {
   .nestedList {
     left: auto;
-    right: 105%;
+    right: 108%;
     top: 0;
     transition: none;
   }
 }
 
-/* reduce the size for small devices width < 600px */
+@media (max-width: 600px) {
+  .rowMenuContainer,
+  .nestedList {
+    padding: 10px 6px;
+    font-size: 14px;
+  }
+  .rowMenuContainer > ul > li {
+    padding: 4px;
+  }
+  .arrowIcon {
+    font-size: 1em;
+  }
+  .inputWrapper {
+    gap: 12px;
+    padding-left: 28px;
+  }
+  .checkmark {
+    height: 16px;
+    width: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  .checkmark:after {
+    left: 4px;
+    top: 0px;
+    width: 4px;
+    height: 10px;
+  }
+}

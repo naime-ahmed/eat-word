@@ -1,12 +1,14 @@
 import PropTypes from "prop-types";
 
 // milestone prop types
-
 export const milestonePropTypes = PropTypes.shape({
   _id: PropTypes.string,
   addedBy: PropTypes.string,
   learnSynonyms: PropTypes.bool,
   includeDefinition: PropTypes.bool,
+  comfortableLang: PropTypes.string,
+  learningLang: PropTypes.string,
+  story: PropTypes.string,
   createdAt: PropTypes.string,
   memorizedCount: PropTypes.number,
   milestoneType: PropTypes.string,
@@ -47,4 +49,10 @@ export const sliderCardPropTypes = {
   wordIdx: PropTypes.number.isRequired,
   setWords: PropTypes.func.isRequired,
   curMilestone: milestonePropTypes,
+  setGeneratingCells: PropTypes.func,
+  generatingCells: PropTypes.arrayOf(
+    PropTypes.arrayOf(
+      PropTypes.oneOfType([PropTypes.number, PropTypes.string])
+    )
+  ),
 };

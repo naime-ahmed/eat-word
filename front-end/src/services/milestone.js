@@ -38,11 +38,10 @@ const baseQueryWithReauth = async (args, api, extraOptions) => {
 
     if (refreshResult.ok) {
       const refreshData = await refreshResult.json();
-      // Store the new token
+
       const { accessToken, ...userData } = refreshData;
       localStorage.setItem("access-token", accessToken);
       
-      // Update user data in Redux store
       api.dispatch(setUser(userData));
 
       // Retry the original request with new token
@@ -80,10 +79,8 @@ export const milestoneApi = createApi({
           )
         );
         try {
-          // Wait for the server response
           await queryFulfilled;
         } catch {
-          // Revert the optimistic update if the request fails
           patchResult.undo();
         }
       },
@@ -113,7 +110,7 @@ export const milestoneApi = createApi({
         body: updatedFields,
       }),
       async onQueryStarted(
-        { updatedFields, milestoneId },
+        [milestoneId, updatedFields],
         { dispatch, queryFulfilled }
       ) {
         const patchResult = dispatch(

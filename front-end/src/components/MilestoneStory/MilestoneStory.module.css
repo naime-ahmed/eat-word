@@ -1,0 +1,113 @@
+.storyContainer {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  font-family: "Roboto", sans-serif;
+  line-height: 1.6;
+  color: #eeeeee;
+  background-color: #020817;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+.storyHeading {
+  text-align: center;
+  margin-bottom: 26px;
+  color: #ffffff;
+}
+
+.storyContent {
+  margin-bottom: 20px;
+}
+
+.chapterContainer {
+  position: relative;
+}
+
+.chapterContainer:nth-child(even):not(:last-child)::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 10%;
+  right: 10%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, #7986cb, transparent);
+}
+.chapterContainer:nth-child(even) {
+  margin-bottom: 20px;
+}
+
+.chapterContainer:nth-child(even) .chapter {
+  padding-bottom: 20px;
+}
+
+.chapterHeading {
+  font-size: 22px;
+  font-weight: bold;
+  margin-bottom: 12px;
+  color: #eceeff;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+  letter-spacing: 0.5px;
+}
+
+.chapterText {
+  margin: 0;
+  white-space: pre-wrap;
+  font-size: 17px;
+  letter-spacing: 0.3px;
+}
+
+.seeMoreBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 20px auto 0;
+  padding: 10px 20px;
+  background-color: rgba(0, 86, 204, 0.8);
+  color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 10px rgba(0, 56, 140, 0.3);
+}
+
+.seeMoreBtn:hover {
+  background-color: #0056cc;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 56, 140, 0.4);
+}
+
+.seeMoreBtn:active {
+  transform: translateY(0);
+}
+
+.btnIcon {
+  margin-left: 8px;
+  font-size: 14px;
+  transition: transform 0.3s ease;
+}
+
+@media (max-width: 768px) {
+  .storyContainer {
+    padding: 15px;
+  }
+  .storyHeading {
+    font-size: 24px;
+    margin-bottom: 24px;
+  }
+  .chapterHeading {
+    font-size: 20px;
+  }
+
+  .chapterText {
+    font-size: 16px;
+  }
+
+  .seeMoreBtn {
+    padding: 8px 16px;
+    font-size: 14px;
+  }
+}

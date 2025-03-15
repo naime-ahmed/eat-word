@@ -17,21 +17,21 @@ import TableSkeletonLoader from "./TableSkeletonLoader.jsx";
 const WordsContainer = ({ curMilestone, isOnRecallMood }) => {
   const [words, setWords] = useState([]);
   const [rowHeights, setRowHeights] = useState([]);
+  const [generatingCells, setGeneratingCells] = useState([]); // [[rowIdx,colId],[rowIdx,colId]]
   const { updateWords, isAppendLoading } = useUpdateWords();
-
-  // Auto-scroll to top on component mount
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, []);
 
   const { data, isLoading, isError, error } = useBringMilestoneWordQuery(
     curMilestone?._id
   );
 
-  // Effect to update words when data is available
   useEffect(() => {
     setWords(data?.words || []);
   }, [data]);
+
+  // reached the milestone?
+  const hasReached =
+    curMilestone?.wordsCount ===
+    Math.max(curMilestone?.targetWords, words?.length);
 
   // Update row height for a specific row and column
   const updateRowHeight = useCallback(
@@ -66,12 +66,10 @@ const WordsContainer = ({ curMilestone, isOnRecallMood }) => {
           } else if (rowIndex === prev.length - 1) {
             return prev.slice(0, -1);
           } else {
-            // console.log("row height before: ", rowHeights);
             for (let i = rowIndex; i < newRowHeights.length - 1; i++) {
               newRowHeights[i] = { ...newRowHeights[i + 1] };
             }
             newRowHeights.pop();
-            // console.log("row height after: ", rowHeights);
             return newRowHeights;
           }
         } else if (action === "append") {
@@ -175,6 +173,7 @@ const WordsContainer = ({ curMilestone, isOnRecallMood }) => {
       updateRowHeight,
       rowHeights,
       isOnRecallMood,
+      generatingCells,
     },
   });
 
@@ -186,9 +185,6 @@ const WordsContainer = ({ curMilestone, isOnRecallMood }) => {
     return <TableSkeletonLoader />;
   }
 
-  if (isError) {
-    console.log(error);
-  }
   // handle the error message
   if (isError)
     return (
@@ -221,12 +217,17 @@ const WordsContainer = ({ curMilestone, isOnRecallMood }) => {
                 row={row}
                 rowHeights={rowHeights}
                 updateRowHeight={updateRowHeight}
+                comfortableLang={curMilestone?.comfortableLang}
+                learningLang={curMilestone?.learningLang}
+                setGeneratingCells={setGeneratingCells}
               />
             ))}
           </tbody>
         )}
       </table>
-      {isAppendLoading ? (
+      {hasReached ? (
+        <></>
+      ) : isAppendLoading ? (
         <div className={styles.loadingSpinner}>
           <Skeleton width="100%" height={26} label="saving word..." />
         </div>

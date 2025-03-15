@@ -7,6 +7,19 @@ import styles from "./Release.module.css";
 
 const releases = [
   {
+    id: "sdgdsfg3454645dfgdg",
+    version: "v1.1.5",
+    date: "2025-03-28",
+    wanted: "2.2k",
+    tag: "Core Feature",
+    features: [
+      "Integrated the most sought-after Generative AI technology.",
+      "Create personalized stories crafted just for you, using your own words.",
+      "Enhanced the user interface for frequently used features.",
+    ],
+    hasSeeMore: false,
+  },
+  {
     id: "s;ldfjslkj343434kklk",
     version: "v1.1.0",
     date: "2025-03-15",

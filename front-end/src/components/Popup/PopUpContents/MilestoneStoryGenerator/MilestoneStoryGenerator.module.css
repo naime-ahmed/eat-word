@@ -1,0 +1,123 @@
+.storyTypeContainer {
+  max-width: 800px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 24px;
+  background-color: #1a2335;
+  border: 1px solid #2a3652;
+  border-radius: 12px;
+  transition: all 0.4s ease; /* Smooth transition for content change */
+}
+
+.typeContainer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+}
+
+.typeButton {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid #555;
+  background-color: transparent;
+  color: #eee;
+  padding: 8px 16px;
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.typeButton:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.typeButtonSelected {
+  background-color: #402fa5;
+  border-color: #9578fff1;
+}
+
+.typeButtonSelected:hover {
+  background-color: #2f1c9c;
+}
+
+.cross {
+  margin-right: 8px;
+  font-weight: bold;
+  font-size: 16px;
+}
+
+.label {
+  white-space: nowrap;
+}
+
+/* Loading Animation Styles */
+.loadingContainer {
+  width: 330px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border-radius: 12px;
+}
+
+.progressMessagesContainer {
+  position: relative;
+  height: 40px;
+  margin-top: 20px;
+  width: 100%;
+}
+
+.progressMessage {
+  position: absolute;
+  width: 100%;
+  text-align: center;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  color: #ffffff;
+  font-size: 16px;
+}
+
+.progressMessage.active {
+  opacity: 1;
+}
+
+.smoke {
+  animation: floatUp 2s infinite ease-out;
+  opacity: 0;
+}
+
+@keyframes floatUp {
+  0% {
+    transform: translateY(0) scale(0.8);
+    opacity: 0;
+  }
+  30% {
+    opacity: 0.4;
+  }
+  100% {
+    transform: translateY(-50px) scale(1.2);
+    opacity: 0;
+  }
+}
+
+@keyframes potSteam {
+  0% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-5px);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+
+.potAnimation svg {
+  animation: potSteam 2s ease-in-out infinite;
+}

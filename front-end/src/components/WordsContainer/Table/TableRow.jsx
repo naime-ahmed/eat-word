@@ -6,7 +6,14 @@ import Popup from "../../Popup/Popup";
 import TableRowMenu from "../../Popup/PopUpContents/TableRowMenu/TableRowMenu";
 import styles from "./Table.module.css";
 
-const TableRow = ({ row, rowHeights, updateRowHeight }) => {
+const TableRow = ({
+  row,
+  rowHeights,
+  updateRowHeight,
+  comfortableLang,
+  learningLang,
+  setGeneratingCells,
+}) => {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [clickPosition, setClickPosition] = useState(null);
 
@@ -56,6 +63,9 @@ const TableRow = ({ row, rowHeights, updateRowHeight }) => {
               onClose={handleOneClose}
               rowIdx={row?.index}
               updateRowHeight={updateRowHeight}
+              comfortableLang={comfortableLang}
+              learningLang={learningLang}
+              setGeneratingCells={setGeneratingCells}
             />
           </Popup>
         </td>
@@ -76,6 +86,9 @@ TableRow.propTypes = {
   rowHeights: PropTypes.arrayOf(PropTypes.objectOf(PropTypes.number))
     .isRequired,
   updateRowHeight: PropTypes.func.isRequired,
+  comfortableLang: PropTypes.string,
+  learningLang: PropTypes.string,
+  setGeneratingCells: PropTypes.func,
 };
 
 export default TableRow;

@@ -89,7 +89,9 @@
 .wordSound:hover {
   color: #b8b8b8;
 }
-
+.itsHard {
+  color: rgb(255 35 84) !important;
+}
 .cardMeanings,
 .cardSynonyms,
 .cardDefinitions,
@@ -189,4 +191,157 @@
 
 .cardMeanings:first-of-type {
   margin-top: 0;
+}
+
+/* .generating {
+  position: relative;
+  overflow: hidden;
+}
+
+.generating::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    120deg,
+    rgba(88, 166, 255, 0.1) 25%,
+    rgba(88, 166, 255, 0.2) 50%,
+    rgba(88, 166, 255, 0.1) 75%
+  );
+  backdrop-filter: blur(4px);
+  animation: shimmer 1.5s infinite;
+  z-index: 1;
+}
+
+@keyframes shimmer {
+  100% {
+    left: 200%;
+  }
+}
+
+.pulsingText {
+  position: relative;
+  animation: text-pulse 1.5s ease-in-out infinite;
+  z-index: 2;
+}
+
+@keyframes text-pulse {
+  0% {
+    opacity: 0.9;
+    text-shadow: 0 0 8px rgba(88, 166, 255, 0.3);
+  }
+  50% {
+    opacity: 1;
+    text-shadow: 0 0 12px rgba(88, 166, 255, 0.6);
+  }
+  100% {
+    opacity: 0.9;
+    text-shadow: 0 0 8px rgba(88, 166, 255, 0.3);
+  }
+}
+
+.generating::before {
+  content: "Generating...";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #58a6ff;
+  font-size: 0.9em;
+  font-weight: 500;
+  z-index: 3;
+  animation: processing-bounce 1s infinite;
+}
+
+@keyframes processing-bounce {
+  0%,
+  100% {
+    transform: translate(-50%, -50%) translateY(0);
+  }
+  50% {
+    transform: translate(-50%, -50%) translateY(-3px);
+  }
+} */
+
+.generating {
+  position: relative;
+  overflow: hidden;
+  border-radius: 8px; /* Match your field's border radius */
+}
+
+/* Animated blur overlay */
+.generating::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(18, 28, 53, 0.6);
+  backdrop-filter: blur(8px);
+  border-radius: inherit;
+  z-index: 2;
+  animation: blur-pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes blur-pulse {
+  0%,
+  100% {
+    backdrop-filter: blur(8px);
+    opacity: 0.9;
+  }
+  50% {
+    backdrop-filter: blur(12px);
+    opacity: 1;
+  }
+}
+
+/* Generating text overlay */
+.generating::after {
+  content: "Generating...";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #58a6ff;
+  font-size: 0.9em;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  z-index: 3;
+  font-family: monospace;
+  animation: text-float 2s ease-in-out infinite,
+    text-shine 1.5s ease-in-out infinite;
+}
+
+@keyframes text-float {
+  0%,
+  100% {
+    transform: translate(-50%, -50%) translateY(0);
+  }
+  50% {
+    transform: translate(-50%, -50%) translateY(-3px);
+  }
+}
+
+@keyframes text-shine {
+  0% {
+    opacity: 0.8;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.8;
+  }
+}
+
+/* Existing text styling */
+.pulsingText {
+  position: relative;
+  z-index: 1;
+  filter: blur(2px); /* Additional blur for existing text */
+  transition: filter 0.3s ease;
 }
