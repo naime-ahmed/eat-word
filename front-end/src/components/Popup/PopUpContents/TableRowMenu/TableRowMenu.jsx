@@ -24,6 +24,8 @@ const TableRowMenu = ({
   comfortableLang,
   learningLang,
   setGeneratingCells,
+  includeDefinition,
+  learnSynonyms,
 }) => {
   const menuItemsRef = useRef([]);
   const [showSubmenu, setShowSubmenu] = useState(false);
@@ -41,6 +43,15 @@ const TableRowMenu = ({
   const [generateWordInfo] = useGenerateWordInfoMutation();
   const [editWord, { isLoading: isEditing }] = useEditWordMutation();
   const [deleteWord, { isLoading: isDeleting }] = useDeleteWordMutation();
+
+  const fields = ["meanings", "examples"];
+  if (learnSynonyms) {
+    fields.splice(1, 0, "synonyms");
+  }
+  if (includeDefinition) {
+    fields.splice(fields.length - 1, 0, "definitions");
+  }
+  console.log(fields);
 
   const handleEdit = async (editedField) => {
     try {
@@ -189,6 +200,8 @@ const TableRowMenu = ({
     }
   };
 
+  // TODO: hide the filed that are not in table
+
   return (
     <div className={styles.rowMenuContainer}>
       <ul onKeyDown={handleKeyDown}>
@@ -236,25 +249,23 @@ const TableRowMenu = ({
                 }
               }}
             >
-              {["meanings", "synonyms", "definitions", "examples"].map(
-                (field, index) => (
-                  <li key={field}>
-                    <label className={styles.inputWrapper}>
-                      <input
-                        type="checkbox"
-                        checked={selectedFields[field]}
-                        onChange={(e) => {
-                          e.stopPropagation();
-                          handleFieldChange(field);
-                        }}
-                        ref={(el) => (menuItemsRef.current[index] = el)}
-                      />
-                      <span className={styles.checkmark} />
-                      {field.charAt(0).toUpperCase() + field.slice(1)}
-                    </label>
-                  </li>
-                )
-              )}
+              {fields?.map((field, index) => (
+                <li key={field}>
+                  <label className={styles.inputWrapper}>
+                    <input
+                      type="checkbox"
+                      checked={selectedFields[field]}
+                      onChange={(e) => {
+                        e.stopPropagation();
+                        handleFieldChange(field);
+                      }}
+                      ref={(el) => (menuItemsRef.current[index] = el)}
+                    />
+                    <span className={styles.checkmark} />
+                    {field.charAt(0).toUpperCase() + field.slice(1)}
+                  </label>
+                </li>
+              ))}
               <li>
                 <FancyBtn
                   clickHandler={handleGenerate}
@@ -332,6 +343,8 @@ TableRowMenu.propTypes = {
   comfortableLang: PropTypes.string,
   learningLang: PropTypes.string,
   setGeneratingCells: PropTypes.func,
+  learnSynonyms: PropTypes.bool,
+  includeDefinition: PropTypes.bool,
 };
 
 export default TableRowMenu;
