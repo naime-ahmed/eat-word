@@ -209,7 +209,6 @@ const SliderCard = ({
     [generatingCells, wordIdx]
   );
 
-  console.log("generating cells ", generatingCells);
   return (
     <div className={styles.card}>
       <div className={styles.cardContainer}>
@@ -497,6 +496,8 @@ const SliderCard = ({
               setGeneratingCells={setGeneratingCells}
               learningLang={curMilestone.learningLang}
               comfortableLang={curMilestone.comfortableLang}
+              includeDefinition={curMilestone.includeDefinition}
+              learnSynonyms={curMilestone.learnSynonyms}
             />
           </Popup>
         )}
