@@ -67,6 +67,11 @@ const Carousel = ({ curMilestone, isOnRecallMood }) => {
   // retry on error
   const retry = () => window.location.reload();
 
+  // reached the milestone?
+  const hasReached =
+    curMilestone?.wordsCount ===
+    Math.max(curMilestone?.targetWords, words?.length);
+
   return (
     <div className={styles.container}>
       {isLoading ? (
@@ -146,11 +151,13 @@ const Carousel = ({ curMilestone, isOnRecallMood }) => {
             </div>
           </SwiperReact>
 
-          <div className={styles.addNewWord}>
-            <button onClick={handleAppendWord}>
-              <IoIosAdd /> Add new word
-            </button>
-          </div>
+          {!hasReached && (
+            <div className={styles.addNewWord}>
+              <button onClick={handleAppendWord}>
+                <IoIosAdd /> Add new word
+              </button>
+            </div>
+          )}
         </>
       )}
     </div>
