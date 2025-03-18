@@ -324,6 +324,9 @@ input:checked + .slider:before {
     padding: 0 10px;
     font-size: 1em;
   }
+  .milestoneShape {
+    display: none;
+  }
 }
 
 /* Extra Small Devices (phones) - Up to 576px wide: */
@@ -378,5 +381,8 @@ input:checked + .slider:before {
     letter-spacing: 0.02em;
     padding: 0 8px;
     font-size: 1em;
+  }
+  .milestoneShape {
+    display: none;
   }
 }
