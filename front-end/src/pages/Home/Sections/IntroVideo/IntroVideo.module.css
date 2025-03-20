@@ -1,4 +1,3 @@
-/* Existing styles */
 .introContainer {
   width: 100%;
   width: 1250px;
@@ -12,10 +11,10 @@
 
 .introWrapper {
   max-width: 1200px;
-  padding: 8px;
-  background-color: rgba(58, 55, 165, 0.322);
-  border: 2px solid rgba(58, 55, 165, 0.822);
-  border-radius: 12px;
+  padding: 12px;
+  background-color: rgb(62 60 149 / 28%);
+  border: 2px solid rgb(58 54 147 / 38%);
+  border-radius: 16px;
   overflow: hidden;
   position: relative;
 }
@@ -35,7 +34,7 @@
   width: 100%;
   height: auto;
   object-fit: cover;
-  border-radius: 8px;
+  border-radius: 12px;
 }
 
 .imageOverlay {
@@ -152,10 +151,9 @@
 .videoContainer::before {
   content: "";
   display: block;
-  padding-top: 56.25%; /* 16:9 aspect ratio */
+  padding-top: 56.25%;
 }
 
-/* CSS to make it responsive for all devices */
 @media (max-width: 399.98px) {
   .introContainer {
     max-width: 300px;
@@ -187,6 +185,9 @@
   .videoContainer {
     max-width: 330px;
     padding: 10px;
+  }
+  .introWrapper {
+    padding: 8px;
   }
 }
 /* Small Devices (tablets) - 576px to 767px wide: */
