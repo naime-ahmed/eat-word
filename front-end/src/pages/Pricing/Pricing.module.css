@@ -34,6 +34,7 @@
   background-color: rgba(17, 25, 40, 0.41);
   color: #fff;
   position: relative;
+  border-radius: 12px;
   transition: transform 0.3s ease;
 }
 
@@ -42,35 +43,39 @@
 }
 
 .free {
-  border-radius: 12px;
   border: 2px solid rgba(255, 255, 255, 0.125);
 }
 
 .premium {
   border: 2px solid #4759f7;
-  border-radius: 12px;
   position: relative;
   /* overflow: hidden; */
 }
 
 .elite {
-  border: 2px solid #cb57ff;
-  border-radius: 12px 24px 12px 12px;
+  border: 2px solid rgba(255, 255, 255, 0.125);
 }
 
 .popularBadge {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   position: absolute;
-  top: -18px;
+  top: -20px;
   left: 50%;
   transform: translateX(-50%);
-  background: linear-gradient(45deg, #a264ff, #2d35d3);
+  background: linear-gradient(45deg, #702dd4, #2d35d3);
   color: white;
-  padding: 8px 16px;
+  padding: 6px 14px;
   border-radius: 20px;
   font-size: 0.9rem;
   font-weight: 600;
 }
-
+.popularBadge > span:first-child {
+  font-size: 20px;
+  margin-right: 4px;
+  color: #ff72dc;
+}
 .freePriceCardTitle h3,
 .PaidPriceCardTitle h3 {
   font-size: 1.8rem;
@@ -146,54 +151,11 @@
   margin-right: 12px;
 }
 
-.crownImg {
-  position: absolute;
-  top: -45px;
-  right: -43px;
-  transform: rotate(45deg);
-}
-
-.crownImg img {
-  width: 80px;
-}
-
 .guaranteeNote {
   text-align: center;
   margin-top: 12px;
   font-size: 0.9rem;
   color: #6c93ff;
-}
-
-.valueNote {
-  position: absolute;
-  bottom: -12px;
-  left: 50%;
-  transform: translateX(-50%);
-  white-space: nowrap;
-  font-size: 0.9rem;
-  color: #b3e3ff;
-  background: #cb57ff;
-  background: linear-gradient(45deg, #6804ff, #cb57ff);
-  padding: 2px 12px;
-  border-radius: 20px;
-}
-
-/* radial gradient bg styles */
-.radialGradPaid {
-  z-index: -100;
-  width: 800px;
-  height: 600px;
-  position: absolute;
-  top: -300px;
-  left: -90px;
-  background: rgb(100, 15, 144);
-  background: radial-gradient(
-    ellipse 80% 40% at center,
-    rgba(100, 15, 144, 0.32) 0%,
-    rgba(100, 15, 144, 0.26) 9%,
-    rgba(0, 212, 255, 0) 66%
-  );
-  transform: rotate(-45deg);
 }
 
 .pricingCTA {

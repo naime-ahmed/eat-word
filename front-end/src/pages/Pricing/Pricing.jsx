@@ -1,15 +1,14 @@
+import { useState } from "react";
+import { FaCheck } from "react-icons/fa6";
+import { ImFire } from "react-icons/im";
+import { IoCloseOutline } from "react-icons/io5";
+import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import crown from "../../assets/crown.webp";
+import Popup from "../../components/Popup/Popup";
+import GeneralMessage from "../../components/Popup/PopUpContents/GeneralMessage/GeneralMessage";
 import Footer from "../../components/shared/Footer/Footer";
 import Header from "../../components/shared/Header/Header";
 import FancyBtn from "../../components/ui/button/FancyBtn/FancyBtn";
-
-import { useState } from "react";
-import { FaCheck } from "react-icons/fa6";
-import { IoCloseOutline } from "react-icons/io5";
-import { useSelector } from "react-redux";
-import Popup from "../../components/Popup/Popup";
-import GeneralMessage from "../../components/Popup/PopUpContents/GeneralMessage/GeneralMessage";
 import { useScrollRestoration } from "../../hooks/useScrollRestoration";
 import styles from "./Pricing.module.css";
 
@@ -56,7 +55,16 @@ const Pricing = () => {
             <p>Begin Your Learning Journey</p>
           </div>
           <div className={styles.freePriceCardAmount}>
-            <span>Free</span> <small>forever</small>
+            <span>Free</span> <small>/forever</small>
+          </div>
+          <div className={styles.pricingCTA}>
+            <FancyBtn
+              clickHandler={handleFreeClick}
+              btnWidth="255px"
+              btnHeight="38px"
+            >
+              Start Learning Free
+            </FancyBtn>
           </div>
           <div className={styles.freePriceCardFeatures}>
             <ul>
@@ -86,33 +94,42 @@ const Pricing = () => {
               </li>
             </ul>
           </div>
-          <div className={styles.pricingCTA}>
-            <FancyBtn
-              clickHandler={handleFreeClick}
-              btnWidth="255px"
-              btnHeight="38px"
-            >
-              Start Learning Free
-            </FancyBtn>
-          </div>
           <div className={styles.radialGradFree}></div>
         </div>
 
         {/* Premium Tier - Recommended Option */}
         <div className={styles.premium}>
-          <div className={styles.popularBadge}>Most Popular</div>
+          <div className={styles.popularBadge}>
+            <span>
+              <ImFire />
+            </span>{" "}
+            <span>Most Popular</span>
+          </div>
           <div className={styles.PaidPriceCardTitle}>
             <h3>Pro Learner</h3>
             <p>Optimal Learning Experience</p>
           </div>
           <div className={styles.paidPriceCardAmount}>
-            <span>$4.99</span>
+            <span>$3.99</span>
             <small>
               /month{" "}
               <span className={styles.billingNote}>
-                ($3.33/month billed annually)
+                ($2.33/month billed annually)
               </span>
             </small>
+          </div>
+          <div className={styles.pricingCTA}>
+            <FancyBtn
+              btnWidth="255px"
+              btnHeight="38px"
+              accentColor="gold"
+              clickHandler={handleProOpen}
+            >
+              Start 7-Day Free Trial
+            </FancyBtn>
+          </div>
+          <div className={styles.guaranteeNote}>
+            30-Day Money Back Guarantee
           </div>
           <div className={styles.paidPriceCardFeatures}>
             <ul>
@@ -141,19 +158,6 @@ const Pricing = () => {
               </li>
             </ul>
           </div>
-          <div className={styles.pricingCTA}>
-            <FancyBtn
-              btnWidth="255px"
-              btnHeight="38px"
-              accentColor="gold"
-              clickHandler={handleProOpen}
-            >
-              Start 7-Day Free Trial
-            </FancyBtn>
-          </div>
-          <div className={styles.guaranteeNote}>
-            30-Day Money Back Guarantee
-          </div>
           {showMessageToPro && (
             <Popup isOpen={showMessageToPro} onClose={handleProClose}>
               <GeneralMessage
@@ -173,8 +177,17 @@ const Pricing = () => {
             <p>Ultimate Learning Companion</p>
           </div>
           <div className={styles.paidPriceCardAmount}>
-            <span>$99.99</span>
-            <small>one-time pay</small>
+            <span>$49.99</span>
+            <small>/life-time</small>
+          </div>
+          <div className={styles.pricingCTA}>
+            <FancyBtn
+              clickHandler={handleLifeTimeOpen}
+              btnWidth="255px"
+              btnHeight="38px"
+            >
+              Become Lifetime Member
+            </FancyBtn>
           </div>
           <div className={styles.paidPriceCardFeatures}>
             <ul>
@@ -203,22 +216,6 @@ const Pricing = () => {
               </li>
             </ul>
           </div>
-          <div className={styles.pricingCTA}>
-            <FancyBtn
-              clickHandler={handleLifeTimeOpen}
-              btnWidth="255px"
-              btnHeight="38px"
-            >
-              Become Lifetime Member
-            </FancyBtn>
-          </div>
-          <div className={styles.crownImg}>
-            <img src={crown} alt="exclusive membership" />
-          </div>
-          <div className={styles.valueNote}>
-            Save $200+ vs 5 years subscription
-          </div>
-          <div className={styles.radialGradPaid}></div>
           {showMessageToLifeT && (
             <Popup isOpen={showMessageToLifeT} onClose={handleLifeTimeClose}>
               <GeneralMessage
