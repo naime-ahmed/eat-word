@@ -5,17 +5,18 @@ import { wordFieldsAndLimit } from "../../utils/wordFieldsAndLimit.js";
 // Field-specific prompt templates
 const FIELD_PROMPTS = {
   meanings: (word, lang) =>
-    `Provide exactly 3 or less comma-separated meanings in ${lang} for "${word}". Example: "meaning1, meaning2". No explanations.`,
-
+    `Provide up to 4 comma-separated meanings in ${lang} for "${word}". Output only the meanings without extra commentary. If the word has distinct multiple meanings, ensure they are clearly differentiated.`,
+    
   synonyms: (word, lang) =>
-    `List exactly 3 or less comma-separated synonyms in ${lang} for "${word}". Example: "syn1, syn2, syn3". No explanations.`,
-
+    `List up to 3 comma-separated synonyms in ${lang} for "${word}". Output only the synonyms without additional commentary.`,
+    
   definitions: (word, lang) =>
-    `Give one short definition in ${lang} for "${word}" (under 15 words). No explanations.`,
-
+    `Give up to 2 concise definitions in ${lang} for "${word}", each under 25 words. Output only the definitions without extra explanation. If the word has distinct definitions, ensure both are provided.`,
+    
   examples: (word, lang) =>
-    `Create one usage example in ${lang} for "${word}" (under 20 words). No explanations.`,
+    `Create up to 2 usage examples in ${lang} for "${word}", each under 25 words. Output only the examples without additional commentary. If the word is used in different contexts, provide distinct examples.`
 };
+
 
 // Process individual field
 async function generateField(field, word, lang) {
