@@ -116,8 +116,6 @@ export const generativeApi = createApi({
         try {
           // Wait for the API call to complete
           const { data } = await queryFulfilled;
-          console.log("story data", data);
-          console.log("mile id: ", milestoneId);
           // Update the cache with the response
           dispatch(
             milestoneApi.util.updateQueryData(
