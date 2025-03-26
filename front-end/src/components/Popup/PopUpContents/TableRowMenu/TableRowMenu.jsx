@@ -51,7 +51,6 @@ const TableRowMenu = ({
   if (includeDefinition) {
     fields.splice(fields.length - 1, 0, "definitions");
   }
-  console.log(fields);
 
   const handleEdit = async (editedField) => {
     try {
@@ -145,6 +144,7 @@ const TableRowMenu = ({
 
     try {
       const res = await generateWordInfo([curWord?._id, fieldsAndLangs]);
+      console.log(res);
       if (res.error) {
         notify({
           title:
@@ -152,11 +152,28 @@ const TableRowMenu = ({
               ? "Network Unavailable"
               : "Generation Failed",
           message:
-            "something went wrong while generating fields, please try again later",
+            "Something went wrong while generating fields, please try again later",
           iconType: "error",
           duration: 6000,
         });
         console.log(res.error);
+      }
+
+      let failedFields = "";
+      for (const field of fieldsAndLangs.fields) {
+        const updateData = res?.data?.updateData || {};
+        if (!(field in updateData)) {
+          failedFields += `${field} `;
+        }
+      }
+
+      if (failedFields) {
+        notify({
+          title: "Failed to generate some fields",
+          message: `Something went wrong while generating: ${failedFields.trim()}`,
+          iconType: "error",
+          duration: 6000,
+        });
       }
     } catch (error) {
       const fieldsString = fieldsAndLangs.fields.join(", ");
