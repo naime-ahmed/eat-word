@@ -31,14 +31,23 @@ const Pricing = () => {
   };
 
   const handleProOpen = () => {
-    setShowMessageToPro(true);
+    if (isAuthenticated) {
+      setShowMessageToPro(true);
+    } else {
+      navigate("/sign-in");
+    }
   };
+
   const handleProClose = () => {
     setShowMessageToPro(false);
   };
 
   const handleLifeTimeOpen = () => {
-    setShowMessageToLifeT(true);
+    if (isAuthenticated) {
+      setShowMessageToLifeT(true);
+    } else {
+      navigate("/sign-in");
+    }
   };
   const handleLifeTimeClose = () => {
     setShowMessageToLifeT(false);
@@ -69,25 +78,25 @@ const Pricing = () => {
           <div className={styles.freePriceCardFeatures}>
             <ul>
               <li>
-                <FaCheck className={styles.iconCheck} /> 500 words/month
+                <FaCheck className={styles.iconCheck} /> 150 words/month
               </li>
               <li>
-                <FaCheck className={styles.iconCheck} /> Basic Definitions
+                <FaCheck className={styles.iconCheck} /> 30 Gen AI points/day
               </li>
               <li>
                 <FaCheck className={styles.iconCheck} /> Community Support
               </li>
               <li>
-                <IoCloseOutline className={styles.iconClose} /> AI-Powered
-                Learning Tools
-              </li>
-              <li>
                 <IoCloseOutline className={styles.iconClose} /> Spaced
-                Repetition System
+                repetition system
               </li>
               <li>
-                <IoCloseOutline className={styles.iconClose} /> Progress
-                Analytics
+                <IoCloseOutline className={styles.iconClose} /> 100
+                story/milestone
+              </li>
+              <li>
+                <IoCloseOutline className={styles.iconClose} /> Detailed
+                Progress Reports
               </li>
               <li>
                 <IoCloseOutline className={styles.iconClose} /> Priority Support
@@ -137,14 +146,14 @@ const Pricing = () => {
                 <FaCheck className={styles.iconCheck} /> Unlimited Words
               </li>
               <li>
-                <FaCheck className={styles.iconCheck} /> Advanced AI Suggestions
+                <FaCheck className={styles.iconCheck} /> 3000 Gen AI points/day
               </li>
               <li>
-                <FaCheck className={styles.iconCheck} /> Smart Spaced Repetition
+                <FaCheck className={styles.iconCheck} /> Spaced repetition
+                system
               </li>
               <li>
-                <FaCheck className={styles.iconCheck} /> Contextual Learning
-                Engine
+                <FaCheck className={styles.iconCheck} /> 100 story/milestone
               </li>
               <li>
                 <FaCheck className={styles.iconCheck} /> Detailed Progress
