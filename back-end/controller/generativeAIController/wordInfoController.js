@@ -5,29 +5,59 @@ import { wordFieldsAndLimit } from "../../utils/wordFieldsAndLimit.js";
 // Field-specific prompt templates
 const FIELD_PROMPTS = {
   meanings: (word, lang) =>
-    `Provide exactly 3 or less comma-separated meanings in ${lang} for "${word}". Example: "meaning1, meaning2". No explanations.`,
+    `Provide up to 4 comma-separated meanings in ${lang} for "${word}". Output only the meanings without extra commentary. If the word has distinct multiple meanings, ensure they are clearly differentiated.`,
 
   synonyms: (word, lang) =>
-    `List exactly 3 or less comma-separated synonyms in ${lang} for "${word}". Example: "syn1, syn2, syn3". No explanations.`,
+    `List up to 3 comma-separated synonyms in ${lang} for "${word}". Output only the synonyms without additional commentary.`,
 
   definitions: (word, lang) =>
-    `Give one short definition in ${lang} for "${word}" (under 15 words). No explanations.`,
+    `Provide ONE concise ${lang} definition for "${word}" (<25 words). If the word has TWO MEANINGS THAT: 
+    1) Are completely unrelated semantically
+    2) Appear in basic vocabulary
+    3) Would fundamentally impair comprehension if not separated
+    THEN provide both meanings separated by " | ". Never split nuanced variations. Example: financial institution | river edge. Output ONLY the text.`,
+  examples: (word, lang, existingDefinitions) => {
+    const basePrompt = `Create ONE ${lang} example for "${word}" (<25 words). ONLY if the word has TWO UNRELATED MEANINGS ESSENTIAL FOR BASIC USAGE, provide examples for both separated by " | ".`;
 
-  examples: (word, lang) =>
-    `Create one usage example in ${lang} for "${word}" (under 20 words). No explanations.`,
+    if (existingDefinitions) {
+      const definitionsList = existingDefinitions
+        .split("|")
+        .map((d) => d.trim());
+      return `${basePrompt} Base your examples on these EXACT definitions: ${definitionsList.join(
+        " | "
+      )}. Output ONLY the text.`;
+    }
+
+    return `${basePrompt} Ensure examples:
+        1) Match definition contexts exactly
+        2) Use different subject matter
+        3) Couldn't work with other meaning
+        Example: "I deposited money at the bank | We picnicked by the river bank". Output ONLY the text.`;
+  },
 };
 
 // Process individual field
-async function generateField(field, word, lang) {
+async function generateField(field, word, lang, existingDefinitions) {
   try {
     const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
     const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash-lite" });
 
-    const prompt = FIELD_PROMPTS[field](word, lang);
-    const result = await model.generateContent(prompt);
-    const text = result.response.text();
+    let prompt = undefined;
+    if(field !== "examples"){
+      prompt = FIELD_PROMPTS[field](
+        word,
+        lang
+      );
+    }else{
+      prompt = FIELD_PROMPTS[field](
+        word,
+        lang,
+        existingDefinitions || undefined
+      );
+    }
 
-    return processFieldResponse(field, text);
+    const result = await model.generateContent(prompt);
+    return processFieldResponse(field, result.response.text());
   } catch (error) {
     console.error(`Failed to generate ${field}:`, error);
     return null;
@@ -35,11 +65,11 @@ async function generateField(field, word, lang) {
 }
 
 // retry mechanism with exponential backoff
-async function generateFieldWithRetry(field, word, lang, retries = 3) {
+async function generateFieldWithRetry(field, word, lang,additionalData, retries = 3) {
   let attempt = 0;
   while (attempt < retries) {
     try {
-      return await generateField(field, word, lang);
+      return await generateField(field, word, lang, additionalData);
     } catch (error) {
       attempt++;
       if (attempt >= retries) throw error;
@@ -91,13 +121,13 @@ export async function generateWordInfo(req, res) {
 
     // Generate fields with retries and error tracking
     const generationResults = await Promise.allSettled(
-      fields.map((field) =>
-        generateFieldWithRetry(
-          field,
-          word.word,
-          field === "meanings" ? comfortableLang : learningLang
-        )
-      )
+      fields.map((field) => {
+        const lang = field === "meanings" ? comfortableLang : learningLang;
+        const additionalData =
+          field === "examples" ? word.definitions : undefined;
+
+        return generateFieldWithRetry(field, word.word, lang, additionalData);
+      })
     );
 
     const updateData = {};

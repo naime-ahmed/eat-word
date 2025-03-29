@@ -205,6 +205,7 @@ const WordsContainer = ({ curMilestone, isOnRecallMood }) => {
         </PrimaryBtn>
       </div>
     );
+  console.log(curMilestone);
   return (
     <div>
       <table className={styles.table}>
@@ -215,6 +216,8 @@ const WordsContainer = ({ curMilestone, isOnRecallMood }) => {
               <TableRow
                 key={row.id}
                 row={row}
+                includeDefinition={curMilestone?.includeDefinition}
+                learnSynonyms={curMilestone?.learnSynonyms}
                 rowHeights={rowHeights}
                 updateRowHeight={updateRowHeight}
                 comfortableLang={curMilestone?.comfortableLang}

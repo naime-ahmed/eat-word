@@ -192,6 +192,20 @@
   margin-left: 2px;
 }
 
+.deletingACC {
+  max-width: 330px;
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  gap: 16px;
+  background-color: rgb(34, 34, 34);
+  color: #fff;
+  text-align: center;
+  border-radius: 16px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
 /* Extra Large Devices (large desktops) - 1200px and above: */
 @media (min-width: 1200px) and (max-width: 1400px) {
   /* CSS for Hero Container */

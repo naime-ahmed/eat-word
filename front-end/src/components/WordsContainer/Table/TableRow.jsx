@@ -13,6 +13,8 @@ const TableRow = ({
   comfortableLang,
   learningLang,
   setGeneratingCells,
+  includeDefinition,
+  learnSynonyms,
 }) => {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [clickPosition, setClickPosition] = useState(null);
@@ -66,6 +68,8 @@ const TableRow = ({
               comfortableLang={comfortableLang}
               learningLang={learningLang}
               setGeneratingCells={setGeneratingCells}
+              learnSynonyms={learnSynonyms}
+              includeDefinition={includeDefinition}
             />
           </Popup>
         </td>
@@ -89,6 +93,8 @@ TableRow.propTypes = {
   comfortableLang: PropTypes.string,
   learningLang: PropTypes.string,
   setGeneratingCells: PropTypes.func,
+  learnSynonyms: PropTypes.bool,
+  includeDefinition: PropTypes.bool,
 };
 
 export default TableRow;

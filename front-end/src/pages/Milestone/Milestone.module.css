@@ -39,7 +39,32 @@
   gap: 12px;
 }
 
-.recallAndLastRecall {
+.milestoneShapeAndRecall {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 26px;
+}
+
+.milestoneShape {
+  padding: 6px 12px;
+  font-size: 32px;
+  border: 2px solid #1e41a100;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: border 0.3s ease;
+}
+
+.milestoneShape:hover {
+  border: 2px solid #1e41a1;
+}
+
+.shapeDropdown {
+  font-size: 18px;
+  color: #2862ff;
+}
+
+.recall {
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -270,6 +295,9 @@ input:checked + .slider:before {
     padding: 0 10px;
     font-size: 1em;
   }
+  .milestoneShape {
+    display: none;
+  }
 }
 
 /* Small Devices (tablets) - 576px to 767px wide: */
@@ -295,6 +323,9 @@ input:checked + .slider:before {
     letter-spacing: 0.04em;
     padding: 0 10px;
     font-size: 1em;
+  }
+  .milestoneShape {
+    display: none;
   }
 }
 
@@ -350,5 +381,8 @@ input:checked + .slider:before {
     letter-spacing: 0.02em;
     padding: 0 8px;
     font-size: 1em;
+  }
+  .milestoneShape {
+    display: none;
   }
 }

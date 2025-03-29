@@ -1,116 +1,336 @@
-/* CSS for about us page */
 .aboutUsPage {
   display: flex;
   flex-direction: column;
   align-items: center;
   background-color: #020817;
-  color: aliceblue;
+  color: #e2e8f0;
+  min-height: 100vh;
 }
 
-/* CSS for about us container */
 .aboutUsContainer {
+  width: 100%;
+  padding: 2rem 1.5rem;
+  margin-top: 6rem;
+}
+
+.whatIsEatWord {
+  width: 100%;
   max-width: 1250px;
-  margin: 100px 0;
+  margin: 0 auto 4rem;
 }
 
-.aboutUsContainer > div {
-  min-height: 450px;
-  display: flex;
-  align-items: center;
-  justify-content: space-around;
-  margin: 30px 0;
-}
-.aboutUsContainer > div > div {
-  flex: 1;
-  max-width: 50%;
-}
-.aboutUsContainer > div > div > img {
-  max-width: 400px;
-  border-radius: 10px;
-}
-/* CSS for text part */
-.aboutUsContainer > div > div > h1 {
-  font-size: 34px;
-  margin-bottom: 20px;
-}
-
-/* CSS for image part */
-.aboutEWImg,
-.aboutMotiveMark,
-.aboutFutureImg {
+.whatIsEatWord h1 {
   text-align: center;
-}
-.aboutMotiveMark P {
-  font-size: 250px;
+  font-size: 52px;
+  font-weight: 800;
+  margin-left: -50px;
+  margin-bottom: 2rem;
+  color: #ffffff;
+  background-image: -webkit-linear-gradient(270deg, #ffffff 39%, #6f65fc 78%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  text-fill-color: transparent;
+  -webkit-text-fill-color: transparent;
+  white-space: nowrap;
+  position: relative;
+  transition: background-image 5s ease;
 }
 
-.aboutFutureImg img {
-  border-radius: 20px;
+.whatIsEatWord > div:first-of-type {
+  font-size: 1.1rem;
+  line-height: 1.8;
+  color: #cbd5e1;
+  margin: 0 auto 3rem;
+  max-width: 800px;
+  padding: 0 1rem;
 }
 
-/* CSS for small devices */
-@media (min-width: 1200px) and (max-width: 1400px) {
+.whatIsEatWordPoints {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+  margin: 3rem 0 0 0;
+}
+
+.whatIsEatWordPoints > div {
+  background: rgba(15, 23, 42, 0.6);
+  border: 1px solid rgba(125, 211, 252, 0.1);
+  border-radius: 1rem;
+  padding: 2rem;
+  transition: transform 0.3s ease;
+}
+
+.whatIsEatWordPoints h3 {
+  font-size: 1.4rem;
+  color: #a5b4fc;
+  margin-bottom: 1.2rem;
+}
+
+.whatIsEatWordPoints p {
+  font-size: 1rem;
+  color: #94a3b8;
+  line-height: 1.7;
+  margin-bottom: 1.2rem;
+}
+
+.whatIsEatWordPoints ul {
+  list-style: none;
+  padding-left: 0;
+}
+
+.whatIsEatWordPoints li {
+  position: relative;
+  padding-left: 1.8rem;
+  margin-bottom: 0.8rem;
+  color: #cbd5e1;
+  font-size: 0.95rem;
+}
+
+.whatIsEatWordPoints li::before {
+  content: "▹";
+  position: absolute;
+  left: 0;
+  color: #7dd3fc;
+  font-size: 1.2rem;
+}
+
+.whyEatWordDiffer {
+  background: linear-gradient(
+    160deg,
+    rgba(15, 23, 42, 0.6) 0%,
+    rgba(2, 8, 23, 0.8) 100%
+  );
+  border: 1px solid rgba(125, 211, 252, 0.15);
+  border-radius: 1rem;
+  padding: 2.5rem;
+  margin: 2rem auto;
+}
+
+.whyEatWordDiffer h2 {
+  font-size: 1.6rem;
+  color: #a5b4fc;
+  margin-bottom: 1.5rem;
+}
+
+.whyEatWordDiffer p {
+  font-size: 1.05rem;
+  line-height: 1.8;
+  color: #cbd5e1;
+  margin-bottom: 1.5rem;
+}
+
+/* Why Eat Word Section */
+.whyEatWord {
+  width: 100%;
+  padding: 4rem 1rem;
+  margin: 4rem 0;
+}
+
+.creationJourney {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.timeline {
+  position: relative;
+  width: 4px;
+  background: rgba(125, 211, 252, 0.2);
+  margin-left: 1.5rem;
+}
+
+.timelineDot {
+  width: 2.5rem;
+  height: 2.5rem;
+  background: #7dd3fc;
+  border-radius: 50%;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  top: -1rem;
+}
+
+.journeyContent {
+  padding: 0 2rem;
+}
+.journeyContent > h1 {
+  transform: translateY(-18px);
+  margin-bottom: 16px;
+}
+.storyCard {
+  background: rgba(15, 23, 42, 0.6);
+  border: 1px solid rgba(125, 211, 252, 0.1);
+  border-radius: 1rem;
+  padding: 2.5rem;
+}
+
+.storySection {
+  margin-bottom: 3rem;
+}
+.storySection > p {
+  margin-bottom: 12px;
+}
+.storySection h3 {
+  font-size: 1.4rem;
+  color: #7dd3fc;
+  margin-bottom: 1.5rem;
+  position: relative;
+  padding-left: 2rem;
+}
+
+.storySection h3::before {
+  content: "▹";
+  position: absolute;
+  left: 0;
+  color: #a5b4fc;
+  font-size: 1.4rem;
+}
+
+.storySection > ul > li {
+  list-style: none;
+  margin-bottom: 12px;
+}
+.methodCards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+  margin-top: 1.5rem;
+}
+
+.methodCard {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(125, 211, 252, 0.1);
+  padding: 1.5rem;
+  border-radius: 0.8rem;
+}
+
+.methodCard h4 {
+  font-size: 1.1rem;
+  color: #a5b4fc;
+  margin-bottom: 0.8rem;
+}
+
+.evolutionTimeline {
+  position: relative;
+  margin: 2rem 0;
+}
+
+.timelineItem {
+  position: relative;
+  padding-left: 2rem;
+  margin-bottom: 2rem;
+}
+
+.timelineMarker {
+  position: absolute;
+  left: 0;
+  top: 0.4rem;
+  width: 0.8rem;
+  height: 0.8rem;
+  background: #7dd3fc;
+  border-radius: 50%;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .whatIsEatWordPoints {
+    grid-template-columns: 1fr;
+    max-width: 700px;
+    margin: 2rem auto;
+  }
+
+  .creationJourney {
+    grid-template-columns: 1fr;
+  }
+
+  .timeline {
+    display: none;
+  }
+
+  .journeyContent {
+    padding: 0;
+  }
+
+  .methodCards {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
   .aboutUsContainer {
-    max-width: 1150px;
+    padding: 2rem 1rem;
+  }
+
+  .whatIsEatWord h1 {
+    font-size: 2rem;
+    margin-bottom: 2rem;
+  }
+
+  .whatIsEatWord > div:first-of-type {
+    font-size: 1rem;
+    padding: 0;
+  }
+
+  .whatIsEatWordPoints > div {
+    padding: 1.5rem;
+  }
+
+  .whyEatWordDiffer {
+    padding: 1.5rem;
+    margin: 2rem 0;
+  }
+
+  .whyEatWordDiffer h2 {
+    font-size: 1.4rem;
+  }
+
+  .storyCard {
+    padding: 1.5rem;
+  }
+
+  .storySection h3 {
+    font-size: 1.2rem;
+    padding-left: 1.5rem;
+  }
+
+  .methodCards {
+    grid-template-columns: 1fr;
+  }
+
+  .methodCard {
+    padding: 1.2rem;
+  }
+
+  .timelineDot {
+    width: 2rem;
+    height: 2rem;
+  }
+
+  .evolutionTimeline {
+    margin: 1.5rem 0;
   }
 }
 
-@media (min-width: 1000px) and (max-width: 1199.98px) {
-  .aboutUsContainer {
-    max-width: 950px;
-  }
-}
-
-@media (min-width: 821px) and (max-width: 999.98px) {
-  .aboutUsContainer {
-    max-width: 750px;
-  }
-  .aboutUsContainer > div > div > img {
-    max-width: 300px;
-  }
-  .aboutUsContainer > div > div > h1 {
-    font-size: 26px;
-    margin-bottom: 20px;
-  }
-}
-
-@media (min-width: 600px) and (max-width: 820.99px) {
-  .aboutUsContainer > div {
-    flex-direction: column;
-    margin: 30px 100px;
+@media (max-width: 480px) {
+  .whatIsEatWord h1 {
+    font-size: 1.8rem;
   }
 
-  .aboutUsContainer > div:first-child {
-    flex-direction: column-reverse;
+  .whyEatWordDiffer {
+    padding: 1.2rem;
   }
-  .aboutUsContainer > div:last-child {
-    margin-top: 100px;
-    flex-direction: column-reverse;
+
+  .storySection h3 {
+    font-size: 1.1rem;
   }
-  .aboutUsContainer > div > div {
-    max-width: 100%;
+
+  .methodCard h4 {
+    font-size: 1rem;
   }
-}
-@media (max-width: 599.99px) {
-  .aboutUsContainer > div {
-    flex-direction: column;
-    margin: 10px;
-  }
-  .aboutUsContainer > div > div > img {
-    max-width: 280px;
-  }
-  .aboutUsContainer > div > div > h1 {
-    font-size: 24px;
-    margin-bottom: 20px;
-  }
-  .aboutUsContainer > div:first-child {
-    flex-direction: column-reverse;
-  }
-  .aboutUsContainer > div:last-child {
-    margin-top: 100px;
-    flex-direction: column-reverse;
-  }
-  .aboutUsContainer > div > div {
-    max-width: 100%;
+
+  .timelineItem p {
+    font-size: 0.9rem;
   }
 }

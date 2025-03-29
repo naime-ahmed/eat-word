@@ -24,6 +24,8 @@ const TableRowMenu = ({
   comfortableLang,
   learningLang,
   setGeneratingCells,
+  includeDefinition,
+  learnSynonyms,
 }) => {
   const menuItemsRef = useRef([]);
   const [showSubmenu, setShowSubmenu] = useState(false);
@@ -41,6 +43,14 @@ const TableRowMenu = ({
   const [generateWordInfo] = useGenerateWordInfoMutation();
   const [editWord, { isLoading: isEditing }] = useEditWordMutation();
   const [deleteWord, { isLoading: isDeleting }] = useDeleteWordMutation();
+
+  const fields = ["meanings", "examples"];
+  if (learnSynonyms) {
+    fields.splice(1, 0, "synonyms");
+  }
+  if (includeDefinition) {
+    fields.splice(fields.length - 1, 0, "definitions");
+  }
 
   const handleEdit = async (editedField) => {
     try {
@@ -134,6 +144,7 @@ const TableRowMenu = ({
 
     try {
       const res = await generateWordInfo([curWord?._id, fieldsAndLangs]);
+      console.log(res);
       if (res.error) {
         notify({
           title:
@@ -141,11 +152,28 @@ const TableRowMenu = ({
               ? "Network Unavailable"
               : "Generation Failed",
           message:
-            "something went wrong while generating fields, please try again later",
+            "Something went wrong while generating fields, please try again later",
           iconType: "error",
           duration: 6000,
         });
         console.log(res.error);
+      }
+
+      let failedFields = "";
+      for (const field of fieldsAndLangs.fields) {
+        const updateData = res?.data?.updateData || {};
+        if (!(field in updateData)) {
+          failedFields += `${field} `;
+        }
+      }
+
+      if (failedFields) {
+        notify({
+          title: "Failed to generate some fields",
+          message: `Something went wrong while generating: ${failedFields.trim()}`,
+          iconType: "error",
+          duration: 6000,
+        });
       }
     } catch (error) {
       const fieldsString = fieldsAndLangs.fields.join(", ");
@@ -188,6 +216,8 @@ const TableRowMenu = ({
       }
     }
   };
+
+  // TODO: hide the filed that are not in table
 
   return (
     <div className={styles.rowMenuContainer}>
@@ -236,25 +266,23 @@ const TableRowMenu = ({
                 }
               }}
             >
-              {["meanings", "synonyms", "definitions", "examples"].map(
-                (field, index) => (
-                  <li key={field}>
-                    <label className={styles.inputWrapper}>
-                      <input
-                        type="checkbox"
-                        checked={selectedFields[field]}
-                        onChange={(e) => {
-                          e.stopPropagation();
-                          handleFieldChange(field);
-                        }}
-                        ref={(el) => (menuItemsRef.current[index] = el)}
-                      />
-                      <span className={styles.checkmark} />
-                      {field.charAt(0).toUpperCase() + field.slice(1)}
-                    </label>
-                  </li>
-                )
-              )}
+              {fields?.map((field, index) => (
+                <li key={field}>
+                  <label className={styles.inputWrapper}>
+                    <input
+                      type="checkbox"
+                      checked={selectedFields[field]}
+                      onChange={(e) => {
+                        e.stopPropagation();
+                        handleFieldChange(field);
+                      }}
+                      ref={(el) => (menuItemsRef.current[index] = el)}
+                    />
+                    <span className={styles.checkmark} />
+                    {field.charAt(0).toUpperCase() + field.slice(1)}
+                  </label>
+                </li>
+              ))}
               <li>
                 <FancyBtn
                   clickHandler={handleGenerate}
@@ -332,6 +360,8 @@ TableRowMenu.propTypes = {
   comfortableLang: PropTypes.string,
   learningLang: PropTypes.string,
   setGeneratingCells: PropTypes.func,
+  learnSynonyms: PropTypes.bool,
+  includeDefinition: PropTypes.bool,
 };
 
 export default TableRowMenu;

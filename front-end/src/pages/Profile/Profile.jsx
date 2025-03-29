@@ -1,3 +1,4 @@
+import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 import { HiMiniXMark } from "react-icons/hi2";
 import { LiaEditSolid } from "react-icons/lia";
@@ -5,16 +6,17 @@ import { MdOutlineEdit } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import defaultProfilePic from "../../assets/defaultUserProfileImage.webp";
-import ConfirmationPopup from "../../components/Popup/ConfirmationPopup/ConfirmationPopup";
+import Popup from "../../components/Popup/Popup";
+import ConfirmDeleteAccount from "../../components/Popup/PopUpContents/ConfirmDeleteAccount/ConfirmDeleteAccount";
 import Error from "../../components/shared/Error/Error";
 import Footer from "../../components/shared/Footer/Footer";
 import Header from "../../components/shared/Header/Header";
 import PrimaryBtn from "../../components/ui/button/PrimaryBtn/PrimaryBtn";
 import LanguageSearch from "../../components/ui/input/LanguageSearch/LanguageSearch";
+import ClassicSpinner from "../../components/ui/loader/ClassicSpinner/ClassicSpinner";
 import SpinnerForPage from "../../components/ui/loader/SpinnerForPage/SpinnerForPage";
 import { setSignOutUser } from "../../features/authSlice";
 import { setUserData } from "../../features/userSlice";
-import { useConfirmation } from "../../hooks/useConfirmation";
 import useNotification from "../../hooks/useNotification";
 import { useScrollRestoration } from "../../hooks/useScrollRestoration";
 import {
@@ -327,6 +329,12 @@ function ProfileImage({ profilePicture, isChanging, onProfilePicChange }) {
   );
 }
 
+ProfileImage.propTypes = {
+  profilePicture: PropTypes.string,
+  isChanging: PropTypes.bool,
+  onProfilePicChange: PropTypes.func,
+};
+
 // component responsible to name and email field
 function NameAndEmail({ isChanging, basicInfo, onBasicInfoChange }) {
   const handleBasicInfoChange = (event) => {
@@ -375,6 +383,12 @@ function NameAndEmail({ isChanging, basicInfo, onBasicInfoChange }) {
     </div>
   );
 }
+
+NameAndEmail.propTypes = {
+  isChanging: PropTypes.bool,
+  basicInfo: PropTypes.object,
+  onBasicInfoChange: PropTypes.func,
+};
 
 // This component responsible for preferred settings
 function PreferredSettings({ isChanging, basicInfo, onBasicInfoChange }) {
@@ -435,6 +449,12 @@ function PreferredSettings({ isChanging, basicInfo, onBasicInfoChange }) {
     </div>
   );
 }
+
+PreferredSettings.propTypes = {
+  isChanging: PropTypes.bool,
+  basicInfo: PropTypes.object,
+  onBasicInfoChange: PropTypes.func,
+};
 
 // this component is responsible for changing password
 function ChangePasswordForm({ setIsChanging }) {
@@ -575,29 +595,20 @@ function ChangePasswordForm({ setIsChanging }) {
   );
 }
 
+ChangePasswordForm.propTypes = {
+  setIsChanging: PropTypes.func,
+};
+
 // delete account
 function DeleteAccount() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const [deleteUser, { isLoading, isError, error }] = useDeleteUserMutation();
-  const { confirm, confirmationProps } = useConfirmation();
+  const [deleteUser, { isLoading }] = useDeleteUserMutation();
+  const [isShowDeleteAC, setIsShowDeleteAC] = useState(false);
   const showNotification = useNotification();
 
   const handleDeleteAccount = async () => {
-    console.log("del click");
     try {
-      const warningResult = await confirm({
-        title: "Are you sure?",
-        message: `Your Account and words will be deleted permanently`,
-        confirmText: "Yes, Delete",
-        cancelText: "Cancel",
-        confirmColor: "#d33",
-        cancelColor: "#3085d6",
-      });
-
-      if (!warningResult) {
-        return;
-      }
       const res = await deleteUser();
 
       if (res?.data) {
@@ -621,14 +632,35 @@ function DeleteAccount() {
         iconType: "error",
         duration: 4000,
       });
+    } finally {
+      setIsShowDeleteAC(false);
     }
+  };
+
+  const handleOpenIsShowDeleteAC = () => {
+    setIsShowDeleteAC(true);
+  };
+
+  const handleCloseIsShowDeleteAC = () => {
+    setIsShowDeleteAC(false);
   };
 
   return (
     <div>
-      <ConfirmationPopup {...confirmationProps} />
+      <Popup
+        isOpen={isShowDeleteAC}
+        onClose={handleCloseIsShowDeleteAC}
+        showCloseButton={isLoading ? false : true}
+      >
+        <ConfirmDeleteAccount handleDeleteAccount={handleDeleteAccount} />
+        {isLoading && (
+          <div className={styles.deletingACC}>
+            <ClassicSpinner /> Deleting your account...
+          </div>
+        )}
+      </Popup>
       <PrimaryBtn
-        handleClick={handleDeleteAccount}
+        handleClick={handleOpenIsShowDeleteAC}
         isLoading={isLoading}
         loadingText="Deleting..."
         colorOne="rgb(153 17 12)"

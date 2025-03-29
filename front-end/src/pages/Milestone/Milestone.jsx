@@ -1,8 +1,11 @@
 import { useEffect, useMemo, useRef, useState } from "react";
+import { FaShapes } from "react-icons/fa";
+import { IoCaretDownSharp, IoCaretUpSharp } from "react-icons/io5";
 import { useParams } from "react-router-dom";
 import MilestoneDeadline from "../../components/MilestoneDeadline";
 import MilestoneStory from "../../components/MilestoneStory/MilestoneStory";
 import Popup from "../../components/Popup/Popup";
+import MilestoneShapeSelect from "../../components/Popup/PopUpContents/MilestoneShapeSelect/MilestoneShapeSelect";
 import MilestoneStoryGenerator from "../../components/Popup/PopUpContents/MilestoneStoryGenerator/MilestoneStoryGenerator";
 import Error from "../../components/shared/Error/Error";
 import Footer from "../../components/shared/Footer/Footer";
@@ -33,8 +36,11 @@ const getRandomColor = () =>
   confettiColors[Math.floor(Math.random() * confettiColors.length)];
 
 const Milestone = () => {
-  const [wordContainerType, setWordContainerType] = useState("table");
-
+  const [wordContainerType, setWordContainerType] = useState(() => {
+    return localStorage.getItem("wordContainerType") || "table";
+  });
+  const [isShowingShape, setIsShowingShape] = useState(false);
+  const [clickPosition, setClickPosition] = useState(null);
   const [isOnRecallMood, setIsOnReCallMood] = useState(false);
   const timeoutRef = useRef(null);
   const [showTooltip, setShowTooltip] = useState(false);
@@ -55,18 +61,20 @@ const Milestone = () => {
 
   // measure the screen size
   useEffect(() => {
-    const countScreenSize = () => {
-      if (window.innerWidth < 1000) {
+    const handleResize = () => {
+      const isSmallScreen = window.innerWidth < 1000;
+      if (isSmallScreen) {
         setWordContainerType("slider");
+        localStorage.setItem("wordContainerType", "slider");
       } else {
-        setWordContainerType("table");
+        const saved = localStorage.getItem("wordContainerType") || "table";
+        setWordContainerType(saved);
       }
     };
-    countScreenSize();
-    window.addEventListener("resize", countScreenSize);
-    return () => {
-      window.removeEventListener("resize", countScreenSize);
-    };
+
+    handleResize(); // Initial check
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
   }, []);
 
   const curMilestone = useMemo(
@@ -93,7 +101,6 @@ const Milestone = () => {
           { lastRecalled: new Date().toISOString() },
         ]).unwrap();
         setHasUpdated(true);
-        console.log("Recall recorded");
       } catch (error) {
         console.error("Update failed:", error);
       }
@@ -136,7 +143,18 @@ const Milestone = () => {
   const handleOpenGenerateStory = () => {
     setIsTakingStoryType(true);
   };
-  console.log(curMilestone);
+
+  const handleOpenShapeSelector = (e) => {
+    const x = e.clientX + window.scrollX;
+    // const y = e.clientY + window.scrollY;
+
+    setClickPosition({ x, y: 190 });
+    setIsShowingShape(true);
+  };
+  const handleCloseShaleSelector = () => {
+    setIsShowingShape(false);
+  };
+
   return (
     <div className={styles.milestonePage}>
       <Header />
@@ -171,35 +189,62 @@ const Milestone = () => {
                     )}
                   </div>
                 </div>
-                <div className={styles.recallAndLastRecall}>
-                  <div className={styles.checkboxAndLabels}>
-                    <label className={styles.switch}>
-                      <input
-                        type="checkbox"
-                        onChange={handleOnRecall}
-                        disabled={curMilestone?.wordsCount <= 0}
+                <div className={styles.milestoneShapeAndRecall}>
+                  <div
+                    className={styles.milestoneShape}
+                    onClick={handleOpenShapeSelector}
+                  >
+                    <FaShapes />{" "}
+                    <span className={styles.shapeDropdown}>
+                      {isShowingShape ? (
+                        <IoCaretUpSharp />
+                      ) : (
+                        <IoCaretDownSharp />
+                      )}
+                    </span>
+                    <Popup
+                      isOpen={isShowingShape}
+                      onClose={handleCloseShaleSelector}
+                      popupType="menu"
+                      clickPosition={clickPosition}
+                      showCloseButton={false}
+                    >
+                      <MilestoneShapeSelect
+                        setWordContainerType={setWordContainerType}
+                        onClose={handleCloseShaleSelector}
                       />
-                      <span className={styles.slider}></span>
-                    </label>
-                    {showTooltip && (
-                      <div className={styles.tooltip}>
-                        Complete all words to count recall
-                      </div>
-                    )}
-                    <span>
-                      {curMilestone?.wordsCount <= 0
-                        ? "No words to recall" // Show message
-                        : isOnRecallMood
-                        ? "Off recall"
-                        : "On recall"}
-                    </span>
+                    </Popup>
                   </div>
-                  <div className={styles.lastRecalled}>
-                    <span>
-                      {curMilestone?.lastRecalled
-                        ? `Last Recall: ${formattedDate}`
-                        : "You haven't recalled"}
-                    </span>
+                  <div className={styles.recall}>
+                    <div className={styles.checkboxAndLabels}>
+                      <label className={styles.switch}>
+                        <input
+                          type="checkbox"
+                          onChange={handleOnRecall}
+                          disabled={curMilestone?.wordsCount <= 0}
+                        />
+                        <span className={styles.slider}></span>
+                      </label>
+                      {showTooltip && (
+                        <div className={styles.tooltip}>
+                          Complete all words to count recall
+                        </div>
+                      )}
+                      <span>
+                        {curMilestone?.wordsCount <= 0
+                          ? "No words to recall"
+                          : isOnRecallMood
+                          ? "Off recall"
+                          : "On recall"}
+                      </span>
+                    </div>
+                    <div className={styles.lastRecalled}>
+                      <span>
+                        {curMilestone?.lastRecalled
+                          ? `Last Recall: ${formattedDate}`
+                          : "You haven't recalled"}
+                      </span>
+                    </div>
                   </div>
                 </div>
               </div>
