@@ -1,11 +1,9 @@
 import { useEffect, useState } from "react";
 import { FaArrowRightToBracket, FaBars, FaXmark } from "react-icons/fa6";
-
 import { useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import defaultUserProfile from "../../../assets/defaultUserProfileImage.webp";
 import logo from "../../../assets/logo.png";
-import Popup from "../../Popup/Popup";
 import UserProfile from "../../Popup/PopUpContents/UserProfile/UserProfile";
 import PrimaryBtn from "../../ui/button/PrimaryBtn/PrimaryBtn";
 import Skeleton from "../../ui/loader/Skeleton/Skeleton";
@@ -15,7 +13,6 @@ const Header = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isSticky, setIsSticky] = useState(false);
   const [isProfileShown, setIsProfileShown] = useState(false);
-  const [clickPosition, setClickPosition] = useState(null);
   const { isAuthenticated, isLoading } = useSelector((state) => state.auth);
   const { user } = useSelector((state) => state.user);
   const navigate = useNavigate();
@@ -25,15 +22,7 @@ const Header = () => {
 
   const handleProfileOpen = (e) => {
     e.stopPropagation();
-    let x = e.clientX + window.scrollX + 16;
-    let y = window.scrollY - 4;
-    if (window.innerWidth < 500) {
-      console.log(window.innerWidth);
-      x += 100;
-    }
-    setClickPosition({ x, y });
     setIsProfileShown(true);
-    console.log(x, y);
   };
 
   const handleScroll = () => {
@@ -150,6 +139,11 @@ const Header = () => {
                         alt="User Profile"
                       />
                     </button>
+                    {isProfileShown && (
+                      <div className={styles.userProfileContainer}>
+                        <UserProfile onClose={() => setIsProfileShown(false)} />
+                      </div>
+                    )}
                   </>
                 ) : (
                   <PrimaryBtn handleClick={() => navigate("/sign-in")}>
@@ -159,18 +153,6 @@ const Header = () => {
               </li>
             </ul>
           </nav>
-          {isProfileShown && (
-            <Popup
-              isOpen={isProfileShown}
-              onClose={() => setIsProfileShown(false)}
-              showCloseButton={false}
-              popupType="menu"
-              clickPosition={clickPosition}
-              isPreventScroll={true}
-            >
-              <UserProfile onClose={() => setIsProfileShown(false)} />
-            </Popup>
-          )}
         </div>
       </div>
     </header>
