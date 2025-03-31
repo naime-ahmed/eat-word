@@ -1,3 +1,4 @@
+import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { BiMessageAltError } from "react-icons/bi";
@@ -39,6 +40,7 @@ const Notification = ({
       clearTimeout(timeout);
       clearInterval(interval);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [visible, duration]);
 
   const handleClose = () => {
@@ -77,6 +79,16 @@ const Notification = ({
     </div>,
     document.body
   );
+};
+
+Notification.propTypes = {
+  id: PropTypes.string,
+  icon: PropTypes.element,
+  title: PropTypes.string,
+  message: PropTypes.string,
+  iconType: PropTypes.string,
+  onClose: PropTypes.func,
+  duration: PropTypes.number,
 };
 
 const NotificationContainer = () => {

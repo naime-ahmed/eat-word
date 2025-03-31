@@ -15,9 +15,8 @@
 
 .content {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   gap: 12px;
-  margin-bottom: 8px;
 }
 
 .textContainer {
@@ -41,15 +40,27 @@
 }
 
 /* Icon Styling */
+.success,
+.error,
+.warning {
+  width: 44px;
+  height: 44px;
+  padding: 6px;
+  align-self: center;
+  border-radius: 6px;
+}
 .success {
-  color: #34d399;
+  background-color: rgba(0, 224, 37, 0.158);
+  color: #00e025;
 }
 
 .error {
-  color: #f87171;
+  background-color: #ff191925;
+  color: #ff0e36;
 }
 
 .warning {
+  background-color: #fbbe2428;
   color: #fbbf24;
 }
 
