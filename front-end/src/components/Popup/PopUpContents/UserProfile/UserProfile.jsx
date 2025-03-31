@@ -1,16 +1,20 @@
+import PropTypes from "prop-types";
+import { useEffect, useRef } from "react";
+import { BiLogOut } from "react-icons/bi";
+import { RiDashboardFill } from "react-icons/ri";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import defaultUserProfileImage from "../../../../assets/defaultUserProfileImage.webp";
 import { setSignOutUser } from "../../../../features/authSlice";
 import { useConfirmation } from "../../../../hooks/useConfirmation";
-import { useSignOutUserMutation } from "../../../../services/auth";
-
 import useNotification from "../../../../hooks/useNotification";
+import { useSignOutUserMutation } from "../../../../services/auth";
 import FancyBtn from "../../../ui/button/FancyBtn/FancyBtn";
 import ConfirmationPopup from "../../ConfirmationPopup/ConfirmationPopup";
 import styles from "./UserProfile.module.css";
 
 const UserProfile = ({ onClose }) => {
+  const profileRef = useRef(null);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const showNotification = useNotification();
@@ -71,8 +75,25 @@ const UserProfile = ({ onClose }) => {
     }
   };
 
+  const handleMyspaceNavigation = () => {
+    navigate("/my-space");
+    onClose();
+  };
+
+  // close profile on outside click
+  useEffect(() => {
+    const handleOutsideClick = (e) => {
+      e.stopPropagation();
+      if (profileRef.current && !profileRef.current.contains(e.target)) {
+        onClose();
+      }
+    };
+    document.addEventListener("mousedown", handleOutsideClick);
+    return () => document.removeEventListener("mousedown", handleOutsideClick);
+  }, [onClose]);
+
   return (
-    <div className={styles.userProfile}>
+    <div className={styles.userProfile} ref={profileRef}>
       <ConfirmationPopup {...confirmationProps} />
       <div className={styles.profilePicture}>
         <img
@@ -96,19 +117,21 @@ const UserProfile = ({ onClose }) => {
       </div>
       <div className={styles.userProfileTabs}>
         <ul>
-          <li onClick={onClose}>
-            <Link to="/my-space"> My Space</Link>
+          <li onClick={handleMyspaceNavigation}>
+            <RiDashboardFill /> My Space
           </li>
-          <li>
-            <i className="fas fa-sign-out-alt"></i>{" "}
-            <span onClick={handleSignOut}>
-              {isLoading ? "sign outing..." : "sign out"}
-            </span>
+          <li onClick={handleSignOut}>
+            <BiLogOut />
+            {isLoading ? "sign outing..." : "sign out"}
           </li>
         </ul>
       </div>
     </div>
   );
+};
+
+UserProfile.propTypes = {
+  onClose: PropTypes.func,
 };
 
 export default UserProfile;
