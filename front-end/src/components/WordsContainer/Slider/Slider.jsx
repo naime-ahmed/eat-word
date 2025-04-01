@@ -20,7 +20,6 @@ const Carousel = ({ curMilestone, isOnRecallMood }) => {
   const [words, setWords] = useState([]);
   const [swiperInstance, setSwiperInstance] = useState(null);
   const [generatingCells, setGeneratingCells] = useState([]); // [[rowIdx,colId],[rowIdx,colId]]
-  console.log("words from carousel: ", words);
   const showNotification = useNotification();
   const { data, isLoading, isError, error } = useBringMilestoneWordQuery(
     curMilestone?._id

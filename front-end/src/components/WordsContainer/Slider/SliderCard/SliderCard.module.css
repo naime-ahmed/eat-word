@@ -98,7 +98,7 @@
 .cardExamples {
   display: flex;
   flex-direction: column;
-  gap: 4px; /* Added for better spacing */
+  gap: 4px;
 }
 
 .cardMeanings label,
@@ -110,23 +110,22 @@
   color: #d0d0d1;
 }
 
-/* Update textarea styles to target through wrapper */
 .cardMeanings textarea,
 .cardSynonyms textarea,
 .cardDefinitions textarea,
 .cardExamples textarea {
   width: 100%;
+  min-height: 28px;
+  padding: 6px 8px;
+  font-size: 14px;
   background-color: transparent;
   color: #d0d0d1;
   border: none;
   outline: none;
-  padding: 6px 8px;
-  font-size: 14px;
   resize: none;
   overflow: hidden;
   box-sizing: border-box;
   transition: box-shadow 0.2s;
-  min-height: 28px; /* Ensure minimum height */
 }
 
 /* Update focus states */
@@ -180,7 +179,6 @@
   white-space: nowrap;
 }
 
-/* Add margin to prevent overlap with limit message */
 .cardMeanings,
 .cardSynonyms,
 .cardDefinitions,
@@ -193,83 +191,10 @@
   margin-top: 0;
 }
 
-/* .generating {
-  position: relative;
-  overflow: hidden;
-}
-
-.generating::after {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(
-    120deg,
-    rgba(88, 166, 255, 0.1) 25%,
-    rgba(88, 166, 255, 0.2) 50%,
-    rgba(88, 166, 255, 0.1) 75%
-  );
-  backdrop-filter: blur(4px);
-  animation: shimmer 1.5s infinite;
-  z-index: 1;
-}
-
-@keyframes shimmer {
-  100% {
-    left: 200%;
-  }
-}
-
-.pulsingText {
-  position: relative;
-  animation: text-pulse 1.5s ease-in-out infinite;
-  z-index: 2;
-}
-
-@keyframes text-pulse {
-  0% {
-    opacity: 0.9;
-    text-shadow: 0 0 8px rgba(88, 166, 255, 0.3);
-  }
-  50% {
-    opacity: 1;
-    text-shadow: 0 0 12px rgba(88, 166, 255, 0.6);
-  }
-  100% {
-    opacity: 0.9;
-    text-shadow: 0 0 8px rgba(88, 166, 255, 0.3);
-  }
-}
-
-.generating::before {
-  content: "Generating...";
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  color: #58a6ff;
-  font-size: 0.9em;
-  font-weight: 500;
-  z-index: 3;
-  animation: processing-bounce 1s infinite;
-}
-
-@keyframes processing-bounce {
-  0%,
-  100% {
-    transform: translate(-50%, -50%) translateY(0);
-  }
-  50% {
-    transform: translate(-50%, -50%) translateY(-3px);
-  }
-} */
-
 .generating {
   position: relative;
   overflow: hidden;
-  border-radius: 8px; /* Match your field's border radius */
+  border-radius: 8px;
 }
 
 /* Animated blur overlay */
@@ -338,10 +263,9 @@
   }
 }
 
-/* Existing text styling */
 .pulsingText {
   position: relative;
   z-index: 1;
-  filter: blur(2px); /* Additional blur for existing text */
+  filter: blur(2px);
   transition: filter 0.3s ease;
 }

@@ -248,7 +248,9 @@ const SliderCard = ({
 
         {/* Meanings Section*/}
         <div className={styles.cardMeanings}>
-          <label htmlFor={`meanings-${wordIdx}`}>MEANINGS: </label>
+          <label htmlFor={`meanings-${wordIdx}`}>
+            {curMilestone.comfortableLang.toUpperCase()} MEANINGS:
+          </label>
           <div
             className={`${styles.textareaWrapper} ${
               isOnRecallMood &&
