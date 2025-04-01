@@ -123,7 +123,7 @@ const WordsContainer = ({ curMilestone, isOnRecallMood }) => {
       },
       {
         accessorKey: "meanings",
-        header: "Meanings",
+        header: `${curMilestone.comfortableLang} meanings`,
         size: meaningSize,
         cell: EditableCell,
       },
@@ -205,7 +205,7 @@ const WordsContainer = ({ curMilestone, isOnRecallMood }) => {
         </PrimaryBtn>
       </div>
     );
-  console.log(curMilestone);
+
   return (
     <div>
       <table className={styles.table}>
