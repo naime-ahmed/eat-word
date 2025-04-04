@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { FaArrowRightToBracket, FaBars, FaXmark } from "react-icons/fa6";
 import { useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
@@ -19,10 +19,11 @@ const Header = () => {
   const handleSidebarToggle = () => {
     setIsSidebarOpen(!isSidebarOpen);
   };
+  const profileRef = useRef(null);
 
-  const handleProfileOpen = (e) => {
+  const handleProfileToggle = (e) => {
     e.stopPropagation();
-    setIsProfileShown(true);
+    setIsProfileShown((prev) => !prev);
   };
 
   const handleScroll = () => {
@@ -130,7 +131,8 @@ const Header = () => {
                 ) : isAuthenticated ? (
                   <>
                     <button
-                      onClick={handleProfileOpen}
+                      ref={profileRef}
+                      onClick={handleProfileToggle}
                       className={styles.profile}
                       aria-label="User Profile"
                     >
@@ -141,7 +143,10 @@ const Header = () => {
                     </button>
                     {isProfileShown && (
                       <div className={styles.userProfileContainer}>
-                        <UserProfile onClose={() => setIsProfileShown(false)} />
+                        <UserProfile
+                          onClose={() => setIsProfileShown(false)}
+                          profileBtnRef={profileRef}
+                        />
                       </div>
                     )}
                   </>
