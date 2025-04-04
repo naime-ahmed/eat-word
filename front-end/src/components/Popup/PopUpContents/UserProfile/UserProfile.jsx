@@ -13,15 +13,22 @@ import FancyBtn from "../../../ui/button/FancyBtn/FancyBtn";
 import ConfirmationPopup from "../../ConfirmationPopup/ConfirmationPopup";
 import styles from "./UserProfile.module.css";
 
-const UserProfile = ({ onClose }) => {
+const UserProfile = ({ onClose, profileBtnRef }) => {
   const profileRef = useRef(null);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const showNotification = useNotification();
   const { confirm, confirmationProps } = useConfirmation();
+  const { isOpen: isConfirmationOpen } = confirmationProps;
+  const isConfirmationOpenRef = useRef();
 
   const [signOutUser, { isLoading }] = useSignOutUserMutation();
   const { user } = useSelector((state) => state.user);
+
+  // Keep a ref updated with confirmation open state
+  useEffect(() => {
+    isConfirmationOpenRef.current = isConfirmationOpen;
+  }, [isConfirmationOpen]);
 
   const handleSignOut = async () => {
     try {
@@ -57,8 +64,6 @@ const UserProfile = ({ onClose }) => {
         iconType: "success",
         duration: 4000,
       });
-
-      onClose();
     } catch (error) {
       console.log("Error during sign out:", error);
 
@@ -72,6 +77,8 @@ const UserProfile = ({ onClose }) => {
         iconType: "error",
         duration: 4000,
       });
+    } finally {
+      onClose();
     }
   };
 
@@ -84,13 +91,22 @@ const UserProfile = ({ onClose }) => {
   useEffect(() => {
     const handleOutsideClick = (e) => {
       e.stopPropagation();
-      if (profileRef.current && !profileRef.current.contains(e.target)) {
+
+      // Don't close if confirmation is active
+      if (isConfirmationOpenRef.current) return;
+
+      if (
+        profileRef.current &&
+        !profileRef.current.contains(e.target) &&
+        !profileBtnRef.current.contains(e.target)
+      ) {
         onClose();
       }
     };
+
     document.addEventListener("mousedown", handleOutsideClick);
     return () => document.removeEventListener("mousedown", handleOutsideClick);
-  }, [onClose]);
+  }, [onClose, profileBtnRef]);
 
   return (
     <div className={styles.userProfile} ref={profileRef}>
@@ -131,7 +147,9 @@ const UserProfile = ({ onClose }) => {
 };
 
 UserProfile.propTypes = {
-  onClose: PropTypes.func,
+  onClose: PropTypes.func.isRequired,
+  profileBtnRef: PropTypes.shape({
+    current: PropTypes.instanceOf(HTMLButtonElement),
+  }),
 };
-
 export default UserProfile;
