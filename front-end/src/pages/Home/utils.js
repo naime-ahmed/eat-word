@@ -84,7 +84,7 @@ export const dashBorderConfigs = () => [
 ];
 
 // A static mapping for language demonstration.
-const countryLanguageMapping = {
+export const countryLanguageMapping = {
   CN: {
     motherTongue: "Mandarin Chinese",
     motherFlag: "cn",
@@ -621,23 +621,35 @@ const countryLanguageMapping = {
   },
 };
 
-// Extract the country code from the locale (e.g., "en-US" -> "US")
-export function getCountryCode(locale) {
-  const parts = locale.split("-");
-  if (parts.length === 2) {
-    return parts[1].toUpperCase();
+export const getLanguageForVisitor = async (defaultCountry = 'BD') => {
+  // Check cache validity
+  const expiry = localStorage.getItem('countryCodeExpiry');
+  if (expiry && Date.now() > Number(expiry)) {
+    localStorage.removeItem('userCountryCode');
+    localStorage.removeItem('countryCodeExpiry');
   }
-  return "US"; // Fallback
-}
 
-// Retrieve language mapping for the given country code
-export function getLanguageMapping(countryCode) {
-  return (
-    countryLanguageMapping[countryCode] || {
-        motherTongue: "Bengali",
-        motherFlag: "bd",
-        secondLanguage: "English",
-        secondFlag: "us",
-      }
-  );
-}
+  // Check cached country
+  const cachedCountry = localStorage.getItem('userCountryCode');
+  if (cachedCountry) {
+    return cachedCountry;
+  }
+
+  try {
+    const response = await fetch('https://ipapi.co/country/');
+    const countryCode = (await response.text()).trim().toUpperCase();
+    
+    if (/^[A-Z]{2}$/.test(countryCode)) {
+      localStorage.setItem('userCountryCode', countryCode);
+      localStorage.setItem('countryCodeExpiry', Date.now() + 7 * 24 * 60 * 60 * 1000);
+      return countryCode;
+    }
+  } catch (error) {
+    console.error('Error detecting country:', error);
+  }
+
+  // Fallback to browser detection
+  const locale = navigator.language || 'en-US';
+  const browserCountry = (locale.split('-')[1] || defaultCountry).toUpperCase();
+  return browserCountry;
+};
