@@ -7,11 +7,63 @@
   overflow: hidden;
 }
 
+.priceSelectorContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 100px;
+  color: #fff;
+}
+.priceSelectorContainer > h1 {
+  margin-bottom: 12px;
+}
+
+.priceSelectors {
+  position: relative;
+  display: flex;
+  padding: 12px;
+}
+
+.priceButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 42px;
+  width: 120px;
+  color: #fff;
+  font-size: 15px;
+  font-weight: 600;
+  border: none;
+  background: transparent;
+  border-radius: 99px;
+  cursor: pointer;
+  transition: all 0.15s ease-in;
+  z-index: 2;
+}
+.priceButton:not(.active):hover {
+  background-color: #00185296;
+}
+
+.glider {
+  position: absolute;
+  height: 42px;
+  width: 120px;
+  background: linear-gradient(to top, #0c2971, #194b97, #1d6ce3);
+  color: #fff;
+  border-radius: 99px;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  box-shadow: 0 15px 30px rgba(12, 23, 104, 0.726);
+  overflow: hidden;
+  transition: transform 0.25s ease-out;
+  z-index: 1;
+}
+
 /* style for card section */
 .pricingSection {
   max-width: 1250px;
   min-height: 80vh;
-  margin-top: 120px;
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
@@ -38,18 +90,36 @@
   transition: transform 0.3s ease;
 }
 
-.premium:hover {
-  transform: translateY(-10px);
-}
-
 .free {
   border: 2px solid rgba(255, 255, 255, 0.125);
 }
 
-.premium {
-  border: 2px solid #4759f7;
-  position: relative;
-  /* overflow: hidden; */
+.premium::before {
+  content: "";
+  position: absolute;
+  top: -3px;
+  left: -3px;
+  right: -3px;
+  bottom: -3px;
+  background: linear-gradient(
+    0deg,
+    rgba(255, 255, 255, 0.125) 19%,
+    #2d35d3 92%
+  );
+  z-index: -1;
+  border-radius: 16px;
+}
+
+.premium::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #020817;
+  z-index: -1;
+  border-radius: 14px;
 }
 
 .elite {
@@ -61,7 +131,7 @@
   justify-content: center;
   align-items: center;
   position: absolute;
-  top: -20px;
+  top: -22px;
   left: 50%;
   transform: translateX(-50%);
   background: linear-gradient(45deg, #702dd4, #2d35d3);
@@ -114,7 +184,7 @@
 
 .freePriceCardFeatures,
 .paidPriceCardFeatures {
-  margin: 20px 0;
+  margin-top: 20px;
   flex-grow: 1;
 }
 
@@ -167,6 +237,7 @@
   .pricingSection {
     max-width: 950px;
     gap: 24px;
+    margin-top: 44px;
   }
   .free,
   .premium,
@@ -190,6 +261,7 @@
   .pricingSection {
     max-width: 750px;
     flex-wrap: wrap;
+    margin-top: 44px;
   }
   .elite {
     margin-top: 26px;
@@ -200,9 +272,7 @@
   .pricingSection {
     max-width: 560px;
     flex-wrap: wrap;
-  }
-  .elite {
-    margin-top: 16px;
+    margin-top: 32px;
   }
 }
 
@@ -211,7 +281,7 @@
     flex-direction: column;
     column-gap: 0;
     row-gap: 54px;
-    margin: 120px 0;
+    margin: 60px 0;
   }
 
   .free,
