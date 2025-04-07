@@ -1,15 +1,17 @@
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { IoArrowForward } from "react-icons/io5";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import CTABtn from "../../../../components/ui/button/CTABtn/CTABtn";
 import Skeleton from "../../../../components/ui/loader/Skeleton/Skeleton";
+import CurlyArrow from "../../../../components/ui/svg/Arrow/CurlyArrow";
+import { countryLanguageMapping, getLanguageForVisitor } from "../../utils.js";
 import styles from "./Hero.module.css";
 
 const texts = [
   "Reading",
-  "writing",
-  "speaking",
+  "Writing",
+  "Speaking",
   "Thinking",
   "Confidence",
   "Knowledge",
@@ -20,9 +22,16 @@ const texts = [
 function Hero() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [leavingIndex, setLeavingIndex] = useState(null);
+  const [localLanguages, setLocalLanguages] = useState({
+    motherTongue: "",
+    motherFlag: "",
+    secondLanguage: "",
+    secondFlag: "",
+  });
   const { isAuthenticated, isLoading } = useSelector((state) => state.auth);
   const navigate = useNavigate();
 
+  // Cycle through animated texts
   useEffect(() => {
     const id = setInterval(() => {
       setCurrentIndex((prev) => {
@@ -33,8 +42,24 @@ function Hero() {
         return (prev + 1) % texts.length;
       });
     }, 2000);
-
     return () => clearInterval(id);
+  }, []);
+
+  // set languages based on visitors origin
+  useEffect(() => {
+    const setVisitorLanguage = async () => {
+      try {
+        const countryCode = await getLanguageForVisitor("BD");
+        const mapping =
+          countryLanguageMapping[countryCode] || countryLanguageMapping.BD;
+        setLocalLanguages(mapping);
+      } catch (error) {
+        console.error("Language detection failed:", error);
+        setLocalLanguages(countryLanguageMapping.BD);
+      }
+    };
+
+    setVisitorLanguage();
   }, []);
 
   const handleNavigation = () => {
@@ -45,9 +70,9 @@ function Hero() {
     }
   };
 
-  const handleNavigateToHotNews = useCallback(() => {
+  const handleNavigateToHotNews = () => {
     navigate("/release");
-  }, [navigate]);
+  };
 
   return (
     <section className={styles.container}>
@@ -99,6 +124,40 @@ function Hero() {
         )}
       </div>
       <div className={`${styles.curvedMask} ${styles.animated}`}></div>
+
+      <div className={styles.langContainer}>
+        {/* First Language Container */}
+        <div className={styles.countryLang}>
+          <img
+            src={`https://flagcdn.com/h60/${localLanguages.motherFlag}.webp`}
+            alt={`${localLanguages.motherTongue} flag`}
+            className={styles.flag}
+          />
+          <span>{localLanguages.motherTongue}</span>
+          <div className={styles.messageAndArrow}>
+            <div className={styles.motherLangArrow}>
+              <CurlyArrow rotation={180} fill="#f0f4ff" stroke="#f0f4ff" />
+            </div>
+            <div className={styles.motherMessage}>You know?</div>
+          </div>
+        </div>
+
+        {/* Second Language Container */}
+        <div className={styles.countryLangSecond}>
+          <img
+            src={`https://flagcdn.com/h60/${localLanguages.secondFlag}.webp`}
+            alt={`${localLanguages.secondLanguage} flag`}
+            className={styles.flag}
+          />
+          <span>{localLanguages.secondLanguage}</span>
+          <div className={styles.messageAndArrow}>
+            <div className={styles.secondLangArrow}>
+              <CurlyArrow rotation={270} fill="#f0f4ff" stroke="#f0f4ff" />
+            </div>
+            <div className={styles.secondMessage}>Learn</div>
+          </div>
+        </div>
+      </div>
     </section>
   );
 }
