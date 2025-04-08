@@ -50,6 +50,7 @@ const Carousel = ({ curMilestone, isOnRecallMood }) => {
         message: "Please provide word to save it before adding a new word.",
         duration: 4000,
       });
+      swiperInstance?.slideTo(words.length - 1);
       return;
     }
 
