@@ -480,30 +480,32 @@ const SliderCard = ({
           )}
         </div>
       </div>
-      <span className={styles.cardMenu} onClick={handleShowMenu}>
-        <BiDotsVerticalRounded />
-        {/* show word menu */}
-        {showMenu && (
-          <Popup
-            isOpen={showMenu}
-            onClose={handleMenuClose}
-            showCloseButton={false}
-            clickPosition={clickPosition}
-            popupType="menu"
-          >
-            <TableRowMenu
-              curWord={word}
-              rowIdx={wordIdx}
+      {word._id && (
+        <span className={styles.cardMenu} onClick={handleShowMenu}>
+          <BiDotsVerticalRounded />
+          {/* show word menu */}
+          {showMenu && (
+            <Popup
+              isOpen={showMenu}
               onClose={handleMenuClose}
-              setGeneratingCells={setGeneratingCells}
-              learningLang={curMilestone.learningLang}
-              comfortableLang={curMilestone.comfortableLang}
-              includeDefinition={curMilestone.includeDefinition}
-              learnSynonyms={curMilestone.learnSynonyms}
-            />
-          </Popup>
-        )}
-      </span>
+              showCloseButton={false}
+              clickPosition={clickPosition}
+              popupType="menu"
+            >
+              <TableRowMenu
+                curWord={word}
+                rowIdx={wordIdx}
+                onClose={handleMenuClose}
+                setGeneratingCells={setGeneratingCells}
+                learningLang={curMilestone.learningLang}
+                comfortableLang={curMilestone.comfortableLang}
+                includeDefinition={curMilestone.includeDefinition}
+                learnSynonyms={curMilestone.learnSynonyms}
+              />
+            </Popup>
+          )}
+        </span>
+      )}
     </div>
   );
 };
