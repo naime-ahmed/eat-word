@@ -157,6 +157,23 @@ input:checked + .slider:before {
   height: 2px;
   background-color: #293b69;
 }
+.sliderDivider {
+  position: relative;
+}
+
+.sliderDivider::after {
+  content: "";
+  position: absolute;
+  top: -6px;
+  left: var(--progress);
+  transform: translateX(-50%);
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background-color: #1c4ecc;
+  box-shadow: 0 0 8px rgb(36 98 255 / 80%), 0 0 12px rgb(45 104 255 / 40%);
+  transition: left 0.3s ease-out, transform 0.4s ease;
+}
 
 .error {
   font-size: 13px;
