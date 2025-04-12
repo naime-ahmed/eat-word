@@ -47,7 +47,7 @@ const Milestone = () => {
   const [hasUpdated, setHasUpdated] = useState(false);
   const [isTakingStoryType, setIsTakingStoryType] = useState(false);
   const [activeSlideIndex, setActiveSlideIndex] = useState(1);
-  console.log(activeSlideIndex);
+  const [totalWord, setTotalWord] = useState(0);
   const { milestoneId } = useParams();
   const { data, isLoading, isError, error } = useBringMilestonesQuery();
   const [editMilestone] = useEditMilestoneMutation();
@@ -86,9 +86,7 @@ const Milestone = () => {
 
   // calculate the progress percentage for slides
   const progressPercentage =
-    curMilestone?.wordsCount > 1
-      ? ((activeSlideIndex - 1) / (curMilestone?.wordsCount - 1)) * 100
-      : 0;
+    totalWord > 1 ? ((activeSlideIndex - 1) / (totalWord - 1)) * 100 : 0;
 
   // handle on recall
   const handleOnRecall = (e) => {
@@ -276,6 +274,7 @@ const Milestone = () => {
                   curMilestone={curMilestone}
                   isOnRecallMood={isOnRecallMood}
                   setActiveSlideIndex={setActiveSlideIndex}
+                  setTotalWord={setTotalWord}
                 />
               )}
 
