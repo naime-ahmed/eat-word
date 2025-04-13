@@ -16,7 +16,12 @@ import { wordSchemaForClient } from "../utils";
 import styles from "./Slider.module.css";
 import SliderCard from "./SliderCard/SliderCard";
 
-const Carousel = ({ curMilestone, isOnRecallMood }) => {
+const Carousel = ({
+  curMilestone,
+  isOnRecallMood,
+  setActiveSlideIndex,
+  setTotalWord,
+}) => {
   const [words, setWords] = useState([]);
   const [swiperInstance, setSwiperInstance] = useState(null);
   const [generatingCells, setGeneratingCells] = useState([]); // [[rowIdx,colId],[rowIdx,colId]]
@@ -38,7 +43,8 @@ const Carousel = ({ curMilestone, isOnRecallMood }) => {
       swiperInstance.update();
       swiperInstance.slideTo(swiperInstance.activeIndex, 0);
     }
-  }, [words, swiperInstance]);
+    setTotalWord(words.length);
+  }, [words, swiperInstance, setTotalWord]);
 
   // Append new word
   const handleAppendWord = async () => {
@@ -117,6 +123,9 @@ const Carousel = ({ curMilestone, isOnRecallMood }) => {
             modules={[EffectCoverflow, Navigation]}
             className={styles.swiperContainer}
             onSwiper={setSwiperInstance}
+            onSlideChange={(swiper) => {
+              setActiveSlideIndex?.(swiper.activeIndex + 1);
+            }}
           >
             {words.map((word, index) => (
               <SwiperSlide
@@ -165,8 +174,10 @@ const Carousel = ({ curMilestone, isOnRecallMood }) => {
 };
 
 Carousel.propTypes = {
-  curMilestone: milestonePropTypes,
+  curMilestone: milestonePropTypes.isRequired,
   isOnRecallMood: PropTypes.bool,
+  setActiveSlideIndex: PropTypes.func.isRequired,
+  setTotalWord: PropTypes.func.isRequired,
 };
 
 export default Carousel;
