@@ -1,0 +1,43 @@
+.paginationContainer {
+  display: flex;
+  align-items: center;
+}
+
+.arrowText {
+  display: block;
+  font-size: 13px;
+}
+
+.paginationNumber {
+  margin: 0 6px;
+  border-radius: 6px;
+  background: #a59bff36;
+  min-width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  padding: 0 6px;
+  transition: background 0.2s ease;
+}
+.paginationNumber:last-child {
+  margin: 0 0 0 6px;
+}
+.paginationNumber:hover {
+  background: #4637cf;
+}
+
+.paginationNumber:active {
+  background: #4637cf;
+}
+
+.paginationActive {
+  background: #4637cf;
+  position: relative;
+}
+
+.arrow {
+  display: flex;
+  align-items: center;
+}
