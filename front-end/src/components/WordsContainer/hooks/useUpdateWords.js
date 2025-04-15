@@ -79,10 +79,14 @@ export const useUpdateWords = () => {
         newWordsSet.current.add(value);
 
         appendWord(wordToUpdate)
-          .then(() => {
+          .then((res) => {
             newWordsSet.current.delete(value);
+            if(res?.error){
+              throw new Error(res.error?.data?.message || "something went wrong while updating word");
+            }
           })
           .catch((error) => {
+            console.log("word append error",error);
             showNotification({
               title: "Failed to save",
               message:
