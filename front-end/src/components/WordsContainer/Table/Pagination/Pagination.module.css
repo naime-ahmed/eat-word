@@ -21,9 +21,7 @@
   padding: 0 6px;
   transition: background 0.2s ease;
 }
-.paginationNumber:last-child {
-  margin: 0 0 0 6px;
-}
+
 .paginationNumber:hover {
   background: #4637cf;
 }
@@ -40,4 +38,35 @@
 .arrow {
   display: flex;
   align-items: center;
+}
+
+.pageSizeContainer {
+  position: relative;
+  display: inline-block;
+  margin-left: 6px;
+}
+
+.pageSizeSelect {
+  appearance: none;
+  padding: 7px 40px 6px 12px;
+  font-size: 14px;
+  border-radius: 6px;
+  border: none;
+  outline: none;
+  background-color: #a59bff36;
+  color: #ffffff;
+  cursor: pointer;
+  transition: border 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  background-image: url("data:image/svg+xml;utf8,<svg fill='gray' height='28' viewBox='0 0 24 24' width='28' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/></svg>");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  background-size: 16px;
+}
+
+.pageSizeSelect option {
+  background-color: #3d3c6d;
+  border: 1px solid #4637cf;
+  outline: none;
+  border-radius: 6px;
 }

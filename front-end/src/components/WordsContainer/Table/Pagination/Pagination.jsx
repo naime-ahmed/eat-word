@@ -4,7 +4,7 @@ import { RiArrowLeftDoubleLine, RiArrowRightDoubleLine } from "react-icons/ri";
 import styles from "./Pagination.module.css";
 
 const Pagination = ({ table }) => {
-  const { pageIndex } = table.getState().pagination;
+  const { pageIndex, pageSize } = table.getState().pagination;
   const pageCount = table.getPageCount();
 
   // Build an array of pages to display.
@@ -36,6 +36,19 @@ const Pagination = ({ table }) => {
   };
 
   const pages = getPageNumbers();
+
+  // Handler for page size select
+  const handlePageSizeChange = (event) => {
+    const value = event.target.value;
+    let newSize;
+    if (value === "Full") {
+      newSize = table.getPrePaginationRowModel().rows.length;
+    } else {
+      newSize = Number(value);
+    }
+    table.setPageIndex(0);
+    table.setPageSize(newSize);
+  };
 
   return (
     <div className={styles.paginationContainer}>
@@ -107,6 +120,25 @@ const Pagination = ({ table }) => {
       >
         <RiArrowRightDoubleLine size={18} />
       </div>
+
+      <div className={styles.pageSizeContainer}>
+        <select
+          id="pageSizeSelect"
+          value={
+            pageSize >= table.getPrePaginationRowModel().rows.length
+              ? "Full"
+              : pageSize
+          }
+          onChange={handlePageSizeChange}
+          className={styles.pageSizeSelect}
+        >
+          {[10, 15, 20, 30, 40, 50, "Full"].map((size) => (
+            <option key={size} value={size}>
+              {size}
+            </option>
+          ))}
+        </select>
+      </div>
     </div>
   );
 };
@@ -122,6 +154,8 @@ Pagination.propTypes = {
     setPageIndex: PropTypes.func.isRequired,
     firstPage: PropTypes.func.isRequired,
     lastPage: PropTypes.func.isRequired,
+    setPageSize: PropTypes.func.isRequired,
+    getPrePaginationRowModel: PropTypes.func.isRequired,
   }).isRequired,
 };
 
