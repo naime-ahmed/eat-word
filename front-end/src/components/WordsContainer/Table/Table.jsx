@@ -1,4 +1,8 @@
-import { getCoreRowModel, useReactTable } from "@tanstack/react-table";
+import {
+  getCoreRowModel,
+  getPaginationRowModel,
+  useReactTable,
+} from "@tanstack/react-table";
 import PropTypes from "prop-types";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { IoAddOutline } from "react-icons/io5";
@@ -8,6 +12,7 @@ import PrimaryBtn from "../../ui/button/PrimaryBtn/PrimaryBtn.jsx";
 import Skeleton from "../../ui/loader/Skeleton/Skeleton.jsx";
 import { useUpdateWords } from "../hooks/useUpdateWords.js";
 import { calculateColumnWidths, wordSchemaForClient } from "../utils.js";
+import Pagination from "./Pagination/Pagination.jsx";
 import styles from "./Table.module.css";
 import EditableCell from "./TableCells/EditableCell";
 import TableHeader from "./TableHeader";
@@ -20,6 +25,8 @@ const WordsContainer = ({ curMilestone, isOnRecallMood }) => {
   const [generatingCells, setGeneratingCells] = useState([]); // [[rowIdx,colId],[rowIdx,colId]]
   const { updateWords, isAppendLoading } = useUpdateWords();
 
+  const [pagination, setPagination] = useState({ pageIndex: 0, pageSize: 10 });
+
   const { data, isLoading, isError, error } = useBringMilestoneWordQuery(
     curMilestone?._id
   );
@@ -28,7 +35,7 @@ const WordsContainer = ({ curMilestone, isOnRecallMood }) => {
     setWords(data?.words || []);
   }, [data]);
 
-  // reached the milestone?
+  // Reached milestone?
   const hasReached =
     curMilestone?.wordsCount ===
     Math.max(curMilestone?.targetWords, words?.length);
@@ -42,7 +49,6 @@ const WordsContainer = ({ curMilestone, isOnRecallMood }) => {
           return [];
         }
         if (action === "delete") {
-          console.log("updating row height", rowIndex, colId, value, action);
           if (
             rowIndex === undefined ||
             rowIndex < 0 ||
@@ -51,11 +57,8 @@ const WordsContainer = ({ curMilestone, isOnRecallMood }) => {
             console.error("Invalid rowIndex for deletion:", rowIndex);
             return prev;
           }
-
           const newRowHeights = [...prev];
-
           if (rowIndex === 0) {
-            // Special case for deleting the first row
             if (newRowHeights.length > 1) {
               for (let i = 0; i < newRowHeights.length - 1; i++) {
                 newRowHeights[i] = { ...newRowHeights[i + 1] };
@@ -78,14 +81,12 @@ const WordsContainer = ({ curMilestone, isOnRecallMood }) => {
           const updatedRowHeights = [...prev];
           const currentRow = updatedRowHeights[rowIndex] || {};
           const updatedRow = { ...currentRow, [colId]: value };
-
           const maxHeight = Math.max(
             ...Object.entries(updatedRow)
               .filter(([key]) => key !== "curMax")
               .map(([, height]) => height)
           );
           updatedRow.curMax = maxHeight;
-
           updatedRowHeights[rowIndex] = updatedRow;
           return updatedRowHeights;
         } else {
@@ -95,15 +96,6 @@ const WordsContainer = ({ curMilestone, isOnRecallMood }) => {
     },
     []
   );
-
-  // Append new word
-  const handleAppendWord = async () => {
-    const newWord = wordSchemaForClient(curMilestone);
-    setWords((prev) => [...prev, newWord]);
-
-    // Initialize row height for the new word
-    setRowHeights((prev) => [...prev, {}]);
-  };
 
   const handleUpdate = (rowIndex, columnId, value) => {
     updateWords(setWords, rowIndex, columnId, value, curMilestone?._id);
@@ -152,7 +144,6 @@ const WordsContainer = ({ curMilestone, isOnRecallMood }) => {
         cell: EditableCell,
       });
     }
-
     return baseColumns;
   }, [
     curMilestone,
@@ -163,11 +154,17 @@ const WordsContainer = ({ curMilestone, isOnRecallMood }) => {
     meaningSize,
   ]);
 
-  // Table instance
+  // Table instance with controlled pagination
   const table = useReactTable({
     columns,
     data: words,
     getCoreRowModel: getCoreRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
+    autoResetPageIndex: false,
+    state: {
+      pagination,
+    },
+    onPaginationChange: setPagination,
     meta: {
       updateWords: handleUpdate,
       updateRowHeight,
@@ -177,21 +174,32 @@ const WordsContainer = ({ curMilestone, isOnRecallMood }) => {
     },
   });
 
-  // refresh the page
-  function refreshPage() {
+  // Append new word and navigate to the last page
+  const handleAppendWord = async () => {
+    const newWord = wordSchemaForClient(curMilestone);
+    setWords((prev) => [...prev, newWord]);
+    // Initialize row height for the new word
+    setRowHeights((prev) => [...prev, {}]);
+
+    setTimeout(() => {
+      table.lastPage();
+    }, 0);
+  };
+
+  // Refresh the page.
+  const refreshPage = () => {
     window.location.reload();
-  }
+  };
+
   if (isLoading) {
     return <TableSkeletonLoader />;
   }
 
-  // handle the error message
   if (isError)
     return (
       <div className={styles.errorOnWordLoad}>
         <span>
-          {error?.data?.message ||
-            "Somethings went wrong while fetching words!"}
+          {error?.data?.message || "Something went wrong while fetching words!"}
         </span>
         <PrimaryBtn
           btnType="button"
@@ -212,7 +220,7 @@ const WordsContainer = ({ curMilestone, isOnRecallMood }) => {
         <TableHeader headerGroups={table.getHeaderGroups()} />
         {words.length !== 0 && (
           <tbody>
-            {table?.getRowModel()?.rows?.map((row) => (
+            {table.getRowModel().rows.map((row) => (
               <TableRow
                 key={row.id}
                 row={row}
@@ -242,6 +250,11 @@ const WordsContainer = ({ curMilestone, isOnRecallMood }) => {
           </button>
         </div>
       ) : null}
+      {words.length >= 11 && (
+        <div className={styles.pagination}>
+          <Pagination table={table} />
+        </div>
+      )}
     </div>
   );
 };
