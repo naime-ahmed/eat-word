@@ -1,5 +1,5 @@
 .storyContainer {
-  max-width: 800px;
+  max-width: 850px;
   margin: 0 auto;
   padding: 20px;
   font-family: "Roboto", sans-serif;
@@ -11,9 +11,68 @@
 }
 
 .storyHeading {
-  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
   margin-bottom: 26px;
   color: #ffffff;
+}
+
+.regenerateStory {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  font-size: 15px;
+  padding: 4px;
+  color: #ffffff;
+  background-color: transparent;
+  border: 2px solid #4d75aca2;
+  border-radius: 8px;
+  cursor: pointer;
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.regenerateStory > svg {
+  font-size: 28px;
+  transition: transform 0.3s ease;
+}
+
+.regenerateStory:hover > svg {
+  transform: rotate(300deg);
+}
+
+.tooltip {
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #385986a2;
+  color: white;
+  padding: 6px 12px;
+  border-radius: 4px;
+  font-size: 14px;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  &::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -6px;
+    border-width: 6px;
+    border-style: solid;
+    border-color: #385986a2 transparent transparent transparent;
+  }
+}
+
+.regenerateStory:hover .tooltip {
+  opacity: 1;
+  transition-delay: 0.3s;
 }
 
 .storyContent {

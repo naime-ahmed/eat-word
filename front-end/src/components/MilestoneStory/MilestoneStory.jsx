@@ -1,11 +1,14 @@
 import PropTypes from "prop-types";
 import { useState } from "react";
 import { FaChevronDown, FaChevronUp } from "react-icons/fa";
+import { IoReloadSharp } from "react-icons/io5";
+import { useSelector } from "react-redux";
 import styles from "./MilestoneStory.module.css";
 
-const MilestoneStory = ({ story }) => {
+const MilestoneStory = ({ story, regenerate }) => {
   const chapters = story.split("\n\n");
   const [showFullStory, setShowFullStory] = useState(false);
+  const { user } = useSelector((state) => state.user);
 
   const handleSeeMoreLess = () => setShowFullStory((prev) => !prev);
 
@@ -32,9 +35,21 @@ const MilestoneStory = ({ story }) => {
 
   return (
     <div className={styles.storyContainer}>
-      <h1 className={styles.storyHeading}>
-        Here is your story, a gift from Eat Word
-      </h1>
+      <div className={styles.storyHeading}>
+        <h1>Here is your story, a gift from Eat Word</h1>
+        {user.subscriptionType !== "regular" && (
+          <button
+            onClick={() => regenerate()}
+            className={styles.regenerateStory}
+            title="Regenerate story"
+          >
+            <IoReloadSharp />
+            <span
+              className={styles.tooltip}
+            >{`Regenerate story. 99 times left`}</span>
+          </button>
+        )}
+      </div>
       <div className={styles.storyContent}>
         {chapters.map((chapter, index) => {
           if (!showFullStory && index >= 2) return null;
@@ -86,6 +101,7 @@ const MilestoneStory = ({ story }) => {
 
 MilestoneStory.propTypes = {
   story: PropTypes.string,
+  regenerate: PropTypes.func,
 };
 
 export default MilestoneStory;

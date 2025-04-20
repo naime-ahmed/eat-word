@@ -300,19 +300,22 @@ const Milestone = () => {
                       />
                     ))}
                   </div>
-                  <Popup
-                    isOpen={isTakingStoryType}
-                    onClose={() => setIsTakingStoryType(false)}
-                  >
-                    <MilestoneStoryGenerator
-                      onClose={() => setIsTakingStoryType(false)}
-                      milestoneId={curMilestone._id}
-                    />
-                  </Popup>
                 </div>
               )}
+              <Popup
+                isOpen={isTakingStoryType}
+                onClose={() => setIsTakingStoryType(false)}
+              >
+                <MilestoneStoryGenerator
+                  onClose={() => setIsTakingStoryType(false)}
+                  milestoneId={curMilestone._id}
+                />
+              </Popup>
               {curMilestone.story && (
-                <MilestoneStory story={curMilestone?.story} />
+                <MilestoneStory
+                  story={curMilestone?.story}
+                  regenerate={handleOpenGenerateStory}
+                />
               )}
             </>
           )}
