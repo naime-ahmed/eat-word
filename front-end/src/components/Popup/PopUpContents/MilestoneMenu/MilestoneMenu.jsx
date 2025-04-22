@@ -1,3 +1,4 @@
+import PropTypes from "prop-types";
 import { useState } from "react";
 import { BsPinAngle, BsPinAngleFill } from "react-icons/bs";
 import { LiaEditSolid } from "react-icons/lia";
@@ -8,11 +9,13 @@ import {
   useEditMilestoneMutation,
   useRemoveMilestoneMutation,
 } from "../../../../services/milestone";
+import { milestonePropTypes } from "../../../../utils/propTypes";
 import Notification from "../../../Notification/Notification";
 import ConfirmationPopup from "../../../Popup/ConfirmationPopup/ConfirmationPopup";
 import Popup from "../../Popup";
 import EditMilestone from "../EditMilestone/EditMilestone";
 import styles from "./MilestoneMenu.module.css";
+
 const MilestoneMenu = ({ milestone, onMenuClose }) => {
   const [doWantEdit, setDoWantEdit] = useState(false);
   const [removeMilestone] = useRemoveMilestoneMutation();
@@ -109,4 +112,8 @@ const MilestoneMenu = ({ milestone, onMenuClose }) => {
   );
 };
 
+MilestoneMenu.propTypes = {
+  milestone: milestonePropTypes,
+  onMenuClose: PropTypes.func,
+};
 export default MilestoneMenu;
