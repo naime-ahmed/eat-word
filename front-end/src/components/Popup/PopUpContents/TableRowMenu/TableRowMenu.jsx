@@ -150,13 +150,17 @@ const TableRowMenu = ({
           title:
             res.error?.status === "FETCH_ERROR"
               ? "Network Unavailable"
+              : res.error?.status === 429
+              ? "Daily Limit exceeded, Try pro version!"
               : "Generation Failed",
           message:
+            res.error?.data?.message ||
             "Something went wrong while generating fields, please try again later",
           iconType: "error",
-          duration: 6000,
+          duration: 8000,
         });
         console.log(res.error);
+        return;
       }
 
       let failedFields = "";
