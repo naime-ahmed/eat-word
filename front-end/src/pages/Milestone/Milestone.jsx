@@ -315,6 +315,7 @@ const Milestone = () => {
                 <MilestoneStory
                   story={curMilestone?.story}
                   regenerate={handleOpenGenerateStory}
+                  storyCount={100 - curMilestone?.storyCount || 1}
                 />
               )}
             </>
