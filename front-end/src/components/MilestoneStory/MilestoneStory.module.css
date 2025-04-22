@@ -83,27 +83,10 @@
   position: relative;
 }
 
-.chapterContainer:nth-child(even):not(:last-child)::after {
-  content: "";
-  position: absolute;
-  bottom: 0;
-  left: 10%;
-  right: 10%;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, #7986cb, transparent);
-}
-.chapterContainer:nth-child(even) {
-  margin-bottom: 20px;
-}
-
-.chapterContainer:nth-child(even) .chapter {
-  padding-bottom: 20px;
-}
-
 .chapterHeading {
   font-size: 22px;
   font-weight: bold;
-  margin-bottom: 12px;
+  margin: 32px 0 6px 0;
   color: #eceeff;
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
   letter-spacing: 0.5px;

@@ -5,7 +5,7 @@ import { IoReloadSharp } from "react-icons/io5";
 import { useSelector } from "react-redux";
 import styles from "./MilestoneStory.module.css";
 
-const MilestoneStory = ({ story, regenerate }) => {
+const MilestoneStory = ({ story, regenerate, storyCount }) => {
   const chapters = story.split("\n\n");
   const [showFullStory, setShowFullStory] = useState(false);
   const { user } = useSelector((state) => state.user);
@@ -37,16 +37,17 @@ const MilestoneStory = ({ story, regenerate }) => {
     <div className={styles.storyContainer}>
       <div className={styles.storyHeading}>
         <h1>Here is your story, a gift from Eat Word</h1>
-        {user.subscriptionType !== "regular" && (
+        {!user.subscriptionType === "regular" && (
           <button
             onClick={() => regenerate()}
             className={styles.regenerateStory}
             title="Regenerate story"
+            disabled={storyCount === 0}
           >
             <IoReloadSharp />
             <span
               className={styles.tooltip}
-            >{`Regenerate story. 99 times left`}</span>
+            >{`Regenerate story. ${storyCount} times left`}</span>
           </button>
         )}
       </div>
@@ -102,6 +103,7 @@ const MilestoneStory = ({ story, regenerate }) => {
 MilestoneStory.propTypes = {
   story: PropTypes.string,
   regenerate: PropTypes.func,
+  storyCount: PropTypes.number,
 };
 
 export default MilestoneStory;
