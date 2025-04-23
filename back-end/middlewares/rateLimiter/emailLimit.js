@@ -1,13 +1,25 @@
-import rateLimit from "express-rate-limit";
+import { RateLimiterMemory } from 'rate-limiter-flexible';
 
-export const emailLimiter = rateLimit({
-  windowMs: 24 * 60 * 60 * 1000, // 24 hours
-  max: 3,
-  keyGenerator: (req) => req.ip, // Use IP as the key
-  handler: (req, res) => {
+const emailRateLimiter = new RateLimiterMemory({
+  points: 3,
+  duration: 24 * 60 * 60, // 24 hours
+  keyPrefix: 'emailLimiter'
+});
+
+export const emailLimiter = async (req, res, next) => {
+  const ip = req.ip;
+  console.log(ip);
+  try {
+    await emailRateLimiter.consume(ip);
+    next();
+  } catch (rejRes) {
+    const retryAfterHour = Math.ceil(rejRes.msBeforeNext / (1000 * 60 * 60));
+    const resetTime = new Date(Date.now() + rejRes.msBeforeNext).toLocaleString();
+
     res.status(429).json({
       success: false,
-      error: "You've sent 3 message today! Please try again tomorrow.",
+      error: `You've sent 3 messages today! Please try again after ${retryAfterHour} hour, at approximately ${resetTime}.`,
+      retryAt: resetTime
     });
-  },
-});
+  }
+};
