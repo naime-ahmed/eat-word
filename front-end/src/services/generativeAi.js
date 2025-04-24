@@ -64,6 +64,17 @@ export const generativeApi = createApi({
         body: fieldsAndLangs,
       }),
 
+      transformResponse: (responseData, meta) => {
+        const limit = meta.response.headers.get("X-RateLimit-Limit");
+        const remaining = meta.response.headers.get("X-RateLimit-Remaining");
+        const reset = meta.response.headers.get("X-RateLimit-Reset");
+
+        return {
+          ...responseData,
+          rateLimit: { limit, remaining, reset },
+        };
+      },
+
       async onQueryStarted(
         [wordId, fieldsAndLangs],
         { dispatch, queryFulfilled }
@@ -114,7 +125,6 @@ export const generativeApi = createApi({
         { dispatch, queryFulfilled }
       ) {
         try {
-          // Wait for the API call to complete
           const { data } = await queryFulfilled;
           // Update the cache with the response
           dispatch(
@@ -127,6 +137,7 @@ export const generativeApi = createApi({
                 );
                 if (milestoneEntry) {
                   milestoneEntry.story = data.story;
+                  milestoneEntry.storyCount = data.storyCount;
                 }
               }
             )
