@@ -105,7 +105,7 @@ const Contact = () => {
             message:
               data?.error || "something went wrong while sending your message",
             iconType: "error",
-            duration: 4000,
+            duration: 8000,
           });
         }
       } catch (error) {
@@ -117,13 +117,14 @@ const Contact = () => {
           duration: 4000,
         });
       } finally {
-        // Reset the form state after sending.
         setUserMessage({
           name: user.name || "",
           email: user.email || "",
           message: "",
         });
         setIsSending(false);
+        captchaWidgetRef.current?.reset();
+        setCaptchaToken("");
       }
     }
   }
