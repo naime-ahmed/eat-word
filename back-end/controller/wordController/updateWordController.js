@@ -1,3 +1,4 @@
+import Milestone from "../../models/Milestone.js";
 import Word from "../../models/Word.js";
 
 const updateWord = async (req, res) => {
@@ -28,6 +29,15 @@ const updateWord = async (req, res) => {
       { $set: updates },
       { new: true } // Return the updated document
     );
+
+    if ("memorized" in updates) {
+      const increment = updates.memorized ? 1 : -1;
+
+      await Milestone.findOneAndUpdate(
+        { _id: milestoneId },
+        { $inc: { memorizedCount: increment } }
+      );
+    }
 
     // If the word is not found
     if (!word) {
