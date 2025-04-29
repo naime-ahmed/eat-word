@@ -19,7 +19,12 @@ import TableHeader from "./TableHeader";
 import TableRow from "./TableRow";
 import TableSkeletonLoader from "./TableSkeletonLoader.jsx";
 
-const WordsContainer = ({ curMilestone, isOnRecallMood }) => {
+const WordsContainer = ({
+  curMilestone,
+  isOnRecallMood,
+  setWordsLimit,
+  setGenAILimit,
+}) => {
   const [words, setWords] = useState([]);
   const [rowHeights, setRowHeights] = useState([]);
   const [generatingCells, setGeneratingCells] = useState([]); // [[rowIdx,colId],[rowIdx,colId]]
@@ -33,7 +38,19 @@ const WordsContainer = ({ curMilestone, isOnRecallMood }) => {
 
   useEffect(() => {
     setWords(data?.words || []);
-  }, [data]);
+    setWordsLimit((prev) => {
+      if (!prev?.total) {
+        return data?.wordRateLimit;
+      }
+      return prev;
+    });
+    setGenAILimit((prev) => {
+      if (!prev?.total) {
+        return data?.genAIRateLimit;
+      }
+      return prev;
+    });
+  }, [data, setGenAILimit, setWordsLimit]);
 
   // Reached milestone?
   const hasReached =
@@ -98,7 +115,14 @@ const WordsContainer = ({ curMilestone, isOnRecallMood }) => {
   );
 
   const handleUpdate = (rowIndex, columnId, value) => {
-    updateWords(setWords, rowIndex, columnId, value, curMilestone?._id);
+    updateWords(
+      setWords,
+      setWordsLimit,
+      rowIndex,
+      columnId,
+      value,
+      curMilestone?._id
+    );
   };
 
   const { wordSize, meaningSize, synonymsSize, definitionsSize, examplesSize } =
@@ -231,6 +255,7 @@ const WordsContainer = ({ curMilestone, isOnRecallMood }) => {
                 comfortableLang={curMilestone?.comfortableLang}
                 learningLang={curMilestone?.learningLang}
                 setGeneratingCells={setGeneratingCells}
+                setGenAILimit={setGenAILimit}
               />
             ))}
           </tbody>
@@ -262,6 +287,8 @@ const WordsContainer = ({ curMilestone, isOnRecallMood }) => {
 WordsContainer.propTypes = {
   curMilestone: milestonePropTypes,
   isOnRecallMood: PropTypes.bool,
+  setWordsLimit: PropTypes.func.isRequired,
+  setGenAILimit: PropTypes.func.isRequired,
 };
 
 export default WordsContainer;
