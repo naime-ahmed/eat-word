@@ -182,7 +182,45 @@ export const wordApi = createApi({
         );
 
         try {
-          await queryFulfilled;
+          const res = await queryFulfilled;
+          const updatedWord = res?.data?.word;
+
+          // filed to update
+          if ("memorized" in editedFields) {
+            const incrementValue = editedFields.memorized ? 1 : -1;
+
+            // update milestone cache
+            dispatch(
+              milestoneApi.util.updateQueryData(
+                "bringMilestones",
+                undefined,
+                (draft) => {
+                  const milestonesArray = draft?.milestones;
+
+                  if (milestonesArray) {
+                    const milestoneIndex = milestonesArray.findIndex(
+                      (milestone) =>
+                        milestone._id === updatedWord.addedMilestone
+                    );
+                    if (milestoneIndex !== -1) {
+                      milestonesArray[milestoneIndex] = {
+                        ...milestonesArray[milestoneIndex],
+                        memorizedCount:
+                          (milestonesArray[milestoneIndex].memorizedCount || 0) + incrementValue,
+                      };
+                    } else {
+                      console.warn(
+                        "Milestone not found in cache:",
+                        updatedWord.addedMilestone
+                      );
+                    }
+                  } else {
+                    console.warn("Milestones array not found in cache.");
+                  }
+                }
+              )
+            );
+          }
         } catch {
           patchResult.undo();
         }
