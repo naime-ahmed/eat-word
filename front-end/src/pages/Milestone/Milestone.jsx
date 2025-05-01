@@ -1,7 +1,12 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { FaShapes } from "react-icons/fa";
+import { HiOutlineSparkles } from "react-icons/hi2";
 import { IoCaretDownSharp, IoCaretUpSharp } from "react-icons/io5";
+import { LuTimerReset } from "react-icons/lu";
+import { MdKeyboardArrowDown, MdKeyboardArrowUp } from "react-icons/md";
 import { useParams } from "react-router-dom";
+import eatWordIcon from "../../assets/logoIcon.webp";
+import DigitAnimation from "../../components/DigitAnimation/DigitAnimation";
 import MilestoneDeadline from "../../components/MilestoneDeadline";
 import MilestoneStory from "../../components/MilestoneStory/MilestoneStory";
 import Popup from "../../components/Popup/Popup";
@@ -10,6 +15,7 @@ import MilestoneStoryGenerator from "../../components/Popup/PopUpContents/Milest
 import Error from "../../components/shared/Error/Error";
 import Footer from "../../components/shared/Footer/Footer";
 import Header from "../../components/shared/Header/Header";
+import PairChart from "../../components/ui/chart/PairChart/PairChart";
 import SpinnerForPage from "../../components/ui/loader/SpinnerForPage/SpinnerForPage";
 import Slider from "../../components/WordsContainer/Slider/Slider";
 import Table from "../../components/WordsContainer/Table/Table";
@@ -51,6 +57,18 @@ const Milestone = () => {
   const { milestoneId } = useParams();
   const { data, isLoading, isError, error } = useBringMilestonesQuery();
   const [editMilestone] = useEditMilestoneMutation();
+  const [showMoreHeader, setShowMoreHeader] = useState(false);
+
+  const [wordsLimit, setWordsLimit] = useState({
+    total: 0,
+    remaining: 0,
+    resetAt: "infinite",
+  });
+  const [genAILimit, setGenAILimit] = useState({
+    total: 0,
+    remaining: 0,
+    resetAt: "infinite",
+  });
 
   let confettiCount = 20;
   if (wordContainerType === "slider") {
@@ -178,20 +196,132 @@ const Milestone = () => {
             />
           ) : (
             <>
-              <div className={styles.milestoneHeading}>
-                <div className={styles.nameAndLeftTime}>
-                  <div className={styles.milestoneName}>
-                    <h3>{curMilestone?.name}</h3>
+              <div
+                className={`${styles.milestoneHeading} ${
+                  showMoreHeader === true ? styles.showFullHeader : ""
+                }`}
+              >
+                <div className={styles.nameTimeWordsInfo}>
+                  <div className={styles.nameAndLeftTime}>
+                    <div className={styles.milestoneName}>
+                      <h3>{curMilestone?.name}</h3>
+                    </div>
+                    <div className={styles.milestoneTimeLeft}>
+                      {curMilestone.milestoneType !== "zero" ? (
+                        <MilestoneDeadline
+                          createdAt={curMilestone?.createdAt}
+                          duration={duration}
+                        />
+                      ) : (
+                        <span>Time left: Infinite</span>
+                      )}
+                    </div>
                   </div>
-                  <div className={styles.milestoneTimeLeft}>
-                    {curMilestone.milestoneType !== "zero" ? (
-                      <MilestoneDeadline
-                        createdAt={curMilestone?.createdAt}
-                        duration={duration}
-                      />
+                  <div className={styles.wordInfo}>
+                    <PairChart
+                      chartType="circle"
+                      size={88}
+                      totalCount={curMilestone?.targetWords}
+                      successCount={curMilestone?.wordsCount}
+                      totalTooltip={`Targeted Words: ${curMilestone?.targetWords}`}
+                      successTooltip={`Current Words: ${curMilestone?.wordsCount}`}
+                    />
+                  </div>
+                </div>
+                <div className={styles.milestoneWordsLimit}>
+                  <PairChart
+                    chartType="line"
+                    totalCount={wordsLimit?.total}
+                    successCount={wordsLimit?.total - wordsLimit?.remaining}
+                  />
+                  <small
+                    className={styles.timeCapsule}
+                    title="Limit reset date"
+                  >
+                    <LuTimerReset />{" "}
+                    {formatDate(wordsLimit?.resetAt) || "loading.."}
+                  </small>
+                  <small
+                    className={styles.wordsLimitTag}
+                    title="information about word limit"
+                  >
+                    <img src={eatWordIcon} alt="eat word icon" />
+                    Word limit
+                  </small>
+                  <div className={styles.wordsLimitInfo}>
+                    <span>
+                      {wordsLimit?.total && wordsLimit?.remaining ? (
+                        <DigitAnimation
+                          value={wordsLimit?.total - wordsLimit?.remaining}
+                        />
+                      ) : (
+                        "00"
+                      )}
+                      <small>saved</small>
+                    </span>
+                    <span>
+                      {wordsLimit?.total ? (
+                        <DigitAnimation value={wordsLimit?.total} />
+                      ) : (
+                        "000"
+                      )}
+                      <small>max</small>
+                    </span>
+                  </div>
+                </div>
+                <div className={styles.genAILimit}>
+                  <PairChart
+                    chartType="line"
+                    totalCount={genAILimit?.total}
+                    successCount={genAILimit?.total - genAILimit?.remaining}
+                  />
+                  <small
+                    className={styles.timeCapsule}
+                    title={`Full reset at: ${new Date(
+                      genAILimit?.resetAt
+                    ).toLocaleString()}`}
+                  >
+                    <LuTimerReset />{" "}
+                    {genAILimit?.resetAt ? (
+                      <>
+                        {Math.max(
+                          0,
+                          Math.ceil(
+                            (new Date(genAILimit.resetAt) - Date.now()) /
+                              (1000 * 60 * 60)
+                          )
+                        )}
+                        h remaining
+                      </>
                     ) : (
-                      <span>Time left: Infinite</span>
+                      "Calculating..."
                     )}
+                  </small>
+                  <small
+                    className={styles.genAILimitTag}
+                    title="information about gen AI limit"
+                  >
+                    <HiOutlineSparkles /> GenAI limit
+                  </small>
+                  <div className={styles.genAILimitInfo}>
+                    <span>
+                      {genAILimit?.total && genAILimit?.remaining ? (
+                        <DigitAnimation
+                          value={genAILimit?.total - genAILimit?.remaining}
+                        />
+                      ) : (
+                        "00"
+                      )}
+                      <small>used</small>
+                    </span>
+                    <span>
+                      {genAILimit?.total ? (
+                        <DigitAnimation value={genAILimit?.total} />
+                      ) : (
+                        "000"
+                      )}
+                      <small>max</small>
+                    </span>
                   </div>
                 </div>
                 <div className={styles.milestoneShapeAndRecall}>
@@ -252,6 +382,22 @@ const Milestone = () => {
                     </div>
                   </div>
                 </div>
+                <button
+                  className={styles.toggleButton}
+                  onClick={() => setShowMoreHeader(!showMoreHeader)}
+                >
+                  {showMoreHeader ? (
+                    <>
+                      <MdKeyboardArrowUp />
+                      <span>Hide Details</span>
+                    </>
+                  ) : (
+                    <>
+                      <MdKeyboardArrowDown />
+                      <span>Show More</span>
+                    </>
+                  )}
+                </button>
               </div>
               <div
                 className={`${styles.divider} ${
@@ -268,6 +414,8 @@ const Milestone = () => {
                 <Table
                   curMilestone={curMilestone}
                   isOnRecallMood={isOnRecallMood}
+                  setWordsLimit={setWordsLimit}
+                  setGenAILimit={setGenAILimit}
                 />
               ) : (
                 <Slider
@@ -275,6 +423,8 @@ const Milestone = () => {
                   isOnRecallMood={isOnRecallMood}
                   setActiveSlideIndex={setActiveSlideIndex}
                   setTotalWord={setTotalWord}
+                  setWordsLimit={setWordsLimit}
+                  setGenAILimit={setGenAILimit}
                 />
               )}
 
