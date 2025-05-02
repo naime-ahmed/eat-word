@@ -54,6 +54,12 @@ const Notification = ({
     success: <LuCircleCheckBig className={styles.success} />,
   };
 
+  const progressFillColor = {
+    error: { backgroundColor: "#ff0e36" },
+    warning: { backgroundColor: "#fbbf24" },
+    success: { backgroundColor: "#00e025" },
+  };
+
   if (!visible) return null;
 
   return createPortal(
@@ -73,7 +79,10 @@ const Notification = ({
       <div className={styles.progressBar}>
         <div
           className={styles.progressFill}
-          style={{ width: `${progress}%` }}
+          style={{
+            width: `${progress}%`,
+            ...progressFillColor[iconType],
+          }}
         />
       </div>
     </div>,
@@ -82,7 +91,7 @@ const Notification = ({
 };
 
 Notification.propTypes = {
-  id: PropTypes.string,
+  id: PropTypes.number,
   icon: PropTypes.element,
   title: PropTypes.string,
   message: PropTypes.string,
