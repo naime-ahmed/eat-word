@@ -26,6 +26,7 @@ const SliderCard = ({
   isOnRecallMood,
   generatingCells,
   setGeneratingCells,
+  setGenAILimit,
 }) => {
   const [wordReplica, setWordReplica] = useState(() => ({
     word: word?.word || "",
@@ -501,6 +502,7 @@ const SliderCard = ({
                 comfortableLang={curMilestone.comfortableLang}
                 includeDefinition={curMilestone.includeDefinition}
                 learnSynonyms={curMilestone.learnSynonyms}
+                setGenAILimit={setGenAILimit}
               />
             </Popup>
           )}
