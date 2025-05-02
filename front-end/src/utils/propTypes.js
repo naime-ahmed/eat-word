@@ -55,4 +55,5 @@ export const sliderCardPropTypes = {
       PropTypes.oneOfType([PropTypes.number, PropTypes.string])
     )
   ),
+  setGenAILimit: PropTypes.func,
 };
