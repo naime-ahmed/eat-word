@@ -1,10 +1,13 @@
 import PropTypes from "prop-types";
 import styles from "./TwoDBtn.module.css";
 
-const TwoDBtn = ({ children, className, ...props }) => {
+const TwoDBtn = ({ children, className, isDisabled, ...props }) => {
   return (
-    <div className={className} {...props}>
-      <button className={styles.twoDBtn}>
+    <div
+      className={`${className} ${isDisabled ? styles.disabledWrapper : ""}`}
+      {...props}
+    >
+      <button className={styles.twoDBtn} disabled={isDisabled}>
         <span className={styles.shadow} />
         <span className={styles.edge} />
         <span className={styles.front}>{children}</span>
@@ -16,6 +19,7 @@ const TwoDBtn = ({ children, className, ...props }) => {
 TwoDBtn.propTypes = {
   children: PropTypes.node,
   className: PropTypes.string,
+  isDisabled: PropTypes.bool,
 };
 
 export default TwoDBtn;
