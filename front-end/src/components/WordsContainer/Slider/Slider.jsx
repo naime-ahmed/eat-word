@@ -199,14 +199,20 @@ const Carousel = ({
             ))}
             <div className={styles.sliderController}>
               <div ref={prevRef}>
-                <TwoDBtn className={styles.sliderArrow}>
+                <TwoDBtn
+                  className={styles.sliderArrow}
+                  isDisabled={activeSlide === 1}
+                >
                   <span className={styles.sliderControllerContent}>
                     <IoArrowBackOutline /> Previous
                   </span>
                 </TwoDBtn>
               </div>
               <div ref={nextRef}>
-                <TwoDBtn className={styles.sliderArrow}>
+                <TwoDBtn
+                  className={styles.sliderArrow}
+                  isDisabled={activeSlide === totalWord}
+                >
                   <span className={styles.sliderControllerContent}>
                     Go Next <IoArrowForward />
                   </span>
