@@ -19,6 +19,11 @@ async function generateMilestoneStory(req, res) {
     if (!milestone) {
       return res.status(404).json({ message: "Milestone not found or unauthorized" });
     }
+
+    if(milestone.storyCount >= 100){
+      return res.status(400).json({ message: "You've reached the story generating limit!" });
+    }
+
     const learningLang = milestone.learningLang || "English";
 
     // Retrieve words associated with the milestone and user
@@ -58,10 +63,13 @@ async function generateMilestoneStory(req, res) {
     const result = await model.generateContent(prompt);
     const story = result.response.text();
 
-    // Update the milestone's story field with the generated story
+    // Update the milestone's story and increment storyCount
     const updatedMilestone = await Milestones.findOneAndUpdate(
       { _id: milestoneId, addedBy: userId },
-      { $set: { story } },
+      { 
+        $set: { story },
+        $inc: { storyCount: 1 }
+      },
       { new: true, runValidators: true }
     );
 
@@ -69,10 +77,11 @@ async function generateMilestoneStory(req, res) {
       return res.status(404).json({ message: "Milestone not found or unauthorized" });
     }
 
-    // Return only the story field
+    // Return the story and the updated count
     res.status(200).json({
       message: "Milestone story generated successfully",
       story: updatedMilestone.story,
+      storyCount: updatedMilestone.storyCount,
     });
   } catch (error) {
     console.error("Error generating milestone story:", error);
