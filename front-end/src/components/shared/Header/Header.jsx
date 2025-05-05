@@ -1,3 +1,4 @@
+import PropTypes from "prop-types";
 import { useEffect, useRef, useState } from "react";
 import { FaArrowRightToBracket, FaBars, FaXmark } from "react-icons/fa6";
 import { useSelector } from "react-redux";
@@ -9,7 +10,7 @@ import PrimaryBtn from "../../ui/button/PrimaryBtn/PrimaryBtn";
 import Skeleton from "../../ui/loader/Skeleton/Skeleton";
 import styles from "./Header.module.css";
 
-const Header = () => {
+const Header = ({ top = "0" }) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isSticky, setIsSticky] = useState(false);
   const [isProfileShown, setIsProfileShown] = useState(false);
@@ -27,11 +28,7 @@ const Header = () => {
   };
 
   const handleScroll = () => {
-    if (window.scrollY > 20) {
-      setIsSticky(true);
-    } else {
-      setIsSticky(false);
-    }
+    setIsSticky(window.scrollY > 70);
   };
 
   useEffect(() => {
@@ -41,11 +38,14 @@ const Header = () => {
     };
   }, []);
 
+  const computedTop = isSticky ? "0" : top;
+
   return (
     <header
       className={`${styles.nav} ${isSticky ? styles.sticky : ""} ${
         isSidebarOpen ? styles.active : ""
       }`}
+      style={{ top: computedTop }}
     >
       <div className={styles.navBar}>
         <FaBars
@@ -162,6 +162,10 @@ const Header = () => {
       </div>
     </header>
   );
+};
+
+Header.propTypes = {
+  top: PropTypes.string,
 };
 
 export default Header;
