@@ -52,8 +52,6 @@ const Milestone = () => {
   const [showTooltip, setShowTooltip] = useState(false);
   const [hasUpdated, setHasUpdated] = useState(false);
   const [isTakingStoryType, setIsTakingStoryType] = useState(false);
-  const [activeSlideIndex, setActiveSlideIndex] = useState(1);
-  const [totalWord, setTotalWord] = useState(0);
   const { milestoneId } = useParams();
   const { data, isLoading, isError, error } = useBringMilestonesQuery();
   const [editMilestone] = useEditMilestoneMutation();
@@ -101,10 +99,6 @@ const Milestone = () => {
     [data?.milestones, milestoneId]
   );
   const duration = curMilestone?.milestoneType === "three" ? 3 : 7;
-
-  // calculate the progress percentage for slides
-  const progressPercentage =
-    totalWord > 1 ? ((activeSlideIndex - 1) / (totalWord - 1)) * 100 : 0;
 
   // handle on recall
   const handleOnRecall = (e) => {
@@ -239,7 +233,9 @@ const Milestone = () => {
                     title="Limit reset date"
                   >
                     <LuTimerReset />{" "}
-                    {formatDate(wordsLimit?.resetAt) || "loading.."}
+                    {!wordsLimit?.resetAt
+                      ? "infinite.."
+                      : formatDate(wordsLimit?.resetAt)}
                   </small>
                   <small
                     className={styles.wordsLimitTag}
@@ -399,17 +395,6 @@ const Milestone = () => {
                   )}
                 </button>
               </div>
-              <div
-                className={`${styles.divider} ${
-                  wordContainerType === "slider" ? styles.sliderDivider : ""
-                }`}
-                style={
-                  wordContainerType === "slider"
-                    ? { "--progress": `${progressPercentage}%` }
-                    : {}
-                }
-              ></div>
-
               {wordContainerType === "table" ? (
                 <Table
                   curMilestone={curMilestone}
@@ -421,8 +406,6 @@ const Milestone = () => {
                 <Slider
                   curMilestone={curMilestone}
                   isOnRecallMood={isOnRecallMood}
-                  setActiveSlideIndex={setActiveSlideIndex}
-                  setTotalWord={setTotalWord}
                   setWordsLimit={setWordsLimit}
                   setGenAILimit={setGenAILimit}
                 />
