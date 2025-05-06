@@ -5,7 +5,7 @@ async function updateUserById(req, res) {
     const userId = req.user.id;
     const updates = req.body;
 
-    const allowedUpdates = ["name", "profilePicture", "preferences"];
+    const allowedUpdates = ["name", "profilePicture", "preferences", "status", "subscriptionDates", "role"];
     const updateKeys = Object.keys(updates);
     const isValidUpdate = updateKeys.every((key) => allowedUpdates.includes(key));
 
