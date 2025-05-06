@@ -7,6 +7,7 @@ import Error from "../../components/shared/Error/Error";
 import Footer from "../../components/shared/Footer/Footer";
 import Header from "../../components/shared/Header/Header";
 import AddBtn from "../../components/ui/button/AddBtn/AddBtn";
+import PairChart from "../../components/ui/chart/PairChart/PairChart";
 import Skeleton from "../../components/ui/loader/Skeleton/Skeleton";
 import { useScrollRestoration } from "../../hooks/useScrollRestoration";
 import { useBringMilestonesQuery } from "../../services/milestone";
@@ -23,6 +24,20 @@ const MySpace = () => {
 
   // manage the scroll position
   useScrollRestoration();
+
+  // count of milestones and words
+  let completedMilestone = 0;
+  let totalWords = 0;
+  let totalMemorizedWords = 0;
+
+  for (const milestone of milestones) {
+    totalWords += milestone?.wordsCount;
+    totalMemorizedWords += milestone?.memorizedCount;
+
+    if (milestone?.targetWords === milestone?.wordsCount) {
+      completedMilestone++;
+    }
+  }
 
   // Update milestones state when data is fetched
   useEffect(() => {
@@ -60,9 +75,8 @@ const MySpace = () => {
       <div className={styles.myspaceContainer}>
         <div className={styles.mySpaceHeading}>
           <div className={styles.createNewMilestoneBtn}>
-            <AddBtn handleOpenModal={openReqModal} />
+            <AddBtn handleOpenModal={openReqModal}>New Challenge</AddBtn>
           </div>
-
           <Popup
             isOpen={isTakingRequirements}
             onClose={closeReqModal}
@@ -73,6 +87,22 @@ const MySpace = () => {
               onClose={closeReqModal}
             />
           </Popup>
+          <div className={styles.milestonesChart}>
+            <PairChart
+              totalCount={milestones.length}
+              successCount={completedMilestone}
+              totalTooltip={`Total Challenges: ${milestones.length}`}
+              successTooltip={`Completed Challenges: ${completedMilestone}`}
+              chartTitle="Challenges"
+            />
+            <PairChart
+              totalCount={totalWords}
+              successCount={totalMemorizedWords}
+              totalTooltip={`Total Words: ${totalWords}`}
+              successTooltip={`Memorized Words: ${totalMemorizedWords}`}
+              chartTitle="Words"
+            />
+          </div>
         </div>
 
         {isLoading ? (

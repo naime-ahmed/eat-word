@@ -16,7 +16,7 @@
   display: flex;
   flex-direction: column;
   align-items: start;
-  row-gap: 50px;
+  row-gap: 40px;
   box-sizing: border-box;
 }
 
@@ -25,9 +25,21 @@
   width: 100%;
   min-width: 300px;
   min-height: 150px;
+  margin-top: 40px;
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
+}
+
+.milestonesChart {
+  display: flex;
+  gap: 16px;
+}
+
+.milestonesChart > div {
+  border: 1px solid #6d5bd398;
+  border-radius: 12px;
+  padding: 12px;
 }
 
 /* style for my space content */
@@ -89,14 +101,10 @@
   cursor: pointer;
   border: 1px solid #9277a32d;
   border-radius: 8px;
-  /* Prevent shrinking of tabs */
   flex-shrink: 0;
-  /* Center content vertically */
   display: flex;
   align-items: center;
-  /* Ensure minimum width */
   min-width: max-content;
-  /* Smooth transition for hover effects */
   transition: all 0.2s ease-in-out;
 }
 
@@ -150,6 +158,12 @@
   gap: 12px;
 }
 
+@media (min-width: 1200px) and (max-width: 1399.98px) {
+  .myspaceContainer {
+    max-width: 1150px;
+  }
+}
+
 @media (min-width: 1000px) and (max-width: 1199.98px) {
   .myspaceContainer {
     max-width: 950px;
@@ -187,6 +201,10 @@
 @media (max-width: 599.98px) {
   .myspaceContainer {
     max-width: 360px;
+  }
+  .mySpaceHeading {
+    flex-direction: column;
+    row-gap: 44px;
   }
   .mySpaceContent {
     padding: 8px;
