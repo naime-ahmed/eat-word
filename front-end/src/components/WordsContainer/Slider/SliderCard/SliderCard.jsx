@@ -21,11 +21,12 @@ const CHARACTER_LIMITS = {
 const SliderCard = ({
   word,
   setWords,
-  wordIdx,
+  wordIdx = 0,
   curMilestone,
   isOnRecallMood,
   generatingCells,
   setGeneratingCells,
+  setWordsLimit,
   setGenAILimit,
 }) => {
   const [wordReplica, setWordReplica] = useState(() => ({
@@ -143,7 +144,15 @@ const SliderCard = ({
 
   const handleUpdateWords = (wordIdx, property, value) => {
     try {
-      updateWords(setWords, wordIdx, property, value, curMilestone?._id);
+      console.log(wordIdx, property, value);
+      updateWords(
+        setWords,
+        setWordsLimit,
+        wordIdx,
+        property,
+        value,
+        curMilestone?._id
+      );
     } catch (error) {
       console.log("error on edit word (slide): ", error);
     }

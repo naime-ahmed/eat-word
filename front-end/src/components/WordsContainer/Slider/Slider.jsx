@@ -194,6 +194,7 @@ const Carousel = ({
                   generatingCells={generatingCells}
                   setGeneratingCells={setGeneratingCells}
                   setGenAILimit={setGenAILimit}
+                  setWordsLimit={setWordsLimit}
                 />
               </SwiperSlide>
             ))}
