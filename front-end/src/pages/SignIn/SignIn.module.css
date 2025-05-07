@@ -8,12 +8,6 @@
   background-color: #020817;
   position: relative;
 }
-/* CSS for back hom e button */
-.backToHomeButton {
-  position: absolute;
-  left: 100px;
-  top: 100px;
-}
 
 /* CSS for form container */
 .formContainer {
@@ -21,9 +15,22 @@
   padding: 30px;
   border-radius: 10px;
 }
+
+.loginHeader {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.loginHeader img {
+  max-width: 50px;
+}
 .formContainer h2 {
   text-align: center;
   color: #f8fafc;
+}
+.loginHeader small {
+  color: #bdbdbd;
 }
 
 /* CSS for form inputs */
