@@ -14,9 +14,23 @@
   padding: 30px;
   border-radius: 10px;
 }
-.formContainer h2 {
+
+.signUpHeader {
+  display: flex;
+  gap: 6px;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.signUpHeader img {
+  max-width: 50px;
+}
+.signUpHeader h2 {
   text-align: center;
   color: #f8fafc;
+}
+.signUpHeader small {
+  color: #bdbdbd;
 }
 
 /* CSS for form inputs */
