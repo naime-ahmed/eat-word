@@ -1,5 +1,27 @@
 import PropTypes from "prop-types";
 
+// user prop types:
+export const userPropTypes = PropTypes.shape({
+  name:  PropTypes.string,
+  email:  PropTypes.string,
+  role:   PropTypes.string,
+  status:  PropTypes.string,
+  subscriptionType:  PropTypes.string,
+  signupSource:  PropTypes.string,
+  authProvider: PropTypes.string,
+  profilePicture:  PropTypes.string,
+  isSubscriptionActive: PropTypes.bool,
+  notifications: PropTypes.shape({
+    email: PropTypes.bool,
+    push: PropTypes.bool,
+  }),
+  preferences: PropTypes.shape({
+    device: PropTypes.string,
+    language: PropTypes.string,
+  }),
+  _id: PropTypes.string,
+})
+
 // milestone prop types
 export const milestonePropTypes = PropTypes.shape({
   _id: PropTypes.string,
@@ -56,4 +78,5 @@ export const sliderCardPropTypes = {
     )
   ),
   setGenAILimit: PropTypes.func,
+  setWordsLimit: PropTypes.func,
 };
