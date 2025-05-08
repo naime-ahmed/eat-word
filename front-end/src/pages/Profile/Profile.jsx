@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import defaultProfilePic from "../../assets/defaultUserProfileImage.webp";
 import Popup from "../../components/Popup/Popup";
-import ConfirmDeleteAccount from "../../components/Popup/PopUpContents/ConfirmDeleteAccount/ConfirmDeleteAccount";
+import ConfirmActionDialog from "../../components/Popup/PopUpContents/ConfirmActionDialog/ConfirmActionDialog";
 import Error from "../../components/shared/Error/Error";
 import Footer from "../../components/shared/Footer/Footer";
 import Header from "../../components/shared/Header/Header";
@@ -21,10 +21,10 @@ import useNotification from "../../hooks/useNotification";
 import { useScrollRestoration } from "../../hooks/useScrollRestoration";
 import {
   useBringUserByIdQuery,
-  useDeleteUserMutation,
   useUpdatePasswordMutation,
   useUpdateUserMutation,
 } from "../../services/user";
+import { userPropTypes } from "../../utils/propTypes";
 import { LANGUAGE_MAP } from "../../utils/supportedLan";
 import styles from "./Profile.module.css";
 
@@ -190,7 +190,7 @@ function Profile() {
               <div className={styles.profileHead}>
                 <p>My Profile</p>
                 <div className={styles.profileActionBtns}>
-                  {!isChanging && <DeleteAccount />}
+                  {/* {!isChanging && <AccountAction user={data?.data} />} */}
                   <PrimaryBtn handleClick={handleIsChanging}>
                     {isChanging ? (
                       <>
@@ -599,33 +599,32 @@ ChangePasswordForm.propTypes = {
   setIsChanging: PropTypes.func,
 };
 
-// delete account
-function DeleteAccount() {
+// delete account (logic changed to deactivate)
+function AccountAction({ user }) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const [deleteUser, { isLoading }] = useDeleteUserMutation();
-  const [isShowDeleteAC, setIsShowDeleteAC] = useState(false);
+  const [updateUser, { isLoading }] = useUpdateUserMutation();
+  const [isShowDeactivateAC, setIsShowDeactivateAC] = useState(false);
   const showNotification = useNotification();
-
-  const handleDeleteAccount = async () => {
+  console.log(user);
+  const handleDeactivateAccount = async () => {
     try {
-      const res = await deleteUser();
-
+      const res = await updateUser({ status: "deactivate" });
+      console.log(res);
       if (res?.data) {
         navigate("/");
         dispatch(setUserData({}));
         dispatch(setSignOutUser());
         localStorage.removeItem("access-token");
         showNotification({
-          title: "See you in hell!",
-          message:
-            res?.data?.message || "Account has been deleted successfully",
+          title: "deactivation successful!",
+          message: "Account has been deactivated successfully",
           iconType: "success",
           duration: 6000,
         });
       }
     } catch (error) {
-      console.error("Error on account deletion:", error);
+      console.error("Error on account deactivation:", error);
       showNotification({
         title: "Something went wrong",
         message: error.message || "An unexpected error occurred",
@@ -633,41 +632,77 @@ function DeleteAccount() {
         duration: 4000,
       });
     } finally {
-      setIsShowDeleteAC(false);
+      setIsShowDeactivateAC(false);
     }
   };
 
   const handleOpenIsShowDeleteAC = () => {
-    setIsShowDeleteAC(true);
+    setIsShowDeactivateAC(true);
   };
 
   const handleCloseIsShowDeleteAC = () => {
-    setIsShowDeleteAC(false);
+    setIsShowDeactivateAC(false);
+  };
+
+  const handleActivateAccount = async () => {
+    try {
+      const res = await updateUser({ status: "active" });
+      console.log(res);
+    } catch (error) {
+      console.error("Error on account Activation:", error);
+      showNotification({
+        title: "Something went wrong",
+        message: error.message || "An unexpected error occurred",
+        iconType: "error",
+        duration: 4000,
+      });
+    }
   };
 
   return (
     <div>
       <Popup
-        isOpen={isShowDeleteAC}
+        isOpen={isShowDeactivateAC}
         onClose={handleCloseIsShowDeleteAC}
         showCloseButton={isLoading ? false : true}
       >
-        <ConfirmDeleteAccount handleDeleteAccount={handleDeleteAccount} />
+        <ConfirmActionDialog
+          title="Confirm Account Deactivation"
+          description="We're sorry to see you go. If there's anything we could improve, we'd love to hear your feedback. To confirm deactivation, please type: "
+          confirmationText="deactivate my account"
+          onConfirm={handleDeactivateAccount}
+          confirmButtonText="Deactivate My Account"
+        />
         {isLoading && (
           <div className={styles.deletingACC}>
-            <ClassicSpinner /> Deleting your account...
+            <ClassicSpinner /> Deactivating your account...
           </div>
         )}
       </Popup>
-      <PrimaryBtn
-        handleClick={handleOpenIsShowDeleteAC}
-        isLoading={isLoading}
-        loadingText="Deleting..."
-        colorOne="rgb(153 17 12)"
-        colorTwo="rgb(201 12 99)"
-      >
-        Delete Account
-      </PrimaryBtn>
+      {user?.status === "deactivate" ? (
+        <PrimaryBtn
+          handleClick={handleActivateAccount}
+          isLoading={isLoading}
+          loadingText="Deactivating..."
+          colorOne="rgb(5 129 10)"
+          colorTwo="rgb(26 206 89)"
+        >
+          {" "}
+          Activate Account{" "}
+        </PrimaryBtn>
+      ) : (
+        <PrimaryBtn
+          handleClick={handleOpenIsShowDeleteAC}
+          isLoading={isLoading}
+          loadingText="Deactivating..."
+          colorOne="rgb(153 17 12)"
+          colorTwo="rgb(201 12 99)"
+        >
+          Deactivate Account
+        </PrimaryBtn>
+      )}
     </div>
   );
 }
+
+AccountAction.propTypes = userPropTypes;
