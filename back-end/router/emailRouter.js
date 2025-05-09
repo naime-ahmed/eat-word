@@ -10,7 +10,6 @@ const router = express.Router();
 
 router.post("/send-contact-email", verifyCaptcha , emailLimiter, async (req, res) => {
   const { name, email, message } = req.body;
-  console.log(req.body);
   
   try {
     const result = await sendEmailContact(name, email, message);

@@ -1,10 +1,9 @@
 import { Suspense, lazy, useCallback, useRef, useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
-import { IoArrowBack } from "react-icons/io5";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
+import logoIcon from "../../assets/logoIcon.webp";
 import TurnstileWidget from "../../components/TurnstileWidget.jsx";
-import PrimaryBtn from "../../components/ui/button/PrimaryBtn/PrimaryBtn";
 import Skeleton from "../../components/ui/loader/Skeleton/Skeleton.jsx";
 import { setUser } from "../../features/authSlice.js";
 import {
@@ -16,7 +15,7 @@ import useNotification from "../../hooks/useNotification.js";
 import { useScrollRestoration } from "../../hooks/useScrollRestoration.js";
 import { useSignInUserMutation } from "../../services/auth.js";
 import { parseJwt } from "../../utils/parseJWT.js";
-import style from "./SignIn.module.css";
+import styles from "./SignIn.module.css";
 
 const GoogleSignIn = lazy(() =>
   import("../../components/OAuth/Google/GoogleSignIn")
@@ -129,16 +128,13 @@ const SignIn = () => {
   );
 
   return (
-    <div className={style.signInContainer}>
-      <nav className={style.backToHomeButton}>
-        <PrimaryBtn handleClick={() => navigate("/")}>
-          <IoArrowBack aria-hidden="true" />
-          <span>Back Home</span>
-        </PrimaryBtn>
-      </nav>
-
-      <main className={style.formContainer}>
-        <h2 aria-live="polite">Sign In</h2>
+    <div className={styles.signInContainer}>
+      <main className={styles.formContainer}>
+        <div className={styles.loginHeader}>
+          <img src={logoIcon} alt="brand icon" />
+          <h2 aria-live="polite">Welcome Back</h2>
+          <small>Please enter your details to sign in</small>
+        </div>
 
         <form onSubmit={handleSubmit} noValidate>
           <div>
@@ -148,7 +144,7 @@ const SignIn = () => {
               name="email"
               value={email}
               onChange={handleChange}
-              className={style.inputField}
+              className={styles.inputField}
               autoComplete="email"
               required
               aria-required="true"
@@ -156,7 +152,7 @@ const SignIn = () => {
               aria-describedby={emailError ? "email-error" : undefined}
               placeholder="Enter email"
             />
-            <label htmlFor="email" className={style.formLabel}>
+            <label htmlFor="email" className={styles.formLabel}>
               Your email
             </label>
             {emailError && (
@@ -166,14 +162,14 @@ const SignIn = () => {
             )}
           </div>
 
-          <div className={style.passwordSection}>
+          <div className={styles.passwordSection}>
             <input
               type={showPassword ? "text" : "password"}
               id="password"
               name="password"
               value={password}
               onChange={handleChange}
-              className={style.inputField}
+              className={styles.inputField}
               autoComplete="current-password"
               required
               aria-required="true"
@@ -181,13 +177,13 @@ const SignIn = () => {
               aria-describedby={passwordError ? "password-error" : undefined}
               placeholder="Enter password"
             />
-            <label htmlFor="password" className={style.formLabel}>
+            <label htmlFor="password" className={styles.formLabel}>
               Your password
             </label>
 
             {/* Password toggle icon */}
             <span
-              className={style.passEyeIcon}
+              className={styles.passEyeIcon}
               style={{ bottom: passwordError ? "26px" : undefined }}
               onClick={() => setShowPassword(!showPassword)}
               role="button"
@@ -195,9 +191,9 @@ const SignIn = () => {
               tabIndex={0}
             >
               {showPassword ? (
-                <FaEyeSlash className={style.eyeIcon} />
+                <FaEyeSlash className={styles.eyeIcon} />
               ) : (
-                <FaEye className={style.eyeIcon} />
+                <FaEye className={styles.eyeIcon} />
               )}
             </span>
 
@@ -206,7 +202,7 @@ const SignIn = () => {
                 {passwordError}
               </p>
             )}
-            <Link to="/forgot-password" className={style.forgotPass}>
+            <Link to="/forgot-password" className={styles.forgotPass}>
               Forgot Password?
             </Link>
           </div>
@@ -244,7 +240,7 @@ const SignIn = () => {
             }}
           />
 
-          <div className={style.submitBtn}>
+          <div className={styles.submitBtn}>
             <button
               type="submit"
               disabled={isLoading}
@@ -254,19 +250,19 @@ const SignIn = () => {
               {isLoading ? "Signing in..." : "Submit"}
             </button>
 
-            <p className={style.separator} aria-hidden="true">
+            <p className={styles.separator} aria-hidden="true">
               or
             </p>
 
             <Suspense fallback={<Skeleton width={280} height={42} />}>
-              <div className={style.googleLogin}>
+              <div className={styles.googleLogin}>
                 <GoogleSignIn />
               </div>
             </Suspense>
 
             <p>
               New here?{" "}
-              <Link to="/sign-up" className={style.signUpLink}>
+              <Link to="/sign-up" className={styles.signUpLink}>
                 Create account
               </Link>
             </p>

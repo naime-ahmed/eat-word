@@ -1,47 +1,34 @@
-import { useEffect, useState } from "react";
+import PropTypes from "prop-types";
+import { useEffect, useRef, useState } from "react";
 import { FaArrowRightToBracket, FaBars, FaXmark } from "react-icons/fa6";
-
 import { useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import defaultUserProfile from "../../../assets/defaultUserProfileImage.webp";
 import logo from "../../../assets/logo.png";
-import Popup from "../../Popup/Popup";
 import UserProfile from "../../Popup/PopUpContents/UserProfile/UserProfile";
 import PrimaryBtn from "../../ui/button/PrimaryBtn/PrimaryBtn";
 import Skeleton from "../../ui/loader/Skeleton/Skeleton";
 import styles from "./Header.module.css";
 
-const Header = () => {
+const Header = ({ top = "0" }) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isSticky, setIsSticky] = useState(false);
   const [isProfileShown, setIsProfileShown] = useState(false);
-  const [clickPosition, setClickPosition] = useState(null);
   const { isAuthenticated, isLoading } = useSelector((state) => state.auth);
   const { user } = useSelector((state) => state.user);
   const navigate = useNavigate();
   const handleSidebarToggle = () => {
     setIsSidebarOpen(!isSidebarOpen);
   };
+  const profileRef = useRef(null);
 
-  const handleProfileOpen = (e) => {
+  const handleProfileToggle = (e) => {
     e.stopPropagation();
-    let x = e.clientX + window.scrollX + 16;
-    let y = window.scrollY - 4;
-    if (window.innerWidth < 500) {
-      console.log(window.innerWidth);
-      x += 100;
-    }
-    setClickPosition({ x, y });
-    setIsProfileShown(true);
-    console.log(x, y);
+    setIsProfileShown((prev) => !prev);
   };
 
   const handleScroll = () => {
-    if (window.scrollY > 20) {
-      setIsSticky(true);
-    } else {
-      setIsSticky(false);
-    }
+    setIsSticky(window.scrollY > 70);
   };
 
   useEffect(() => {
@@ -51,11 +38,14 @@ const Header = () => {
     };
   }, []);
 
+  const computedTop = isSticky ? "0" : top;
+
   return (
     <header
       className={`${styles.nav} ${isSticky ? styles.sticky : ""} ${
         isSidebarOpen ? styles.active : ""
       }`}
+      style={{ top: computedTop }}
     >
       <div className={styles.navBar}>
         <FaBars
@@ -141,7 +131,8 @@ const Header = () => {
                 ) : isAuthenticated ? (
                   <>
                     <button
-                      onClick={handleProfileOpen}
+                      ref={profileRef}
+                      onClick={handleProfileToggle}
                       className={styles.profile}
                       aria-label="User Profile"
                     >
@@ -150,6 +141,14 @@ const Header = () => {
                         alt="User Profile"
                       />
                     </button>
+                    {isProfileShown && (
+                      <div className={styles.userProfileContainer}>
+                        <UserProfile
+                          onClose={() => setIsProfileShown(false)}
+                          profileBtnRef={profileRef}
+                        />
+                      </div>
+                    )}
                   </>
                 ) : (
                   <PrimaryBtn handleClick={() => navigate("/sign-in")}>
@@ -159,22 +158,14 @@ const Header = () => {
               </li>
             </ul>
           </nav>
-          {isProfileShown && (
-            <Popup
-              isOpen={isProfileShown}
-              onClose={() => setIsProfileShown(false)}
-              showCloseButton={false}
-              popupType="menu"
-              clickPosition={clickPosition}
-              isPreventScroll={true}
-            >
-              <UserProfile onClose={() => setIsProfileShown(false)} />
-            </Popup>
-          )}
         </div>
       </div>
     </header>
   );
+};
+
+Header.propTypes = {
+  top: PropTypes.string,
 };
 
 export default Header;

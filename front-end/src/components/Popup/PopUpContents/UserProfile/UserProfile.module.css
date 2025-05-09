@@ -10,7 +10,7 @@
   background: rgba(1, 0, 24);
   border: 1px solid rgba(75, 103, 173, 0.363);
   border-radius: 6px;
-  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 30px rgba(36, 61, 126, 0.14);
   backdrop-filter: blur(5.6px);
   -webkit-backdrop-filter: blur(5.6px);
   color: white;
@@ -22,7 +22,7 @@
 }
 .profilePicture img {
   max-width: 100px;
-  border: 2px solid rgba(75, 103, 173, 0.563);
+  border: 2px solid rgb(20, 74, 252);
   border-radius: 50%;
 }
 .userName {
@@ -41,23 +41,25 @@
 .userProfileTabs > ul {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 8px;
 }
 .userProfileTabs > ul > li {
-  display: inline-block;
-  max-width: fit-content;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px;
   border-radius: 4px;
   list-style: none;
   cursor: pointer;
+  transition: all 0.2s ease;
+}
+.userProfileTabs > ul > li:hover {
+  background: #448fff4d;
 }
 
-.userProfileTabs > ul > li > a {
-  text-decoration: none;
-  color: white;
-  transition: color 0.2s ease;
-}
-.userProfileTabs > ul > li > a:hover {
-  color: #c1bcff;
+.userProfileTabs > ul > li:last-child:hover {
+  color: #ff3636;
+  background: #d8050523;
 }
 /* style for small devices */
 @media (max-width: 820px) {

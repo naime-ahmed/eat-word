@@ -4,7 +4,12 @@ import { HiOutlineSparkles } from "react-icons/hi2";
 import { IoReloadSharp } from "react-icons/io5";
 import { MdFavorite, MdFavoriteBorder } from "react-icons/md";
 import { PiCheckSquareOffset } from "react-icons/pi";
-import { RiArrowRightSLine, RiDeleteBin4Line } from "react-icons/ri";
+import {
+  RiArrowRightSLine,
+  RiBrainFill,
+  RiBrainLine,
+  RiDeleteBin4Line,
+} from "react-icons/ri";
 import { VscCircleFilled } from "react-icons/vsc";
 import useNotification from "../../../../hooks/useNotification";
 import { useGenerateWordInfoMutation } from "../../../../services/generativeAi";
@@ -26,6 +31,7 @@ const TableRowMenu = ({
   setGeneratingCells,
   includeDefinition,
   learnSynonyms,
+  setGenAILimit,
 }) => {
   const menuItemsRef = useRef([]);
   const [showSubmenu, setShowSubmenu] = useState(false);
@@ -91,6 +97,9 @@ const TableRowMenu = ({
 
   const handleEditClick = async (action) => {
     switch (action) {
+      case "memorized":
+        await handleEdit({ memorized: !curWord?.memorized });
+        break;
       case "favorite":
         await handleEdit({ isFavorite: !curWord?.isFavorite });
         break;
@@ -150,13 +159,17 @@ const TableRowMenu = ({
           title:
             res.error?.status === "FETCH_ERROR"
               ? "Network Unavailable"
+              : res.error?.status === 429
+              ? "Daily Limit exceeded, Try pro version!"
               : "Generation Failed",
           message:
+            res.error?.data?.message ||
             "Something went wrong while generating fields, please try again later",
           iconType: "error",
-          duration: 6000,
+          duration: 8000,
         });
         console.log(res.error);
+        return;
       }
 
       let failedFields = "";
@@ -175,6 +188,10 @@ const TableRowMenu = ({
           duration: 6000,
         });
       }
+      setGenAILimit((prev) => ({
+        ...prev,
+        remaining: res?.data?.rateLimit?.remaining || prev.remaining,
+      }));
     } catch (error) {
       const fieldsString = fieldsAndLangs.fields.join(", ");
       notify({
@@ -302,6 +319,27 @@ const TableRowMenu = ({
 
         <li
           ref={(el) => (menuItemsRef.current[0] = el)}
+          onClick={() => handleEditClick("memorized")}
+          className={styles.markAsMemo}
+          role="button"
+          tabIndex={0}
+          onKeyPress={(e) => e.key === "Enter" && handleEditClick("memorized")}
+        >
+          {curWord.memorized ? (
+            <>
+              <RiBrainFill data-icon="memorize" />
+              <span>Remove from Memorized</span>
+            </>
+          ) : (
+            <>
+              {isEditing ? <IoReloadSharp /> : <RiBrainLine />}{" "}
+              <span>Mark as Memorized</span>
+            </>
+          )}
+        </li>
+
+        <li
+          ref={(el) => (menuItemsRef.current[0] = el)}
           onClick={() => handleEditClick("favorite")}
           className={styles.markAsFav}
           role="button"
@@ -359,9 +397,10 @@ TableRowMenu.propTypes = {
   updateRowHeight: PropTypes.func,
   comfortableLang: PropTypes.string,
   learningLang: PropTypes.string,
-  setGeneratingCells: PropTypes.func,
+  setGeneratingCells: PropTypes.func.isRequired,
   learnSynonyms: PropTypes.bool,
   includeDefinition: PropTypes.bool,
+  setGenAILimit: PropTypes.func.isRequired,
 };
 
 export default TableRowMenu;

@@ -1,23 +1,34 @@
+import PropTypes from "prop-types";
+import { useEffect, useRef } from "react";
+import { BiLogOut } from "react-icons/bi";
+import { RiDashboardFill } from "react-icons/ri";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import defaultUserProfileImage from "../../../../assets/defaultUserProfileImage.webp";
 import { setSignOutUser } from "../../../../features/authSlice";
 import { useConfirmation } from "../../../../hooks/useConfirmation";
-import { useSignOutUserMutation } from "../../../../services/auth";
-
 import useNotification from "../../../../hooks/useNotification";
+import { useSignOutUserMutation } from "../../../../services/auth";
 import FancyBtn from "../../../ui/button/FancyBtn/FancyBtn";
 import ConfirmationPopup from "../../ConfirmationPopup/ConfirmationPopup";
 import styles from "./UserProfile.module.css";
 
-const UserProfile = ({ onClose }) => {
+const UserProfile = ({ onClose, profileBtnRef }) => {
+  const profileRef = useRef(null);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const showNotification = useNotification();
   const { confirm, confirmationProps } = useConfirmation();
+  const { isOpen: isConfirmationOpen } = confirmationProps;
+  const isConfirmationOpenRef = useRef();
 
   const [signOutUser, { isLoading }] = useSignOutUserMutation();
   const { user } = useSelector((state) => state.user);
+
+  // Keep a ref updated with confirmation open state
+  useEffect(() => {
+    isConfirmationOpenRef.current = isConfirmationOpen;
+  }, [isConfirmationOpen]);
 
   const handleSignOut = async () => {
     try {
@@ -53,8 +64,6 @@ const UserProfile = ({ onClose }) => {
         iconType: "success",
         duration: 4000,
       });
-
-      onClose();
     } catch (error) {
       console.log("Error during sign out:", error);
 
@@ -68,11 +77,39 @@ const UserProfile = ({ onClose }) => {
         iconType: "error",
         duration: 4000,
       });
+    } finally {
+      onClose();
     }
   };
 
+  const handleMyspaceNavigation = () => {
+    navigate("/my-space");
+    onClose();
+  };
+
+  // close profile on outside click
+  useEffect(() => {
+    const handleOutsideClick = (e) => {
+      e.stopPropagation();
+
+      // Don't close if confirmation is active
+      if (isConfirmationOpenRef.current) return;
+
+      if (
+        profileRef.current &&
+        !profileRef.current.contains(e.target) &&
+        !profileBtnRef.current.contains(e.target)
+      ) {
+        onClose();
+      }
+    };
+
+    document.addEventListener("mousedown", handleOutsideClick);
+    return () => document.removeEventListener("mousedown", handleOutsideClick);
+  }, [onClose, profileBtnRef]);
+
   return (
-    <div className={styles.userProfile}>
+    <div className={styles.userProfile} ref={profileRef}>
       <ConfirmationPopup {...confirmationProps} />
       <div className={styles.profilePicture}>
         <img
@@ -96,14 +133,12 @@ const UserProfile = ({ onClose }) => {
       </div>
       <div className={styles.userProfileTabs}>
         <ul>
-          <li onClick={onClose}>
-            <Link to="/my-space"> My Space</Link>
+          <li onClick={handleMyspaceNavigation}>
+            <RiDashboardFill /> My Space
           </li>
-          <li>
-            <i className="fas fa-sign-out-alt"></i>{" "}
-            <span onClick={handleSignOut}>
-              {isLoading ? "sign outing..." : "sign out"}
-            </span>
+          <li onClick={handleSignOut}>
+            <BiLogOut />
+            {isLoading ? "sign outing..." : "sign out"}
           </li>
         </ul>
       </div>
@@ -111,4 +146,10 @@ const UserProfile = ({ onClose }) => {
   );
 };
 
+UserProfile.propTypes = {
+  onClose: PropTypes.func.isRequired,
+  profileBtnRef: PropTypes.shape({
+    current: PropTypes.instanceOf(HTMLButtonElement),
+  }),
+};
 export default UserProfile;

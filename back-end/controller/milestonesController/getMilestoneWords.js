@@ -1,30 +1,90 @@
 import Word from "../../models/Word.js";
+import {
+  wordInfoGenLimiterTire,
+  wordLimiterTire,
+} from "../../utils/rateLimitersConfig.js";
 
 const getMilestoneWords = async (req, res) => {
   try {
     const milestoneId = req.params.milestoneId;
     const userId = req.user.id;
+    const subscriptionType = req.user.subscriptionType || "regular";
 
-    // Validate the milestoneId
     if (!milestoneId) {
       return res.status(400).json({ message: "Milestone ID is required." });
     }
 
-    // Query words based on user and milestone
     const words = await Word.find({
       addedBy: userId,
       addedMilestone: milestoneId,
     });
 
-    // Check if any words are found
-    if (!words.length) {
-      return res
-        .status(200)
-        .json({ message: "No words found for this milestone.", words:[] });
+    const wordLimiter =
+      wordLimiterTire[subscriptionType] || wordLimiterTire.regular;
+    const genAILimiter =
+      wordInfoGenLimiterTire[subscriptionType] ||
+      wordInfoGenLimiterTire.regular;
+
+    let wordConsumedPoints = 0;
+    let wordMsBeforeNext = wordLimiter.duration * 1000;
+
+    let genAIConsumePoints = 0;
+    let genAIMsBeforeNext = genAILimiter.duration * 1000;
+
+    try {
+      const wordRateLimitInfo = await wordLimiter.get(userId);
+      const genAIRateLimitInfo = await genAILimiter.get(userId);
+
+      if (wordRateLimitInfo) {
+        wordConsumedPoints = wordRateLimitInfo.consumedPoints;
+        wordMsBeforeNext = wordRateLimitInfo.msBeforeNext;
+      }
+
+      if (genAIRateLimitInfo) {
+        genAIConsumePoints = genAIRateLimitInfo.consumedPoints;
+        genAIMsBeforeNext = genAIRateLimitInfo.msBeforeNext;
+      }
+    } catch (error) {
+      console.error("Error fetching rate limit info:", error);
     }
 
-    // Return the words
-    res.status(200).json({ message: "Words retrieved successfully.", words });
+    const wordRemaining = wordLimiter.points - wordConsumedPoints;
+    const wordResetAt = new Date(Date.now() + wordMsBeforeNext).toISOString();
+
+    const genAIRemaining = genAILimiter.points - genAIConsumePoints;
+    const genAIResetAt = new Date(Date.now() + genAIMsBeforeNext);
+
+    if (!words.length) {
+      return res.status(200).json({
+        message: "No words found for this milestone.",
+        words: [],
+        wordRateLimit: {
+          total: wordLimiter.points,
+          remaining: wordRemaining,
+          resetAt: wordResetAt,
+        },
+        genAIRateLimit: {
+          total: genAILimiter.points,
+          remaining: genAIRemaining,
+          resetAt: genAIResetAt,
+        },
+      });
+    }
+
+    res.status(200).json({
+      message: "Words retrieved successfully.",
+      words,
+      wordRateLimit: {
+        total: wordLimiter.points,
+        remaining: wordRemaining,
+        resetAt: wordResetAt,
+      },
+      genAIRateLimit: {
+        total: genAILimiter.points,
+        remaining: genAIRemaining,
+        resetAt: genAIResetAt,
+      },
+    });
   } catch (error) {
     console.error("Error while fetching words:", error);
     res

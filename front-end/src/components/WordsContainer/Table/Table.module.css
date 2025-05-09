@@ -92,3 +92,10 @@
   gap: 8px;
   margin-top: 8px;
 }
+
+/* pagination style */
+.pagination {
+  margin-top: 8px;
+  display: flex;
+  justify-content: end;
+}

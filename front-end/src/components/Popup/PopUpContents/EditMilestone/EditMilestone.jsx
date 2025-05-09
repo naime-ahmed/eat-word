@@ -2,6 +2,7 @@ import PropTypes from "prop-types";
 import { useState } from "react";
 import useNotification from "../../../../hooks/useNotification";
 import { useEditMilestoneMutation } from "../../../../services/milestone";
+import { isEnded } from "../../../../utils/formateDate";
 import { milestonePropTypes } from "../../../../utils/propTypes";
 import PrimaryBtn from "../../../ui/button/PrimaryBtn/PrimaryBtn";
 import styles from "./EditMilestone.module.css";
@@ -23,8 +24,6 @@ function EditMilestone({ milestone, onClose }) {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    console.log(editedMilestone);
-
     try {
       if (
         editedMilestone.name !== milestone?.name &&
@@ -75,22 +74,24 @@ function EditMilestone({ milestone, onClose }) {
             Want to give it a new name?
           </label>
         </div>
-        <div className={styles.inputGroup}>
-          <input
-            type="number"
-            name="targetWords"
-            id="targetWords"
-            min="10"
-            max="100"
-            value={editedMilestone.targetWords}
-            onChange={handleChange}
-            className={styles.inputField}
-            required
-          />
-          <label htmlFor="targetWords" className={styles.formLabel}>
-            Increase, decrease or keep it
-          </label>
-        </div>
+        {!isEnded(milestone?.createdAt, milestone?.milestoneType) && (
+          <div className={styles.inputGroup}>
+            <input
+              type="number"
+              name="targetWords"
+              id="targetWords"
+              min="10"
+              max="100"
+              value={editedMilestone.targetWords}
+              onChange={handleChange}
+              className={styles.inputField}
+              required
+            />
+            <label htmlFor="targetWords" className={styles.formLabel}>
+              Increase, decrease or keep it
+            </label>
+          </div>
+        )}
         {isError && <p className={styles.editError}>{error.data.message}</p>}
         {!hasChanges && (
           <p className={styles.editError}>You have not changed anything! lol</p>

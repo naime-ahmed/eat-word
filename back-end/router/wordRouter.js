@@ -6,6 +6,7 @@ import { addWord } from "../controller/wordController/addWordController.js";
 import { deleteWord } from "../controller/wordController/deleteWordController.js";
 import { getWords } from "../controller/wordController/getWordsController.js";
 import { updateWord } from "../controller/wordController/updateWordController.js";
+import { wordLimiter } from "../middlewares/rateLimiter/wordLimit.js";
 import { verifyAccessToken } from "../middlewares/validate/verifyAccessToken.js";
 
 const router = express.Router();
@@ -14,7 +15,7 @@ const router = express.Router();
 router.get("/", verifyAccessToken, getWords);
 
 // add words
-router.post("/", verifyAccessToken, addWord);
+router.post("/", verifyAccessToken, wordLimiter, addWord);
 
 // edit word
 router.patch("/:wordId",verifyAccessToken, updateWord);

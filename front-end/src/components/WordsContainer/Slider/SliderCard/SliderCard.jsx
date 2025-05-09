@@ -21,11 +21,13 @@ const CHARACTER_LIMITS = {
 const SliderCard = ({
   word,
   setWords,
-  wordIdx,
+  wordIdx = 0,
   curMilestone,
   isOnRecallMood,
   generatingCells,
   setGeneratingCells,
+  setWordsLimit,
+  setGenAILimit,
 }) => {
   const [wordReplica, setWordReplica] = useState(() => ({
     word: word?.word || "",
@@ -142,7 +144,15 @@ const SliderCard = ({
 
   const handleUpdateWords = (wordIdx, property, value) => {
     try {
-      updateWords(setWords, wordIdx, property, value, curMilestone?._id);
+      console.log(wordIdx, property, value);
+      updateWords(
+        setWords,
+        setWordsLimit,
+        wordIdx,
+        property,
+        value,
+        curMilestone?._id
+      );
     } catch (error) {
       console.log("error on edit word (slide): ", error);
     }
@@ -248,7 +258,9 @@ const SliderCard = ({
 
         {/* Meanings Section*/}
         <div className={styles.cardMeanings}>
-          <label htmlFor={`meanings-${wordIdx}`}>MEANINGS: </label>
+          <label htmlFor={`meanings-${wordIdx}`}>
+            {curMilestone.comfortableLang.toUpperCase()} MEANINGS:
+          </label>
           <div
             className={`${styles.textareaWrapper} ${
               isOnRecallMood &&
@@ -478,30 +490,33 @@ const SliderCard = ({
           )}
         </div>
       </div>
-      <span className={styles.cardMenu} onClick={handleShowMenu}>
-        <BiDotsVerticalRounded />
-        {/* show word menu */}
-        {showMenu && (
-          <Popup
-            isOpen={showMenu}
-            onClose={handleMenuClose}
-            showCloseButton={false}
-            clickPosition={clickPosition}
-            popupType="menu"
-          >
-            <TableRowMenu
-              curWord={word}
-              rowIdx={wordIdx}
+      {word._id && (
+        <span className={styles.cardMenu} onClick={handleShowMenu}>
+          <BiDotsVerticalRounded />
+          {/* show word menu */}
+          {showMenu && (
+            <Popup
+              isOpen={showMenu}
               onClose={handleMenuClose}
-              setGeneratingCells={setGeneratingCells}
-              learningLang={curMilestone.learningLang}
-              comfortableLang={curMilestone.comfortableLang}
-              includeDefinition={curMilestone.includeDefinition}
-              learnSynonyms={curMilestone.learnSynonyms}
-            />
-          </Popup>
-        )}
-      </span>
+              showCloseButton={false}
+              clickPosition={clickPosition}
+              popupType="menu"
+            >
+              <TableRowMenu
+                curWord={word}
+                rowIdx={wordIdx}
+                onClose={handleMenuClose}
+                setGeneratingCells={setGeneratingCells}
+                learningLang={curMilestone.learningLang}
+                comfortableLang={curMilestone.comfortableLang}
+                includeDefinition={curMilestone.includeDefinition}
+                learnSynonyms={curMilestone.learnSynonyms}
+                setGenAILimit={setGenAILimit}
+              />
+            </Popup>
+          )}
+        </span>
+      )}
     </div>
   );
 };

@@ -66,6 +66,15 @@ export const wordApi = createApi({
         method: "POST",
         body: wordData,
       }),
+      transformResponse: (responseData, meta) => {
+        const limit = meta.response.headers.get("X-RateLimit-Limit");
+        const remaining = meta.response.headers.get("X-RateLimit-Remaining");
+        const reset = meta.response.headers.get("X-RateLimit-Reset");
+        return {
+          ...responseData,
+          rateLimit: { limit, remaining, reset },
+        };
+      },
       // Optimistic update
       async onQueryStarted(wordData, { dispatch, queryFulfilled }) {
         const patchResult = dispatch(
@@ -108,19 +117,22 @@ export const wordApi = createApi({
               undefined,
               (draft) => {
                 const milestonesArray = draft?.milestones;
-          
+
                 if (milestonesArray) {
                   const milestoneIndex = milestonesArray.findIndex(
                     (milestone) => milestone._id === newWord.addedMilestone
                   );
                   if (milestoneIndex !== -1) {
-                  
                     milestonesArray[milestoneIndex] = {
                       ...milestonesArray[milestoneIndex],
-                      wordsCount: milestonesArray[milestoneIndex].wordsCount + 1,
+                      wordsCount:
+                        milestonesArray[milestoneIndex].wordsCount + 1,
                     };
                   } else {
-                    console.warn("Milestone not found in cache:", newWord.addedMilestone);
+                    console.warn(
+                      "Milestone not found in cache:",
+                      newWord.addedMilestone
+                    );
                   }
                 } else {
                   console.warn("Milestones array not found in cache.");
@@ -170,7 +182,45 @@ export const wordApi = createApi({
         );
 
         try {
-          await queryFulfilled;
+          const res = await queryFulfilled;
+          const updatedWord = res?.data?.word;
+
+          // filed to update
+          if ("memorized" in editedFields) {
+            const incrementValue = editedFields.memorized ? 1 : -1;
+
+            // update milestone cache
+            dispatch(
+              milestoneApi.util.updateQueryData(
+                "bringMilestones",
+                undefined,
+                (draft) => {
+                  const milestonesArray = draft?.milestones;
+
+                  if (milestonesArray) {
+                    const milestoneIndex = milestonesArray.findIndex(
+                      (milestone) =>
+                        milestone._id === updatedWord.addedMilestone
+                    );
+                    if (milestoneIndex !== -1) {
+                      milestonesArray[milestoneIndex] = {
+                        ...milestonesArray[milestoneIndex],
+                        memorizedCount:
+                          (milestonesArray[milestoneIndex].memorizedCount || 0) + incrementValue,
+                      };
+                    } else {
+                      console.warn(
+                        "Milestone not found in cache:",
+                        updatedWord.addedMilestone
+                      );
+                    }
+                  } else {
+                    console.warn("Milestones array not found in cache.");
+                  }
+                }
+              )
+            );
+          }
         } catch {
           patchResult.undo();
         }
@@ -210,16 +260,16 @@ export const wordApi = createApi({
               undefined,
               (draft) => {
                 const milestonesArray = draft?.milestones;
-          
+
                 if (milestonesArray) {
                   const milestoneIndex = milestonesArray.findIndex(
                     (milestone) => milestone._id === milestoneId
                   );
                   if (milestoneIndex !== -1) {
-                  
                     milestonesArray[milestoneIndex] = {
                       ...milestonesArray[milestoneIndex],
-                      wordsCount: milestonesArray[milestoneIndex].wordsCount - 1,
+                      wordsCount:
+                        milestonesArray[milestoneIndex].wordsCount - 1,
                     };
                   } else {
                     console.warn("Milestone not found in cache:", milestoneId);
@@ -230,7 +280,6 @@ export const wordApi = createApi({
               }
             )
           );
-
         } catch {
           patchResult.undo();
         }

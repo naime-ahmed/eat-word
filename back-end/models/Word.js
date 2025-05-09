@@ -11,8 +11,7 @@ const wordSchema = new mongoose.Schema(
       maxLength: [
         CHARACTER_LIMITS.word,
         `Word cannot exceed ${CHARACTER_LIMITS.word} characters`,
-      ],
-      unique: true,
+      ]
     },
     meanings: {
       type: String,

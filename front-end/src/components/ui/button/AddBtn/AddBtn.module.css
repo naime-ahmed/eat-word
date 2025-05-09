@@ -1,87 +1,57 @@
-/* style for start new week button */
-.iconBtn {
-  width: 80px;
-  height: 80px;
-  border: 2px solid #a7a5ff54;
-  background: rgb(2, 2, 34);
-  border-radius: 40px;
-  overflow: hidden;
-  position: relative;
-  transition: width 0.4s ease-in-out;
-  font-weight: 500;
-  font-family: inherit;
+.button {
+  font-size: 18px;
+  border-radius: 12px;
+  padding: 3px;
+  font-weight: 700;
+  background-color: #64527c11;
+  border: 1px solid #584ec2f7;
+  color: #ecf0ff;
   cursor: pointer;
-}
-.addBtn:hover {
-  width: 224px;
-}
-.addBtn::before,
-.addBtn::after {
-  transition: width 0.4s ease-in-out, border-radius 0.3s ease-in-out;
-  content: "";
-  position: absolute;
-  height: 6px;
-  width: 16px;
-  top: calc(50% - 3px);
-  background: rgb(52, 61, 196);
-}
-.addBtn::after {
-  right: 22px;
+  position: relative;
   overflow: hidden;
-  border-top-right-radius: 3px;
-  border-bottom-right-radius: 3px;
+  display: inline-flex;
 }
-.addBtn::before {
-  left: 22px;
-  border-top-left-radius: 3px;
-  border-bottom-left-radius: 3px;
+
+.button span {
+  border-radius: 10px;
+  padding: 1em 1.5em;
+  padding-right: 1.4em;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+  background-color: hsl(254.5deg 88% 72.13%);
+  background-image: radial-gradient(
+      at 95% 89%,
+      hsl(230.07deg 88.2% 32.87%) 0px,
+      transparent 50%
+    ),
+    radial-gradient(
+      at 0% 100%,
+      hsl(244.43deg 42.01% 52.76%) 0px,
+      transparent 50%
+    ),
+    radial-gradient(at 0% 0%, hsl(235.38deg 100% 39.17%) 0px, transparent 50%);
 }
-.iconBtn:focus {
-  outline: none;
+
+.icon {
+  width: 24px;
+  height: 24px;
+  transition: transform 0.4s ease-out;
 }
-.btnTxt {
-  color: #fff;
-  opacity: 0;
-  visibility: hidden;
-  transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
-  transition-delay: 0.1s;
-  font-size: 1.3em;
+
+.button:hover .icon {
+  transform: rotate(360deg);
 }
-.addBtn:hover::before,
-.addBtn:hover::after {
-  width: 6px;
-  border-radius: 3px;
-}
-.addBtn:hover .btnTxt {
-  opacity: 1;
-  visibility: visible;
-}
-.addIcon::after,
-.addIcon::before {
-  transition: all 0.2s ease-in-out;
-  content: "";
+
+.buttonOverlay {
   position: absolute;
-  height: 32px;
-  width: 5px;
-  top: calc(50% - 16px);
-  background: rgb(52, 61, 196);
-  overflow: hidden;
-}
-.addIcon::before {
-  left: 36px;
-  border-radius: 5px;
-}
-.addIcon::after {
-  right: 36px;
-  border-radius: 5px;
-}
-.addBtn:hover .addIcon::before {
-  left: 24px;
-  height: 6px;
-  top: calc(50% - 3px);
-}
-.addBtn:hover .addIcon::after {
-  right: 24px;
-  height: 6px;
-  top: calc(50% - 3px);
+  inset: 0;
+  pointer-events: none;
+  background: repeating-conic-gradient(
+      hsl(217, 86%, 20%) 0.0000001%,
+      hsl(217, 86%, 23%) 0.000104%
+    )
+    60% 60%/600% 600%;
+  filter: opacity(12%) contrast(110%);
 }

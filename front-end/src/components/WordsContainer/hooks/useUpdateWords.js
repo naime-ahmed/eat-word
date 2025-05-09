@@ -8,11 +8,17 @@ import {
 export const useUpdateWords = () => {
   const newWordsSet = useRef(new Set());
   const showNotification = useNotification();
-  const [appendWord, {isLoading: isAppendLoading}] = useAppendWordMutation();
+  const [appendWord, { isLoading: isAppendLoading }] = useAppendWordMutation();
   const [editWord] = useEditWordMutation();
 
-  const updateWords = (setWords, rowIndex, columnId, value, milestoneId) => {
-
+  const updateWords = (
+    setWords,
+    setWordsLimit,
+    rowIndex,
+    columnId,
+    value,
+    milestoneId
+  ) => {
     // Early return if inputs are invalid
     if (
       typeof rowIndex !== "number" ||
@@ -79,10 +85,18 @@ export const useUpdateWords = () => {
         newWordsSet.current.add(value);
 
         appendWord(wordToUpdate)
-          .then(() => {
+          .then((res) => {
             newWordsSet.current.delete(value);
+            if (res?.error) {
+              throw new Error(
+                res.error?.data?.message ||
+                  "something went wrong while updating word"
+              );
+            }
+            setWordsLimit(prev => ({...prev, remaining: prev.remaining-1}));
           })
           .catch((error) => {
+            console.log("word append error", error);
             showNotification({
               title: "Failed to save",
               message:

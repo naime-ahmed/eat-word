@@ -14,7 +14,7 @@ const TermsAndConditions = () => {
       <div className={styles.tacTextContainer}>
         <h1>Terms and Conditions</h1>
         <p>
-          Welcome to Your Words. By accessing or using our service, you agree to
+          Welcome to Eat Word. By accessing or using our service, you agree to
           comply with and be bound by the following terms and conditions.
         </p>
 
@@ -27,7 +27,7 @@ const TermsAndConditions = () => {
 
         <h2>2. User Responsibilities</h2>
         <p>
-          When using the Your Words platform, users are responsible for
+          When using the Eat Word platform, users are responsible for
           maintaining the confidentiality of their account credentials and for
           all activities that occur under their account.
         </p>
@@ -42,7 +42,7 @@ const TermsAndConditions = () => {
 
         <h2>4. Privacy and Data Collection</h2>
         <p>
-          Your Words values your privacy. By using our service, you agree to our{" "}
+          Eat Word values your privacy. By using our service, you agree to our{" "}
           <Link to="/privacyPolicy">Privacy Policy</Link>, which outlines how we
           collect, store, and use your personal information.
         </p>
@@ -65,34 +65,27 @@ const TermsAndConditions = () => {
 
         <h2>7. Termination</h2>
         <p>
-          Your Words may terminate or suspend your account if you breach these
+          Eat Word may terminate or suspend your account if you breach these
           terms. Upon termination, your right to access the service will cease
           immediately.
         </p>
 
         <h2>8. Intellectual Property</h2>
         <p>
-          All content provided within Your Words, including text, design, logos,
-          and software, is the property of Your Words and its affiliates. You
-          may not copy, distribute, or create derivative works without our
+          All content provided within Eat Word, including text, design, logos,
+          and software, is the property of Eat Word and its affiliates. You may
+          not copy, distribute, or create derivative works without our
           permission.
         </p>
 
         <h2>9. Limitation of Liability</h2>
         <p>
-          Your Words will not be liable for any indirect, incidental, or
+          Eat Word will not be liable for any indirect, incidental, or
           consequential damages resulting from the use or inability to use the
           service.
         </p>
 
-        <h2>10. Governing Law</h2>
-        <p>
-          These terms shall be governed and construed in accordance with the
-          laws of [Your Jurisdiction]. Any disputes arising from these terms
-          shall be resolved in the courts of [Your Jurisdiction].
-        </p>
-
-        <h2>11. Changes to Terms</h2>
+        <h2>10. Changes to Terms</h2>
         <p>
           We reserve the right to update these Terms and Conditions at any time.
           Continued use of the service after such changes will constitute

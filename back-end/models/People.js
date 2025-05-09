@@ -1,11 +1,5 @@
 import mongoose from "mongoose";
 
-const USAGE_LIMITS = {
-  regular: { apiCalls: 1000, storage: 1024 },
-  premium: { apiCalls: 5000, storage: 5120 },
-  elite: { apiCalls: 10000, storage: 10240 },
-};
-
 const LANGUAGE_CODES = ["en", "bn", "es","zh", "hi", "ar", "ru", "pt", "ko", "tr", "vi", "fr", "de", "it", "ja"]; // ISO 639-1 codes
 
 const peopleSchema = new mongoose.Schema(
@@ -115,35 +109,9 @@ const peopleSchema = new mongoose.Schema(
       enum: ["organic", "referral", "google", "facebook"],
       default: "organic",
     },
-    usage: {
-      limit: {
-        apiCalls: {
-          type: Number,
-          validate: {
-            validator: function(v) {
-              return USAGE_LIMITS[this.subscriptionType]?.apiCalls === v;
-            },
-            message: "API call limit does not match subscription type",
-          },
-        },
-        storage: {
-          type: Number,
-          validate: {
-            validator: function(v) {
-              return USAGE_LIMITS[this.subscriptionType]?.storage === v;
-            },
-            message: "Storage limit does not match subscription type",
-          },
-        },
-      },
-      current: {
-        apiCalls: { type: Number, default: 0, min: 0 },
-        storage: { type: Number, default: 0, min: 0 },
-      },
-    },
     status: {
       type: String,
-      enum: ["active", "suspended", "locked"],
+      enum: ["active", "deactivate", "suspended", "locked"],
       default: "active",
     },
   },

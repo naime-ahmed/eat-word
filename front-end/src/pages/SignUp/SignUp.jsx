@@ -4,6 +4,7 @@ import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { FaEnvelopeCircleCheck } from "react-icons/fa6";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import logoIcon from "../../assets/logoIcon.webp";
 import TurnstileWidget from "../../components/TurnstileWidget";
 import {
   setUserNewErrors,
@@ -145,7 +146,11 @@ const SignUp = () => {
         <VerifyYourEmail email={newUser?.email} />
       ) : (
         <div className={styles.formContainer}>
-          <h2 aria-live="polite">Create Your Account</h2>
+          <div className={styles.signUpHeader}>
+            <img src={logoIcon} alt="brand icon" />
+            <h2 aria-live="polite">Welcome To Eat Word</h2>
+            <small>Please enter your details to create an account</small>
+          </div>
 
           <form onSubmit={handleSubmit} noValidate>
             {/* Name Field */}

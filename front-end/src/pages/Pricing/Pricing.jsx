@@ -16,6 +16,9 @@ const Pricing = () => {
   const { isAuthenticated } = useSelector((state) => state.auth);
   const [showMessageToPro, setShowMessageToPro] = useState(false);
   const [showMessageToLifeT, setShowMessageToLifeT] = useState(false);
+  const plans = ["Monthly", "Annually"];
+  const [activePlan, setActivePlan] = useState(plans[0]);
+  const activeIndex = plans.indexOf(activePlan);
 
   // manage the scroll position
   useScrollRestoration();
@@ -56,6 +59,26 @@ const Pricing = () => {
   return (
     <div className={styles.pricingPage}>
       <Header />
+      <div className={styles.priceSelectorContainer}>
+        <h1>Choose The Plan!</h1>
+        <div className={styles.priceSelectors}>
+          {plans.map((plan) => (
+            <button
+              key={plan}
+              className={`${styles.priceButton} ${
+                activePlan === plan ? styles.active : ""
+              }`}
+              onClick={() => setActivePlan(plan)}
+            >
+              {plan}
+            </button>
+          ))}
+          <span
+            className={styles.glider}
+            style={{ transform: `translateX(${activeIndex * 120}px)` }}
+          />
+        </div>
+      </div>
       <div className={styles.pricingSection}>
         {/* Free Tier - Gateway to Conversion */}
         <div className={styles.free}>
@@ -119,12 +142,14 @@ const Pricing = () => {
             <p>Optimal Learning Experience</p>
           </div>
           <div className={styles.paidPriceCardAmount}>
-            <span>$3.99</span>
+            <span>{activePlan === "Monthly" ? "$3.99" : "$27.99"}</span>
             <small>
-              /month{" "}
-              <span className={styles.billingNote}>
-                ($2.33/month billed annually)
-              </span>
+              {activePlan === "Monthly" ? "/month" : "/year"}{" "}
+              {activePlan === "Monthly" && (
+                <span className={styles.billingNote}>
+                  ($2.33/month billed annually)
+                </span>
+              )}
             </small>
           </div>
           <div className={styles.pricingCTA}>

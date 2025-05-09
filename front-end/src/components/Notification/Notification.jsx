@@ -1,3 +1,4 @@
+import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { BiMessageAltError } from "react-icons/bi";
@@ -39,6 +40,7 @@ const Notification = ({
       clearTimeout(timeout);
       clearInterval(interval);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [visible, duration]);
 
   const handleClose = () => {
@@ -50,6 +52,12 @@ const Notification = ({
     error: <BiMessageAltError className={styles.error} />,
     warning: <LuMessageSquareWarning className={styles.warning} />,
     success: <LuCircleCheckBig className={styles.success} />,
+  };
+
+  const progressFillColor = {
+    error: { backgroundColor: "#ff0e36" },
+    warning: { backgroundColor: "#fbbf24" },
+    success: { backgroundColor: "#00e025" },
   };
 
   if (!visible) return null;
@@ -71,12 +79,25 @@ const Notification = ({
       <div className={styles.progressBar}>
         <div
           className={styles.progressFill}
-          style={{ width: `${progress}%` }}
+          style={{
+            width: `${progress}%`,
+            ...progressFillColor[iconType],
+          }}
         />
       </div>
     </div>,
     document.body
   );
+};
+
+Notification.propTypes = {
+  id: PropTypes.number,
+  icon: PropTypes.element,
+  title: PropTypes.string,
+  message: PropTypes.string,
+  iconType: PropTypes.string,
+  onClose: PropTypes.func,
+  duration: PropTypes.number,
 };
 
 const NotificationContainer = () => {

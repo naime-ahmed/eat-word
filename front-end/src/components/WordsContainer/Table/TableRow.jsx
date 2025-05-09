@@ -15,6 +15,7 @@ const TableRow = ({
   setGeneratingCells,
   includeDefinition,
   learnSynonyms,
+  setGenAILimit,
 }) => {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [clickPosition, setClickPosition] = useState(null);
@@ -70,6 +71,7 @@ const TableRow = ({
               setGeneratingCells={setGeneratingCells}
               learnSynonyms={learnSynonyms}
               includeDefinition={includeDefinition}
+              setGenAILimit={setGenAILimit}
             />
           </Popup>
         </td>
@@ -95,6 +97,7 @@ TableRow.propTypes = {
   setGeneratingCells: PropTypes.func,
   learnSynonyms: PropTypes.bool,
   includeDefinition: PropTypes.bool,
+  setGenAILimit: PropTypes.func.isRequired,
 };
 
 export default TableRow;

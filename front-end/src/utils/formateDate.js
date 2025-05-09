@@ -6,3 +6,18 @@ export function formatDate(dateString) {
 
   return `${yyyy}-${mm}-${dd}`;
 }
+
+export function isEnded(createdAtISO, milestoneType) {
+  const createdAt = new Date(createdAtISO);
+  const now = new Date();
+  const daysPassed = Math.floor((now - createdAt) / (1000 * 60 * 60 * 24));
+
+  const milestoneDurations = {
+    seven: 7,
+    three: 3,
+  };
+
+  const requiredDays = milestoneDurations[milestoneType] || 0;
+
+  return daysPassed >= requiredDays;
+}
