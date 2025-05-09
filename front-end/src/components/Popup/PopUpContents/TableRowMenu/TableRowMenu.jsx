@@ -394,7 +394,7 @@ TableRowMenu.propTypes = {
   curWord: wordPropTypes.isRequired,
   onClose: PropTypes.func.isRequired,
   rowIdx: PropTypes.number,
-  updateRowHeight: PropTypes.func.isRequired,
+  updateRowHeight: PropTypes.func,
   comfortableLang: PropTypes.string,
   learningLang: PropTypes.string,
   setGeneratingCells: PropTypes.func.isRequired,
