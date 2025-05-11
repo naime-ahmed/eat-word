@@ -6,7 +6,7 @@ import { removeUser } from "../controller/usersController/deleteController.js";
 import { getUserById } from "../controller/usersController/getUserController.js";
 import { updatePassword } from "../controller/usersController/updatePasswordController.js";
 import { updateUserById } from "../controller/usersController/updateUserController.js";
-import { updateUserInfoLimit } from "../middlewares/rateLimiter/updatePassLimit.js";
+import { updateUserInfoLimit } from "../middlewares/rateLimiter/updateUserInfoLimit.js";
 import { verifyAccessToken } from "../middlewares/validate/verifyAccessToken.js";
 
 const router = express.Router();
