@@ -96,14 +96,6 @@ const peopleSchema = new mongoose.Schema(
         default: "unspecified",
       },
     },
-    security: {
-      lastLogin: Date,
-      failedAttempts: {
-        type: Number,
-        default: 0,
-      },
-      lockedUntil: Date,
-    },
     signupSource: {
       type: String,
       enum: ["organic", "referral", "google", "facebook"],
@@ -138,16 +130,6 @@ peopleSchema.pre("save", function (next) {
   // Admin override logic
   if (this.role === "admin") {
     this.subscriptionType = "elite";
-  }
-
-  // Set usage limits
-  this.usage.limit = USAGE_LIMITS[this.subscriptionType];
-
-  // Cap failed attempts at 5 and handle locking
-  if (this.security.failedAttempts >= 5) {
-    this.security.failedAttempts = 5; // Prevent exceeding limit
-    this.security.lockedUntil = new Date(Date.now() + 3600000);
-    this.status = "locked";
   }
 
   next();
