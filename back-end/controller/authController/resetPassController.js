@@ -1,66 +1,128 @@
 import bcrypt from "bcrypt";
 import { sendEmailForgotPass } from "../../helper/sendMail.js";
 import Users from "../../models/People.js";
+import { forgotPasswordLimiter, resetPasswordLimiter } from "../../utils/rateLimitersConfig.js";
 import { generateTempToken, verifyToken } from "../../utils/tokenUtils.js";
-
 
 export const resetPassword = {
   forgot: async (req, res) => {
     try {
-      const { email } = req.body;
-      // Verify if email is registered
-      const user = await Users.findOne({ email });
-      if (!user) {
-        // Generic response for security
+      const ip = req.ip;
+      // block check
+      const rlGet = await forgotPasswordLimiter.get(ip);
+      if (rlGet && rlGet.remainingPoints <= 0) {
+        const retry = Math.ceil(rlGet.msBeforeNext / 1000);
+        res.set("Retry-After", retry);
         return res
-          .status(200)
-          .json({ message: "If the email is registered, you will receive a reset link." });
+          .status(429)
+          .json({
+            code: "TOO_MANY_REQUESTS",
+            message: `Too many requests. Try again in ${retry / 60}m.`,
+            retryAfter: retry,
+          });
       }
 
-      // Generate the reset token
-      const resetToken = generateTempToken({ id: user._id });
-      const url = `${process.env.FRONT_END_URL}/reset-password/?token=${resetToken}`;
+      const { email } = req.body;
+      // always consume one point on each request
+      try {
+        await forgotPasswordLimiter.consume(ip);
+      } catch (rlRej) {
+        const retry = Math.ceil(rlRej.msBeforeNext / 1000);
+        res.set("Retry-After", retry);
+        return res
+          .status(429)
+          .json({
+            code: "TOO_MANY_REQUESTS",
+            message: `Too many requests. Try again in ${retry / 60}m.`,
+            retryAfter: retry,
+          });
+      }
 
-      // Send email
+      const user = await Users.findOne({ email });
+      if (!user)
+        return res
+          .status(200)
+          .json({
+            message:
+              "If the email is registered, you will receive a reset link.",
+          });
+
+      const token = generateTempToken({ id: user._id });
+      const url = `${process.env.FRONT_END_URL}/reset-password/?token=${token}`;
       await sendEmailForgotPass(
         email,
-        "Eat Word | Password Reset",
+        "Password Reset",
         user.name,
         url,
         "Reset Password"
       );
-
-      // Success response
-      res.status(200).json({ message: "If the email is registered, you will receive a reset link." });
+      return res
+        .status(200)
+        .json({
+          message: "If the email is registered, you will receive a reset link.",
+        });
     } catch (error) {
-      res.status(500).json({ message: "Something went wrong! Please try again." });
+      console.error(error);
+      return res
+        .status(500)
+        .json({ message: "Something went wrong! Please try again." });
     }
   },
 
   reset: async (req, res) => {
     try {
+      const ip = req.ip;
+      const rlGet = await resetPasswordLimiter.get(ip);
+      if (rlGet && rlGet.remainingPoints <= 0) {
+        const retry = Math.ceil(rlGet.msBeforeNext / 1000);
+        res.set("Retry-After", retry);
+        return res
+          .status(429)
+          .json({
+            code: "TOO_MANY_REQUESTS",
+            message: `Too many requests. Try again in ${retry / 60}m.`,
+            retryAfter: retry,
+          });
+      }
+
       const { newPass, token } = req.body;
-      // Validate token
+      try {
+        await resetPasswordLimiter.consume(ip);
+      } catch (rlRej) {
+        const retry = Math.ceil(rlRej.msBeforeNext / 1000);
+        res.set("Retry-After", retry);
+        return res
+          .status(429)
+          .json({
+            code: "TOO_MANY_REQUESTS",
+            message: `Too many requests. Try again in ${retry / 60}m.`,
+            retryAfter: retry,
+          });
+      }
+
       const payload = verifyToken(token);
-      if (!payload) {
-        return res.status(400).json({ message: "Invalid or expired reset token." });
-      }
+      if (!payload)
+        return res
+          .status(400)
+          .json({ message: "Invalid or expired reset token." });
+      if (newPass.length < 6)
+        return res
+          .status(400)
+          .json({ message: "Password must be at least 6 characters long." });
 
-      // Validate password complexity
-      if (newPass.length < 6) {
-        return res.status(400).json({ message: "Password must be at least 6 characters long." });
-      }
+      const hashed = await bcrypt.hash(newPass, 10);
+      await Users.findByIdAndUpdate(payload.id, { password: hashed });
 
-      // Hash password
-      const hashedPassword = await bcrypt.hash(newPass, 10);
-
-      // Update user password
-      await Users.findByIdAndUpdate(payload.id, { password: hashedPassword });
-
-      // Success response
-      res.status(204).json({message: "Successful, Use new password to sign In"}); // No content
+      return res
+        .status(204)
+        .json({ message: "Successful, use new password to sign in" });
     } catch (error) {
-      res.status(500).json({ message: "Something went wrong while resetting the password." });
+      console.error(error);
+      return res
+        .status(500)
+        .json({
+          message: "Something went wrong while resetting the password.",
+        });
     }
   },
 };
