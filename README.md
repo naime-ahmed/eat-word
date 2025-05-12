@@ -12,7 +12,7 @@ No more generic word lists. **You** control your learning: add words from books,
 ## 🔗 Quick Links
 
 [![Live Demo](https://img.shields.io/badge/%F0%9F%9A%80-Live_Demo-2EA44F)](https://eat-word.pages.dev/)  
-[📺 Usage Guide Video](your-url-here)
+[📺 Usage Guide Video](https://eat-word.pages.dev/#introvideo)
 
 <!-- [📖 Case Study](https://eat-word.pages.dev/#introvideo) -->
 
