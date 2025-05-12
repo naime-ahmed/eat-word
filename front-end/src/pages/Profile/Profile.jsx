@@ -1,5 +1,6 @@
 import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
+import { FaEye, FaEyeSlash } from "react-icons/fa6";
 import { HiMiniXMark } from "react-icons/hi2";
 import { LiaEditSolid } from "react-icons/lia";
 import { MdOutlineEdit } from "react-icons/md";
@@ -153,8 +154,14 @@ function Profile() {
       }
     } catch (error) {
       showNotification({
-        title: "Something went wrong",
-        message: error.message || "An unexpected error occurred",
+        title:
+          error.status === 429
+            ? "Calm down! Try later"
+            : "Something went wrong",
+        message:
+          error.message ||
+          error?.data?.message ||
+          "An unexpected error occurred",
         iconType: "error",
         duration: 4000,
       });
@@ -470,6 +477,11 @@ function ChangePasswordForm({ setIsChanging }) {
     retypePass: "",
     retypePassError: "",
   });
+  const [showPass, setShowPass] = useState({
+    curPass: false,
+    newPass: false,
+    retypePass: false,
+  });
   const showNotification = useNotification();
 
   const handlePassChangeClick = async (e) => {
@@ -519,6 +531,15 @@ function ChangePasswordForm({ setIsChanging }) {
           duration: 4000,
         });
         setIsChanging(false);
+      } else if (res.error) {
+        showNotification({
+          title: "Calm down!",
+          message:
+            res?.error?.data?.message ||
+            "something went wrong! You might requesting too much",
+          iconType: "error",
+          duration: 4000,
+        });
       }
     } catch (error) {
       console.log(error);
@@ -544,7 +565,7 @@ function ChangePasswordForm({ setIsChanging }) {
             Enter current password <small>&#42;</small>
           </label>
           <input
-            type="password"
+            type={showPass.curPass ? "text" : "password"}
             name="curPass"
             id="curPass"
             onChange={handlePassChange}
@@ -552,6 +573,27 @@ function ChangePasswordForm({ setIsChanging }) {
             className={styles.inputField}
             autoComplete="on"
           />
+          {pass?.curPass && (
+            <span
+              className={styles.passEyeIcon}
+              style={{
+                bottom: pass.curPassError || isErrorUpPass ? "24px" : undefined,
+              }}
+              onClick={() =>
+                setShowPass((prev) => ({ ...prev, curPass: !prev.curPass }))
+              }
+              role="button"
+              aria-label={showPass.curPass ? "Hide password" : "Show password"}
+              tabIndex={0}
+            >
+              {showPass.curPass ? (
+                <FaEyeSlash className={styles.eyeIcon} />
+              ) : (
+                <FaEye className={styles.eyeIcon} />
+              )}
+            </span>
+          )}
+
           {pass.curPassError && <small>{pass.curPassError}</small>}
           {isErrorUpPass && <small>{errorUpPass?.data?.message}</small>}
         </div>
@@ -560,7 +602,7 @@ function ChangePasswordForm({ setIsChanging }) {
             Enter new password <small>&#42;</small>
           </label>
           <input
-            type="password"
+            type={showPass.newPass ? "text" : "password"}
             name="newPass"
             id="newPass"
             onChange={handlePassChange}
@@ -568,6 +610,24 @@ function ChangePasswordForm({ setIsChanging }) {
             className={styles.inputField}
             autoComplete="on"
           />
+          {pass?.newPass && (
+            <span
+              className={styles.passEyeIcon}
+              style={{ bottom: pass.newPassError ? "24px" : undefined }}
+              onClick={() =>
+                setShowPass((prev) => ({ ...prev, newPass: !prev.newPass }))
+              }
+              role="button"
+              aria-label={showPass.newPass ? "Hide password" : "Show password"}
+              tabIndex={0}
+            >
+              {showPass.newPass ? (
+                <FaEyeSlash className={styles.eyeIcon} />
+              ) : (
+                <FaEye className={styles.eyeIcon} />
+              )}
+            </span>
+          )}
           {pass.newPassError && <small>{pass.newPassError}</small>}
         </div>
         <div>
@@ -575,7 +635,7 @@ function ChangePasswordForm({ setIsChanging }) {
             Enter new password Again <small>&#42;</small>
           </label>
           <input
-            type="password"
+            type={showPass.retypePass ? "text" : "password"}
             name="retypePass"
             id="retypePass"
             onChange={handlePassChange}
@@ -583,6 +643,29 @@ function ChangePasswordForm({ setIsChanging }) {
             className={styles.inputField}
             autoComplete="on"
           />
+          {pass?.retypePass && (
+            <span
+              className={styles.passEyeIcon}
+              style={{ bottom: pass.retypePassError ? "24px" : undefined }}
+              onClick={() =>
+                setShowPass((prev) => ({
+                  ...prev,
+                  retypePass: !prev.retypePass,
+                }))
+              }
+              role="button"
+              aria-label={
+                showPass.retypePass ? "Hide password" : "Show password"
+              }
+              tabIndex={0}
+            >
+              {showPass.retypePass ? (
+                <FaEyeSlash className={styles.eyeIcon} />
+              ) : (
+                <FaEye className={styles.eyeIcon} />
+              )}
+            </span>
+          )}
           {pass.retypePassError && <small>{pass.retypePassError}</small>}
         </div>
       </div>

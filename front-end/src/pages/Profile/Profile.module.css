@@ -186,10 +186,36 @@
   justify-content: space-between;
   align-items: center;
 }
+.changePass > div {
+  position: relative;
+}
 .changePass > div > small {
   display: block;
   color: rgb(255, 124, 124);
   margin-left: 2px;
+}
+
+.passEyeIcon {
+  position: absolute;
+  right: 6px;
+  bottom: 6px;
+  background-color: #020817;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  padding: 4px;
+  transition: opacity 0.2s ease;
+}
+
+.passEyeIcon:hover {
+  opacity: 0.8;
+}
+
+.eyeIcon {
+  color: #666;
+  width: 1.25rem;
+  height: 1.25rem;
+  vertical-align: middle;
 }
 
 .deletingACC {

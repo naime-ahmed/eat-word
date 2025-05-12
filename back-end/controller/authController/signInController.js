@@ -1,9 +1,7 @@
-// external imports
 import bcrypt from "bcrypt";
 import ms from "ms";
-
-// internal imports
 import Users from "../../models/People.js";
+import { loginFailureLimiter } from "../../utils/rateLimitersConfig.js";
 import {
   generateAccessToken,
   generateRefreshToken,
@@ -11,50 +9,70 @@ import {
 
 async function signIn(req, res, next) {
   try {
+    const ip = req.ip;
 
-    if (!req.body.email || !req.body.password) {
-      return res.status(400).json({ message: "Email and password are required" });
+    // check if IP is already blocked
+    const rateLimiterRes = await loginFailureLimiter.get(ip);
+    if (rateLimiterRes && rateLimiterRes.remainingPoints <= 0) {
+      const retryMin = Math.ceil(rateLimiterRes.msBeforeNext / 1000 / 60);
+      res.set("Retry-After", retryMin);
+      return res.status(429).json({
+        code: "TOO_MANY_REQUESTS",
+        message: `Too many failed login attempts. Try again in ${retryMin} minutes.`,
+        retryAfter: retryMin,
+      });
     }
 
-    const hasUser = await Users.findOne({ email: req.body.email });
-
-    if (!hasUser) {
-      return res.status(404).json({ message: "Please sign up first" });
+    // basic validation
+    const { email, password } = req.body;
+    if (!email || !password) {
+      return res
+        .status(400)
+        .json({ message: "Email and password are required" });
     }
 
-    // compare the given password with the stored one
-    const isSamePass = await bcrypt.compare(
-      req.body.password,
-      hasUser.password
-    );
+    const user = await Users.findOne({ email });
+    const passwordMatches =
+      user && (await bcrypt.compare(password, user.password));
 
-    if (!isSamePass) {
-      return res.status(401).json({ message: "Invalid Password or Email!" });
+    if (!user || !passwordMatches) {
+      try {
+        const rlRes = await loginFailureLimiter.consume(ip, 1);
+      } catch (rlRejected) {
+        const retrySecs = Math.ceil(rlRejected.msBeforeNext / 1000);
+        res.set("Retry-After", retrySecs);
+        return res.status(429).json({
+          code: "TOO_MANY_REQUESTS",
+          message: `Too many failed login attempts. Try again in ${retrySecs} seconds.`,
+          retryAfter: retrySecs,
+        });
+      }
+
+      return res.status(401).json({ message: "Invalid email or password" });
     }
 
-    // grant access to account and generate tokens
-    const accessToken = generateAccessToken(hasUser);
-    const refreshToken = generateRefreshToken(hasUser);
+    await loginFailureLimiter.delete(ip);
 
-    const refreshTokenExpiry = ms(process.env.JWT_REFRESH_TOKEN_EXPIRY);
+    // 6) generate & send tokens
+    const accessToken = generateAccessToken(user);
+    const refreshToken = generateRefreshToken(user);
+    const refreshTokenExpiryMs = ms(process.env.JWT_REFRESH_TOKEN_EXPIRY);
 
-    // Store refresh token in HTTP-only cookie
     res.cookie(process.env.COOKIE_NAME, refreshToken, {
       httpOnly: true,
       signed: true,
-      maxAge: refreshTokenExpiry,
+      maxAge: refreshTokenExpiryMs,
       secure: process.env.NODE_ENV === "production",
       sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
       path: "/",
     });
 
-    // Send success response with access token
     res.status(200).json({
       message: "Authentication successful",
       accessToken,
     });
   } catch (err) {
-    // Handle any server error
+    console.error("SignIn Error:", err);
     res.status(500).json({
       message: "An unknown error occurred during sign-in",
     });

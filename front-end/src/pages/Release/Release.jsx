@@ -7,6 +7,19 @@ import styles from "./Release.module.css";
 
 const releases = [
   {
+    id: "dgfdgdf2125$$%%sfd",
+    version: "v1.5",
+    date: "2025-05-24",
+    wanted: "1.5k",
+    tag: "bug fix",
+    features: [
+      "Implemented a redesigned table header and words slider incorporating rate limit indicators",
+      "Addressed critical UI/UX issues in the My Space and Challenge pages",
+      "Introduced a prominent notification banner for displaying important announcements on the homepage",
+    ],
+    hasSeeMore: false,
+  },
+  {
     id: "sdgdsfg3454645dfgdg",
     version: "v1.1.5",
     date: "2025-03-28",
