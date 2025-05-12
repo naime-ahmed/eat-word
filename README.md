@@ -11,9 +11,10 @@ No more generic word lists. **You** control your learning: add words from books,
 
 ## 🔗 Quick Links
 
-[![Live Demo](https://img.shields.io/badge/%F0%9F%9A%80-Live_Demo-2EA44F)](your-url-here)  
-[📺 Usage Guide Video](your-url-here)  
-[📖 Case Study](your-url-here)
+[![Live Demo](https://img.shields.io/badge/%F0%9F%9A%80-Live_Demo-2EA44F)](https://eat-word.pages.dev/)  
+[📺 Usage Guide Video](your-url-here)
+
+<!-- [📖 Case Study](https://eat-word.pages.dev/#introvideo) -->
 
 ---
 
