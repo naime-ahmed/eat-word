@@ -48,10 +48,11 @@ const getMilestoneWords = async (req, res) => {
       console.error("Error fetching rate limit info:", error);
     }
 
-    const wordRemaining = wordLimiter.points - wordConsumedPoints;
+    const wordRemaining = wordLimiter.points - Math.min(wordLimiter.points, wordConsumedPoints);
+    
     const wordResetAt = new Date(Date.now() + wordMsBeforeNext).toISOString();
 
-    const genAIRemaining = genAILimiter.points - genAIConsumePoints;
+    const genAIRemaining =  genAILimiter.points - Math.min(genAILimiter.points, genAIConsumePoints);
     const genAIResetAt = new Date(Date.now() + genAIMsBeforeNext);
 
     if (!words.length) {
