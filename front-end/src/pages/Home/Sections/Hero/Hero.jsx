@@ -4,7 +4,6 @@ import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import CTABtn from "../../../../components/ui/button/CTABtn/CTABtn";
 import Skeleton from "../../../../components/ui/loader/Skeleton/Skeleton";
-import CurlyArrow from "../../../../components/ui/svg/Arrow/CurlyArrow";
 import { countryLanguageMapping, getLanguageForVisitor } from "../../utils.js";
 import styles from "./Hero.module.css";
 
@@ -30,6 +29,14 @@ function Hero() {
   });
   const { isAuthenticated, isLoading } = useSelector((state) => state.auth);
   const navigate = useNavigate();
+  const capsuleCTA = {
+    route: isLoading ? "/" : isAuthenticated ? "/release" : "/sign-up",
+    content: isLoading
+      ? "wait, it's loading..."
+      : isAuthenticated
+      ? "✨ You can now see the limits"
+      : "✨ Free 1-month Pro for you",
+  };
 
   // Cycle through animated texts
   useEffect(() => {
@@ -70,17 +77,20 @@ function Hero() {
     }
   };
 
-  const handleNavigateToHotNews = () => {
-    navigate("/release");
+  const handleCapsuleCTANavigate = () => {
+    navigate(capsuleCTA.route);
   };
 
   return (
     <section className={styles.container}>
       <div className={styles.heroContent}>
         <div className={styles.shinyText}>
-          <div onClick={handleNavigateToHotNews} className={styles.shinyTextBg}>
+          <div
+            onClick={handleCapsuleCTANavigate}
+            className={styles.shinyTextBg}
+          >
             <span className={styles.shinyAnimatedText}>
-              <span>✨ Generate with AI is here</span>
+              <span>{capsuleCTA.content}</span>
               <IoArrowForward className={styles.arrowIcon} />
             </span>
           </div>
@@ -106,9 +116,8 @@ function Hero() {
           </span>
         </div>
         <p className={styles.HeroDescription}>
-          We help you digest the words you crave—with active recall, spaced
-          repetition, contextual learning, and AI, vocabulary becomes second
-          nature.
+          Master vocabulary with active recall, spaced repetition, context,{" "}
+          <br className={styles.breakLine} /> and AI, so it sticks for life.
         </p>
         {isLoading ? (
           <Skeleton width="180px" height="63px" />
@@ -134,12 +143,6 @@ function Hero() {
             className={styles.flag}
           />
           <span>{localLanguages.motherTongue}</span>
-          <div className={styles.messageAndArrow}>
-            <div className={styles.motherLangArrow}>
-              <CurlyArrow rotation={180} fill="#f0f4ff" stroke="#f0f4ff" />
-            </div>
-            <div className={styles.motherMessage}>You know?</div>
-          </div>
         </div>
 
         {/* Second Language Container */}
@@ -150,12 +153,6 @@ function Hero() {
             className={styles.flag}
           />
           <span>{localLanguages.secondLanguage}</span>
-          <div className={styles.messageAndArrow}>
-            <div className={styles.secondLangArrow}>
-              <CurlyArrow rotation={270} fill="#f0f4ff" stroke="#f0f4ff" />
-            </div>
-            <div className={styles.secondMessage}>Learn</div>
-          </div>
         </div>
       </div>
     </section>
