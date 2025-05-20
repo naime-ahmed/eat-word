@@ -9,33 +9,33 @@ import imgForFindWord from "../../assets/wordSearchCardIcon.webp";
 export const cards = () => [
   {
     img: imgForFindWord,
-    alt: "Image of word search",
-    text: "Clashed with unknown word?",
+    alt: "Discovering a new word",
+    text: "Stumbled upon a new word?",
   },
   {
     img: imgForListWord,
-    alt: "image of word list",
-    text: "List it down and learn",
+    alt: "Adding a word to your list",
+    text: "Save it to your active challenge.",
   },
   {
     img: imgForShortMemo,
-    alt: "image of short time memory",
-    text: "Now it's living in your short time memory",
+    alt: "Committing a word to short-term memory",
+    text: "Start learning—it's now in short-term memory.",
   },
   {
     img: imgForRevised,
-    alt: "image of revise the word for a week",
-    text: "Revise either once per day or once every two days for a week.",
+    alt: "Reviewing words during the week",
+    text: "Revisit once daily or every other day this week.",
   },
   {
     img: imgForTestOnSelf,
-    alt: "image of test on self",
-    text: "Each week, test yourself on all the words you've learned. Mark any forgotten words in red, then start next week mission.",
+    alt: "Self-testing your word knowledge",
+    text: "Test yourself weekly. Flag any forgotten words and prepare for your next round.",
   },
   {
     img: imgForLongMemo,
-    alt: "image of long time memory",
-    text: "Successfully remembering words in your self-test indicates they're now part of your long-term memory.",
+    alt: "Words stored in long-term memory",
+    text: "Remembered? That word's now yours—locked in long-term memory.",
   },
 ];
 
