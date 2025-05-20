@@ -1,10 +1,8 @@
-/* CSS for journey of a words container */
 .JourneyOfAWordContainer {
   width: 1250px;
   position: relative;
 }
 
-/* CSS for gradient bg */
 .gradientLine {
   position: absolute;
   top: -0.5px;
@@ -162,7 +160,6 @@
   height: 182px;
 }
 
-/* Set dashed stroke style */
 .dashBorder0 > svg path,
 .dashBorder1 > svg path,
 .dashBorder2 > svg path,
@@ -171,7 +168,6 @@
 .dashBorder5 > svg path {
   fill: none;
   stroke-width: 2;
-  /* Set a dash pattern (e.g., 5px dash, 5px gap) */
   stroke-dasharray: 5 5;
   stroke-dashoffset: 0;
 }
@@ -285,27 +281,27 @@
   }
   .dashBorder1 > svg {
     left: 100px;
-    bottom: 30px;
+    bottom: 42px;
     rotate: 15deg;
   }
   .dashBorder3 > svg {
     left: 100px;
-    bottom: 60px;
+    bottom: 50px;
     rotate: 15deg;
   }
   .dashBorder5 > svg {
-    left: 98px;
-    bottom: 84px;
-    rotate: 25deg;
+    left: 86px;
+    bottom: 40px;
+    rotate: 24deg;
   }
   .dashBorder2 > svg {
-    left: -15px;
-    bottom: 35px;
-    rotate: -15deg;
+    left: -18px;
+    bottom: 50px;
+    rotate: 340deg;
   }
   .dashBorder4 > svg {
-    left: -25px;
-    bottom: 90px;
+    left: -20px;
+    bottom: 54px;
     rotate: -22deg;
   }
   .dashBorder0 > svg,
@@ -427,6 +423,11 @@
   .dashBorder5 > svg {
     width: 122px;
     height: 122px;
+  }
+  .dashBorder4 > svg {
+    left: -58px;
+    bottom: 64px;
+    rotate: 358deg;
   }
 }
 
