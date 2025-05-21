@@ -1,6 +1,8 @@
 import PropTypes from "prop-types";
 import { useCallback, useEffect, useRef, useState } from "react";
+import { usePreviousState } from "../../hooks/usePreviousState";
 import styles from "./EditableCell.module.css";
+
 const CHARACTER_LIMITS = {
   word: 35,
   meanings: 100,
@@ -8,6 +10,7 @@ const CHARACTER_LIMITS = {
   definitions: 250,
   examples: 255,
 };
+
 const EditableCell = ({ getValue, row, column, table }) => {
   const initialValue = getValue();
   const [value, setValue] = useState(initialValue);
@@ -15,16 +18,73 @@ const EditableCell = ({ getValue, row, column, table }) => {
   const hasFocusedRef = useRef(false);
   const [isBlurDismissed, setIsBlurDismissed] = useState(false);
   const [showLimitMessage, setShowLimitMessage] = useState(false);
-  const timeoutRef = useRef(null);
-  const isGenerating = table.options.meta?.generatingCells.some(
+  const characterLimitTimeoutRef = useRef(null);
+
+  const isCurrentlyGenerating = table.options.meta?.generatingCells.some(
     ([rowIdx, colId]) => rowIdx === row.index && colId === column.id
   );
 
-  // Derived values
   const characterLimit = CHARACTER_LIMITS[column.id] || 0;
   const isOnRecallMode = table.options.meta?.isOnRecallMood;
-  const showBlur =
-    isOnRecallMode && column.id !== "word" && !isBlurDismissed && value;
+
+  const isRecallBlurActive =
+    isOnRecallMode && column.id !== "word" && !isBlurDismissed && !!value;
+
+  const cellShouldBeVisuallyBlurred =
+    isRecallBlurActive || isCurrentlyGenerating;
+  const prevCellShouldBeVisuallyBlurred = usePreviousState(
+    cellShouldBeVisuallyBlurred
+  );
+
+  const [blurAnimationState, setBlurAnimationState] = useState("none");
+  const isFirstRenderRef = useRef(true);
+
+  useEffect(() => {
+    if (isFirstRenderRef.current) {
+      if (cellShouldBeVisuallyBlurred) {
+        setBlurAnimationState("static");
+        setBlurAnimationState("none");
+      }
+      isFirstRenderRef.current = false;
+      return;
+    }
+
+    // Not first render
+    if (cellShouldBeVisuallyBlurred) {
+      if (!prevCellShouldBeVisuallyBlurred) {
+        setBlurAnimationState("blurring");
+      } else {
+        if (blurAnimationState === "unblurring") {
+          setBlurAnimationState("blurring");
+        } else if (blurAnimationState === "none") {
+          setBlurAnimationState("blurring");
+        }
+      }
+    } else {
+      // cellShouldBeVisuallyBlurred is FALSE
+      if (prevCellShouldBeVisuallyBlurred) {
+        setBlurAnimationState("unblurring");
+      } else {
+        if (blurAnimationState === "blurring") {
+          setBlurAnimationState("unblurring");
+        } else if (blurAnimationState === "static") {
+          setBlurAnimationState("unblurring");
+        }
+      }
+    }
+  }, [
+    cellShouldBeVisuallyBlurred,
+    prevCellShouldBeVisuallyBlurred,
+    blurAnimationState,
+  ]);
+
+  const handleAnimationEnd = () => {
+    if (blurAnimationState === "blurring") {
+      setBlurAnimationState("static");
+    } else if (blurAnimationState === "unblurring") {
+      setBlurAnimationState("none");
+    }
+  };
 
   const adjustHeight = useCallback(() => {
     const textarea = textareaRef.current;
@@ -40,7 +100,6 @@ const EditableCell = ({ getValue, row, column, table }) => {
     }
   }, [row.index, table, column.id]);
 
-  // set the height to rows max height on mount
   useEffect(() => {
     const textarea = textareaRef.current;
     if (textarea) {
@@ -51,46 +110,44 @@ const EditableCell = ({ getValue, row, column, table }) => {
     }
   }, [row.index, table.options.meta?.rowHeights]);
 
-  // Zoom/resize handler
   useEffect(() => {
     const handleZoom = () => requestAnimationFrame(adjustHeight);
-
     const zoomHandler = (e) => {
       if ((e.ctrlKey || e.metaKey) && (e.key === "+" || e.key === "-")) {
         handleZoom();
       }
     };
-
     window.addEventListener("keydown", zoomHandler);
     window.visualViewport?.addEventListener("resize", handleZoom);
-
     return () => {
       window.removeEventListener("keydown", zoomHandler);
       window.visualViewport?.removeEventListener("resize", handleZoom);
-      clearTimeout(timeoutRef.current);
+      clearTimeout(characterLimitTimeoutRef.current);
     };
   }, [adjustHeight]);
 
-  // Value synchronization
   useEffect(() => {
     setValue(initialValue);
-    setTimeout(adjustHeight, 10);
+    requestAnimationFrame(() => {
+      if (textareaRef.current) {
+        adjustHeight();
+      }
+    });
   }, [initialValue, adjustHeight]);
 
-  // Initial focus for new rows
   useEffect(() => {
     if (
       column.id === "word" &&
       !row.original._id &&
       !hasFocusedRef.current &&
-      textareaRef.current
+      textareaRef.current &&
+      !cellShouldBeVisuallyBlurred
     ) {
       textareaRef.current.focus();
       hasFocusedRef.current = true;
     }
-  }, [column.id, row.original._id]);
+  }, [column.id, row.original._id, cellShouldBeVisuallyBlurred]);
 
-  // Reset dismissal state when recall mode turns off
   useEffect(() => {
     if (!isOnRecallMode) {
       setIsBlurDismissed(false);
@@ -100,10 +157,16 @@ const EditableCell = ({ getValue, row, column, table }) => {
   const handleOnChange = (e) => {
     const newValue = e.target.value.slice(0, characterLimit);
     setValue(newValue);
-
-    if (e.target.value.length >= characterLimit) {
+    if (e.target.value.length >= characterLimit && characterLimit > 0) {
       setShowLimitMessage(true);
-      timeoutRef.current = setTimeout(() => setShowLimitMessage(false), 2000);
+      clearTimeout(characterLimitTimeoutRef.current);
+      characterLimitTimeoutRef.current = setTimeout(
+        () => setShowLimitMessage(false),
+        2000
+      );
+    } else {
+      setShowLimitMessage(false);
+      clearTimeout(characterLimitTimeoutRef.current);
     }
     adjustHeight();
   };
@@ -111,29 +174,25 @@ const EditableCell = ({ getValue, row, column, table }) => {
   const handleOnBlur = useCallback(() => {
     if (initialValue !== value) {
       table.options.meta?.updateWords(row.index, column.id, value);
-      adjustHeight();
     }
-  }, [
-    initialValue,
-    value,
-    row.index,
-    column.id,
-    table.options.meta,
-    adjustHeight,
-  ]);
+  }, [initialValue, value, row.index, column.id, table.options.meta]);
 
-  // Handle overlay click
   const handleOverlayClick = (e) => {
-    if (showBlur) {
+    if (isRecallBlurActive) {
       e.preventDefault();
       setIsBlurDismissed(true);
       return;
     }
-    textareaRef.current?.focus();
+    if (
+      !isCurrentlyGenerating &&
+      blurAnimationState !== "blurring" &&
+      blurAnimationState !== "static"
+    ) {
+      textareaRef.current?.focus();
+    }
   };
 
-  // dynamic style
-  const style = {
+  const dynamicStyle = {
     paddingLeft: column.id === "word" ? "12px" : undefined,
     color:
       column.id === "word" && row.original.difficultyLevel === "hard"
@@ -141,13 +200,39 @@ const EditableCell = ({ getValue, row, column, table }) => {
         : undefined,
   };
 
+  let wrapperClasses = styles.cellWrapper;
+  if (blurAnimationState === "static")
+    wrapperClasses += ` ${styles.isBlurredStatic}`;
+  else if (blurAnimationState === "blurring")
+    wrapperClasses += ` ${styles.isBlurring}`;
+  else if (blurAnimationState === "unblurring")
+    wrapperClasses += ` ${styles.isUnblurring}`;
+
+  if (
+    isRecallBlurActive &&
+    (blurAnimationState === "blurring" || blurAnimationState === "static")
+  ) {
+    wrapperClasses += ` ${styles.canReveal}`;
+  }
+
+  const showOverlayElement =
+    blurAnimationState === "blurring" ||
+    blurAnimationState === "unblurring" ||
+    blurAnimationState === "static";
+
   return (
     <div
-      className={`${styles.cellWrapper} ${
-        (showBlur && value) || isGenerating ? styles.blurred : ""
-      } ${isGenerating ? styles.generating : ""}`}
+      className={wrapperClasses}
       onClick={handleOverlayClick}
+      onAnimationEnd={handleAnimationEnd}
     >
+      {showOverlayElement && (
+        <div
+          className={`${styles.blurOverlay} ${
+            isCurrentlyGenerating ? styles.generatingEffect : ""
+          }`}
+        ></div>
+      )}
       <textarea
         ref={textareaRef}
         value={value}
@@ -155,17 +240,17 @@ const EditableCell = ({ getValue, row, column, table }) => {
         onKeyUp={adjustHeight}
         onBlur={handleOnBlur}
         className={`${styles.editableCell} ${
-          isGenerating ? styles.pulsingText : ""
+          isCurrentlyGenerating ? styles.pulsingText : ""
         }`}
-        style={style}
+        style={dynamicStyle}
         rows={1}
-        maxLength={characterLimit}
+        maxLength={characterLimit > 0 ? characterLimit : undefined}
         onFocus={(e) => {
-          if (showBlur || isGenerating) {
+          if (showOverlayElement || isCurrentlyGenerating) {
             e.target.blur();
           }
         }}
-        disabled={isGenerating}
+        disabled={isCurrentlyGenerating}
       />
       {showLimitMessage && (
         <div className={styles.limitMessage}>

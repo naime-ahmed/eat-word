@@ -52,20 +52,28 @@
   height: 100%;
 }
 
-.blurred::after {
-  content: "";
+.cellWrapper.canReveal {
+  cursor: pointer;
+}
+
+.blurOverlay {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background: #111b2f08;
+  background: rgba(17, 27, 47, 0.03);
   backdrop-filter: blur(4px);
-  cursor: pointer;
   z-index: 1;
+  pointer-events: none;
+  clip-path: inset(0 100% 0 0);
 }
 
-.blurred::before {
+.cellWrapper.isBlurredStatic .blurOverlay {
+  clip-path: inset(0 0 0 0);
+  pointer-events: auto;
+}
+.cellWrapper.isBlurredStatic.canReveal::before {
   content: "Click to reveal";
   position: absolute;
   top: 50%;
@@ -76,26 +84,113 @@
   color: #999999;
   font-size: 0.9em;
   pointer-events: none;
+  opacity: 1;
 }
 
-.generating {
-  position: relative;
-  overflow: hidden;
-  filter: blur(3px);
-  animation: generatingBlur 1s infinite alternate;
+.cellWrapper.isBlurring .blurOverlay {
+  animation: slideInBlur 0.35s forwards ease-out;
+  pointer-events: auto;
+}
+.cellWrapper.isBlurring.canReveal::before {
+  content: "Click to reveal";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  min-width: 115px;
+  transform: translate(-50%, -50%);
+  z-index: 2;
+  color: #999999;
+  font-size: 0.9em;
+  pointer-events: none;
+  opacity: 0;
+  animation: fadeInText 0.3s 0.15s forwards;
 }
 
-@keyframes generatingBlur {
+.cellWrapper.isUnblurring .blurOverlay {
+  animation: slideOutBlur 0.35s forwards ease-in;
+  pointer-events: none;
+}
+
+@keyframes slideInBlur {
   from {
-    filter: blur(4px);
+    clip-path: inset(0 100% 0 0);
   }
   to {
-    filter: blur(8px);
+    clip-path: inset(0 0 0 0);
   }
 }
 
-@keyframes blink {
-  50% {
+@keyframes slideOutBlur {
+  from {
+    clip-path: inset(0 0 0 0);
+  }
+  to {
+    clip-path: inset(0 100% 0 0);
+  }
+}
+
+@keyframes fadeInText {
+  to {
+    opacity: 1;
+  }
+}
+
+.blurOverlay.generatingEffect {
+  animation: generatingBackdropBlur 1.2s infinite alternate ease-in-out;
+}
+
+@keyframes generatingBackdropBlur {
+  from {
+    backdrop-filter: blur(4px);
+  }
+  to {
+    backdrop-filter: blur(7px);
+  }
+}
+
+.editableCell {
+  width: 100%;
+  height: 100%;
+  position: static;
+  background-color: transparent;
+  color: #d0d0d1;
+  border: none;
+  outline: none;
+  padding: 6px 8px;
+  font-size: 15px;
+  overflow: hidden;
+  resize: none;
+  box-sizing: border-box;
+  vertical-align: top;
+  transition: filter 0.2s ease;
+}
+.editableCell:focus {
+  box-shadow: inset 0 0 0 2px #045dbb;
+  outline-offset: 0;
+}
+
+.limitMessage {
+  position: absolute;
+  bottom: 2px;
+  right: 5px;
+  background: rgb(32, 12, 15);
+  color: rgb(255, 63, 95);
+  padding: 2px 5px;
+  border-radius: 3px;
+  font-size: 0.75rem;
+  pointer-events: none;
+  animation: fadeOut 2s forwards;
+  z-index: 2;
+}
+
+@keyframes fadeOut {
+  0% {
+    opacity: 1;
+  }
+  80% {
+    opacity: 1;
+  }
+  100% {
     opacity: 0;
   }
 }
