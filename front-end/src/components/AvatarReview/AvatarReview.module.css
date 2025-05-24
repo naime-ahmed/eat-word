@@ -1,0 +1,68 @@
+.reviewContainer {
+  display: inline-flex;
+  align-items: center;
+  gap: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.avatarGroup {
+  display: flex;
+  align-items: center;
+}
+
+.avatarWrapper {
+  position: relative;
+}
+
+.avatarWrapper + .avatarWrapper {
+  margin-left: -16px;
+}
+
+.avatarLink {
+  display: block;
+  line-height: 0;
+}
+
+.avatarImage {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 2px solid #ffffff;
+  object-fit: cover;
+  display: block;
+  background-color: #e0e0e0;
+}
+
+.reviewInfo {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.stars {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 5px;
+}
+
+.starIcon {
+  color: #ffd700;
+  width: 18px;
+  height: 18px;
+}
+
+.trustText {
+  font-size: 14px;
+  color: #ffffff;
+  font-weight: 500;
+  white-space: nowrap;
+}
+@media (max-width: 391.98px) {
+  .reviewContainer {
+    gap: 10px;
+  }
+  .avatarImage {
+    width: 38px;
+    height: 38px;
+  }
+}
