@@ -74,7 +74,7 @@
   pointer-events: auto;
 }
 .cellWrapper.isBlurredStatic.canReveal::before {
-  content: "Click to reveal";
+  content: "";
   position: absolute;
   top: 50%;
   left: 50%;
@@ -92,7 +92,7 @@
   pointer-events: auto;
 }
 .cellWrapper.isBlurring.canReveal::before {
-  content: "Click to reveal";
+  content: "";
   position: absolute;
   top: 50%;
   left: 50%;
@@ -125,7 +125,7 @@
     clip-path: inset(0 0 0 0);
   }
   to {
-    clip-path: inset(0 100% 0 0);
+    clip-path: inset(0 0 0 100%);
   }
 }
 
@@ -137,6 +137,7 @@
 
 .blurOverlay.generatingEffect {
   animation: generatingBackdropBlur 1.2s infinite alternate ease-in-out;
+  background: rgba(17, 27, 47, 0.08);
 }
 
 @keyframes generatingBackdropBlur {

@@ -239,6 +239,7 @@ const EditableCell = ({ getValue, row, column, table }) => {
         onChange={handleOnChange}
         onKeyUp={adjustHeight}
         onBlur={handleOnBlur}
+        placeholder={isCurrentlyGenerating && !value ? "Generating..." : ""}
         className={`${styles.editableCell} ${
           isCurrentlyGenerating ? styles.pulsingText : ""
         }`}
