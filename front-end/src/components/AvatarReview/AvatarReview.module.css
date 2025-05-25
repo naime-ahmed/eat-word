@@ -27,10 +27,28 @@
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  border: 2px solid #ffffff;
+  border: 2px solid #a4beff;
   object-fit: cover;
   display: block;
   background-color: #e0e0e0;
+  box-sizing: border-box;
+}
+
+.countCircle {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 2px solid #a4beff;
+  background-color: #19233c;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1;
+  text-align: center;
+  box-sizing: border-box;
 }
 
 .reviewInfo {
@@ -57,12 +75,40 @@
   font-weight: 500;
   white-space: nowrap;
 }
+
+@keyframes slideInFromRightKeyframe {
+  from {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.animatedElement {
+  opacity: 0;
+}
+
+.startAnimation {
+  animation-name: slideInFromRightKeyframe;
+  animation-duration: 0.4s;
+  animation-timing-function: ease-out;
+  animation-fill-mode: forwards;
+  animation-delay: var(--animation-delay, 0s);
+}
+
 @media (max-width: 391.98px) {
   .reviewContainer {
     gap: 10px;
   }
-  .avatarImage {
+  .avatarImage,
+  .countCircle {
     width: 38px;
     height: 38px;
+  }
+  .countCircle {
+    font-size: 12px;
   }
 }
