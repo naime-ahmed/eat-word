@@ -2,9 +2,10 @@ import { useEffect, useState } from "react";
 import { IoArrowForward } from "react-icons/io5";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import AvatarReview from "../../../../components/AvatarReview/AvatarReview";
 import CTABtn from "../../../../components/ui/button/CTABtn/CTABtn";
 import Skeleton from "../../../../components/ui/loader/Skeleton/Skeleton";
-import { countryLanguageMapping, getLanguageForVisitor } from "../../utils.js";
+import { trustedUserAvatar } from "../../utils";
 import styles from "./Hero.module.css";
 
 const texts = [
@@ -21,12 +22,7 @@ const texts = [
 function Hero() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [leavingIndex, setLeavingIndex] = useState(null);
-  const [localLanguages, setLocalLanguages] = useState({
-    motherTongue: "",
-    motherFlag: "",
-    secondLanguage: "",
-    secondFlag: "",
-  });
+
   const { isAuthenticated, isLoading } = useSelector((state) => state.auth);
   const navigate = useNavigate();
   const capsuleCTA = {
@@ -50,23 +46,6 @@ function Hero() {
       });
     }, 2000);
     return () => clearInterval(id);
-  }, []);
-
-  // set languages based on visitors origin
-  useEffect(() => {
-    const setVisitorLanguage = async () => {
-      try {
-        const countryCode = await getLanguageForVisitor("BD");
-        const mapping =
-          countryLanguageMapping[countryCode] || countryLanguageMapping.BD;
-        setLocalLanguages(mapping);
-      } catch (error) {
-        console.error("Language detection failed:", error);
-        setLocalLanguages(countryLanguageMapping.BD);
-      }
-    };
-
-    setVisitorLanguage();
   }, []);
 
   const handleNavigation = () => {
@@ -133,27 +112,12 @@ function Hero() {
         )}
       </div>
       <div className={`${styles.curvedMask} ${styles.animated}`}></div>
-
-      <div className={styles.langContainer}>
-        {/* First Language Container */}
-        <div className={styles.countryLang}>
-          <img
-            src={`https://flagcdn.com/h60/${localLanguages.motherFlag}.webp`}
-            alt={`${localLanguages.motherTongue} flag`}
-            className={styles.flag}
-          />
-          <span>{localLanguages.motherTongue}</span>
-        </div>
-
-        {/* Second Language Container */}
-        <div className={styles.countryLangSecond}>
-          <img
-            src={`https://flagcdn.com/h60/${localLanguages.secondFlag}.webp`}
-            alt={`${localLanguages.secondLanguage} flag`}
-            className={styles.flag}
-          />
-          <span>{localLanguages.secondLanguage}</span>
-        </div>
+      <div className={styles.trustedUser}>
+        <AvatarReview
+          avatars={trustedUserAvatar}
+          trustedUsersCount={150}
+          maxDisplayedAvatars={5}
+        />
       </div>
     </section>
   );

@@ -229,87 +229,15 @@
   animation: exitAnim 0.5s ease-in-out 0.2s both;
 }
 
-.langContainer {
-  position: relative;
-  width: 1250px;
-}
-
-.countryLang,
-.countryLangSecond {
+.trustedUser {
   display: flex;
-  flex-direction: column;
+  align-items: center;
   justify-content: center;
-  align-items: center;
-  gap: 10px;
   position: absolute;
-  bottom: 50px;
-  color: #ffffff;
-  z-index: 10;
-}
-
-.countryLang {
-  left: 10px;
-  transform: rotate(-10deg) scale(0);
-  animation: scaleUpLeft 0.8s forwards;
-  animation-delay: 0.3s;
-}
-
-.countryLangSecond {
-  right: 10px;
-  transform: rotate(10deg) scale(0);
-  animation: scaleUpRight 0.8s forwards;
-  animation-delay: 0.3s;
-}
-
-.countryLang > img,
-.countryLangSecond > img {
-  border: 2px solid #4d87f6;
-  box-shadow: 0px 10px 40px 0px #4d88f67a;
-  border-radius: 10px;
-}
-
-.countryLang > span,
-.countryLangSecond > span {
-  font-size: 24px;
-  font-family: "Solitreo", cursive;
-  font-weight: 400;
-}
-
-.messageAndArrow {
-  position: absolute;
-  bottom: 100%;
-  left: 50%;
-  transform: translateX(-50%);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-@keyframes scaleUpLeft {
-  from {
-    transform: rotate(-10deg) scale(0);
-  }
-  to {
-    transform: rotate(-10deg) scale(1);
-  }
-}
-
-@keyframes scaleUpRight {
-  from {
-    transform: rotate(10deg) scale(0);
-  }
-  to {
-    transform: rotate(10deg) scale(1);
-  }
+  bottom: 72px;
 }
 
 /* Media queries for responsiveness */
-
-@media (min-width: 1200px) and (max-width: 1399.98px) {
-  .langContainer {
-    width: 950px;
-  }
-}
 
 @media (min-width: 1000px) and (max-width: 1199.98px) {
   .title {
@@ -320,9 +248,6 @@
   }
   .HeroDescription {
     font-size: 1.1rem;
-  }
-  .langContainer {
-    width: 730px;
   }
 }
 
@@ -337,9 +262,6 @@
     max-width: 600px;
     font-size: 1rem;
     line-height: 2rem;
-  }
-  .langContainer {
-    width: 650px;
   }
 }
 
@@ -358,9 +280,6 @@
     max-width: 500px;
     font-size: 1rem;
     line-height: 1.6rem;
-  }
-  .langContainer {
-    width: 520px;
   }
 }
 
@@ -416,16 +335,6 @@
   .breakLine {
     display: none;
   }
-  .langContainer {
-    width: 330px;
-  }
-  .countryLang {
-    left: 10px;
-  }
-
-  .countryLangSecond {
-    right: 10px;
-  }
 }
 
 @media (max-width: 391.98px) {
@@ -441,60 +350,5 @@
   }
   .HeroDescription {
     font-size: 15px;
-  }
-}
-
-/* media query for language container */
-@media (max-width: 1400px) {
-  .countryLang > img,
-  .countryLangSecond > img {
-    height: 50px;
-  }
-
-  .countryLang > span,
-  .countryLangSecond > span {
-    font-size: 22px;
-  }
-}
-
-@media (max-width: 1000px) {
-  .countryLang {
-    left: 0px;
-  }
-  .countryLangSecond {
-    right: 0px;
-  }
-}
-@media (max-width: 768px) {
-  .countryLang {
-    left: 0px;
-  }
-  .countryLangSecond {
-    right: 0px;
-  }
-  .countryLang > img,
-  .countryLangSecond > img {
-    height: 40px;
-  }
-  .countryLang > span,
-  .countryLangSecond > span {
-    font-size: 20px;
-  }
-}
-@media (max-width: 599px) {
-  .countryLang {
-    left: 0px;
-  }
-  .countryLangSecond {
-    right: 0px;
-    bottom: 42px;
-  }
-  .countryLang > img,
-  .countryLangSecond > img {
-    height: 40px;
-  }
-  .countryLang > span,
-  .countryLangSecond > span {
-    font-size: 20px;
   }
 }
