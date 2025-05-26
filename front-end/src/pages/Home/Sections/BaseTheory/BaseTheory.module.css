@@ -271,7 +271,7 @@
     font-size: 17px;
   }
   .baseTheoryCardsContainer > div {
-    padding: 35px;
+    padding: 24px;
   }
   .baseTheoryCardsContainer > div > h2 {
     font-size: 24px;
@@ -295,14 +295,27 @@
   .baseTheoryHeading p {
     font-size: 16px;
   }
-  .baseTheoryCardsContainer > div {
-    padding: 45px;
+  /* Image Styles */
+  .spacedRepetition img,
+  .activeRecall img,
+  .contextualLearning img,
+  .fewMoreThings img {
+    width: 58px;
+    height: 58px;
+    margin-bottom: 16px;
   }
+  .baseTheoryCardsContainer > div {
+    padding: 26px;
+  }
+
   .baseTheoryCardsContainer > div > h2 {
     font-size: 24px;
   }
   .baseTheoryCardsContainer > div > p {
     font-size: 16px;
+  }
+  .baseTheoryCardsContainer::before {
+    content: none;
   }
 }
 
@@ -320,15 +333,27 @@
   .baseTheoryHeading p {
     font-size: 16px;
   }
+  /* Image Styles */
+  .spacedRepetition img,
+  .activeRecall img,
+  .contextualLearning img,
+  .fewMoreThings img {
+    width: 48px;
+    height: 48px;
+    margin-bottom: 16px;
+  }
   .baseTheoryCardsContainer > div {
-    padding: 35px;
+    padding: 18px;
   }
   .baseTheoryCardsContainer > div > h2 {
-    font-size: 22px;
+    font-size: 20px;
   }
   .baseTheoryCardsContainer > div > p {
-    font-size: 16px;
+    font-size: 14px;
     text-align: left;
+  }
+  .baseTheoryCardsContainer::before {
+    content: none;
   }
   .baseTheoryContainer::after {
     width: 300px;
