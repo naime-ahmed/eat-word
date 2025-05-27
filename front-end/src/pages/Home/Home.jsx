@@ -19,11 +19,7 @@ const Home = () => {
     if (!isLoading) {
       const hasClosed = sessionStorage.getItem("promoClosed");
       if (!hasClosed && !isAuthenticated) {
-        if (window.innerWidth <= 900) {
-          setTimeout(() => setShowBanner(true), 4000);
-        } else {
-          setShowBanner(true);
-        }
+        setTimeout(() => setShowBanner(true), 4000);
       }
     }
   }, [isAuthenticated, isLoading]);
