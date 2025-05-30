@@ -45,6 +45,10 @@ const peopleSchema = new mongoose.Schema(
       default: "user",
       immutable: true,
     },
+    deviceFingerPrint: {
+      type: String,
+      required: [true, "Device fingerprint is required"],
+    },
     subscriptionType: {
       type: String,
       enum: ["regular", "premium", "elite"],
