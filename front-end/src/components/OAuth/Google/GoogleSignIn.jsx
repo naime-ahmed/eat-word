@@ -3,6 +3,7 @@ import { GoogleLogin, GoogleOAuthProvider } from "@react-oauth/google";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { setUser } from "../../../features/authSlice";
+import { useDeviceFingerprint } from "../../../hooks/useDeviceFingerprint";
 import useNotification from "../../../hooks/useNotification";
 import { parseJwt } from "../../../utils/parseJWT";
 
@@ -10,9 +11,11 @@ function GoogleSignIn() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const showNotification = useNotification();
+  const fp = useDeviceFingerprint();
 
   const handleLoginSuccess = async (response) => {
     try {
+      console.log("device fingerprint: ", fp);
       // Extract the Google ID token
       const googleToken = response.credential;
 
@@ -25,7 +28,11 @@ function GoogleSignIn() {
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ token: googleToken }),
+          body: JSON.stringify({
+            token: googleToken,
+            deviceFingerPrint: fp,
+            promoCode: "EARLY_BIRD_FREE_PREMIUM_1_MONTH",
+          }),
         }
       );
 
