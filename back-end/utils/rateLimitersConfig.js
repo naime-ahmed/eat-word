@@ -20,7 +20,7 @@ const createWordLimiter = (tier, points, memoryBlock) =>
 
 export const wordLimiterTire = {
   regular: createWordLimiter("regular", 200, 201),
-  pro: createWordLimiter("pro", 5000, 5001),
+  premium: createWordLimiter("premium", 2000, 2001),
 };
 
 // word info gen limiter config
@@ -38,7 +38,7 @@ const createWordInfoGenLimiter = (points, memoryBlock) =>
 
 export const wordInfoGenLimiterTire = {
   regular: createWordInfoGenLimiter(30, 31),
-  pro: createWordInfoGenLimiter(3000, 3001),
+  premium: createWordInfoGenLimiter(3000, 3001),
 };
 
 export function createRateLimiter(key, coll, points = 5, duration = 60 * 60, blockDuration = 60 * 60) {
