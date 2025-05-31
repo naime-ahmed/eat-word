@@ -29,7 +29,7 @@ export async function refreshTokenController(req, res) {
       return errorResponse(res, 403, "Invalid or expired refresh token");
     }
 
-    const user = await User.findById(decoded.id).select("_id email role");
+    const user = await User.findById(decoded.id).select("_id email role subscriptionType");
     if (!user) {
       return errorResponse(res, 404, "User account not found");
     }
@@ -56,6 +56,7 @@ export async function refreshTokenController(req, res) {
       id: user._id,
       email: user.email,
       role: user.role,
+      subscriptionType : user.subscriptionType,
       accessToken: newAccessToken,
     });
   } catch (error) {
