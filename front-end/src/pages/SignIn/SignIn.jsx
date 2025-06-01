@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import logoIcon from "../../assets/logoIcon.webp";
 import TurnstileWidget from "../../components/TurnstileWidget.jsx";
+import PrimaryBtn from "../../components/ui/button/PrimaryBtn/PrimaryBtn.jsx";
 import Skeleton from "../../components/ui/loader/Skeleton/Skeleton.jsx";
 import { setUser } from "../../features/authSlice.js";
 import {
@@ -89,9 +90,6 @@ const SignIn = () => {
           localStorage.setItem("access-token", result.accessToken);
           dispatch(setUser(parseJwt(result.accessToken)));
 
-          // Reset on success
-          captchaWidgetRef.current?.reset();
-          setCaptchaToken("");
           showNotification({
             title: result?.message,
             iconType: "success",
@@ -100,9 +98,6 @@ const SignIn = () => {
 
           navigate("/my-space");
         } catch (error) {
-          // Reset on failure
-          captchaWidgetRef.current?.reset();
-          setCaptchaToken("");
           showNotification({
             title: "Unable to sign in",
             message:
@@ -112,6 +107,10 @@ const SignIn = () => {
             iconType: "error",
             duration: 4000,
           });
+        } finally {
+          // Reset captcha
+          captchaWidgetRef.current?.reset();
+          setCaptchaToken("");
         }
       }
     },
@@ -241,14 +240,16 @@ const SignIn = () => {
           />
 
           <div className={styles.submitBtn}>
-            <button
-              type="submit"
+            <PrimaryBtn
+              btnType="submit"
               disabled={isLoading}
-              aria-disabled={isLoading}
-              aria-busy={isLoading}
+              colorOne="#1A73E8"
+              colorTwo="#1A73E8"
+              isLoading={isLoading}
+              loadingText="Signing in..."
             >
-              {isLoading ? "Signing in..." : "Submit"}
-            </button>
+              <span>Submit</span>
+            </PrimaryBtn>
 
             <p className={styles.separator} aria-hidden="true">
               or
