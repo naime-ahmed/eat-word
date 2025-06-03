@@ -4,18 +4,28 @@ import jwt from "jsonwebtoken";
 import ms from "ms";
 
 // internal imports
+import {
+  applyDiscountOffer,
+  recordDiscountGrant,
+} from "../../helper/discountService.js";
 import { sendEmailRegister } from "../../helper/sendMail.js";
 import Users from "../../models/People.js";
 import {
   generateAccessToken,
   generateRefreshToken,
-  generateTempToken
+  generateTempToken,
 } from "../../utils/tokenUtils.js";
-
 
 async function signUp(req, res, next) {
   try {
     const { name, email, password } = req.body;
+
+    // Validate required fields
+    if (!name || !email || !password) {
+      return res
+        .status(400)
+        .json({ message: "Name, email, and password are required." });
+    }
 
     const existingUser = await Users.findOne({ email });
     if (existingUser) {
@@ -41,7 +51,18 @@ async function signUp(req, res, next) {
 }
 
 const activate = async (req, res) => {
-  const { activation_token } = req.body;
+  const { activation_token, deviceFingerPrint } = req.body;
+  const promoCode = req.body?.promoCode || "";
+
+  if (!activation_token) {
+    return res.status(400).json({ message: "Activation token is required." });
+  }
+
+  if (!deviceFingerPrint) {
+    return res
+      .status(400)
+      .json({ message: "Device fingerprint is missing in activation data." });
+  }
 
   try {
     const user = jwt.verify(
@@ -52,10 +73,29 @@ const activate = async (req, res) => {
 
     const existingUser = await Users.findOne({ email });
     if (existingUser) {
-      return res.status(400).json({ msg: "This email is already registered." });
+      return res
+        .status(400)
+        .json({ message: "This email is already registered." });
     }
 
-    const newUser = new Users({ name, email, password });
+    const newUser = new Users({ name, email, password, deviceFingerPrint });
+
+    // Apply discount Logic
+    const discountResult = await applyDiscountOffer(
+      newUser,
+      deviceFingerPrint,
+      promoCode
+    );
+
+    // If discount was successfully applied, record the grant
+    if (discountResult.applied) {
+      await recordDiscountGrant(
+        newUser._id,
+        deviceFingerPrint,
+        discountResult?.offerId
+      );
+    }
+
     const savedUser = await newUser.save();
 
     // Generate JWT tokens
@@ -79,7 +119,7 @@ const activate = async (req, res) => {
     });
   } catch (err) {
     //  Check for duplicate key error (development mode only)
-    if(process.env.NODE_ENV === "development" && err.code === 11000){
+    if (process.env.NODE_ENV === "development" && err.code === 11000) {
       // Generate JWT tokens
       const existingUser = await Users.findOne(err.keyValue);
       const accessToken = generateAccessToken(existingUser);
@@ -97,13 +137,13 @@ const activate = async (req, res) => {
       });
       return res.status(201).json({
         message: "Your account has been successfully activated.",
-        accessToken
+        accessToken,
       });
     }
 
     return res
       .status(400)
-      .json({ msg: "Invalid or expired activation token." });
+      .json({ message: "Invalid or expired activation token." });
   }
 };
 
