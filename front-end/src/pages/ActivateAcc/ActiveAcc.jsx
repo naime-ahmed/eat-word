@@ -5,6 +5,7 @@ import ActivateACCCard from "../../components/ActivateACCCard/ActivateACCCard";
 import SpinnerForPage from "../../components/ui/loader/SpinnerForPage/SpinnerForPage";
 import { setUser } from "../../features/authSlice.js";
 import { resetNewUserForm } from "../../features/userSignUpSlice";
+import { useDeviceFingerprint } from "../../hooks/useDeviceFingerprint.js";
 import { useActivateUserMutation } from "../../services/auth";
 import { parseJwt } from "../../utils/parseJWT.js";
 import styles from "./ActiveAcc.module.css";
@@ -16,6 +17,7 @@ const ActiveAcc = () => {
   const navigate = useNavigate();
   const { activateToken } = useParams();
   const [activateUser, { isLoading }] = useActivateUserMutation();
+  const fp = useDeviceFingerprint();
 
   // Function to handle navigation
   const handleNavigate = (route) => {
@@ -27,9 +29,11 @@ const ActiveAcc = () => {
     const reqServer = async () => {
       if (localStorage.getItem("access-token")) return;
       try {
-        const { accessToken, message } = await activateUser(
-          activateToken
-        ).unwrap();
+        const { accessToken, message } = await activateUser({
+          activation_token: activateToken,
+          deviceFingerPrint: fp,
+          promoCode: "EARLY_BIRD_FREE_PREMIUM_1_MONTH",
+        }).unwrap();
 
         // Reset the sign-up form
         dispatch(resetNewUserForm());
@@ -50,16 +54,16 @@ const ActiveAcc = () => {
       }
     };
 
-    if (activateToken) {
+    if (activateToken && fp) {
       reqServer();
     }
-  }, [activateToken, activateUser, dispatch]);
+  }, [activateToken, activateUser, dispatch, fp]);
 
   // Return loading spinner or activation card based on state
   return (
     <div className={styles.ActiveAccPage}>
       <div className={styles.ActiveAccContainer}>
-        {isLoading ? (
+        {isLoading || !fp ? (
           <SpinnerForPage />
         ) : isActivated ? (
           <ActivateACCCard
