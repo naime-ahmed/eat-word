@@ -35,7 +35,8 @@
   transition: visibility 0s, opacity 0.3s ease, background-color 0.3s ease;
 }
 
-.table:hover + .addNewWord > button {
+.table:hover + .addNewWord > button,
+.makeAppendWordVisible > button {
   visibility: visible;
   opacity: 1;
 }
