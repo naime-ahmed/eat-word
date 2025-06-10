@@ -26,7 +26,7 @@ const AvatarReview = ({
       <div className={styles.avatarGroup}>
         {displayedAvatars.map((avatar, index) => (
           <div
-            key={avatar.profileUrl || `avatar-${index}`}
+            key={`avatar-${index}`}
             className={`
               ${styles.avatarWrapper}
               ${styles.animatedElement}
