@@ -96,6 +96,9 @@ const SignIn = () => {
             duration: 4000,
           });
 
+          // store user sign in event
+          localStorage.setItem("hasACC", true);
+
           navigate("/my-space");
         } catch (error) {
           showNotification({

@@ -16,9 +16,10 @@ const Home = () => {
   const [showBanner, setShowBanner] = useState(false);
   useScrollRestoration();
   useEffect(() => {
+    const hadACC = localStorage.getItem("hasACC");
     if (!isLoading) {
       const hasClosed = sessionStorage.getItem("promoClosed");
-      if (!hasClosed && !isAuthenticated) {
+      if (!hasClosed && !isAuthenticated && !hadACC) {
         setTimeout(() => setShowBanner(true), 4000);
       }
     }

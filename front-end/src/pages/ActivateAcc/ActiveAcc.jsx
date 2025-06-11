@@ -47,6 +47,9 @@ const ActiveAcc = () => {
         // Update activation state
         setMsg(message);
         setIsActivated(true);
+
+        // store user sign up event
+        localStorage.setItem("hasACC", true);
       } catch (error) {
         console.error("Activation error:", error);
         setMsg(error?.data?.msg || "Oops, something went wrong");
