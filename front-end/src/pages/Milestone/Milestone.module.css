@@ -380,7 +380,7 @@ input:checked + .slider:before {
   .toggleButton {
     display: block;
     position: absolute;
-    z-index: 100000;
+    z-index: 10;
     top: 144px;
     transition: all 0.3s ease;
   }

@@ -101,7 +101,7 @@ const Pricing = () => {
           <div className={styles.freePriceCardFeatures}>
             <ul>
               <li>
-                <FaCheck className={styles.iconCheck} /> 150 words/month
+                <FaCheck className={styles.iconCheck} /> 200 words/month
               </li>
               <li>
                 <FaCheck className={styles.iconCheck} /> 30 Gen AI points/day
@@ -168,7 +168,7 @@ const Pricing = () => {
           <div className={styles.paidPriceCardFeatures}>
             <ul>
               <li>
-                <FaCheck className={styles.iconCheck} /> Unlimited Words
+                <FaCheck className={styles.iconCheck} /> 2000 words/month
               </li>
               <li>
                 <FaCheck className={styles.iconCheck} /> 3000 Gen AI points/day

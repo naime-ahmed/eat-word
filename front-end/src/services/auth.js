@@ -18,11 +18,11 @@ export const authApi = createApi({
       invalidatesTags: ["User"],
     }),
     activateUser: builder.mutation({
-      query: (activationToken) => ({
+      query: (activationData) => ({
         url:"/activate",
         method: "POST",
         credentials: "include",
-        body: {activation_token: activationToken},
+        body: activationData,
       }),
       providesTags: ["User"],
     }),

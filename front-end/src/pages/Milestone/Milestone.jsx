@@ -246,7 +246,8 @@ const Milestone = () => {
                   </small>
                   <div className={styles.wordsLimitInfo}>
                     <span>
-                      {wordsLimit?.total && wordsLimit?.remaining ? (
+                      {wordsLimit?.total &&
+                      (wordsLimit?.remaining || wordsLimit?.remaining === 0) ? (
                         <DigitAnimation
                           value={wordsLimit?.total - wordsLimit?.remaining}
                         />
@@ -301,7 +302,8 @@ const Milestone = () => {
                   </small>
                   <div className={styles.genAILimitInfo}>
                     <span>
-                      {genAILimit?.total && genAILimit?.remaining ? (
+                      {genAILimit?.total &&
+                      (genAILimit?.remaining || genAILimit?.remaining === 0) ? (
                         <DigitAnimation
                           value={genAILimit?.total - genAILimit?.remaining}
                         />

@@ -2,9 +2,9 @@
 @import url("https://fonts.googleapis.com/css2?family=Caveat:wght@400..600&family=Solitreo&display=swap");
 
 .container {
-  height: calc(100vh - 265px);
+  height: calc(100vh - 352px);
   max-height: 44rem;
-  min-height: 42rem;
+  min-height: 38rem;
   width: calc(100vw - 50px);
   margin-top: 168px;
   position: relative;
@@ -13,7 +13,7 @@
   grid-template-areas: "stack";
   align-items: center;
   justify-items: center;
-  padding: 100px 0;
+  padding: 100px 0 60px 0;
 }
 .heroContent,
 .curvedMask {
@@ -149,9 +149,12 @@
 .HeroDescription {
   max-width: 700px;
   text-align: center;
-  font-size: 1.2rem;
+  font-size: 1.1rem;
   line-height: 2rem;
-  color: hsl(239, 100%, 88%);
+  color: hsl(239, 51%, 74%);
+}
+.breakLine {
+  display: inline;
 }
 
 .heroContent > div:not(:first-child),
@@ -226,141 +229,12 @@
   animation: exitAnim 0.5s ease-in-out 0.2s both;
 }
 
-.langContainer {
-  position: relative;
-}
-
-.countryLang,
-.countryLangSecond {
+.trustedUser {
   display: flex;
-  flex-direction: column;
+  align-items: center;
   justify-content: center;
-  align-items: center;
-  gap: 10px;
   position: absolute;
-  bottom: 50px;
-  color: #ffffff;
-  z-index: 10;
-}
-
-.countryLang {
-  left: calc(50% - 450px);
-  transform: rotate(-10deg) scale(0);
-  animation: scaleUpLeft 0.8s forwards;
-  animation-delay: 0.3s;
-}
-
-.countryLangSecond {
-  left: calc(50% + 332px);
-  transform: rotate(10deg) scale(0);
-  animation: scaleUpRight 0.8s forwards;
-  animation-delay: 0.3s;
-}
-
-.countryLang > img,
-.countryLangSecond > img {
-  border: 3px solid rgba(231, 230, 255, 0.822);
-  border-radius: 10px;
-}
-
-.countryLang > span,
-.countryLangSecond > span {
-  font-size: 24px;
-  font-family: "Solitreo", cursive;
-  font-weight: 400;
-}
-
-.messageAndArrow {
-  position: absolute;
-  bottom: 100%;
-  left: 50%;
-  transform: translateX(-50%);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.motherMessage,
-.secondMessage,
-.motherLangArrow,
-.secondLangArrow {
-  opacity: 0;
-}
-
-.motherMessage,
-.secondMessage {
-  color: #ffffff;
-  font-size: 16px;
-  box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1);
-  white-space: nowrap;
-  margin-bottom: 5px;
-  position: relative;
-  animation: fadeInUp 0.6s forwards;
-  animation-delay: 1s;
-}
-
-.countryLang .messageAndArrow {
-  bottom: -106%;
-  left: 132%;
-}
-
-.countryLangSecond .messageAndArrow {
-  bottom: -114%;
-  left: 0;
-}
-
-.motherMessage {
-  right: -68%;
-  transform: rotate(9deg);
-  bottom: -6px;
-}
-
-.secondMessage {
-  left: -90%;
-  transform: rotate(349deg);
-  bottom: 22px;
-}
-
-.motherLangArrow,
-.secondLangArrow {
-  animation: fadeIn 0.6s forwards;
-  animation-delay: 1.5s;
-}
-
-@keyframes scaleUpLeft {
-  from {
-    transform: rotate(-10deg) scale(0);
-  }
-  to {
-    transform: rotate(-10deg) scale(1);
-  }
-}
-
-@keyframes scaleUpRight {
-  from {
-    transform: rotate(10deg) scale(0);
-  }
-  to {
-    transform: rotate(10deg) scale(1);
-  }
-}
-
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
+  bottom: 72px;
 }
 
 /* Media queries for responsiveness */
@@ -419,8 +293,12 @@
     transform: translateY(-130px);
   }
   .shinyText {
-    font-size: 14px;
+    font-size: 13px;
   }
+  .shinyAnimatedText {
+    pad: 0.15rem 0.6rem;
+  }
+
   .title {
     width: 340px;
     margin-left: 0;
@@ -454,6 +332,9 @@
     line-height: 1.6rem;
     text-align: center;
   }
+  .breakLine {
+    display: none;
+  }
 }
 
 @media (max-width: 391.98px) {
@@ -469,101 +350,5 @@
   }
   .HeroDescription {
     font-size: 15px;
-  }
-}
-
-/* media query for language container */
-@media (max-width: 1400px) {
-  .countryLang {
-    left: calc(50% - 380px);
-  }
-  .countryLangSecond {
-    left: calc(50% + 262px);
-  }
-  .countryLang > img,
-  .countryLangSecond > img {
-    height: 50px;
-  }
-
-  .countryLang > span,
-  .countryLangSecond > span {
-    font-size: 22px;
-  }
-  .motherLangArrow > svg,
-  .secondLangArrow > svg {
-    width: 60px;
-    height: 60px;
-  }
-}
-
-@media (max-width: 1000px) {
-  .countryLang {
-    left: calc(50% - 350px);
-  }
-  .countryLangSecond {
-    left: calc(50% + 232px);
-  }
-}
-@media (max-width: 768px) {
-  .countryLang {
-    left: calc(50% - 250px);
-  }
-  .countryLangSecond {
-    left: calc(50% + 182px);
-  }
-  .countryLang > img,
-  .countryLangSecond > img {
-    height: 40px;
-  }
-  .countryLang > span,
-  .countryLangSecond > span {
-    font-size: 20px;
-  }
-  .motherLangArrow > svg,
-  .secondLangArrow > svg {
-    width: 50px;
-    height: 50px;
-  }
-}
-@media (max-width: 599px) {
-  .countryLang {
-    left: calc(50% - 140px);
-  }
-  .countryLangSecond {
-    left: calc(50% + 62px);
-    bottom: 42px;
-  }
-  .countryLang > img,
-  .countryLangSecond > img {
-    height: 40px;
-  }
-  .countryLang > span,
-  .countryLangSecond > span {
-    font-size: 20px;
-  }
-  .countryLang .messageAndArrow {
-    bottom: -110%;
-    left: 0;
-    transform: rotate(30deg);
-  }
-  .countryLangSecond .messageAndArrow {
-    bottom: -120%;
-    left: 8px;
-    transform: rotate(328deg);
-  }
-  .motherLangArrow > svg,
-  .secondLangArrow > svg {
-    width: 50px;
-    height: 50px;
-  }
-  .motherMessage {
-    right: 0;
-    transform: rotate(339deg);
-    bottom: -4px;
-  }
-  .secondMessage {
-    left: -104%;
-    transform: rotate(23deg);
-    bottom: 36px;
   }
 }

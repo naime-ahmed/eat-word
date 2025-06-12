@@ -145,22 +145,6 @@ input:-webkit-autofill:active {
 }
 .submitBtn button {
   width: 300px;
-  height: 35px;
-  border-radius: 4px;
-  font-size: 15px;
-  border: transparent;
-  background: dodgerblue;
-  color: #f8fafc;
-  cursor: pointer;
-  transition: button 0.3s ease-in-out;
-}
-.submitBtn button:hover {
-  background: rgb(2, 0, 36);
-  background: linear-gradient(
-    90deg,
-    rgba(30, 144, 255, 1) 0%,
-    rgba(0, 212, 255, 1) 100%
-  );
 }
 
 .separator {

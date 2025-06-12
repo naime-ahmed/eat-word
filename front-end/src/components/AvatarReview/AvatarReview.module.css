@@ -1,0 +1,114 @@
+.reviewContainer {
+  display: inline-flex;
+  align-items: center;
+  gap: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.avatarGroup {
+  display: flex;
+  align-items: center;
+}
+
+.avatarWrapper {
+  position: relative;
+}
+
+.avatarWrapper + .avatarWrapper {
+  margin-left: -16px;
+}
+
+.avatarLink {
+  display: block;
+  line-height: 0;
+}
+
+.avatarImage {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 2px solid #a4beff;
+  object-fit: cover;
+  display: block;
+  background-color: #e0e0e0;
+  box-sizing: border-box;
+}
+
+.countCircle {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 2px solid #a4beff;
+  background-color: #19233c;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1;
+  text-align: center;
+  box-sizing: border-box;
+}
+
+.reviewInfo {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.stars {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 5px;
+}
+
+.starIcon {
+  color: #ffd700;
+  width: 18px;
+  height: 18px;
+}
+
+.trustText {
+  font-size: 14px;
+  color: #ffffff;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+@keyframes slideInFromRightKeyframe {
+  from {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.animatedElement {
+  opacity: 0;
+}
+
+.startAnimation {
+  animation-name: slideInFromRightKeyframe;
+  animation-duration: 0.4s;
+  animation-timing-function: ease-out;
+  animation-fill-mode: forwards;
+  animation-delay: var(--animation-delay, 0s);
+}
+
+@media (max-width: 391.98px) {
+  .reviewContainer {
+    gap: 10px;
+  }
+  .avatarImage,
+  .countCircle {
+    width: 38px;
+    height: 38px;
+  }
+  .countCircle {
+    font-size: 12px;
+  }
+}

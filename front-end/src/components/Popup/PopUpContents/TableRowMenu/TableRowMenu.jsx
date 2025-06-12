@@ -190,7 +190,7 @@ const TableRowMenu = ({
       }
       setGenAILimit((prev) => ({
         ...prev,
-        remaining: res?.data?.rateLimit?.remaining || prev.remaining,
+        remaining: res?.data?.rateLimit?.remaining || 0,
       }));
     } catch (error) {
       const fieldsString = fieldsAndLangs.fields.join(", ");

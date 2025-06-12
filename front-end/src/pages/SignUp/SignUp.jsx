@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import logoIcon from "../../assets/logoIcon.webp";
 import TurnstileWidget from "../../components/TurnstileWidget";
+import PrimaryBtn from "../../components/ui/button/PrimaryBtn/PrimaryBtn.jsx";
 import {
   setUserNewErrors,
   updateNewUser,
@@ -121,11 +122,15 @@ const SignUp = () => {
         } catch (error) {
           showNotification({
             title: "Account creation failed",
-            message: error?.message || "Please check your details",
+            message: error?.data?.message || "Please check your details",
             iconType: "error",
             duration: 6000,
           });
           setHasEmailSent(false);
+        } finally {
+          // Reset captcha
+          captchaWidgetRef.current?.reset();
+          setCaptchaToken("");
         }
       }
     },
@@ -368,15 +373,16 @@ const SignUp = () => {
 
             {/* Submit Section */}
             <div className={styles.submitBtn}>
-              <button
-                type="submit"
+              <PrimaryBtn
+                btnType="submit"
                 disabled={isLoading}
-                aria-disabled={isLoading}
-                aria-busy={isLoading}
+                colorOne="#1A73E8"
+                colorTwo="#1A73E8"
+                isLoading={isLoading}
+                loadingText="Creating account..."
               >
-                {isLoading ? "Creating account..." : "Submit"}
-              </button>
-
+                <span>Submit</span>
+              </PrimaryBtn>
               <p>
                 Have an account?{" "}
                 <Link to="/sign-in" className={styles.signInLink}>

@@ -63,7 +63,7 @@
 /* style for card section */
 .pricingSection {
   max-width: 1250px;
-  min-height: 80vh;
+  min-height: 736px;
   display: flex;
   flex-wrap: wrap;
   justify-content: center;

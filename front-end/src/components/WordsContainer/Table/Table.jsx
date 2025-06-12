@@ -268,7 +268,11 @@ const WordsContainer = ({
           <Skeleton width="100%" height={26} label="saving word..." />
         </div>
       ) : words[words.length - 1]?._id || words.length === 0 ? (
-        <div className={styles.addNewWord}>
+        <div
+          className={`${styles.addNewWord} ${
+            words.length === 0 ? styles.makeAppendWordVisible : ""
+          }`}
+        >
           <button onClick={handleAppendWord}>
             <IoAddOutline />
             Add new word

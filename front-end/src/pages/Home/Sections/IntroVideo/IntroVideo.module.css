@@ -1,7 +1,6 @@
 .introContainer {
   width: 100%;
   width: 1250px;
-  /* margin-bottom: 150px; */
   margin: 0 auto 150px;
   display: flex;
   justify-content: center;
@@ -11,12 +10,15 @@
 
 .introWrapper {
   max-width: 1200px;
-  padding: 12px;
-  background-color: rgb(62 60 149 / 28%);
-  border: 2px solid rgb(58 54 147 / 38%);
+  padding: 8px;
+  background-color: #3b518970;
   border-radius: 16px;
   overflow: hidden;
   position: relative;
+  transform: perspective(1000px) rotateX(35deg);
+  transform-style: preserve-3d;
+  transition: transform 0.3s ease-out;
+  will-change: transform;
 }
 
 .introImage {
@@ -28,9 +30,11 @@
   position: relative;
   overflow: hidden;
 }
-
+.introImage picture {
+  display: block;
+}
 .introImage img {
-  aspect-ratio: 16/9;
+  display: block;
   width: 100%;
   height: auto;
   object-fit: cover;
