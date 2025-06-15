@@ -1,4 +1,5 @@
 export const LANGUAGE_MAP = () => ({
+  auto: "Auto-detect",
   ab: "Abkhaz",
   ace: "Acehnese",
   ach: "Acholi",
