@@ -88,13 +88,16 @@ function createFloatingIcon(x, y) {
   });
 
   document.body.appendChild(icon);
-  floatingIcon = icon;
 
+  let currentIcon = icon;
   requestAnimationFrame(() => {
-    floatingIcon.style.transform = "scale(1)";
-    floatingIcon.style.opacity = "1";
+    if (document.body.contains(currentIcon)) {
+      currentIcon.style.transform = "scale(1)";
+      currentIcon.style.opacity = "1";
+    }
   });
 
+  floatingIcon = icon;
   startFadeTimer();
 }
 
@@ -277,10 +280,10 @@ function startFadeTimer() {
 }
 
 function removeFloatingIcon() {
-  if (floatingIcon) {
+  if (floatingIcon && document.body.contains(floatingIcon)) {
     floatingIcon.remove();
-    floatingIcon = null;
   }
+  floatingIcon = null;
   hideTooltip();
   clearTimeout(fadeTimeout);
 }
