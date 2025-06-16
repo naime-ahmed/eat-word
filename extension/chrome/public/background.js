@@ -17,6 +17,15 @@ chrome.runtime.onInstalled.addListener(() => {
   });
 });
 
+chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+  if (request.type === 'api-request') {
+    fetch(request.url)
+      .then(response => response.json())
+      .then(data => sendResponse(data))
+      .catch(error => sendResponse({ error }));
+    return true; // Keeps message channel open for async response
+  }
+});
 
 function storeTextAndOpenPopup(text) {
   chrome.storage.local.set({ 'selectedText': text }, () => {
