@@ -6,7 +6,7 @@
 
   "permissions": ["storage", "activeTab", "scripting", "contextMenus"],
 
-  "host_permissions": ["*://*/*"],
+  "host_permissions": ["https://t.song.work/", "*://*/*"],
 
   "background": {
     "service_worker": "background.js"
