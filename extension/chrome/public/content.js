@@ -5,6 +5,14 @@ let tooltip = null;
 let fadeTimeout = null;
 let selectionTimeout = null;
 
+// Track popup state
+let popupIframe = null;
+let isPopupPinned = false;
+let popupPosition = { x: 0, y: 0 };
+let pinnedViewportPosition = { x: 0, y: 0 };
+let dragOffset = { x: 0, y: 0 };
+let isDragging = false;
+
 function createFloatingIcon(x, y) {
   removeFloatingIcon();
   clearTimeout(fadeTimeout);
@@ -111,12 +119,17 @@ function createPopupPanel(x, y, text) {
   iframe.id = 'eatword-popup-iframe';
   
   iframe.src = chrome.runtime.getURL(`index.html?text=${encodeURIComponent(text)}`);
+  popupIframe = iframe;
   
   const panelWidth = 512;
-  const panelHeight = 256;
+  const panelHeight = 400;
   const maxWidth = Math.min(window.innerWidth - 32, panelWidth);
   const maxHeight = Math.min(window.innerHeight - 32, panelHeight);
   
+  // Store initial position
+  popupPosition = { x, y };
+  
+  // Set initial styles
   Object.assign(popupPanel.style, {
     position: 'absolute',
     left: `${x}px`,
@@ -133,26 +146,50 @@ function createPopupPanel(x, y, text) {
     transform: 'scale(0.95)',
     opacity: '0',
     transition: 'transform 0.2s ease-out, opacity 0.2s ease-out',
-    visibility: 'hidden'
+    visibility: 'hidden',
+    cursor: 'move',
   });
   
   Object.assign(iframe.style, {
     width: '100%',
     height: '100%',
-    border: 'none'
+    border: 'none',
+    pointerEvents: 'auto'
+  });
+
+
+  // put this drag handle around the popup instead of only on top
+
+  
+  // Create transparent drag handle
+  const dragHandle = document.createElement('div');
+  Object.assign(dragHandle.style, {
+    position: 'absolute',
+    top: '0',
+    left: '0',
+    right: '0',
+    height: '32px',
+    backgroundColor: 'transparent',
+    cursor: 'move',
+    zIndex: '2147483648',
+    borderTopLeftRadius: '12px',
+    borderTopRightRadius: '12px'
   });
   
+  popupPanel.appendChild(dragHandle);
   popupPanel.appendChild(iframe);
   document.body.appendChild(popupPanel);
   
-  // Wait for iframe to load and get actual dimensions
+  // Add drag handlers to the transparent handle
+  dragHandle.addEventListener('mousedown', startDrag);
+  
+  // Handle iframe load
   iframe.onload = () => {
+    // Set up message listener
+    window.addEventListener('message', handleIframeMessage);
+
     setTimeout(() => {
-      const rect = popupPanel.getBoundingClientRect();
-      const adjustedPosition = getAdjustedPosition(x, y, rect.width, rect.height);
-      
-      popupPanel.style.left = `${adjustedPosition.x}px`;
-      popupPanel.style.top = `${adjustedPosition.y}px`;
+      adjustPopupPosition();
       popupPanel.style.visibility = 'visible';
       
       requestAnimationFrame(() => {
@@ -165,11 +202,7 @@ function createPopupPanel(x, y, text) {
   // Fallback in case iframe doesn't load
   setTimeout(() => {
     if (popupPanel && popupPanel.style.visibility === 'hidden') {
-      const rect = popupPanel.getBoundingClientRect();
-      const adjustedPosition = getAdjustedPosition(x, y, rect.width || maxWidth, rect.height || maxHeight);
-      
-      popupPanel.style.left = `${adjustedPosition.x}px`;
-      popupPanel.style.top = `${adjustedPosition.y}px`;
+      adjustPopupPosition();
       popupPanel.style.visibility = 'visible';
       
       requestAnimationFrame(() => {
@@ -178,7 +211,22 @@ function createPopupPanel(x, y, text) {
       });
     }
   }, 200);
+  
+  // Add scroll listener
+  window.addEventListener('scroll', handleScroll);
 }
+
+function adjustPopupPosition() {
+  if (!popupPanel) return;
+  
+  const rect = popupPanel.getBoundingClientRect();
+  const adjustedPosition = getAdjustedPosition(popupPosition.x, popupPosition.y, rect.width, rect.height);
+  
+  popupPanel.style.left = `${adjustedPosition.x}px`;
+  popupPanel.style.top = `${adjustedPosition.y}px`;
+  popupPosition = adjustedPosition;
+}
+
 
 function getAdjustedPosition(x, y, width, height) {
   const viewportWidth = window.innerWidth;
@@ -205,6 +253,97 @@ function getAdjustedPosition(x, y, width, height) {
   
   return { x: adjustedX, y: adjustedY };
 }
+
+function startDrag(e) {
+  isDragging = true;
+  const rect = popupPanel.getBoundingClientRect();
+  
+  // Calculate offset from mouse to popup corner
+  dragOffset = {
+    x: e.clientX - rect.left,
+    y: e.clientY - rect.top
+  };
+  
+  // Change cursor and add move/end listeners
+  document.body.style.cursor = 'grabbing';
+  popupPanel.style.cursor = 'grabbing';
+  popupPanel.style.boxShadow = '0px 15px 50px rgba(0, 0, 0, 0.3)';
+  
+  document.addEventListener('mousemove', drag);
+  document.addEventListener('mouseup', stopDrag);
+}
+
+function drag(e) {
+  if (!isDragging) return;
+  
+  // Calculate new position
+  const x = e.clientX - dragOffset.x + window.scrollX;
+  const y = e.clientY - dragOffset.y + window.scrollY;
+  
+  // Update popup position
+  popupPanel.style.left = `${x}px`;
+  popupPanel.style.top = `${y}px`;
+  popupPosition = { x, y };
+  
+  // Update pinned position if pinned
+  if (isPopupPinned) {
+    const rect = popupPanel.getBoundingClientRect();
+    pinnedViewportPosition = { 
+      x: rect.left, 
+      y: rect.top 
+    };
+  }
+}
+
+function stopDrag() {
+  isDragging = false;
+  
+  // Reset cursor and remove listeners
+  document.body.style.cursor = '';
+  popupPanel.style.cursor = 'move';
+  popupPanel.style.boxShadow = '0px 10px 40px rgba(0, 0, 0, 0.2)';
+  
+  document.removeEventListener('mousemove', drag);
+  document.removeEventListener('mouseup', stopDrag);
+}
+
+function handleScroll() {
+  if (!popupPanel) return;
+  
+  if (isPopupPinned) {
+    popupPanel.style.left = `${pinnedViewportPosition.x + window.scrollX}px`;
+    popupPanel.style.top = `${pinnedViewportPosition.y + window.scrollY}px`;
+  }
+}
+
+function setPinnedState(pinned) {
+  isPopupPinned = pinned;
+  
+  if (isPopupPinned && popupPanel) {
+    // Store current viewport-relative position
+    const rect = popupPanel.getBoundingClientRect();
+    pinnedViewportPosition = { 
+      x: rect.left, 
+      y: rect.top 
+    };
+    
+    // Immediately update position to account for current scroll
+    popupPanel.style.left = `${pinnedViewportPosition.x + window.scrollX}px`;
+    popupPanel.style.top = `${pinnedViewportPosition.y + window.scrollY}px`;
+  }
+}
+
+// Replace the message listener with this:
+function handleIframeMessage(event) {
+  if (!popupIframe || !popupIframe.contentWindow || event.source !== popupIframe.contentWindow) {
+    return;
+  }
+  
+  if (event.data.type === 'SET_PIN_STATE') {
+    setPinnedState(event.data.pinned);
+  }
+}
+
 
 function showTooltip(iconElement) {
   hideTooltip();
@@ -290,6 +429,12 @@ function removeFloatingIcon() {
 
 function removePopupPanel() {
   if (popupPanel) {
+    // Clean up event listeners
+    window.removeEventListener('message', handleIframeMessage);
+    window.removeEventListener('scroll', handleScroll);
+    document.removeEventListener('mousemove', drag);
+    document.removeEventListener('mouseup', stopDrag);
+    
     popupPanel.remove();
     popupPanel = null;
   }
