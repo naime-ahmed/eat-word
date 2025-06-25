@@ -6,7 +6,12 @@
 
   "permissions": ["storage", "activeTab", "scripting", "contextMenus"],
 
-  "host_permissions": ["https://t.song.work/", "*://*/*"],
+  "host_permissions": [
+    "https://t.song.work/*",
+    "https://eat-word.pages.dev/*",
+    "https://eat-word-naime-ahmeds-projects.vercel.app/*",
+    "*://*/*"
+  ],
 
   "background": {
     "service_worker": "background.js"
@@ -34,7 +39,13 @@
       "matches": ["<all_urls>"]
     }
   ],
-
+  "externally_connectable": {
+    "matches": [
+      "https://eat-word.pages.dev/*",
+      "https://www.eat-word.pages.dev/*",
+      "http://localhost/*"
+    ]
+  },
   "action": {
     "default_popup": "popup.html",
     "default_title": "EatWord - Translate selected text",
