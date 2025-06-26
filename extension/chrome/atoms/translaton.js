@@ -1,6 +1,3 @@
 import { atom } from "jotai";
 
-export const translatingAtom = atom({
-    result: "",
-    pronunciation: "",
-})
+export const translationAtom = atom({})
