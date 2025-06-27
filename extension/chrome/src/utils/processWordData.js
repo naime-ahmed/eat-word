@@ -181,6 +181,8 @@ export const extractWordData = (translationData, word) => {
 export const wordSchemaForClient = ({
   id,
   addedBy,
+  learnSynonyms,
+  includeDefinition,
   word,
   meanings = "",
   synonyms = "",
@@ -189,8 +191,8 @@ export const wordSchemaForClient = ({
 }) => ({
   word: word,
   meanings: meanings,
-  synonyms: synonyms,
-  definitions: definitions,
+  synonyms: learnSynonyms ? synonyms : "",
+  definitions: includeDefinition ? definitions : "",
   examples: examples,
   memorized: false,
   difficultyLevel: "notSpecified",
