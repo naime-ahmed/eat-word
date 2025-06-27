@@ -21,7 +21,7 @@ const useFetch = (url, options = {}) => {
         "Cannot call chrome.runtime.sendMessage. This must be run in a Chrome extension.";
       console.error(errorMessage);
       // To allow local development, we are sending mock data
-      return;
+     return;
     }
 
     setLoading(true);
@@ -75,7 +75,8 @@ const useFetch = (url, options = {}) => {
         setLoading(false);
       }
     }
-  }, [url, attempt, options]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [url, attempt]);
 
   // This effect triggers the fetch when the url or attempt count changes
   useEffect(() => {
