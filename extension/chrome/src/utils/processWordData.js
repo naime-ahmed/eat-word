@@ -68,23 +68,23 @@ export const extractWordData = (translationData, word) => {
     "conjunction",
     "interjection",
   ];
-
-  // Extract the word (text)
   const finalWord = processed.text || "";
 
   // Extract Meanings
   const meaningsList = [];
+  const addedMeanings = new Set();
+
   if (processed.result) {
     meaningsList.push(processed.result);
+    addedMeanings.add(processed.result.toLowerCase());
   }
 
-  // Gather all available translations, grouped by their type.
   const translationsByType = {};
   for (const type of priorityOrder) {
     if (processed.translations?.[type]) {
       translationsByType[type] = processed.translations[type]
         .map((t) => t.translation)
-        .filter(Boolean); // Ensure no empty strings
+        .filter(Boolean);
     }
   }
 
@@ -93,26 +93,32 @@ export const extractWordData = (translationData, word) => {
     if (meaningsList.length >= 4) break;
     if (translationsByType[type]?.length > 0) {
       const curMeaning = translationsByType[type].shift();
-      if (!meaningsList.includes(curMeaning)) {
-        meaningsList.push(curMeaning); // Take the first and remove it
+      if (!addedMeanings.has(curMeaning.toLowerCase())) {
+        meaningsList.push(curMeaning);
+        addedMeanings.add(curMeaning.toLowerCase());
       }
     }
   }
 
-  // Fill remaining slots with whatever is left, in priority order.
+  // Fill remaining slots for meanings
   for (const type of priorityOrder) {
     if (meaningsList.length >= 4) break;
     if (translationsByType[type]?.length > 0) {
-      const needed = 4 - meaningsList.length;
-      meaningsList.push(...translationsByType[type].slice(0, needed));
+      for (const meaning of translationsByType[type]) {
+        if (meaningsList.length >= 4) break;
+        if (!addedMeanings.has(meaning.toLowerCase())) {
+          meaningsList.push(meaning);
+          addedMeanings.add(meaning.toLowerCase());
+        }
+      }
     }
   }
   const meanings = meaningsList.join(", ");
 
   // Extract Synonyms
   const synonymsList = [];
+  const addedSynonyms = new Set();
 
-  // Gather all available reversed translations, grouped by their type.
   const synonymsByType = {};
   for (const type of priorityOrder) {
     if (processed.translations?.[type]) {
@@ -127,23 +133,37 @@ export const extractWordData = (translationData, word) => {
     if (synonymsList.length >= 4) break;
     if (synonymsByType[type]?.length > 0) {
       const curSynonym = synonymsByType[type].shift();
-      if (!synonymsList.includes(curSynonym)) {
+      const lowerSynonym = curSynonym.toLowerCase();
+      if (
+        !addedSynonyms.has(lowerSynonym) &&
+        lowerSynonym !== finalWord.toLowerCase()
+      ) {
         synonymsList.push(curSynonym);
+        addedSynonyms.add(lowerSynonym);
       }
     }
   }
 
-  // Fill remaining slots.
+  // Fill remaining slots for synonyms
   for (const type of priorityOrder) {
     if (synonymsList.length >= 4) break;
     if (synonymsByType[type]?.length > 0) {
-      const needed = 4 - synonymsList.length;
-      synonymsList.push(...synonymsByType[type].slice(0, needed));
+      for (const synonym of synonymsByType[type]) {
+        if (synonymsList.length >= 4) break;
+        const lowerSynonym = synonym.toLowerCase();
+        if (
+          !addedSynonyms.has(lowerSynonym) &&
+          lowerSynonym !== finalWord.toLowerCase()
+        ) {
+          synonymsList.push(synonym);
+          addedSynonyms.add(lowerSynonym);
+        }
+      }
     }
   }
   const synonyms = synonymsList.join(", ");
 
-  // Extract Definitions
+  // Definitions Extraction
   const definitionsList = [];
   for (const type of priorityOrder) {
     if (definitionsList.length >= 3) break;
@@ -154,15 +174,13 @@ export const extractWordData = (translationData, word) => {
   }
   const definitions = definitionsList.join(" | ");
 
-  // Extract the Example
+  // Example Extraction with Fallback
   let examples = processed.example || "";
-
-  // If the top-level example is missing, find one in the definitions.
   if (!examples) {
     for (const type of priorityOrder) {
       const definitionExample = processed.definitions?.[type]?.example;
       if (definitionExample) {
-        examples = definitionExample; // Use the first one we find
+        examples = definitionExample;
         break;
       }
     }
