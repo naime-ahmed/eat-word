@@ -115,8 +115,9 @@ const Carousel = ({
 
     // bind just to the “thumb” pseudo‐element container
     const thumb = track.querySelector(`.${styles.sliderDivider}`);
-    thumb.addEventListener("pointerdown", onPointerDown);
-
+    if (thumb) {
+      thumb.addEventListener("pointerdown", onPointerDown);
+    }
     return () => {
       if (thumb) {
         thumb.removeEventListener("pointerdown", onPointerDown);
@@ -133,10 +134,12 @@ const Carousel = ({
         className={styles.divider}
         style={{ position: "relative" }}
       >
-        <div
-          className={styles.sliderDivider}
-          style={{ "--progress": `${progressPct}%` }}
-        />
+        {words?.length > 1 && (
+          <div
+            className={styles.sliderDivider}
+            style={{ "--progress": `${progressPct}%` }}
+          />
+        )}
       </div>
       {isLoading ? (
         <div className={styles.sliderSkeletonLoader}>
