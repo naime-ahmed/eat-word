@@ -1,4 +1,20 @@
-@import 'tailwindcss';
+@import "tailwindcss";
+
+@theme {
+  --breakpoint-sm: 30rem;
+}
+/* Target the root HTML element inside the iframe */
+html {
+  /* For Firefox */
+  scrollbar-width: none;
+  /* For Internet Explorer and Edge */
+  -ms-overflow-style: none;
+}
+
+/* For Webkit-based browsers (Chrome, Safari, new Edge) */
+html::-webkit-scrollbar {
+  display: none;
+}
 
 /*
   The default border color has changed to `currentColor` in Tailwind CSS v4,
