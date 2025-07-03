@@ -1,3 +1,5 @@
 import { atom } from "jotai";
 
-export const fontSizeAtom = atom(16);
+const isMobile = window.innerWidth <= 480;
+
+export const fontSizeAtom = atom(isMobile ? 14 : 16);
