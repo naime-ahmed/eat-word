@@ -70,7 +70,9 @@ function createFloatingIcon(x, y) {
     clearTimeout(fadeTimeout);
     icon.style.transform = "scale(1.1)";
     icon.style.backgroundColor = "#1e293b";
-    showTooltip(icon);
+    if (window.innerWidth > 600) {
+      showTooltip(icon);
+    }
   });
 
   icon.addEventListener("mouseleave", () => {
@@ -149,7 +151,6 @@ function createPopupPanel(x, y, text) {
   if (isMobile) {
     // For mobile, center it horizontally in the viewport.
     initialX = (window.innerWidth - maxWidth) / 2;
-    // For mobile, position it 40% down the VISIBLE screen, accounting for scroll.
     initialY = window.scrollY + window.innerHeight * 0.4 - maxHeight / 2;
   } else {
     // For desktop, use the coordinates from the text selection.
@@ -394,7 +395,7 @@ function showTooltip(iconElement) {
       '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
     fontWeight: "500",
     whiteSpace: "nowrap",
-    zIndex: "2147483648",
+    zIndex: "2147483647",
     boxShadow: "0 4px 20px rgba(0, 0, 0, 0.3)",
     border: "1px solid rgba(255, 255, 255, 0.1)",
     opacity: "0",
