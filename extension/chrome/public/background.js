@@ -22,25 +22,31 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     fetch(request.url, request.options)
       .then(async (response) => {
         if (response.ok) {
+          // Handle success
           const contentType = response.headers.get("content-type");
-          if (contentType && contentType.indexOf("application/json") !== -1) {
-            return response.json();
+          if (contentType?.includes("application/json")) {
+            sendResponse(await response.json());
+          } else {
+            sendResponse({});
           }
-          return {};
+        } else {
+          // Preserve error details
+          sendResponse({
+            error: true,
+            status: response.status,
+            statusText: response.statusText,
+            body: await response.json()
+          });
         }
-
-        return Promise.reject({
-          status: response.status,
-          statusText: response.statusText,
-          body: await response.json(),
-        });
-      })
-      .then((data) => {
-        sendResponse(data);
       })
       .catch((error) => {
-        console.error("Background fetch error:", error);
-        sendResponse(error);
+        // Network errors
+        console.log("error from bg sc: ", error);
+        sendResponse({
+          error: true,
+          message: error.message,
+          isNetworkError: true
+        });
       });
 
     return true;
@@ -169,7 +175,7 @@ chrome.runtime.onMessageExternal.addListener(
   (message, sender, sendResponse) => {
     if (
       !sender.url.startsWith(
-        "https://eat-word-naime-ahmeds-projects.vercel.app/"
+        "https://eat-word.pages.dev/"
       ) &&
       !sender.url.startsWith("http://localhost")
     ) {
