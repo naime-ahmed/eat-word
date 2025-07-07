@@ -1,0 +1,81 @@
+{
+  "manifest_version": 3,
+  "name": "EatWord: AI-Powered Vocabulary mastery",
+  "version": "1.0.0",
+  "description": "Master vocabulary from your real world - capture words from documents, articles, and conversations. AI-powered definitions, translations, and personalized learning.",
+
+  "permissions": ["storage", "activeTab", "scripting", "contextMenus", "tts"],
+
+  "host_permissions": [
+    "https://t.song.work/*",
+    "https://eat-word.pages.dev/*",
+    "https://eat-word-naime-ahmeds-projects.vercel.app/*",
+    "*://*/*"
+  ],
+
+  "background": {
+    "service_worker": "background.js"
+  },
+
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"],
+      "run_at": "document_end"
+    }
+  ],
+
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "index.html",
+        "defaultPopup.html",
+        "static/*",
+        "icon.webp",
+        "icon-16.png",
+        "icon-48.png",
+        "icon-128.png",
+        "*"
+      ],
+      "matches": ["<all_urls>"]
+    }
+  ],
+  "externally_connectable": {
+    "matches": [
+      "https://eat-word.pages.dev/*",
+      "https://www.eat-word.pages.dev/*",
+      "http://localhost/*"
+    ]
+  },
+  "action": {
+    "default_popup": "defaultPopup.html",
+    "default_title": "EatWord - Translate selected text",
+    "default_icon": {
+      "16": "icon-16.png",
+      "48": "icon-48.png",
+      "128": "icon-128.png"
+    }
+  },
+
+  "icons": {
+    "16": "icon-16.png",
+    "48": "icon-48.png",
+    "128": "icon-128.png"
+  },
+
+  "commands": {
+    "open-eatword": {
+      "suggested_key": {
+        "default": "Alt+T",
+        "mac": "Alt+T"
+      },
+      "description": "Open EatWord with selected text"
+    }
+  },
+
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; object-src 'self'"
+  },
+
+  "minimum_chrome_version": "88"
+}

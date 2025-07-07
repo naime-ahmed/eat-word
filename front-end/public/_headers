@@ -1,4 +1,4 @@
 /*
-  Content-Security-Policy: script-src 'self' https://challenges.cloudflare.com 'sha256-88N2CpMrljnMVUAlMAyJF+APT2LiYQhvVgbJ46MNSDY='; frame-src https://challenges.cloudflare.com; style-src 'self' 'unsafe-inline'; object-src 'none'; base-uri 'self'; form-action 'self'
+  Content-Security-Policy: script-src 'self' https://challenges.cloudflare.com 'sha256-88N2CpMrljnMVUAlMAyJF+APT2LiYQhvVgbJ46MNSDY='https://accounts.google.com; frame-src https://challenges.cloudflare.com; style-src 'self' 'unsafe-inline'; object-src 'none'; base-uri 'self'; form-action 'self'
   X-Frame-Options: SAMEORIGIN
   X-Content-Type-Options: nosniff

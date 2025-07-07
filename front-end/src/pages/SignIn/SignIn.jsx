@@ -1,7 +1,14 @@
-import { Suspense, lazy, useCallback, useRef, useState } from "react";
+import {
+  Suspense,
+  lazy,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import logoIcon from "../../assets/logoIcon.webp";
 import TurnstileWidget from "../../components/TurnstileWidget.jsx";
 import PrimaryBtn from "../../components/ui/button/PrimaryBtn/PrimaryBtn.jsx";
@@ -34,6 +41,76 @@ const SignIn = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const showNotification = useNotification();
+  const [searchParams] = useSearchParams();
+  const {
+    isAuthenticated,
+    isLoading: isAuthChecking,
+    user: userTokenData,
+  } = useSelector((state) => state.auth);
+
+  // handle user signin from chrome extension
+  if (searchParams.has("extensionId")) {
+    sessionStorage.setItem("extensionId", searchParams.get("extensionId"));
+  }
+
+  // notify extension about user auth
+  const notifyExtension = useCallback(
+    (extensionId) => {
+      if (extensionId) {
+        console.log(
+          "User is authenticated. Sending message to extension:",
+          extensionId
+        );
+
+        try {
+          chrome.runtime.sendMessage(
+            extensionId,
+            {
+              type: "LOGIN_SUCCESS",
+              accessToken: localStorage.getItem("access-token"),
+              user: userTokenData,
+            },
+            (response) => {
+              if (chrome.runtime.lastError) {
+                console.error(
+                  "Error sending message:",
+                  chrome.runtime.lastError.message
+                );
+              } else if (response && response.status === "success") {
+                console.log(
+                  "Message successfully received by extension. Closing tab."
+                );
+                sessionStorage.removeItem("extensionId");
+                window.close();
+              } else {
+                console.log(
+                  "Extension did not respond successfully:",
+                  response
+                );
+              }
+            }
+          );
+        } catch (e) {
+          console.error(
+            "Could not send message. Is the extension installed and enabled?",
+            e
+          );
+        }
+      } else {
+        console.log("No extensionId found in session storage.");
+      }
+    },
+    [userTokenData]
+  );
+
+  useEffect(() => {
+    if (isAuthChecking === false) {
+      if (isAuthenticated) {
+        const extensionId = sessionStorage.getItem("extensionId");
+        notifyExtension(extensionId);
+      }
+    }
+  }, [isAuthChecking, isAuthenticated, notifyExtension]);
 
   const [signInUser, { isLoading }] = useSignInUserMutation();
 
@@ -99,6 +176,11 @@ const SignIn = () => {
           // store user sign in event
           localStorage.setItem("hasACC", true);
 
+          if (sessionStorage.getItem("extensionId")) {
+            const extensionId = sessionStorage.getItem("extensionId");
+            notifyExtension(extensionId);
+          }
+
           navigate("/my-space");
         } catch (error) {
           showNotification({
@@ -126,153 +208,158 @@ const SignIn = () => {
       showNotification,
       navigate,
       captchaToken,
+      notifyExtension,
     ]
   );
 
   return (
     <div className={styles.signInContainer}>
-      <main className={styles.formContainer}>
-        <div className={styles.loginHeader}>
-          <img src={logoIcon} alt="brand icon" />
-          <h2 aria-live="polite">Welcome Back</h2>
-          <small>Please enter your details to sign in</small>
-        </div>
-
-        <form onSubmit={handleSubmit} noValidate>
-          <div>
-            <input
-              type="email"
-              id="email"
-              name="email"
-              value={email}
-              onChange={handleChange}
-              className={styles.inputField}
-              autoComplete="email"
-              required
-              aria-required="true"
-              aria-invalid={!!emailError}
-              aria-describedby={emailError ? "email-error" : undefined}
-              placeholder="Enter email"
-            />
-            <label htmlFor="email" className={styles.formLabel}>
-              Your email
-            </label>
-            {emailError && (
-              <p id="email-error" role="alert">
-                {emailError}
-              </p>
-            )}
+      {searchParams.has("extensionId") && isAuthChecking ? (
+        <div>Checking if you are already logged in...</div>
+      ) : (
+        <main className={styles.formContainer}>
+          <div className={styles.loginHeader}>
+            <img src={logoIcon} alt="brand icon" />
+            <h2 aria-live="polite">Welcome Back</h2>
+            <small>Please enter your details to sign in</small>
           </div>
 
-          <div className={styles.passwordSection}>
-            <input
-              type={showPassword ? "text" : "password"}
-              id="password"
-              name="password"
-              value={password}
-              onChange={handleChange}
-              className={styles.inputField}
-              autoComplete="current-password"
-              required
-              aria-required="true"
-              aria-invalid={!!passwordError}
-              aria-describedby={passwordError ? "password-error" : undefined}
-              placeholder="Enter password"
-            />
-            <label htmlFor="password" className={styles.formLabel}>
-              Your password
-            </label>
-
-            {/* Password toggle icon */}
-            <span
-              className={styles.passEyeIcon}
-              style={{ bottom: passwordError ? "26px" : undefined }}
-              onClick={() => setShowPassword(!showPassword)}
-              role="button"
-              aria-label={showPassword ? "Hide password" : "Show password"}
-              tabIndex={0}
-            >
-              {showPassword ? (
-                <FaEyeSlash className={styles.eyeIcon} />
-              ) : (
-                <FaEye className={styles.eyeIcon} />
+          <form onSubmit={handleSubmit} noValidate>
+            <div>
+              <input
+                type="email"
+                id="email"
+                name="email"
+                value={email}
+                onChange={handleChange}
+                className={styles.inputField}
+                autoComplete="email"
+                required
+                aria-required="true"
+                aria-invalid={!!emailError}
+                aria-describedby={emailError ? "email-error" : undefined}
+                placeholder="Enter email"
+              />
+              <label htmlFor="email" className={styles.formLabel}>
+                Your email
+              </label>
+              {emailError && (
+                <p id="email-error" role="alert">
+                  {emailError}
+                </p>
               )}
-            </span>
+            </div>
 
-            {passwordError && (
-              <p id="password-error" role="alert">
-                {passwordError}
-              </p>
-            )}
-            <Link to="/forgot-password" className={styles.forgotPass}>
-              Forgot Password?
-            </Link>
-          </div>
+            <div className={styles.passwordSection}>
+              <input
+                type={showPassword ? "text" : "password"}
+                id="password"
+                name="password"
+                value={password}
+                onChange={handleChange}
+                className={styles.inputField}
+                autoComplete="current-password"
+                required
+                aria-required="true"
+                aria-invalid={!!passwordError}
+                aria-describedby={passwordError ? "password-error" : undefined}
+                placeholder="Enter password"
+              />
+              <label htmlFor="password" className={styles.formLabel}>
+                Your password
+              </label>
 
-          {/* Turnstile Widget */}
-          <TurnstileWidget
-            ref={captchaWidgetRef}
-            onVerify={setCaptchaToken}
-            onError={(error) => {
-              showNotification({
-                title: "CAPTCHA Error",
-                message:
-                  error?.message ||
-                  "CAPTCHA verification failed. Please try again.",
-                iconType: "error",
-                duration: 4000,
-              });
-              setCaptchaToken("");
-              captchaWidgetRef.current?.reset();
-            }}
-            onExpire={() => {
-              showNotification({
-                title: "CAPTCHA Expired",
-                message:
-                  "The CAPTCHA challenge has expired. Please verify again.",
-                iconType: "warning",
-                duration: 4000,
-              });
-              setCaptchaToken("");
-              captchaWidgetRef.current?.reset();
-            }}
-            options={{
-              theme: "dark",
-              action: "signin",
-            }}
-          />
+              {/* Password toggle icon */}
+              <span
+                className={styles.passEyeIcon}
+                style={{ bottom: passwordError ? "26px" : undefined }}
+                onClick={() => setShowPassword(!showPassword)}
+                role="button"
+                aria-label={showPassword ? "Hide password" : "Show password"}
+                tabIndex={0}
+              >
+                {showPassword ? (
+                  <FaEyeSlash className={styles.eyeIcon} />
+                ) : (
+                  <FaEye className={styles.eyeIcon} />
+                )}
+              </span>
 
-          <div className={styles.submitBtn}>
-            <PrimaryBtn
-              btnType="submit"
-              disabled={isLoading}
-              colorOne="#1A73E8"
-              colorTwo="#1A73E8"
-              isLoading={isLoading}
-              loadingText="Signing in..."
-            >
-              <span>Submit</span>
-            </PrimaryBtn>
-
-            <p className={styles.separator} aria-hidden="true">
-              or
-            </p>
-
-            <Suspense fallback={<Skeleton width={280} height={42} />}>
-              <div className={styles.googleLogin}>
-                <GoogleSignIn />
-              </div>
-            </Suspense>
-
-            <p>
-              New here?{" "}
-              <Link to="/sign-up" className={styles.signUpLink}>
-                Create account
+              {passwordError && (
+                <p id="password-error" role="alert">
+                  {passwordError}
+                </p>
+              )}
+              <Link to="/forgot-password" className={styles.forgotPass}>
+                Forgot Password?
               </Link>
-            </p>
-          </div>
-        </form>
-      </main>
+            </div>
+
+            {/* Turnstile Widget */}
+            <TurnstileWidget
+              ref={captchaWidgetRef}
+              onVerify={setCaptchaToken}
+              onError={(error) => {
+                showNotification({
+                  title: "CAPTCHA Error",
+                  message:
+                    error?.message ||
+                    "CAPTCHA verification failed. Please try again.",
+                  iconType: "error",
+                  duration: 4000,
+                });
+                setCaptchaToken("");
+                captchaWidgetRef.current?.reset();
+              }}
+              onExpire={() => {
+                showNotification({
+                  title: "CAPTCHA Expired",
+                  message:
+                    "The CAPTCHA challenge has expired. Please verify again.",
+                  iconType: "warning",
+                  duration: 4000,
+                });
+                setCaptchaToken("");
+                captchaWidgetRef.current?.reset();
+              }}
+              options={{
+                theme: "dark",
+                action: "signin",
+              }}
+            />
+
+            <div className={styles.submitBtn}>
+              <PrimaryBtn
+                btnType="submit"
+                disabled={isLoading}
+                colorOne="#1A73E8"
+                colorTwo="#1A73E8"
+                isLoading={isLoading}
+                loadingText="Signing in..."
+              >
+                <span>Submit</span>
+              </PrimaryBtn>
+
+              <p className={styles.separator} aria-hidden="true">
+                or
+              </p>
+
+              <Suspense fallback={<Skeleton width={280} height={42} />}>
+                <div className={styles.googleLogin}>
+                  <GoogleSignIn />
+                </div>
+              </Suspense>
+
+              <p>
+                New here?{" "}
+                <Link to="/sign-up" className={styles.signUpLink}>
+                  Create account
+                </Link>
+              </p>
+            </div>
+          </form>
+        </main>
+      )}
     </div>
   );
 };

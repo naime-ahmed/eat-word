@@ -62,6 +62,10 @@ const router = createBrowserRouter([
         element: <SignIn />,
       },
       {
+        path: "/extension-signin",
+        element: <SignIn />,
+      },
+      {
         path: "/forgot-password",
         element: <ForgotPass />,
       },
