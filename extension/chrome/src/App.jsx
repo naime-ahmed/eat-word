@@ -69,6 +69,9 @@ function App() {
 
   // listen for live authentication state changes
   useEffect(() => {
+    if (typeof chrome === "undefined" || !chrome.runtime?.onMessage) {
+      console.warn("Not in a Chrome extension context. Auth check skipped.");
+    }
     const handleAuthChange = (message) => {
       if (message.action === "AUTH_STATE_CHANGED") {
         console.log("Auth state changed message received by UI:", message);
@@ -81,10 +84,10 @@ function App() {
       }
     };
 
-    chrome.runtime.onMessage.addListener(handleAuthChange);
+    chrome.runtime?.onMessage.addListener(handleAuthChange);
 
     return () => {
-      chrome.runtime.onMessage.removeListener(handleAuthChange);
+      chrome?.runtime?.onMessage.removeListener(handleAuthChange);
     };
   }, [setUser]);
 
@@ -95,7 +98,7 @@ function App() {
     const selectedText = params.get("text") || "";
 
     if (selectedText) {
-      setText(selectedText);
+      setText(selectedText.trim());
     } else {
       console.log("no text selected");
     }
