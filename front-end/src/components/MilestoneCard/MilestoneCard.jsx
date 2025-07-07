@@ -88,10 +88,10 @@ const MilestoneCard = ({ milestone }) => {
           </div>
         ) : (
           <div className={styles.wordVerdict}>
-            <p title="Memorized" onClick={handlePropagation}>
+            <p title="Number of memorized words" onClick={handlePropagation}>
               {milestone?.memorizedCount}
             </p>
-            <p title="Required revision" onClick={handlePropagation}>
+            <p title="Revision required" onClick={handlePropagation}>
               {milestone?.revisionCount}
             </p>
           </div>
