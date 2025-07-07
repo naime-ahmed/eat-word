@@ -55,27 +55,41 @@ const useFetch = (url, options = {}) => {
         throw new Error(chrome.runtime.lastError.message);
       }
 
-      // Handle custom errors returned within the response object
       if (response && response.error) {
-        throw new Error(response.error);
+        if (response.status >= 500) {
+          // Preserve full error object for retries
+          throw response;
+        } else {
+          // Non-retryable errors
+          setError(response);
+          setLoading(false);
+          return;
+        }
       }
 
       // On success, update data and stop loading
       setData(response);
       setLoading(false);
     } catch (err) {
-      console.error(`Fetch attempt ${attempt + 1} failed:`, err.message);
-
-      if (attempt < MAX_RETRIES) {
+      console.log("fetch error:", err);
+      if (attempt < MAX_RETRIES && err?.status >= 500) {
+        // Retry server errors
         timeoutIdRef.current = setTimeout(() => {
           setAttempt((prev) => prev + 1);
         }, RETRY_DELAY);
       } else {
-        setError(err);
+        // Final error handling
+        setError(
+          err.status
+            ? err
+            : {
+                message: err.message || "Unknown error",
+              }
+        );
         setLoading(false);
       }
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [url, attempt]);
 
   // This effect triggers the fetch when the url or attempt count changes
