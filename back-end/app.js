@@ -37,7 +37,7 @@ app.set("trust proxy", 1);
 // Enable CORS for specific uris
 app.use(
   cors({
-    origin: ["http://localhost:5173", "https://eat-word.pages.dev", "https://eatword.com"],
+    origin: ["http://localhost:5173", "https://eat-word.pages.dev", "https://eatword.com", "https://www.eatword.com"],
     credentials: true,
     allowedHeaders: [
       'Content-Type',
