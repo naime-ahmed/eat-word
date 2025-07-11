@@ -19,7 +19,7 @@ const CopyToClip = ({ text, className = "" }) => {
     const btnRect = buttonRef.current.getBoundingClientRect();
     const tooltipElement = document.createElement("div");
     tooltipElement.innerText = message;
-    // Temporarily apply some styles to measure width accurately
+
     Object.assign(tooltipElement.style, {
       position: "absolute",
       visibility: "hidden",
@@ -66,12 +66,12 @@ const CopyToClip = ({ text, className = "" }) => {
       <button
         ref={buttonRef}
         onClick={handleButtonClick}
-        className={`p-2 text-slate-400 hover:text-slate-200 hover:bg-slate-700/60 rounded-md transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500/30 ${className}`}
+        className={`p-1 sm:p-2 text-slate-400 hover:text-slate-200 hover:bg-slate-700/60 rounded-md transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500/30 ${className}`}
         aria-label={copied ? "Copied to clipboard" : "Copy to clipboard"}
         disabled={copied}
       >
         {copied ? (
-          <BsCheck2All className="w-4 h-4 text-green-400" />
+          <BsCheck2All className="w-3.5 sm:w-4 h-3.5 sm:h-4 text-green-400" />
         ) : (
           <IoCopyOutline className="w-4 h-4" title="copy to clipboard" />
         )}
