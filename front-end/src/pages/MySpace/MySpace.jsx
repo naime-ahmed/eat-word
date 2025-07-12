@@ -75,7 +75,7 @@ const MySpace = () => {
       <div className={styles.myspaceContainer}>
         <div className={styles.mySpaceHeading}>
           <div className={styles.createNewMilestoneBtn}>
-            <AddBtn handleOpenModal={openReqModal}>New Challenge</AddBtn>
+            <AddBtn handleOpenModal={openReqModal}>New Milestone</AddBtn>
           </div>
           <Popup
             isOpen={isTakingRequirements}
@@ -91,9 +91,9 @@ const MySpace = () => {
             <PairChart
               totalCount={milestones.length}
               successCount={completedMilestone}
-              totalTooltip={`Total Challenges: ${milestones.length}`}
-              successTooltip={`Completed Challenges: ${completedMilestone}`}
-              chartTitle="Challenges"
+              totalTooltip={`Total Milestones: ${milestones.length}`}
+              successTooltip={`Completed Milestones: ${completedMilestone}`}
+              chartTitle="Milestones"
             />
             <PairChart
               totalCount={totalWords}
@@ -131,16 +131,16 @@ const MySpace = () => {
           <div className={styles.mySpaceContent}>
             <div className={styles.tabs}>
               <ul>
-                {["seven", "three", "zero"].map((type) => (
+                {["zero", "three", "seven"].map((type) => (
                   <li
                     key={type}
                     onClick={() => handleSelectMSType(type)}
                     className={viewMilestone === type ? styles.active : ""}
                   >
                     {type === "seven"
-                      ? "7-Day challenges"
+                      ? "7-Day Milestones"
                       : type === "three"
-                      ? "3-Day Challenges"
+                      ? "3-Day Milestones"
                       : "Flexible Learning"}
                   </li>
                 ))}
@@ -150,7 +150,7 @@ const MySpace = () => {
             <div className={styles.milestonesSection}>
               {filteredMilestones?.length === 0 ? (
                 <Error
-                  message="You've not taken this challenge yet!"
+                  message="You've not set this Milestone yet!"
                   icon={TbFaceIdError}
                 />
               ) : (

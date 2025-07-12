@@ -79,17 +79,17 @@ const MilestoneRequirements = ({ handleViewMilestone, onClose }) => {
     } catch (error) {
       showNotification({
         title: "Request failed",
-        message: "An error occurred while creating new challenge!",
+        message: "An error occurred while creating new milestone!",
         iconType: "error",
         duration: 4000,
       });
-      console.log("error on append new challenge", error);
+      console.log("error on append new milestone", error);
     }
   };
 
   return (
     <div className={styles.modalContent}>
-      <h2 className={styles.modalTitle}>Let me know your preferences</h2>
+      <h2 className={styles.modalTitle}>Your preferences</h2>
       <form onSubmit={handleSubmit} className={styles.form}>
         <div className={styles.inputGroup}>
           <select
@@ -103,7 +103,7 @@ const MilestoneRequirements = ({ handleViewMilestone, onClose }) => {
             <option value="" disabled>
               Select a learning plan
             </option>
-            <option value="seven">7-Day Challenge</option>
+            <option value="seven">7-Day Milestone</option>
             <option value="three">3-Day Sprint</option>
             <option value="zero">Flexible Learning</option>
           </select>
@@ -211,7 +211,7 @@ const MilestoneRequirements = ({ handleViewMilestone, onClose }) => {
 
         <div className={styles.submitButton}>
           <PrimaryBtn btnType="submit" isLoading={isLoading}>
-            Let&#39;s goo
+            Set New Milestone
           </PrimaryBtn>
         </div>
       </form>
