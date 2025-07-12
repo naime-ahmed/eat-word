@@ -16,8 +16,8 @@ const PromoBanner = ({ show, onClose }) => {
         <strong className={styles.promoLabel}>🔥 Hot Deal:</strong>
         <span className={styles.promoText}>
           Unlock 1 MONTH of Pro features for
-          <strong className={styles.promoLabel}> FREE</strong> — limited to the
-          first 200 early birds!
+          <strong className={styles.promoLabel}> FREE</strong> - Limited
+          availability: Only 50 slots!
         </span>
         <Link to="/sign-up" className={styles.promoLink}>
           Claim Yours Now
