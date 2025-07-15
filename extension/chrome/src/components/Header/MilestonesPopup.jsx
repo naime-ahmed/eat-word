@@ -2,6 +2,7 @@ import { useAtomValue } from "jotai";
 import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { AiOutlineReload } from "react-icons/ai";
+import { BsCheck2All } from "react-icons/bs";
 import { IoIosWarning } from "react-icons/io";
 import { RiFunctionAddFill } from "react-icons/ri";
 import { selectedTextAtom } from "../../../atoms/text.js";
@@ -165,9 +166,10 @@ const MilestonesPopup = ({ isVisible, targetRef, onClose }) => {
             <span className="text-slate-300">{appendError?.body?.message}</span>
           </div>
         ) : saveSuccess ? (
-          <p className="p-2.5 sm:p-3 text-green-400 text-base">
-            Saved successfully!
-          </p>
+          <div className="p-2.5 sm:p-3 flex gap-2 sm:gap-3 text-green-400 ">
+            <BsCheck2All className="text-lg" />
+            <span className="text-xs sm:text-base">Saved successfully!</span>
+          </div>
         ) : (
           <ul
             className="space-y-1 max-h-40 sm:max-h-52 overflow-y-auto p-1 scrollbar-thin scrollbar-track-transparent scrollbar-thumb-slate-500/50 hover:scrollbar-thumb-slate-400/70 scrollbar-thumb-rounded-full"
