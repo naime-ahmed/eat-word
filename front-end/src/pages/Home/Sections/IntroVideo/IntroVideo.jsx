@@ -118,12 +118,12 @@ const IntroVideo = () => {
             <div className={styles.videoContainer}>
               {videoLoaded && (
                 <iframe
-                  src="https://www.youtube-nocookie.com/embed/JAyuHIthHco?autoplay=1&modestbranding=1&rel=0"
+                  src="https://www.youtube.com/embed/h147l0pC1bg?si=DJU8iGdEWJ-JLL8d"
                   title="YouTube video player"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  allowFullScreen
-                  loading="lazy"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                   referrerPolicy="strict-origin-when-cross-origin"
+                  allowfullscreen
+                  loading="lazy"
                   sandbox="allow-scripts allow-same-origin allow-presentation"
                   style={{ width: "100%", height: "100%", border: 0 }}
                 />
