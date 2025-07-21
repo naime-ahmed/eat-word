@@ -14,7 +14,8 @@
   ],
 
   "background": {
-    "service_worker": "background.js"
+    "service_worker": "background.js",
+    "type": "module"
   },
 
   "content_scripts": [
@@ -35,6 +36,8 @@
         "icon-16.png",
         "icon-48.png",
         "icon-128.png",
+        "dictionaries/*",
+        "lib/suggest-word-list.js",
         "*"
       ],
       "matches": ["<all_urls>"]
