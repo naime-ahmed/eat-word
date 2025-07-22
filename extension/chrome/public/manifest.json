@@ -8,9 +8,9 @@
 
   "host_permissions": [
     "https://t.song.work/*",
-    "https://eat-word.pages.dev/*",
-    "https://eat-word-naime-ahmeds-projects.vercel.app/*",
-    "*://*/*"
+    "https://eatword.com/*",
+    "https://www.eatword.com/*",
+    "https://eat-word-naime-ahmeds-projects.vercel.app/*"
   ],
 
   "background": {
@@ -45,8 +45,8 @@
   ],
   "externally_connectable": {
     "matches": [
-      "https://eat-word.pages.dev/*",
-      "https://www.eat-word.pages.dev/*",
+      "https://eatword.com/*",
+      "https://www.eatword.com/*",
       "http://localhost/*"
     ]
   },

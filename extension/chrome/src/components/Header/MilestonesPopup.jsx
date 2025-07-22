@@ -26,7 +26,7 @@ const MilestonesPopup = ({ isVisible, targetRef, onClose }) => {
   const [saveSuccess, setSaveSuccess] = useState(false);
 
   const { data, loading, error, retry } = useFetch(
-    "http://localhost:5000/milestones",
+    "https://eat-word-naime-ahmeds-projects.vercel.app/milestones",
     {
       includeToken: true,
     }
@@ -91,12 +91,15 @@ const MilestonesPopup = ({ isVisible, targetRef, onClose }) => {
       ...extractDataToSave,
     });
     try {
-      const response = await mutate("http://localhost:5000/words", {
-        method: "POST",
-        body: wordToSave,
-        includeToken: true,
-        credentials: "include",
-      });
+      const response = await mutate(
+        "https://eat-word-naime-ahmeds-projects.vercel.app/words",
+        {
+          method: "POST",
+          body: wordToSave,
+          includeToken: true,
+          credentials: "include",
+        }
+      );
 
       console.log("Word saved successfully!", response);
       setSaveSuccess(true);
@@ -147,7 +150,7 @@ const MilestonesPopup = ({ isVisible, targetRef, onClose }) => {
               No milestone found
             </h2>
             <a
-              href="http://localhost:5173/my-space"
+              href="https://eatword.com/my-space"
               target="_blank"
               className="flex items-center justify-center gap-2 w-full px-2.5 sm:px-3 py-2 text-sm text-slate-300 hover:bg-slate-700 rounded-md transition-colors no-underline cursor-pointer"
             >

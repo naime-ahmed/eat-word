@@ -29,14 +29,14 @@ function updateAuthButton(isAuthenticated) {
     authButton.textContent = "Visit Eat Word";
     authButton.classList.add("authenticated");
     authButton.onclick = () => {
-      chrome.tabs.create({ url: `http://localhost:5173/` });
+      chrome.tabs.create({ url: `https://eatword.com/` });
     };
   } else {
     authButton.textContent = "Log in";
     authButton.classList.remove("authenticated");
     authButton.onclick = () => {
       chrome.tabs.create({
-        url: `http://localhost:5173/extension-signin?extensionId=${getExtensionId()}`,
+        url: `https://eatword.com/extension-signin?extensionId=${getExtensionId()}`,
       });
     };
   }
@@ -45,13 +45,13 @@ function updateAuthButton(isAuthenticated) {
 // Logo click handler
 document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("logoContainer").onclick = () => {
-    chrome.tabs.create({ url: `http://localhost:5173/` });
+    chrome.tabs.create({ url: `https://eatword.com/` });
   };
 
   // Default button click handler (in case auth check fails)
   document.getElementById("authButton").onclick = () => {
     chrome.tabs.create({
-      url: `http://localhost:5173/extension-signin?extensionId=${getExtensionId()}`,
+      url: `https://eatword.com/extension-signin?extensionId=${getExtensionId()}`,
     });
   };
 });

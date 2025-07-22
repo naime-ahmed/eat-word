@@ -100,7 +100,7 @@ const Header = () => {
     <div className="flex flex-col gap-6 sm:gap-8 w-full mx-auto">
       {/* brand and quick tools */}
       <div className="flex justify-between">
-        <a href="http://localhost:5173/" target="_blank">
+        <a href="https://eatword.com/" target="_blank">
           <img src={brandLogo} className="w-20 sm:w-24" alt="Eat Word logo" />
         </a>
         <div className="flex gap-4 items-center">
