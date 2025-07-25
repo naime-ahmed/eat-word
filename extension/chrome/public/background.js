@@ -1,3 +1,6 @@
+// Import the spell-check module. Note the path.
+import { SpellChecker } from "./lib/spell-check.js";
+
 // Handle extension installation and context menu setup
 chrome.runtime.onInstalled.addListener(() => {
   chrome.storage.local.set({
@@ -17,57 +20,11 @@ chrome.runtime.onInstalled.addListener(() => {
   });
 });
 
-chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-  if (request.type === "api-request") {
-    fetch(request.url, request.options)
-      .then(async (response) => {
-        if (response.ok) {
-          // Handle success
-          const contentType = response.headers.get("content-type");
-          if (contentType?.includes("application/json")) {
-            sendResponse(await response.json());
-          } else {
-            sendResponse({});
-          }
-        } else {
-          // Preserve error details
-          sendResponse({
-            error: true,
-            status: response.status,
-            statusText: response.statusText,
-            body: await response.json()
-          });
-        }
-      })
-      .catch((error) => {
-        // Network errors
-        console.log("error from bg sc: ", error);
-        sendResponse({
-          error: true,
-          message: error.message,
-          isNetworkError: true
-        });
-      });
-
-    return true;
-  }
-});
-
 function storeTextAndOpenPopup(text) {
   chrome.storage.local.set({ selectedText: text }, () => {
     chrome.action.openPopup();
   });
 }
-
-// handle authentication
-chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-  // Check authentication status
-  if (request.action === "CHECK_AUTH") {
-    console.log("checking login");
-    handleAuthCheck(sendResponse);
-    return true; // Indicates async response
-  }
-});
 
 async function handleAuthCheck(sendResponse) {
   const { accessToken, user } = await chrome.storage.local.get([
@@ -84,11 +41,14 @@ async function handleAuthCheck(sendResponse) {
   }
 
   try {
-    const response = await fetch(`http://localhost:5000/auth`, {
-      method: "POST",
-      headers: { Authorization: `Bearer ${accessToken}` },
-      credentials: "include",
-    });
+    const response = await fetch(
+      `https://eat-word-naime-ahmeds-projects.vercel.app/auth`,
+      {
+        method: "POST",
+        headers: { Authorization: `Bearer ${accessToken}` },
+        credentials: "include",
+      }
+    );
 
     if (response.ok) {
       console.log(
@@ -131,10 +91,13 @@ async function handleAuthCheck(sendResponse) {
 
 async function handleTokenRefresh() {
   try {
-    const response = await fetch(`http://localhost:5000/auth/refresh-token`, {
-      method: "POST",
-      credentials: "include",
-    });
+    const response = await fetch(
+      `https://eat-word-naime-ahmeds-projects.vercel.app/auth/refresh-token`,
+      {
+        method: "POST",
+        credentials: "include",
+      }
+    );
 
     if (response.ok) {
       const data = await response.json();
@@ -174,9 +137,7 @@ async function handleTokenRefresh() {
 chrome.runtime.onMessageExternal.addListener(
   (message, sender, sendResponse) => {
     if (
-      !sender.url.startsWith(
-        "https://eat-word.pages.dev/"
-      ) &&
+      !sender.url.startsWith("https://eatword.com") &&
       !sender.url.startsWith("http://localhost")
     ) {
       return;
@@ -222,6 +183,99 @@ chrome.contextMenus.onClicked.addListener((info, tab) => {
       text: info.selectionText,
       position: { x: 200, y: 200 },
     });
+  }
+});
+
+// Listen for messages from content scripts or the popup UI.
+chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+  const messageType = request.type || request.action;
+
+  switch (messageType) {
+    case "api-request":
+      fetch(request.url, request.options)
+        .then(async (response) => {
+          if (response.ok) {
+            const contentType = response.headers.get("content-type");
+            if (contentType?.includes("application/json")) {
+              sendResponse(await response.json());
+            } else {
+              sendResponse({});
+            }
+          } else {
+            sendResponse({
+              error: true,
+              status: response.status,
+              statusText: response.statusText,
+              body: await response.json(),
+            });
+          }
+        })
+        .catch((error) => {
+          console.log("error from bg sc: ", error);
+          sendResponse({
+            error: true,
+            message: error.message,
+            isNetworkError: true,
+          });
+        });
+      return true;
+
+    case "CHECK_AUTH":
+      console.log("checking login");
+      handleAuthCheck(sendResponse);
+      return true;
+
+    case "LOOKUP_TEXT_AND_OPEN_POPUP":
+      storeTextAndOpenPopup(request.text);
+      sendResponse({ status: "success, popup opened" });
+      break;
+
+    case "check-word":
+      (async () => {
+        try {
+          const isCorrect = await SpellChecker.check(request.word);
+          console.log("isCorrect from bg: ", isCorrect, "word: ", request.word);
+          sendResponse({ isCorrect });
+        } catch (err) {
+          console.error("Error checking word:", err);
+          sendResponse({ status: "error", error: err.message });
+        }
+      })();
+      return true;
+
+    case "get-suggestions":
+      console.log("request object in bg: ", request);
+      const suggestions = SpellChecker.suggest(request.word);
+      console.log("suggestions from bg: ", suggestions);
+      sendResponse({ suggestions });
+      break;
+    
+    case "store-ignored-word":
+      console.log("calling to store word in session", request.word);
+      const key = "ignoredWords";
+      const word = request.word.toLowerCase();
+      (
+        async () => {
+          try {
+            const result = await chrome.storage.session.get(key);
+            console.log("res for storing word from storage", result);
+            const list = result[key] || [];
+            if (!list.includes(word)) {
+              list.push(word);
+              await chrome.storage.session.set({ [key]: list });
+            }
+            console.log("Word added to session storage:", word);
+            sendResponse({ status: "success" });
+          } catch (err) {
+            console.error("Error storing word:", err);
+            sendResponse({ status: "error", error: err.message });
+          }
+        }
+      )();
+      return true;
+    default:
+      console.log("Unknown message received in background:", messageType);
+      break;
   }
 });
 
