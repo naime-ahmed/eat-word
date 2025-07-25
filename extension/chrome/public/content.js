@@ -563,3 +563,431 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   }
   return true;
 });
+
+(async () => {
+  // In a content script, we must dynamically import modules that are web-accessible.
+  const helperModuleSrc = chrome.runtime.getURL("lib/suggest-word-list.js");
+  const { createSuggestionPopover } = await import(helperModuleSrc);
+
+  // --- Add CSS for red underline overlay ---
+  const style = document.createElement("style");
+  style.textContent = `
+  .eatword-overlay {
+    position: absolute;
+    pointer-events: none; /* The main container is not interactive */
+    z-index: 9998;
+    overflow: hidden; /* Clips the inner content */
+    /* These styles are copied from the target element by JS */
+  }
+
+  .eatword-overlay > div {
+    /* This is the inner scrollable wrapper */
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    color: transparent !important; /* Hide the mirrored text */
+    word-wrap: break-word;
+  }
+  
+  /* This is the span for the highlighted word *inside* the overlay */
+  .eatword-misspelled-overlay {
+    position: relative; /* Anchor for the custom underline */
+    text-decoration: none !important;
+    background-color: transparent;
+    pointer-events: auto; /* Make the word itself hoverable/clickable for suggestions */
+    transition: background-color 0.2s ease-in-out;
+  }
+
+  /* The animated custom underline */
+  .eatword-misspelled-overlay::after {
+    content: '';
+    display: block;
+    position: absolute;
+    width: 100%;
+    height: 2px;
+    background-color: red;
+    bottom: 0px;
+    left: 0;
+    transform-origin: left;
+    transform: scaleX(0);
+    animation: eatword-grow-underline 0.3s ease-out forwards;
+  }
+
+  /* The red background on hover */
+  .eatword-misspelled-overlay:hover {
+    background-color: rgba(255, 82, 82, 0.15);
+  }
+
+  @keyframes eatword-grow-underline {
+    from { transform: scaleX(0); }
+    to { transform: scaleX(1); }
+  }
+`;
+  document.head.appendChild(style);
+
+  // --- State and Initialization ---
+  const popover = createSuggestionPopover();
+  let activeEditableElement = null;
+  let currentMisspelledWordInfo = null;
+  let isCheckingSpelling = false;
+  let overlayElement = null;
+  let misspelledWords = new Map(); // Store misspelled words and their positions
+
+  const handleSuggestionSelect = (selectedWord) => {
+    if (!currentMisspelledWordInfo || !activeEditableElement) return;
+
+    const { startPos, endPos } = currentMisspelledWordInfo;
+
+    if (
+      activeEditableElement.tagName === "TEXTAREA" ||
+      activeEditableElement.tagName === "INPUT"
+    ) {
+      const currentValue = activeEditableElement.value;
+      const newValue =
+        currentValue.substring(0, startPos) +
+        selectedWord +
+        currentValue.substring(endPos);
+      activeEditableElement.value = newValue;
+
+      const inputEvent = new Event("input", { bubbles: true });
+      activeEditableElement.dispatchEvent(inputEvent);
+
+      const newCursorPos = startPos + selectedWord.length;
+      activeEditableElement.focus();
+      activeEditableElement.setSelectionRange(newCursorPos, newCursorPos);
+    } else if (activeEditableElement.isContentEditable) {
+      // Filter to find only the text nodes we are interested in.
+      const filter = {
+        acceptNode: (node) => {
+          if (node.parentElement.closest("pre, code")) {
+            return NodeFilter.FILTER_REJECT;
+          }
+          return NodeFilter.FILTER_ACCEPT;
+        },
+      };
+
+      const walker = document.createTreeWalker(
+        activeEditableElement,
+        NodeFilter.SHOW_TEXT,
+        filter
+      );
+      let charCount = 0;
+      let node;
+      let found = false;
+
+      // Walk through the text nodes to find the one containing the misspelled word
+      while ((node = walker.nextNode()) && !found) {
+        const nodeLength = node.textContent.length;
+
+        // Check if the misspelled word starts within this text node
+        if (startPos >= charCount && startPos < charCount + nodeLength) {
+          const range = document.createRange();
+          const localStart = startPos - charCount;
+          const localEnd = endPos - charCount;
+
+          // Ensure the word ends in the same node
+          if (localEnd <= nodeLength) {
+            range.setStart(node, localStart);
+            range.setEnd(node, localEnd);
+
+            range.deleteContents();
+            const correctedNode = document.createTextNode(selectedWord);
+            range.insertNode(correctedNode);
+
+            // Place the cursor right after the newly inserted word
+            range.setStartAfter(correctedNode);
+            range.collapse(true);
+            const selection = window.getSelection();
+            selection.removeAllRanges();
+            selection.addRange(range);
+
+            found = true;
+          }
+        }
+        charCount += nodeLength;
+      }
+
+      // Dispatch an input event so frameworks (React, etc.) see the change
+      const inputEvent = new InputEvent("input", { bubbles: true });
+      activeEditableElement.dispatchEvent(inputEvent);
+    }
+
+    popover.hide();
+    currentMisspelledWordInfo = null;
+    // Re-run the spell check to update the overlay
+    setTimeout(() => checkSpellingInElement(activeEditableElement), 100);
+  };
+
+  const createOverlay = (element) => {
+    if (overlayElement) {
+      // Clean up old scroll listener if it exists
+      const oldListener = overlayElement.listener;
+      if (oldListener && overlayElement.targetElement) {
+        overlayElement.targetElement.removeEventListener("scroll", oldListener);
+      }
+      overlayElement.remove();
+    }
+
+    const overlay = document.createElement("div");
+    overlay.className = "eatword-overlay";
+
+    const scrollWrapper = document.createElement("div");
+    overlay.appendChild(scrollWrapper);
+
+    const computedStyle = window.getComputedStyle(element);
+    const rect = element.getBoundingClientRect();
+
+    Object.assign(overlay.style, {
+      left: `${rect.left + window.scrollX}px`,
+      top: `${rect.top + window.scrollY}px`,
+      width: `${rect.width}px`,
+      height: `${rect.height}px`,
+    });
+
+    // Copy font and text properties to the inner scroll wrapper to mirror the text
+    const relevantStyles = [
+      "fontFamily",
+      "fontSize",
+      "lineHeight",
+      "paddingTop",
+      "paddingRight",
+      "paddingBottom",
+      "paddingLeft",
+      "letterSpacing",
+      "wordSpacing",
+      "textAlign",
+      "textIndent",
+      "whiteSpace",
+      "borderWidth",
+    ];
+    relevantStyles.forEach((style) => {
+      scrollWrapper.style[style] = computedStyle[style];
+    });
+
+    document.body.appendChild(overlay);
+    overlayElement = overlay;
+
+    // --- CRITICAL: Synchronize Scrolling ---
+    const syncScroll = () => {
+      scrollWrapper.scrollTop = element.scrollTop;
+      scrollWrapper.scrollLeft = element.scrollLeft;
+    };
+
+    element.addEventListener("scroll", syncScroll);
+    overlayElement.listener = syncScroll;
+    overlayElement.targetElement = element;
+
+    syncScroll(); // Sync initially
+  };
+
+  const updateOverlay = (element, text) => {
+    if (!overlayElement) return;
+
+    const scrollWrapper = overlayElement.firstChild;
+    if (!scrollWrapper) return;
+
+    let highlightedHTML = "";
+    let lastIndex = 0;
+
+    const sortedWords = Array.from(misspelledWords.values()).sort(
+      (a, b) => a.startPos - b.startPos
+    );
+
+    sortedWords.forEach(({ word, startPos, endPos }) => {
+      // Sanitize text by creating text nodes to prevent HTML injection
+      highlightedHTML += document.createTextNode(
+        text.substring(lastIndex, startPos)
+      ).textContent;
+      const misspelledText = document.createTextNode(
+        text.substring(startPos, endPos)
+      ).textContent;
+
+      highlightedHTML += `<span class="eatword-misspelled-overlay" data-word="${word}" data-start="${startPos}" data-end="${endPos}">${misspelledText}</span>`;
+      lastIndex = endPos;
+    });
+
+    highlightedHTML += document.createTextNode(
+      text.substring(lastIndex)
+    ).textContent;
+
+    // Use innerHTML, converting newlines to <br> for proper rendering
+    scrollWrapper.innerHTML = highlightedHTML.replace(/\n/g, "<br>");
+  };
+
+  const checkSpellingInElement = (element) => {
+    if (isCheckingSpelling || !element) return;
+
+    isCheckingSpelling = true;
+    misspelledWords.clear();
+
+    // Use innerText for contentEditable to get a clean text representation
+    const textContent = element.isContentEditable
+      ? element.innerText
+      : element.value;
+
+    createOverlay(element);
+
+    if (!textContent.trim()) {
+      if (overlayElement) overlayElement.firstChild.innerHTML = "";
+      isCheckingSpelling = false;
+      return;
+    }
+
+    const wordRegex = /\b[a-zA-Z']+\b/g;
+    let match;
+    const wordsToCheck = new Map();
+
+    while ((match = wordRegex.exec(textContent)) !== null) {
+      const word = match[0];
+      // Skip single letters or non-words
+      if (!/^[a-zA-Z']{2,}$/.test(word)) continue;
+      const startPos = match.index;
+      const endPos = startPos + word.length;
+      if (!wordsToCheck.has(word)) wordsToCheck.set(word, []);
+      wordsToCheck.get(word).push({ startPos, endPos });
+    }
+
+    if (wordsToCheck.size === 0) {
+      // Call with empty misspelled map to clear old highlights
+      updateOverlay(element, textContent);
+      isCheckingSpelling = false;
+      return;
+    }
+
+    let checkedWords = 0;
+    const totalWords = wordsToCheck.size;
+
+    wordsToCheck.forEach((positions, word) => {
+      chrome.runtime.sendMessage({ type: "check-word", word }, (response) => {
+        checkedWords++;
+        if (!chrome.runtime.lastError && response && !response.isCorrect) {
+          positions.forEach((pos) => {
+            misspelledWords.set(`${word}_${pos.startPos}`, { word, ...pos });
+          });
+        }
+
+        if (checkedWords === totalWords) {
+          updateOverlay(element, textContent);
+          isCheckingSpelling = false;
+        }
+      });
+    });
+  };
+
+  document.addEventListener("focusin", (e) => {
+    // e.stopPropagation();
+    if (
+      e.target.isContentEditable ||
+      e.target.tagName === "TEXTAREA" ||
+      e.target.tagName === "INPUT"
+    ) {
+      activeEditableElement = e.target;
+      setTimeout(() => checkSpellingInElement(activeEditableElement), 100);
+    }
+  });
+
+  let inputTimeout;
+  document.addEventListener("input", (e) => {
+    // e.stopPropagation();
+    if (e.target === activeEditableElement) {
+      clearTimeout(inputTimeout);
+      inputTimeout = setTimeout(() => {
+        checkSpellingInElement(activeEditableElement);
+      }, 1000);
+    }
+  });
+
+  document.addEventListener("mouseover", (e) => {
+    if (e.target.classList.contains("eatword-misspelled-overlay")) {
+      const word = e.target.dataset.word;
+      const startPos = parseInt(e.target.dataset.start);
+      const endPos = parseInt(e.target.dataset.end);
+      const rect = e.target.getBoundingClientRect();
+
+      // Store the word and its position. The `.element` property is no longer needed.
+      currentMisspelledWordInfo = { word, startPos, endPos };
+
+      chrome.runtime.sendMessage(
+        { type: "get-suggestions", word },
+        (response) => {
+          console.log("suggestion res: ", response);
+          if (chrome.runtime.lastError) return;
+          if (
+            response &&
+            response.suggestions &&
+            response.suggestions.length > 0
+          ) {
+            popover.show(
+              window.scrollY + rect.bottom + 2,
+              window.scrollX + rect.left,
+              response.suggestions,
+              handleSuggestionSelect,
+              word
+            );
+          }
+        }
+      );
+    }
+  });
+
+  document.addEventListener("mouseout", (e) => {
+    let isMisspelled =
+      e.target.classList.contains("eatword-misspelled") ||
+      e.target.classList.contains("eatword-misspelled-overlay");
+    let isPopover = e.target.closest("[data-popover-id]");
+
+    if (isMisspelled || isPopover) {
+      setTimeout(() => {
+        const stillHoveringWord = document.querySelector(
+          ".eatword-misspelled:hover, .eatword-misspelled-overlay:hover"
+        );
+        const stillHoveringPopover = document.querySelector(
+          "[data-popover-id]:hover"
+        );
+
+        if (!stillHoveringWord && !stillHoveringPopover) {
+          popover.hide();
+          currentMisspelledWordInfo = null;
+        }
+      }, 100);
+    }
+  });
+
+  document.addEventListener("click", (e) => {
+    // Hide popover if clicking anywhere but the popover itself
+    if (!e.target.closest("[data-popover-id]")) {
+      popover.hide();
+    }
+  });
+
+  document.addEventListener("focusout", (e) => {
+    if (e.target === activeEditableElement) {
+      setTimeout(() => {
+        // Check if focus has moved to the popover or elsewhere
+        const isFocusInsidePopover = document.querySelector(
+          "[data-popover-id]:focus-within"
+        );
+        if (
+          overlayElement &&
+          !activeEditableElement.matches(":focus") &&
+          !isFocusInsidePopover
+        ) {
+          overlayElement.remove();
+          overlayElement = null;
+        }
+      }, 100);
+    }
+  });
+
+  const repositionOverlay = () => {
+    if (overlayElement && activeEditableElement) {
+      const rect = activeEditableElement.getBoundingClientRect();
+      overlayElement.style.left = `${rect.left + window.scrollX}px`;
+      overlayElement.style.top = `${rect.top + window.scrollY}px`;
+    }
+  };
+
+  window.addEventListener("resize", repositionOverlay);
+  window.addEventListener("scroll", repositionOverlay, true); // Use capture for better response
+
+})();
