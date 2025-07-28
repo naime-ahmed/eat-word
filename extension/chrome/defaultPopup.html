@@ -8,48 +8,112 @@
   <body>
     <!-- Header section -->
     <header>
-      <!-- Brand logo on the left -->
       <div class="logo-container" id="logoContainer">
         <img src="./assets/logo.png" alt="eat word brand logo" />
       </div>
-      <!-- Login/Visit button on the right -->
       <button class="auth-button" id="authButton">Log in</button>
     </header>
-
     <main>
-      <!-- Features list -->
-      <h2 class="features-title">How to Use Eat Word</h2>
-      <ul class="features-list">
-        <li class="feature-item">
-          <div class="feature-icon">1</div>
-          <div class="feature-text">
-            <strong>Select Text:</strong> Highlight any text on a webpage (up to
-            1,000 characters) to translate it instantly.
-          </div>
-        </li>
-        <li class="feature-item">
-          <div class="feature-icon">2</div>
-          <div class="feature-text">
-            <strong>Choose Your Method:</strong> Click the floating Eat Word
-            icon, press <span class="shortcut-hint">Alt + T</span>, or
-            right-click and select <strong>"Eat Word"</strong> from the menu.
-          </div>
-        </li>
-        <li class="feature-item">
-          <div class="feature-icon">3</div>
-          <div class="feature-text">
-            <strong>Save & Learn:</strong> Hit the Save button to store
-            translations in your vocabulary. Sign in to sync across all your
-            devices.
-          </div>
-        </li>
-      </ul>
-    </main>
+      <!-- Feature Toggles -->
+      <div class="feature-section">
+        <h3 class="feature-title">Spell Check</h3>
+        <p class="feature-description">
+          Enable/disable spell checking for this site.
+        </p>
+        <div class="toggle-container">
+          <input class="toggle-input" id="spellCheckToggle" type="checkbox" />
+          <label
+            class="toggle-label"
+            for="spellCheckToggle"
+            aria-label="Toggle Spell Check"
+          >
+            <svg
+              class="toggle-icon toggle-icon-on"
+              version="1.1"
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 130.2 130.2"
+            >
+              <polyline
+                class="path check"
+                points="100.2,40.2 51.5,88.8 29.8,67.5"
+              ></polyline>
+            </svg>
+            <svg
+              class="toggle-icon toggle-icon-off"
+              version="1.1"
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 130.2 130.2"
+            >
+              <line
+                class="path line"
+                x1="34.4"
+                y1="34.4"
+                x2="95.8"
+                y2="95.8"
+              ></line>
+              <line
+                class="path line"
+                x1="95.8"
+                y1="34.4"
+                x2="34.4"
+                y2="95.8"
+              ></line>
+            </svg>
+          </label>
+        </div>
+      </div>
 
+      <div class="feature-section">
+        <h3 class="feature-title">Translation</h3>
+        <p class="feature-description">
+          Enable/disable translation for this site.
+        </p>
+        <div class="toggle-container">
+          <input class="toggle-input" id="translationToggle" type="checkbox" />
+          <label
+            class="toggle-label"
+            for="translationToggle"
+            aria-label="Toggle Translation"
+          >
+            <svg
+              class="toggle-icon toggle-icon-on"
+              version="1.1"
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 130.2 130.2"
+            >
+              <polyline
+                class="path check"
+                points="100.2,40.2 51.5,88.8 29.8,67.5"
+              ></polyline>
+            </svg>
+            <svg
+              class="toggle-icon toggle-icon-off"
+              version="1.1"
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 130.2 130.2"
+            >
+              <line
+                class="path line"
+                x1="34.4"
+                y1="34.4"
+                x2="95.8"
+                y2="95.8"
+              ></line>
+              <line
+                class="path line"
+                x1="95.8"
+                y1="34.4"
+                x2="34.4"
+                y2="95.8"
+              ></line>
+            </svg>
+          </label>
+        </div>
+      </div>
+    </main>
     <footer class="footer">
       @ 2025 Eat Word - AI powered vocabulary mastery
     </footer>
-
     <script src="./defaultPopup.js"></script>
   </body>
 </html>
