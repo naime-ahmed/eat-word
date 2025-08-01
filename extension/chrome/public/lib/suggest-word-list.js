@@ -174,14 +174,11 @@ export function createSuggestionPopover() {
   console.log("clicked ignore for", currentWord);
   
   if (currentWord) {
+    const textSpan = ignoreBtn.querySelector('div > span:nth-child(2)');
+    
     // Show processing state
-    ignoreBtn.innerHTML = `
-      <div style="display: flex; align-items: center; gap: 8px;">
-        <span style="width: 16px; height: 16px; display: flex; align-items: center; justify-content: center;">${ignoreIcon}</span>
-        <span>Ignoring...</span>
-      </div>
-    `;
-    ignoreBtn.style.pointerEvents = "none";  // Disable button during processing
+    textSpan.textContent = "Ignoring...";
+    ignoreBtn.style.pointerEvents = "none";
 
     try {
       console.log(`Adding "${currentWord}" to session ignore list`);
@@ -193,12 +190,7 @@ export function createSuggestionPopover() {
       if (res.status === "error") {
         console.error("Error storing word:", res.error);
         // Optional: Revert button text on error
-        ignoreBtn.innerHTML = `
-          <div style="display: flex; align-items: center; gap: 8px;">
-            <span style="width: 16px; height: 16px; display: flex; align-items: center; justify-content: center;">${ignoreIcon}</span>
-            <span>Failed - Retry?</span>
-          </div>
-        `;
+        textSpan.textContent = "Failed - Retry?";
         ignoreBtn.style.pointerEvents = "auto";
         return;
       }
@@ -208,7 +200,9 @@ export function createSuggestionPopover() {
       console.error("Message error:", err);
       // Handle messaging errors here
     } finally {
-      // Always close after processing (success or error)
+      // Revert to original text
+      textSpan.textContent = "Ignore for now";
+      ignoreBtn.style.pointerEvents = "auto";
       hide();
     }
   } else {
