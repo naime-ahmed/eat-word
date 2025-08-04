@@ -1,5 +1,9 @@
-// Import the spell-check module. Note the path.
 import { SpellChecker } from "./lib/spell-check.js";
+
+import {
+  isSpellCheckEnabled,
+  isTranslationEnabled,
+} from "./lib/inti-feature-state.js";
 
 // Handle extension installation and context menu setup
 chrome.runtime.onInstalled.addListener(() => {
@@ -14,17 +18,11 @@ chrome.runtime.onInstalled.addListener(() => {
 
   // Create a context menu item for text selection
   chrome.contextMenus.create({
-    id: "eatword-lookup",
+    id: "eatword-translation",
     title: 'Translate "%s" with EatWord',
     contexts: ["selection"],
   });
 });
-
-function storeTextAndOpenPopup(text) {
-  chrome.storage.local.set({ selectedText: text }, () => {
-    chrome.action.openPopup();
-  });
-}
 
 async function handleAuthCheck(sendResponse) {
   const { accessToken, user } = await chrome.storage.local.get([
@@ -33,9 +31,6 @@ async function handleAuthCheck(sendResponse) {
   ]);
 
   if (!accessToken) {
-    console.log(
-      "handleAuthCheck: No access token found. User is not authenticated."
-    );
     sendResponse({ isAuthenticated: false });
     return;
   }
@@ -51,33 +46,23 @@ async function handleAuthCheck(sendResponse) {
     );
 
     if (response.ok) {
-      console.log(
-        "handleAuthCheck: Token is valid. User is authenticated.",
-        user
-      );
       sendResponse({ isAuthenticated: true, user: user });
       return;
     }
 
     const errorData = await response.json();
-    console.log("error verifying acc token: ", errorData);
     if (
       response.status === 401 &&
       errorData.message === "Access token expired"
     ) {
-      console.log("handleAuthCheck: Access token expired. Attempting refresh.");
-
       const newUser = await handleTokenRefresh();
 
       if (newUser) {
-        console.log("handleAuthCheck: Token refresh successful.");
         sendResponse({ isAuthenticated: true, user: newUser });
       } else {
-        console.log("handleAuthCheck: Token refresh failed.");
         sendResponse({ isAuthenticated: false });
       }
     } else {
-      console.log("handleAuthCheck: Token is invalid, not an expiry issue.");
       sendResponse({ isAuthenticated: false });
     }
   } catch (error) {
@@ -113,16 +98,8 @@ async function handleTokenRefresh() {
         accessToken: data.accessToken,
         user: newUser,
       });
-
-      console.log(
-        "handleTokenRefresh: Successfully refreshed token and stored new user data."
-      );
       return newUser;
     }
-    console.log(
-      "handleTokenRefresh: Refresh token request failed with status:",
-      response.status
-    );
     return null;
   } catch (error) {
     console.error(
@@ -144,21 +121,12 @@ chrome.runtime.onMessageExternal.addListener(
     }
 
     if (message.type === "LOGIN_SUCCESS") {
-      console.log(
-        "onMessageExternal: LOGIN_SUCCESS message received.",
-        message
-      );
-
       chrome.storage.local.set(
         {
           accessToken: message.accessToken,
           user: message.user,
         },
         () => {
-          console.log(
-            "onMessageExternal: Tokens and user data stored successfully."
-          );
-
           chrome.runtime.sendMessage({
             action: "AUTH_STATE_CHANGED",
             isAuthenticated: true,
@@ -175,14 +143,27 @@ chrome.runtime.onMessageExternal.addListener(
 );
 
 // Handle Context Menu clicks
-chrome.contextMenus.onClicked.addListener((info, tab) => {
-  if (info.menuItemId === "eatword-lookup" && info.selectionText) {
-    // Send a message to the content script in the active tab to show the UI
-    chrome.tabs.sendMessage(tab.id, {
-      type: "SHOW_INPAGE_POPUP",
-      text: info.selectionText,
-      position: { x: 200, y: 200 },
-    });
+chrome.contextMenus.onClicked.addListener(async (info, tab) => {
+  if (info.menuItemId === "eatword-translation") {
+    const selectedText = info.selectionText?.trim();
+    if (
+      selectedText &&
+      selectedText.length > 0 &&
+      selectedText.length <= 1000
+    ) {
+      try {
+        const isEnabled = await isTranslationEnabled();
+        if (isEnabled) {
+          // Send message to the specific tab that was clicked
+          chrome.tabs.sendMessage(tab.id, {
+            type: "SHOW_INPAGE_POPUP",
+            selectedText: selectedText,
+          });
+        }
+      } catch (error) {
+        console.error("Error processing context menu click:", error);
+      }
+    }
   }
 });
 
@@ -211,7 +192,6 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
           }
         })
         .catch((error) => {
-          console.log("error from bg sc: ", error);
           sendResponse({
             error: true,
             message: error.message,
@@ -221,20 +201,13 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       return true;
 
     case "CHECK_AUTH":
-      console.log("checking login");
       handleAuthCheck(sendResponse);
       return true;
-
-    case "LOOKUP_TEXT_AND_OPEN_POPUP":
-      storeTextAndOpenPopup(request.text);
-      sendResponse({ status: "success, popup opened" });
-      break;
 
     case "check-word":
       (async () => {
         try {
           const isCorrect = await SpellChecker.check(request.word);
-          console.log("isCorrect from bg: ", isCorrect, "word: ", request.word);
           sendResponse({ isCorrect });
         } catch (err) {
           console.error("Error checking word:", err);
@@ -244,34 +217,48 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       return true;
 
     case "get-suggestions":
-      console.log("request object in bg: ", request);
       const suggestions = SpellChecker.suggest(request.word);
       console.log("suggestions from bg: ", suggestions);
       sendResponse({ suggestions });
       break;
-    
+
     case "store-ignored-word":
-      console.log("calling to store word in session", request.word);
       const key = "ignoredWords";
       const word = request.word.toLowerCase();
-      (
-        async () => {
-          try {
-            const result = await chrome.storage.session.get(key);
-            console.log("res for storing word from storage", result);
-            const list = result[key] || [];
-            if (!list.includes(word)) {
-              list.push(word);
-              await chrome.storage.session.set({ [key]: list });
-            }
-            console.log("Word added to session storage:", word);
-            sendResponse({ status: "success" });
-          } catch (err) {
-            console.error("Error storing word:", err);
-            sendResponse({ status: "error", error: err.message });
+      (async () => {
+        try {
+          const result = await chrome.storage.session.get(key);
+          const list = result[key] || [];
+          if (!list.includes(word)) {
+            list.push(word);
+            await chrome.storage.session.set({ [key]: list });
           }
+          sendResponse({ status: "success" });
+        } catch (err) {
+          console.error("Error storing word:", err);
+          sendResponse({ status: "error", error: err.message });
         }
-      )();
+      })();
+      return true;
+    case "check-spelling-enabled":
+      isSpellCheckEnabled()
+        .then((enabled) => {
+          sendResponse({ enabled: enabled });
+        })
+        .catch((error) => {
+          console.error("Error determining spell check state:", error);
+          sendResponse({ enabled: true });
+        });
+      return true;
+    case "check-translation-enabled":
+      isTranslationEnabled()
+        .then((enabled) => {
+          sendResponse({ enabled: enabled });
+        })
+        .catch((error) => {
+          console.error("Error determining translation state:", error);
+          sendResponse({ enabled: true });
+        });
       return true;
     default:
       console.log("Unknown message received in background:", messageType);
@@ -312,13 +299,5 @@ chrome.commands.onCommand.addListener((command, tab) => {
         }
       }
     );
-  }
-});
-
-chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-  if (message.type === "LOOKUP_TEXT_AND_OPEN_POPUP") {
-    storeTextAndOpenPopup(message.text);
-    sendResponse({ status: "success, popup opened" });
-    return true;
   }
 });
