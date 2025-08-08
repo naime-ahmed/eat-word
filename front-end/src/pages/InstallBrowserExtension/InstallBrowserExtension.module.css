@@ -1,0 +1,271 @@
+.extensionInstallPage {
+  min-height: 100vh;
+  background-color: #020817;
+  color: #ffffff;
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    sans-serif;
+  line-height: 1.6;
+}
+
+.extensionInstallPageContainer {
+  max-width: 1250px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+}
+
+.extensionInstallPageContainer > section {
+  margin-bottom: 4rem;
+}
+
+.welcomeSection {
+  text-align: center;
+  padding: 3rem 0 4rem;
+}
+
+.welcomeTitle {
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  font-weight: 700;
+  margin-bottom: 1rem;
+  background: linear-gradient(135deg, #70b0ff, #2a4aff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.welcomeSubtitle {
+  font-size: clamp(1.1rem, 2.5vw, 1.3rem);
+  color: #cbd5e1;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.checkIcon {
+  display: inline-block;
+  width: 80px;
+  height: 80px;
+  color: #08ff31;
+  background-color: #08ff3121;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 1.5rem;
+  font-size: 32px;
+}
+
+.sectionTitle {
+  font-size: clamp(1.5rem, 4vw, 2.2rem);
+  font-weight: 600;
+  margin-bottom: 2rem;
+  color: #f1f5f9;
+  text-align: center;
+}
+
+.instructionsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.instructionCard {
+  background: linear-gradient(
+    135deg,
+    rgba(59, 130, 246, 0.05),
+    rgba(72, 88, 236, 0.199)
+  );
+  border: 1px solid rgba(59, 130, 246, 0.2);
+  border-radius: 16px;
+  padding: 2rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.cardNumber {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  width: 40px;
+  height: 40px;
+  background-color: rgba(59, 130, 246, 0.2);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #60a5fa;
+}
+
+.cardIcon {
+  font-size: 2.5rem;
+  color: #60a5fa;
+  margin-bottom: 1rem;
+}
+
+.cardTitle {
+  font-size: 1.3rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  color: #f1f5f9;
+}
+
+.cardDescription {
+  color: #cbd5e1;
+  font-size: 0.95rem;
+  margin-bottom: 1rem;
+}
+
+.cardSteps {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.cardStep {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+  font-size: 0.9rem;
+  color: #94a3b8;
+}
+
+.stepDot {
+  width: 6px;
+  height: 6px;
+  background-color: #60a5fa;
+  border-radius: 50%;
+  margin-top: 0.5rem;
+  flex-shrink: 0;
+}
+
+.exampleSection {
+  padding: 2.5rem;
+}
+
+.exampleGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.exampleCard {
+  background: rgba(59, 130, 246, 0.05);
+  border-radius: 12px;
+  padding: 1.5rem;
+  border: 1px solid rgba(59, 130, 246, 0.1);
+}
+
+.exampleTitle {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  color: #f1f5f9;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.selectable_text {
+  padding: 1rem;
+  background-color: rgba(15, 23, 42, 0.6);
+  border-radius: 8px;
+  border: 2px dashed rgba(59, 130, 246, 0.3);
+  cursor: pointer;
+  user-select: text;
+  transition: border-color 0.2s ease;
+}
+
+.selectable_text:hover {
+  border-color: rgba(59, 130, 246, 0.6);
+}
+
+.textarea {
+  width: 100%;
+  min-height: 100px;
+  padding: 1rem;
+  background-color: rgba(15, 23, 42, 0.6);
+  border: 2px solid rgba(59, 130, 246, 0.3);
+  border-radius: 8px;
+  color: #ffffff;
+  font-size: 0.95rem;
+  font-family: inherit;
+  resize: vertical;
+  outline: none;
+  transition: border-color 0.2s ease;
+}
+
+.textarea:focus {
+  border-color: #60a5fa;
+}
+
+.disclaimerSection {
+  background: linear-gradient(
+    135deg,
+    rgba(245, 101, 101, 0.1),
+    rgba(251, 146, 60, 0.1)
+  );
+  border: 1px solid rgba(245, 101, 101, 0.3);
+  border-radius: 16px;
+  padding: 2rem;
+}
+
+.disclaimerTitle {
+  font-size: 1.4rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  color: #fca5a5;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.disclaimerText {
+  color: #f1f5f9;
+  margin-bottom: 1rem;
+  font-size: 0.95rem;
+}
+
+.disclaimerNote {
+  color: #cbd5e1;
+  font-size: 0.9rem;
+  font-style: italic;
+}
+
+@media (max-width: 768px) {
+  .extensionInstallPageContainer {
+    padding: 1rem;
+  }
+
+  .welcomeSection {
+    padding: 2rem 0.5rem 3rem;
+    margin-bottom: 3rem;
+  }
+
+  .instructionsGrid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+  .instructionCard {
+    padding: 1.5rem;
+  }
+
+  .exampleGrid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  .extensionInstallPageContainer > section {
+    margin-bottom: 3rem;
+  }
+
+  .exampleSection {
+    padding: 2rem 0;
+  }
+
+  .disclaimerSection {
+    padding: 1.5rem;
+  }
+}
