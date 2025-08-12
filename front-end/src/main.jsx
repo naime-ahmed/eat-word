@@ -11,6 +11,7 @@ import ActiveAcc from "./pages/ActivateAcc/ActiveAcc";
 import Contact from "./pages/Contact/Contact";
 import ForgotPass from "./pages/ForgotPass/ForgotPass";
 import Home from "./pages/Home/Home";
+import InstallBrowserExtension from "./pages/InstallBrowserExtension/InstallBrowserExtension";
 import Milestone from "./pages/Milestone/Milestone";
 import MySpace from "./pages/MySpace/MySpace";
 import NotFound from "./pages/NotFound/NotFound";
@@ -22,6 +23,7 @@ import ResetPass from "./pages/ResetPass/ResetPass";
 import SignIn from "./pages/SignIn/SignIn";
 import SignUp from "./pages/SignUp/SignUp";
 import TermsAndConditions from "./pages/TermsAndConditions/TermsAndConditions";
+import UninstallBrowserExtension from "./pages/UninstallBrowserExtension/UninstallBrowserExtension";
 
 const router = createBrowserRouter([
   {
@@ -96,6 +98,14 @@ const router = createBrowserRouter([
       {
         path: "/release",
         element: <Release />,
+      },
+      {
+        path: "/install-browser-extension",
+        element: <InstallBrowserExtension />,
+      },
+      {
+        path: "/uninstall-browser-extension",
+        element: <UninstallBrowserExtension />,
       },
     ],
   },
