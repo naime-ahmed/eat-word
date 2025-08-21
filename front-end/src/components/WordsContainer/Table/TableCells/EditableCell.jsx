@@ -18,6 +18,7 @@ const EditableCell = ({ getValue, row, column, table }) => {
   const hasFocusedRef = useRef(false);
   const [isBlurDismissed, setIsBlurDismissed] = useState(false);
   const [showLimitMessage, setShowLimitMessage] = useState(false);
+  const hasSavedOnUnloadRef = useRef(false);
   const characterLimitTimeoutRef = useRef(null);
 
   const isCurrentlyGenerating = table.options.meta?.generatingCells.some(
@@ -171,7 +172,31 @@ const EditableCell = ({ getValue, row, column, table }) => {
     adjustHeight();
   };
 
+  useEffect(() => {
+    const handleBeforeUnload = (e) => {
+      if (initialValue !== value) {
+        table.options.meta?.updateWords(row.index, column.id, value);
+        hasSavedOnUnloadRef.current = true;
+        // Show confirmation dialog
+        e.preventDefault();
+        e.returnValue = "";
+        return "";
+      }
+    };
+
+    window.addEventListener("beforeunload", handleBeforeUnload);
+
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+    };
+  }, [initialValue, value, row.index, column.id, table.options.meta]);
+
   const handleOnBlur = useCallback(() => {
+    if (hasSavedOnUnloadRef.current) {
+      hasSavedOnUnloadRef.current = false;
+      return;
+    }
+
     if (initialValue !== value) {
       table.options.meta?.updateWords(row.index, column.id, value);
     }
