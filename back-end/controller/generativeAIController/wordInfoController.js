@@ -1,4 +1,4 @@
-import { GoogleGenerativeAI } from "@google/generative-ai";
+import { GoogleGenAI, Type } from "@google/genai";
 import Word from "../../models/Word.js";
 import { wordFieldsAndLimit } from "../../utils/wordFieldsAndLimit.js";
 
@@ -12,6 +12,24 @@ const FIELD_CONFIG = {
 
 const PREFERRED_ORDER = ["meanings", "synonyms", "definitions", "examples"];
 
+// === SCHEMA BUILDER ===
+function buildResponseSchema(fields) {
+  const properties = {};
+  for (const field of fields) {
+    properties[FIELD_CONFIG[field].jsonKey] = {
+      type: Type.ARRAY,
+      items: {
+        type: Type.STRING,
+      }
+  }}
+
+  return {
+    type: Type.OBJECT,
+    properties,
+    required: PREFERRED_ORDER.filter((f) => fields.includes(f)),
+  };
+}
+
 // === PROMPT BUILDER ===
 function buildPrompt(
   fields,
@@ -20,77 +38,64 @@ function buildPrompt(
   learningLang,
   existingDefinitions
 ) {
-  const schema = fields.reduce((acc, f) => {
-    acc[f] = [];
-    return acc;
-  }, {});
-
   return `
 You are a precise vocabulary data generator.
-Return ONLY valid JSON with this exact schema:
-${JSON.stringify(schema, null, 2)}
 
 Requirements:
 ${
   fields.includes("meanings")
-    ? `- Array of up to ${FIELD_CONFIG["meanings"].limit} most relevant and concise ${comfortableLang} meanings for the word.`
+    ? `- Provide up to ${FIELD_CONFIG["meanings"].limit} most relevant and concise ${comfortableLang} meanings for the word.`
     : ""
 }
-
 ${
   fields.includes("synonyms")
-    ? `- Array of up to ${FIELD_CONFIG["synonyms"].limit} most relevant ${learningLang} synonyms for the word.`
+    ? `- Provide up to ${FIELD_CONFIG["synonyms"].limit} most relevant ${learningLang} synonyms for the word.`
     : ""
 }
-
 ${
   fields.includes("definitions")
-    ? `- Array of up to ${FIELD_CONFIG["definitions"].limit} most relevant ${learningLang} definitions for the word. Each under 25 words.`
+    ? `- Provide up to ${FIELD_CONFIG["definitions"].limit} most relevant ${learningLang} definitions for the word. Each under 25 words.`
     : ""
 }
-
 ${
   existingDefinitions
     ? `Use ONLY these exact definitions for examples: ${existingDefinitions}`
     : ""
 }
-
 ${
   fields.includes("examples")
-    ? `- Array of up to ${FIELD_CONFIG["examples"].limit} most relevant ${learningLang} examples for the word. Each under 25 words.`
+    ? `- Provide up to ${FIELD_CONFIG["examples"].limit} most relevant ${learningLang} examples for the word. Each under 25 words.`
     : ""
 }
 
-
 Rules:
-- No commentary, no markdown.
-- Each field is an array of strings.
-- No numbering, bullets, or prefixes in array values.
-- Keep text concise and plain.
+- No commentary or markdown in your response.
+- Keep the text for each item concise and plain.
 
 Target word: "${word}"
 - If the word is misspelled, generate info for the most relevant correct spelling.
-
 `.trim();
 }
 
 // === AI CLIENT ===
-function getModel() {
-  const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-  return genAI.getGenerativeModel({ model: "gemini-2.0-flash-lite" });
+function getGenAi() {
+  return new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
 }
 
-async function callModel(prompt) {
-  const model = getModel();
-  const result = await model.generateContent({
-    contents: [{ role: "user", parts: [{ text: prompt }] }],
-    generationConfig: {
+async function callModel(prompt, schema) {
+  const ai = getGenAi();
+  const response = await ai.models.generateContent({
+    model: "gemini-2.0-flash-lite",
+    contents: prompt,
+    config: {
       responseMimeType: "application/json",
+      responseSchema: schema,
     },
-  });
-  // console.log("result res: ",result.response); // great infos about tokens...
-
-  return result.response.candidates?.[0]?.content?.parts?.[0]?.text || "";
+  }).catch((e) => {
+    console.log("generation error: ",e);
+    return "";
+  })
+  return response.text;
 }
 
 // === SANITIZATION ===
@@ -127,7 +132,7 @@ function parseAndProcessResponse(raw, fields) {
   return result;
 }
 
-// === MAIN AI CALL (ONE REQUEST) ===
+// === MAIN AI CALL ===
 async function generateAllFields(
   fields,
   word,
@@ -143,10 +148,12 @@ async function generateAllFields(
     existingDefinitions
   );
 
+  const schema = buildResponseSchema(fields);
+
   let lastError;
   for (let attempt = 0; attempt < 3; attempt++) {
     try {
-      const raw = await callModel(prompt);
+      const raw = await callModel(prompt, schema);
       if (!raw) {
         console.error("Empty AI response");
         return {};
@@ -182,15 +189,11 @@ export async function generateWordInfo(req, res) {
       return res.status(404).json({ message: "Word not found" });
     }
 
-    fields = PREFERRED_ORDER.filter((f) => fields.includes(f));
-
-    // Existing defs for example context
     let existingDefinitions = word.definitions || null;
     if (fields.includes("definitions") && fields.includes("examples")) {
       existingDefinitions = null;
     }
 
-    // Single AI request
     const updateData = await generateAllFields(
       fields,
       word.word,
