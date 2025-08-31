@@ -1,92 +1,138 @@
-import { GoogleGenerativeAI } from "@google/generative-ai";
+import { GoogleGenAI } from "@google/genai";
 import mongoose from "mongoose";
 import Milestones from "../../models/Milestone.js";
+import User from "../../models/People.js";
 import Word from "../../models/Word.js";
 
+function buildStoryPrompt(typeOfStory, learningLang, maxStorySize, words) {
+  const vocabularyList = words
+    .map((word) => {
+      const meaning = word.meanings || word.definitions || "a useful word";
+      return `- word: "${word.word}" (meaning: ${meaning})`;
+    })
+    .join("\n");
+
+  return `
+You are a creative writer specializing in educational stories for language learners.
+Your task is to write a simple, engaging ${typeOfStory} story in ${learningLang}. The story is for a beginner (A1/A2 level), so you must use very simple grammar and sentence structures.
+
+The story must naturally use the following vocabulary words. When you use one of these vocabulary words, you MUST highlight the entire word with single backticks, including any grammatical variations (e.g., verb conjugations, plural forms) of the word.
+
+Formatting Rules:
+- Use clean Markdown for structure.
+- Provide a title using a single hashtag (e.g., # The Lost Key).
+- Use double hashtags for chapters (e.g., ## Chapter name).
+- MUST highlight words from vocabulary with backticks not asterisks or anything.
+- Keep paragraphs engaging and easy to read.
+- The entire story must be under ${maxStorySize} words. Don't be cheap though.
+- DO NOT use any emojis, icons, blockquotes, or other complex styling.
+
+Vocabulary to include:
+${vocabularyList}
+
+Begin the story directly with the title. Do not include any preamble, commentary, or explanation before or after the story.
+  `.trim();
+}
+
+/**
+ * Main controller to generate a story for a milestone.
+ */
 async function generateMilestoneStory(req, res) {
   try {
     const { milestoneId } = req.params;
     const { typeOfStory, maxStorySize } = req.body;
-    const userId = req.user.id;
+    const { id: userId } = req.user;
 
-    // Validate milestoneId format
     if (!mongoose.Types.ObjectId.isValid(milestoneId)) {
-      return res.status(400).json({ message: "Invalid milestone ID format" });
+      return res.status(400).json({ message: "Invalid milestone ID format." });
     }
 
-    // Retrieve the milestone to get the learning language and ensure authorization
-    const milestone = await Milestones.findOne({ _id: milestoneId, addedBy: userId });
-    if (!milestone) {
-      return res.status(404).json({ message: "Milestone not found or unauthorized" });
-    }
-
-    if(milestone.storyCount >= 100){
-      return res.status(400).json({ message: "You've reached the story generating limit!" });
-    }
-
-    const learningLang = milestone.learningLang || "English";
-
-    // Retrieve words associated with the milestone and user
-    const words = await Word.find({ 
-      addedMilestone: milestoneId, 
-      addedBy: userId 
+    // 1. Fetch data from the database
+    const milestone = await Milestones.findOne({
+      _id: milestoneId,
+      addedBy: userId,
     });
-    
-    if (!words || words.length === 0) {
-      return res.status(404).json({ message: "No words found for this milestone" });
+    if (!milestone) {
+      return res
+        .status(404)
+        .json({ message: "Milestone not found or you're not authorized." });
     }
 
-    // Construct a prompt for the AI
-    const prompt = `
-    Generate a ${typeOfStory} story in ${learningLang} that helps memorize the following vocabulary.
-    Use simple language so the story is easily understood. Structure the story into clear, engaging chapters, each slightly expanded based on the story genre, but ensure the entire story does not exceed ${maxStorySize} words.
-    Incorporate each word into the narrative naturally, including its meanings, synonyms, definitions, and examples where provided.
-    Return only the story text in plain text format. Each chapter should be clearly labeled (e.g., "Chapter 1:", "Chapter 2:"), with chapters separated by newline characters. Do not include any additional commentary or metadata.
-    Vocabulary:
-    ${words
-      .map((word) => {
-        let parts = [`Word: "${word.word}"`];
-        if (word.meanings) parts.push(`Meaning: "${word.meanings}"`);
-        if (word.synonyms) parts.push(`Synonyms: "${word.synonyms}"`);
-        if (word.definitions) parts.push(`Definition: "${word.definitions}"`);
-        if (word.examples) parts.push(`Example: "${word.examples}"`);
-        return parts.join(" | ");
-      })
-      .join("\n")}
-    `;
+    const user = await User.findById(userId, "subscriptionType"); // Fetch only necessary fields
+    if (!user) {
+      return res.status(404).json({ message: "User not found." });
+    }
 
-    // Initialize the AI client
-    const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-    const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash-lite" });
+    // 2. Business Logic: Check generation limits
+    const isRegularUser = user.subscriptionType === "regular";
+    const hasGeneratedBefore = milestone.story && milestone.story.length > 0;
+    const hasReachedMaxGenerations = milestone.storyCount >= 100;
 
-    // Generate the story using the AI model
-    const result = await model.generateContent(prompt);
-    const story = result.response.text();
+    if ((isRegularUser && hasGeneratedBefore) || hasReachedMaxGenerations) {
+      return res
+        .status(403)
+        .json({
+          message:
+            "You have reached your story generation limit for this milestone.",
+        });
+    }
 
-    // Update the milestone's story and increment storyCount
-    const updatedMilestone = await Milestones.findOneAndUpdate(
-      { _id: milestoneId, addedBy: userId },
-      { 
-        $set: { story },
-        $inc: { storyCount: 1 }
+    const words = await Word.find({
+      addedMilestone: milestoneId,
+      addedBy: userId,
+    });
+    if (!words || words.length === 0) {
+      return res
+        .status(404)
+        .json({
+          message: "No words found for this milestone to create a story.",
+        });
+    }
+
+    // 3. Build the prompt and call the AI
+    const learningLang = milestone.learningLang || "English";
+    const prompt = buildStoryPrompt(
+      typeOfStory,
+      learningLang,
+      maxStorySize,
+      words
+    );
+
+    // generate with gemini
+    const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
+    const response = await ai.models.generateContent({
+      model: "gemini-2.0-flash-lite",
+      contents: prompt,
+      config: {
+        responseMimeType: "text/plain",
+      },
+    }).catch((e) => {
+      console.log("generation error: ",e);
+      throw new Error("AI failed to generate a story. The response was empty.");
+    })
+
+    // 4. Update the database with the new story
+    const updatedMilestone = await Milestones.findByIdAndUpdate(
+      milestoneId,
+      {
+        $set: { story: response.text },
+        $inc: { storyCount: 1 },
       },
       { new: true, runValidators: true }
     );
 
-    if (!updatedMilestone) {
-      return res.status(404).json({ message: "Milestone not found or unauthorized" });
-    }
-
-    // Return the story and the updated count
+    // 5. Send the successful response
     res.status(200).json({
-      message: "Milestone story generated successfully",
+      message: "Milestone story generated successfully.",
       story: updatedMilestone.story,
       storyCount: updatedMilestone.storyCount,
     });
   } catch (error) {
-    console.error("Error generating milestone story:", error);
+    console.error("Error in generateMilestoneStory:", error);
     res.status(500).json({
-      message: error.message || "Failed to generate milestone story",
+      message:
+        error.message ||
+        "An unexpected error occurred while generating the story.",
     });
   }
 }
