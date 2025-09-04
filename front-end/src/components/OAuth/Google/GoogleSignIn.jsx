@@ -48,7 +48,7 @@ function GoogleSignIn() {
         duration: 4000,
       });
       dispatch(setUser(parseJwt(result.accessToken)));
-      navigate("/my-space");
+      navigate("/words");
     } catch (error) {
       console.error("Sign in failed:", error);
       // show the error to user

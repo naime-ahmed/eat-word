@@ -181,7 +181,7 @@ const SignIn = () => {
             notifyExtension(extensionId);
           }
 
-          navigate("/my-space");
+          navigate("/words");
         } catch (error) {
           showNotification({
             title: "Unable to sign in",
@@ -300,6 +300,7 @@ const SignIn = () => {
               ref={captchaWidgetRef}
               onVerify={setCaptchaToken}
               onError={(error) => {
+                if (error === "200100") return;
                 showNotification({
                   title: "CAPTCHA Error",
                   message:

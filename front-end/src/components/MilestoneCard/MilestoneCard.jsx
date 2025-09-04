@@ -16,7 +16,7 @@ const MilestoneCard = ({ milestone }) => {
   const [clickPosition, setClickPosition] = useState(null);
 
   function handleClick() {
-    navigate(`/my-space/${id}`);
+    navigate(`/words/${id}`);
   }
 
   // handle the menu on and off

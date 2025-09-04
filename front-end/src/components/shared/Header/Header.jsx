@@ -91,11 +91,11 @@ const Header = ({ top = "0" }) => {
               {isAuthenticated && (
                 <li>
                   <Link
-                    to="/my-space"
+                    to="/words"
                     onClick={handleSidebarToggle}
                     aria-label="My Space Page"
                   >
-                    My Space
+                    Words
                   </Link>
                 </li>
               )}

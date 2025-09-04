@@ -50,7 +50,7 @@ function Hero() {
 
   const handleNavigation = () => {
     if (isAuthenticated) {
-      navigate("/my-space");
+      navigate("/words");
     } else {
       navigate("/sign-in");
     }

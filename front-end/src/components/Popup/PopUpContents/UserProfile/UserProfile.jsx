@@ -83,7 +83,7 @@ const UserProfile = ({ onClose, profileBtnRef }) => {
   };
 
   const handleMyspaceNavigation = () => {
-    navigate("/my-space");
+    navigate("/words");
     onClose();
   };
 

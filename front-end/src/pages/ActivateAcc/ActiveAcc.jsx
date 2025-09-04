@@ -76,7 +76,7 @@ const ActiveAcc = () => {
             btnText="Let's go!"
             btnColorLeft="#078900"
             btnColorRight="#079200"
-            btnClick={() => handleNavigate("my-space")}
+            btnClick={() => handleNavigate("words")}
           />
         ) : (
           <ActivateACCCard
