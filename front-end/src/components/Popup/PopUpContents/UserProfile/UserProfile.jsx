@@ -134,7 +134,7 @@ const UserProfile = ({ onClose, profileBtnRef }) => {
       <div className={styles.userProfileTabs}>
         <ul>
           <li onClick={handleMyspaceNavigation}>
-            <RiDashboardFill /> My Space
+            <RiDashboardFill /> My Words
           </li>
           <li onClick={handleSignOut}>
             <BiLogOut />
