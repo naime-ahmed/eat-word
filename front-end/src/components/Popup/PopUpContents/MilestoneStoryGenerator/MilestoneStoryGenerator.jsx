@@ -3,7 +3,6 @@ import { useEffect, useState } from "react";
 import useNotification from "../../../../hooks/useNotification";
 import { useGenerateStoryMutation } from "../../../../services/generativeAi";
 import FancyBtn from "../../../ui/button/FancyBtn/FancyBtn";
-import ClassicSpinner from "../../../ui/loader/ClassicSpinner/ClassicSpinner";
 import styles from "./MilestoneStoryGenerator.module.css";
 
 const STORY_TYPES = [
@@ -54,7 +53,13 @@ const CookingAnimation = () => {
 
   return (
     <div className={styles.loadingContainer}>
-      <ClassicSpinner />
+      <div className={styles.typewriter}>
+        <div className={styles.slide}>
+          <i></i>
+        </div>
+        <div className={styles.paper}></div>
+        <div className={styles.keyboard}></div>
+      </div>
 
       <div className={styles.progressMessagesContainer}>
         {progressMessages.map((message, index) => (
@@ -137,7 +142,7 @@ const MilestoneStoryGenerator = ({ onClose, milestoneId }) => {
               );
             })}
           </div>
-          <FancyBtn clickHandler={handleGenerateStory}>Let&#39;s go</FancyBtn>
+          <FancyBtn clickHandler={handleGenerateStory}>Generate Story</FancyBtn>
         </>
       ) : (
         <CookingAnimation />
