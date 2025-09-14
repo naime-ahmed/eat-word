@@ -1,0 +1,117 @@
+.chartContainer {
+  position: relative;
+  width: 100%;
+  max-width: 300px;
+  height: auto;
+  aspect-ratio: 2 / 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  margin: 1rem auto 0.6rem auto;
+  overflow: hidden;
+}
+
+.chartSvg {
+  width: 100%;
+  height: 100%;
+}
+
+/* Background track */
+.chartArcBackground {
+  fill: none;
+  /* stroke: rgba(52, 73, 94, 0.3); */
+  stroke-linecap: square;
+}
+
+.chartArc {
+  fill: none;
+  transition: stroke-dasharray 0.8s cubic-bezier(0.77, 0, 0.175, 1);
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+}
+
+.chartArcRemains {
+  stroke: url(#chart-gradient-remains);
+  stroke-linecap: butt;
+}
+
+.chartArcAchieved {
+  stroke: url(#chart-gradient-achieved);
+  stroke-linecap: butt;
+}
+
+/* Custom rounded caps */
+.achievedStartCap,
+.achievedEndCap {
+  fill: url(#chart-gradient-achieved);
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+}
+
+.remainsStartCap,
+.remainsEndCap {
+  fill: url(#chart-gradient-remains);
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+}
+
+.chartArcHoverTarget {
+  stroke: transparent;
+  fill: none;
+  cursor: pointer;
+}
+
+.centerText {
+  position: absolute;
+  top: 65%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  pointer-events: none;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+}
+
+.centerTextPercentage {
+  font-size: clamp(2.5rem, 12vw, 3.5rem);
+  font-weight: 700;
+  color: #ffffff;
+  line-height: 0.9;
+  text-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
+}
+
+.tooltip {
+  position: fixed;
+  background: linear-gradient(
+    135deg,
+    rgba(0, 0, 0, 0.9) 0%,
+    rgba(30, 35, 45, 0.95) 100%
+  );
+  color: white;
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  pointer-events: none;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  opacity: 0;
+  transform: translate(-50%, -120%) scale(0.95);
+  white-space: nowrap;
+  z-index: 10;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4), 0 1px 3px rgba(0, 0, 0, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+}
+
+.tooltip::before {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 6px solid transparent;
+  border-top-color: rgba(0, 0, 0, 0.9);
+}
+
+.tooltip.visible {
+  opacity: 1;
+  transform: translate(-50%, -130%) scale(1);
+}
