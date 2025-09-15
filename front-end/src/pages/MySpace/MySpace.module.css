@@ -31,15 +31,154 @@
   justify-content: space-between;
 }
 
-.milestonesChart {
+/* Wrapper for statistics section */
+.statistics {
   display: flex;
-  gap: 16px;
+  flex-wrap: wrap;
+  gap: 24px;
+  margin-top: 24px;
+  justify-content: center;
 }
 
-.milestonesChart > div {
-  border: 1px solid #6d5bd398;
-  border-radius: 12px;
-  padding: 12px;
+/* Card container */
+.milestoneChart,
+.wordsChart {
+  background: linear-gradient(160deg, #0a1220, #0c111f);
+  border-radius: 14px;
+  padding: 16px 20px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow: hidden; /* allows gradient borders to stay clipped */
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+/* Spotlight border effect */
+.milestoneChart::before,
+.wordsChart::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 2px; /* thickness of the spotlight */
+  border-top-right-radius: 14px;
+  border-bottom-right-radius: 14px;
+  background: linear-gradient(
+    to bottom,
+    rgba(0, 100, 214, 0) 0%,
+    rgba(0, 100, 214, 0.1) 12%,
+    var(--completedColor) 52%,
+    rgba(0, 100, 214, 0.1) 88%,
+    rgba(0, 100, 214, 0) 100%
+  );
+  box-shadow: 0 0 18px rgba(0, 100, 214, 0.12);
+  pointer-events: none;
+  z-index: 0;
+  transform: translateX(-1px);
+}
+
+/* Ensure card content sits above the left strip */
+.milestoneChart > *,
+.wordsChart > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* Headings inside charts */
+.milestoneChartHeading,
+.wordsChartHeading {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #b9c3d6;
+  letter-spacing: 0.3px;
+}
+
+.milestoneChartHeading small:nth-child(2) {
+  font-size: 11px;
+  font-weight: 500;
+}
+
+.wordsChartHeading {
+  justify-content: start;
+}
+
+.inProgress {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #449bff;
+}
+
+.inProgressIcon {
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #43f79a;
+  animation: pulse 1.8s ease-in-out infinite;
+}
+
+/* subtle pulsing animation for icon */
+@keyframes pulse {
+  0% {
+    opacity: 0.4;
+    transform: scale(0.9);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 0.4;
+    transform: scale(0.9);
+  }
+}
+
+/* Chart caption */
+.chartCaption {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 6px;
+  width: 100%;
+  padding: 0 12px;
+}
+
+.chartCaption small {
+  font-size: 0.65rem;
+  color: #d8e1f3;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  position: relative;
+}
+
+/* Bullet styles before each caption item */
+.chartCaption small::before {
+  content: "";
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  border-radius: 2px;
+  background: currentColor;
+}
+
+.chartCaption small:first-child::before {
+  background: linear-gradient(135deg, #0064d6, #b0d6ff);
+}
+
+.chartCaption small:last-child::before {
+  background: linear-gradient(135deg, #1a2330, #7da8d4);
 }
 
 /* style for my space content */
@@ -48,8 +187,7 @@
   padding: 16px 24px;
   border-radius: 12px;
   color: #fff;
-  background-color: #c77ff711;
-  border: 1px solid #9277a32d;
+  background: linear-gradient(160deg, #071224, #0c111f);
 }
 
 .tabs {
@@ -60,7 +198,7 @@
 .tabs > ul {
   display: flex;
   gap: 16px;
-  margin: 8px 0 20px 0;
+  margin: 8px 0 16px 0;
   padding: 4px;
   overflow-x: auto;
   scrollbar-width: thin;
@@ -77,29 +215,29 @@
 }
 
 .tabs > ul::-webkit-scrollbar-track {
-  background: #1e1b2e;
+  background: #121422;
   border-radius: 100vh;
 }
 
 .tabs > ul::-webkit-scrollbar-thumb {
-  background: #9277a3;
+  background: #5c6596;
   border-radius: 100vh;
 }
 
 /* For Firefox */
 .tabs > ul {
-  scrollbar-color: #9277a3 #1e1b2e;
+  scrollbar-color: #5c6596 #1e1b2e;
 }
 
 .tabs > ul > li {
   list-style: none;
   font-size: 15px;
   font-weight: 500;
-  padding: 12px 16px;
-  height: 48px;
-  background-color: #64527c11;
+  padding: 4px 10px;
+  height: 38px;
+  background-color: #4e629925;
   cursor: pointer;
-  border: 1px solid #9277a32d;
+  border: 1px solid #4c5d963f;
   border-radius: 8px;
   flex-shrink: 0;
   display: flex;
@@ -109,14 +247,14 @@
 }
 
 .tabs > ul > li.active {
-  color: #dfc3ff;
-  border: 1px solid #8e7deb98;
+  color: #b4bfff;
+  border: 1px solid #8789ffcc;
 }
 
 .divider {
   width: 100%;
   height: 1px;
-  background-color: #9277a32d;
+  background-color: #3442706c;
 }
 .milestonesSection {
   margin: 24px 0 8px 0;
@@ -174,6 +312,14 @@
   .myspaceContainer {
     max-width: 750px;
   }
+  .statistics {
+    gap: 20px;
+  }
+
+  .milestoneChart,
+  .wordsChart {
+    padding: 20px;
+  }
   .milestones {
     justify-content: center;
   }
@@ -181,6 +327,19 @@
 @media (max-width: 767.98px) {
   .myspaceContainer {
     max-width: 560px;
+  }
+  .statistics {
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .milestoneChart,
+  .wordsChart {
+    padding: 16px;
+  }
+
+  .chartCaption {
+    justify-content: space-around;
   }
   .mySpaceContent {
     padding: 12px;
@@ -212,5 +371,28 @@
   .tabs > ul {
     gap: 8px;
     margin: 4px 0 20px 0;
+  }
+}
+/* small screen tweaks */
+@media (max-width: 599.98px) {
+  .mySpaceContent {
+    padding: 10px;
+  }
+  .msSelect {
+    min-width: 130px;
+    font-size: 14px;
+  }
+  .milestoneCard {
+    padding: 12px;
+    border-radius: 10px;
+  }
+
+  .tabs > ul {
+    margin: 8px 0 12px 0;
+  }
+  .tabs > ul > li {
+    font-size: 12px;
+    padding: 2px 8px;
+    height: 32px;
   }
 }

@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import { TbFaceIdError } from "react-icons/tb";
+import { TbFaceIdError, TbLivePhotoFilled } from "react-icons/tb";
 import MilestoneCard from "../../components/MilestoneCard/MilestoneCard";
 import Popup from "../../components/Popup/Popup";
 import MilestoneRequirements from "../../components/Popup/PopUpContents/MilestoneRequirements/MilestoneRequirements";
@@ -7,11 +7,14 @@ import Error from "../../components/shared/Error/Error";
 import Footer from "../../components/shared/Footer/Footer";
 import Header from "../../components/shared/Header/Header";
 import AddBtn from "../../components/ui/button/AddBtn/AddBtn";
-import PairChart from "../../components/ui/chart/PairChart/PairChart";
+import HalfCircleChart from "../../components/ui/chart/HalfCircleChart/HalfCircleChart";
 import Skeleton from "../../components/ui/loader/Skeleton/Skeleton";
+import Tooltip from "../../components/ui/Tooltip/Tooltip";
 import { useScrollRestoration } from "../../hooks/useScrollRestoration";
 import { useBringMilestonesQuery } from "../../services/milestone";
 import styles from "./MySpace.module.css";
+
+// https://dribbble.com/shots/26127078-NeuroBank-Online-Banking-Dashboard-Design
 
 const MySpace = () => {
   const [isTakingRequirements, setIsTakingRequirements] = useState(false);
@@ -25,10 +28,26 @@ const MySpace = () => {
   // manage the scroll position
   useScrollRestoration();
 
+  // tooltip state
+  const [tooltip, setTooltip] = useState({
+    visible: false,
+    content: "",
+    x: 0,
+    y: 0,
+  });
+  const showTooltip = (content) => (e) => {
+    setTooltip({ visible: true, content, x: e.clientX, y: e.clientY });
+  };
+
+  const hideTooltip = () => {
+    setTooltip((prev) => ({ ...prev, visible: false }));
+  };
+
   // count of milestones and words
   let completedMilestone = 0;
   let totalWords = 0;
   let totalMemorizedWords = 0;
+  let inProgress = 0;
 
   for (const milestone of milestones) {
     totalWords += milestone?.wordsCount;
@@ -36,6 +55,17 @@ const MySpace = () => {
 
     if (milestone?.targetWords === milestone?.wordsCount) {
       completedMilestone++;
+    }
+
+    // calculate inprogress milestones
+    const duration = milestone?.milestoneType === "three" ? 3 : 7;
+    const createdDate = new Date(milestone.createdAt);
+    const targetDate = new Date(
+      createdDate.getTime() + duration * 24 * 60 * 60 * 1000
+    );
+    const currentDate = new Date();
+    if (targetDate > currentDate) {
+      inProgress++;
     }
   }
 
@@ -87,21 +117,86 @@ const MySpace = () => {
               onClose={closeReqModal}
             />
           </Popup>
-          <div className={styles.milestonesChart}>
-            <PairChart
-              totalCount={milestones.length}
-              successCount={completedMilestone}
-              totalTooltip={`Total Milestones: ${milestones.length}`}
-              successTooltip={`Completed Milestones: ${completedMilestone}`}
-              chartTitle="Milestones"
-            />
-            <PairChart
-              totalCount={totalWords}
-              successCount={totalMemorizedWords}
-              totalTooltip={`Total Words: ${totalWords}`}
-              successTooltip={`Memorized Words: ${totalMemorizedWords}`}
-              chartTitle="Words"
-            />
+          <div className={styles.statistics}>
+            <div
+              className={styles.milestoneChart}
+              style={{
+                "--completedColor":
+                  completedMilestone === 0
+                    ? "#5777a6"
+                    : "rgba(0, 100, 214, 0.95)",
+              }}
+            >
+              <div className={styles.milestoneChartHeading}>
+                <small>Milestones</small>
+                <div
+                  className={styles.inProgress}
+                  title="Milestone in progress"
+                  onMouseEnter={showTooltip(
+                    `${inProgress} Milestone in progress`
+                  )}
+                  onMouseLeave={hideTooltip}
+                >
+                  <span className={styles.inProgressIcon}>
+                    <TbLivePhotoFilled />
+                  </span>
+                  <span>{inProgress}</span>
+                  <Tooltip
+                    visible={tooltip.visible}
+                    content={tooltip.content}
+                    x={tooltip.x}
+                    y={tooltip.y}
+                  />
+                </div>
+              </div>
+              <HalfCircleChart
+                achieved_count={completedMilestone}
+                remains_count={milestones.length - completedMilestone}
+                thickness={24}
+                achieved_tooltip={`${completedMilestone} Completed`}
+                remains_tooltip={`${
+                  milestones.length - completedMilestone
+                } Remaining`}
+                achieved_color_one="#0064D6"
+                achieved_color_two="#B0D6FF"
+                remains_color_one="#1A2330"
+                remains_color_two="#7DA8D4"
+              />
+              <div className={styles.chartCaption}>
+                <small>Completed</small>
+                <small>Remains</small>
+              </div>
+            </div>
+            <div
+              className={styles.wordsChart}
+              style={{
+                "--completedColor":
+                  completedMilestone === 0
+                    ? "#5777a6"
+                    : "rgba(0, 100, 214, 0.95)",
+              }}
+            >
+              <div className={styles.wordsChartHeading}>
+                <small>Words</small>
+              </div>
+              <HalfCircleChart
+                achieved_count={totalMemorizedWords}
+                remains_count={totalWords - totalMemorizedWords}
+                thickness={24}
+                achieved_tooltip={`${totalMemorizedWords} Memorized`}
+                remains_tooltip={`${
+                  totalWords - totalMemorizedWords
+                } Not Memorized`}
+                achieved_color_one="#0064D6"
+                achieved_color_two="#B0D6FF"
+                remains_color_one="#1A2330"
+                remains_color_two="#7DA8D4"
+              />
+              <div className={styles.chartCaption}>
+                <small>Memorized</small>
+                <small>Remains</small>
+              </div>
+            </div>
           </div>
         </div>
 
