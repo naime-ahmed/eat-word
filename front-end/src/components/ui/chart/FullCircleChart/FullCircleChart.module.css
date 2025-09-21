@@ -1,0 +1,65 @@
+.chartContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  font-family: system-ui, -apple-system, sans-serif;
+}
+
+.chartWrapper {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.svg {
+  transform: rotate(-90deg);
+  overflow: visible;
+}
+
+.background,
+.progress {
+  fill: none;
+  vector-effect: non-scaling-stroke;
+}
+
+.background {
+  stroke: rgba(73, 93, 203, 0.2);
+  transition: stroke 0.3s ease;
+}
+
+.background:hover {
+  stroke: rgba(73, 93, 203, 0.4);
+}
+
+.progress {
+  transition: stroke-dashoffset 1.2s cubic-bezier(0.65, 0, 0.35, 1),
+    filter 0.3s ease;
+}
+
+.progress:hover {
+  filter: brightness(1.15);
+}
+
+.gradientStart {
+  stop-color: #2e40e4;
+}
+.gradientEnd {
+  stop-color: #6e8df1;
+}
+
+.textGroup {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  pointer-events: none;
+}
+
+.percentage {
+  font-weight: 600;
+  color: #e0e0e0;
+  text-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+}
