@@ -1,5 +1,6 @@
 import PropTypes from "prop-types";
 import { useEffect, useMemo, useState } from "react";
+import Tooltip from "../../Tooltip/Tooltip";
 import styles from "./HalfCircleChart.module.css";
 
 const HalfCircleChart = ({
@@ -218,13 +219,12 @@ const HalfCircleChart = ({
           {displayPercent}%
         </div>
       </div>
-
-      <div
-        className={`${styles.tooltip} ${tooltip.visible ? styles.visible : ""}`}
-        style={{ left: tooltip.x, top: tooltip.y }}
-      >
-        {tooltip.content}
-      </div>
+      <Tooltip
+        visible={tooltip.visible}
+        content={tooltip.content}
+        x={tooltip.x}
+        y={tooltip.y}
+      />
     </div>
   );
 };
