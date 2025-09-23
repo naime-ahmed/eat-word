@@ -1,7 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { FaShapes } from "react-icons/fa";
 import { HiOutlineSparkles } from "react-icons/hi2";
-import { IoCaretDownSharp, IoCaretUpSharp } from "react-icons/io5";
 import { LuTimerReset } from "react-icons/lu";
 import { MdKeyboardArrowDown, MdKeyboardArrowUp } from "react-icons/md";
 import { useParams } from "react-router-dom";
@@ -12,10 +11,12 @@ import MilestoneStory from "../../components/MilestoneStory/MilestoneStory";
 import Popup from "../../components/Popup/Popup";
 import MilestoneShapeSelect from "../../components/Popup/PopUpContents/MilestoneShapeSelect/MilestoneShapeSelect";
 import MilestoneStoryGenerator from "../../components/Popup/PopUpContents/MilestoneStoryGenerator/MilestoneStoryGenerator";
+import Quiz from "../../components/Quiz/Quiz";
 import Error from "../../components/shared/Error/Error";
 import Footer from "../../components/shared/Footer/Footer";
 import Header from "../../components/shared/Header/Header";
-import PairChart from "../../components/ui/chart/PairChart/PairChart";
+import ColumnChart from "../../components/ui/chart/ColumnChart/ColumnChart";
+import CircularProgressChart from "../../components/ui/chart/FullCircleChart/FullCircleChart";
 import SpinnerForPage from "../../components/ui/loader/SpinnerForPage/SpinnerForPage";
 import Slider from "../../components/WordsContainer/Slider/Slider";
 import Table from "../../components/WordsContainer/Table/Table";
@@ -205,6 +206,7 @@ const Milestone = () => {
                         <MilestoneDeadline
                           createdAt={curMilestone?.createdAt}
                           duration={duration}
+                          styles={{ fontSize: "14px" }}
                         />
                       ) : (
                         <span>Time left: Infinite</span>
@@ -212,21 +214,22 @@ const Milestone = () => {
                     </div>
                   </div>
                   <div className={styles.wordInfo}>
-                    <PairChart
-                      chartType="circle"
-                      size={88}
+                    <CircularProgressChart
                       totalCount={curMilestone?.targetWords}
                       successCount={curMilestone?.wordsCount}
-                      totalTooltip={`Targeted Words: ${curMilestone?.targetWords}`}
-                      successTooltip={`Current Words: ${curMilestone?.wordsCount}`}
+                      size={105}
+                      remains_tooltip={`Targeted Words: ${curMilestone?.targetWords}`}
+                      achieved_tooltip={`Current Words: ${curMilestone?.wordsCount}`}
                     />
                   </div>
                 </div>
                 <div className={styles.milestoneWordsLimit}>
-                  <PairChart
-                    chartType="line"
-                    totalCount={wordsLimit?.total}
-                    successCount={wordsLimit?.total - wordsLimit?.remaining}
+                  <ColumnChart
+                    total_credit={wordsLimit?.total}
+                    consumed={wordsLimit?.total - wordsLimit?.remaining}
+                    width={90}
+                    height={75}
+                    column_count={2}
                   />
                   <small
                     className={styles.timeCapsule}
@@ -267,10 +270,12 @@ const Milestone = () => {
                   </div>
                 </div>
                 <div className={styles.genAILimit}>
-                  <PairChart
-                    chartType="line"
-                    totalCount={genAILimit?.total}
-                    successCount={genAILimit?.total - genAILimit?.remaining}
+                  <ColumnChart
+                    total_credit={genAILimit?.total}
+                    consumed={genAILimit?.total - genAILimit?.remaining}
+                    width={105}
+                    height={75}
+                    column_gap="8px"
                   />
                   <small
                     className={styles.timeCapsule}
@@ -298,7 +303,7 @@ const Milestone = () => {
                     className={styles.genAILimitTag}
                     title="information about gen AI limit"
                   >
-                    <HiOutlineSparkles /> GenAI limit
+                    <HiOutlineSparkles /> Gen AI limit
                   </small>
                   <div className={styles.genAILimitInfo}>
                     <span>
@@ -323,30 +328,26 @@ const Milestone = () => {
                   </div>
                 </div>
                 <div className={styles.milestoneShapeAndRecall}>
-                  <div
-                    className={styles.milestoneShape}
-                    onClick={handleOpenShapeSelector}
-                  >
-                    <FaShapes />{" "}
-                    <span className={styles.shapeDropdown}>
-                      {isShowingShape ? (
-                        <IoCaretUpSharp />
-                      ) : (
-                        <IoCaretDownSharp />
-                      )}
-                    </span>
-                    <Popup
-                      isOpen={isShowingShape}
-                      onClose={handleCloseShaleSelector}
-                      popupType="menu"
-                      clickPosition={clickPosition}
-                      showCloseButton={false}
+                  <div className={styles.viewAndQuiz}>
+                    <Quiz milestoneID={curMilestone._id} />
+                    <div
+                      className={styles.milestoneShape}
+                      onClick={handleOpenShapeSelector}
                     >
-                      <MilestoneShapeSelect
-                        setWordContainerType={setWordContainerType}
+                      <FaShapes /> <small>View</small>
+                      <Popup
+                        isOpen={isShowingShape}
                         onClose={handleCloseShaleSelector}
-                      />
-                    </Popup>
+                        popupType="menu"
+                        clickPosition={clickPosition}
+                        showCloseButton={false}
+                      >
+                        <MilestoneShapeSelect
+                          setWordContainerType={setWordContainerType}
+                          onClose={handleCloseShaleSelector}
+                        />
+                      </Popup>
+                    </div>
                   </div>
                   <div className={styles.recall}>
                     <div className={styles.checkboxAndLabels}>
@@ -365,7 +366,7 @@ const Milestone = () => {
                       )}
                       <span>
                         {curMilestone?.wordsCount <= 0
-                          ? "No words to recall"
+                          ? "Can't recall"
                           : isOnRecallMood
                           ? "Off recall"
                           : "On recall"}
@@ -375,6 +376,8 @@ const Milestone = () => {
                       <span>
                         {curMilestone?.lastRecalled
                           ? `Last Recall: ${formattedDate}`
+                          : curMilestone?.wordsCount <= 0
+                          ? "No words to recall"
                           : "You haven't recalled"}
                       </span>
                     </div>
