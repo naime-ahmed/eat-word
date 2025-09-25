@@ -29,6 +29,15 @@ export const wordInfoGenLimit = async (req, res, next) => {
         "X-RateLimit-Reset": Math.ceil(result.msBeforeNext / 1000),
       });
 
+      // If the request fails later, refund the points.
+      res.on("finish", () => {
+        if (res.statusCode >= 400) {
+          limiter.reward(req.user.id, cost).catch((err) => {
+            console.error("Failed to reward rate limit points:", err);
+          });
+        }
+      });
+
       next();
     } catch (result) {
       const retrySec = Math.ceil(result.msBeforeNext / 1000);
