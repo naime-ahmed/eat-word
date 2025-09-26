@@ -147,8 +147,15 @@ export const generativeApi = createApi({
         }
       },
     }),
+    generateQuizzes: builder.mutation({
+      query: ([milestoneId, quizCount]) => ({
+        url: `/quizzes/${milestoneId}`,
+        method: "POST",
+        body: { quizCount },
+      }),
+    }),
   }),
 });
 
-export const { useGenerateWordInfoMutation, useGenerateStoryMutation } =
+export const { useGenerateWordInfoMutation, useGenerateStoryMutation, useGenerateQuizzesMutation } =
   generativeApi;
