@@ -4,6 +4,7 @@ import express from "express";
 // internal imports
 import { addMilestone } from "../controller/milestonesController/addMilestoneController.js";
 import { deleteMilestone } from "../controller/milestonesController/deleteMilestoneController.js";
+import { getMilestoneQuiz } from "../controller/milestonesController/getMilestoneQuiz.js";
 import { getMilestoneWords } from "../controller/milestonesController/getMilestoneWords.js";
 import { updateMilestone } from "../controller/milestonesController/updateMilestoneController.js";
 import { userMilestones } from "../controller/milestonesController/userMilestonesController.js";
@@ -18,12 +19,14 @@ router.post("/", verifyAccessToken, addMilestone);
 router.get("/", verifyAccessToken, userMilestones);
 
 // get the words associated with the milestone id
-router.get("/:milestoneId", verifyAccessToken, getMilestoneWords);
+router.get("/words/:milestoneId", verifyAccessToken, getMilestoneWords);
 
 // update specific milestone data
 router.patch("/:milestoneId", verifyAccessToken, updateMilestone);
 
 // delete specific milestone from db
 router.delete("/:milestoneId", verifyAccessToken, deleteMilestone);
+
+router.get("/quizzes/:milestoneId", verifyAccessToken,  getMilestoneQuiz);
 
 export default router;
