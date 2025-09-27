@@ -1,4 +1,5 @@
-import { GoogleGenAI, Type } from "@google/genai";
+import { Type } from "@google/genai";
+import { callModel } from "../../helper/GoogleGenAI.js";
 import Word from "../../models/Word.js";
 import { wordFieldsAndLimit } from "../../utils/wordFieldsAndLimit.js";
 
@@ -20,8 +21,9 @@ function buildResponseSchema(fields) {
       type: Type.ARRAY,
       items: {
         type: Type.STRING,
-      }
-  }}
+      },
+    };
+  }
 
   return {
     type: Type.OBJECT,
@@ -75,27 +77,6 @@ Rules:
 Target word: "${word}"
 - If the word is misspelled, generate info for the most relevant correct spelling.
 `.trim();
-}
-
-// === AI CLIENT ===
-function getGenAi() {
-  return new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
-}
-
-async function callModel(prompt, schema) {
-  const ai = getGenAi();
-  const response = await ai.models.generateContent({
-    model: "gemini-2.0-flash-lite",
-    contents: prompt,
-    config: {
-      responseMimeType: "application/json",
-      responseSchema: schema,
-    },
-  }).catch((e) => {
-    console.log("generation error: ",e);
-    return "";
-  })
-  return response.text;
 }
 
 // === SANITIZATION ===
@@ -153,7 +134,13 @@ async function generateAllFields(
   let lastError;
   for (let attempt = 0; attempt < 3; attempt++) {
     try {
-      const raw = await callModel(prompt, schema);
+      const raw = await callModel(
+        "gemini-2.0-flash-lite",
+        process.env.GEMINI_API_KEY,
+        prompt,
+        "application/json",
+        schema
+      );
       if (!raw) {
         console.error("Empty AI response");
         return {};

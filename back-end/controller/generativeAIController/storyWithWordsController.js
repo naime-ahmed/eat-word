@@ -1,5 +1,5 @@
-import { GoogleGenAI } from "@google/genai";
 import mongoose from "mongoose";
+import { callModel } from "../../helper/GoogleGenAI.js";
 import Milestones from "../../models/Milestone.js";
 import User from "../../models/People.js";
 import Word from "../../models/Word.js";
@@ -98,24 +98,23 @@ async function generateMilestoneStory(req, res) {
       words
     );
 
-    // generate with gemini
-    const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
-    const response = await ai.models.generateContent({
-      model: "gemini-2.0-flash-lite",
-      contents: prompt,
-      config: {
-        responseMimeType: "text/plain",
-      },
-    }).catch((e) => {
+    // generate with LLM
+    const aiResponse = await callModel(
+      "gemini-2.0-flash-lite",
+      process.env.GEMINI_API_KEY,
+      prompt, 
+      "text/plain"
+    )
+    if (!aiResponse){
       console.log("generation error: ",e);
-      throw new Error("AI failed to generate a story. The response was empty.");
-    })
+      throw new Error("AI failed to generate a story.");
+    }
 
     // 4. Update the database with the new story
     const updatedMilestone = await Milestones.findByIdAndUpdate(
       milestoneId,
       {
-        $set: { story: response.text },
+        $set: { story: aiResponse },
         $inc: { storyCount: 1 },
       },
       { new: true, runValidators: true }
