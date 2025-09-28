@@ -1,0 +1,74 @@
+/* --- Circular SVG Timer (Modern & Simple) --- */
+.circularTimer {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.timerSvg {
+  transform: rotate(-90deg);
+}
+
+.timerTrack,
+.timerProgress {
+  fill: none;
+}
+
+.timerTrack {
+  stroke: #334155; /* slate-700 */
+}
+
+.timerProgress {
+  stroke: #10b981; /* emerald-500 */
+  transition: stroke-dashoffset 0.1s linear, stroke 0.3s ease;
+}
+
+.circularTimer[data-urgency="medium"] .timerProgress {
+  stroke: #f59e0b; /* amber-500 */
+}
+.circularTimer[data-urgency="high"] .timerProgress {
+  stroke: #ef4444; /* red-500 */
+}
+
+.timerText {
+  position: absolute;
+  color: #f8fafc; /* slate-50 */
+  font-weight: 600;
+  font-family: "SF Mono", Monaco, "Cascadia Code", monospace;
+}
+
+/* --- Linear Timer (Modern & Simple) --- */
+.linearTimer {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 12px;
+  background-color: #334155; /* slate-700 */
+  color: #f8fafc; /* slate-50 */
+  font-weight: 600;
+  font-family: "SF Mono", Monaco, "Cascadia Code", monospace;
+  overflow: hidden;
+}
+
+.linearProgress {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  background-color: #10b981; /* emerald-500 */
+  transition: width 0.1s linear, background-color 0.3s ease;
+}
+
+.timerTextLinear {
+  position: relative;
+  z-index: 2;
+}
+
+.linearTimer[data-urgency="medium"] .linearProgress {
+  background-color: #f59e0b; /* amber-500 */
+}
+.linearTimer[data-urgency="high"] .linearProgress {
+  background-color: #ef4444; /* red-500 */
+}
