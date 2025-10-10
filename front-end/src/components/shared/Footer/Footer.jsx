@@ -14,7 +14,7 @@ const Footer = () => {
             <p>Elevate Your Language</p>
           </div>
           <div className={style.desktopCopyright}>
-            <p>© 2024 Eat Word. All Rights Reserved.</p>
+            <p>© 2025 Eat Word. All Rights Reserved.</p>
           </div>
         </div>
 
@@ -37,7 +37,7 @@ const Footer = () => {
           </nav>
 
           <div className={style.mobileCopyright}>
-            <p>© 2024 Eat Word. All Rights Reserved.</p>
+            <p>© 2025 Eat Word. All Rights Reserved.</p>
           </div>
         </div>
       </div>
