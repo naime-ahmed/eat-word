@@ -66,10 +66,14 @@
   white-space: nowrap;
   overflow: hidden;
 }
-.milestoneName p {
-  font-size: 1rem;
-  font-weight: 500;
-  color: #e3e8ff;
+.milestoneReached > div {
+  color: #ffffff;
+  background-image: -webkit-linear-gradient(180deg, #5d60fc 39%, #9c95ff 78%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  text-fill-color: transparent;
+  -webkit-text-fill-color: transparent;
+  font-weight: 600;
 }
 .editEllipsis {
   display: flex;

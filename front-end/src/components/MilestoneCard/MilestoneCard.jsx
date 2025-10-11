@@ -165,13 +165,22 @@ const MilestoneCard = ({ milestone }) => {
             <BsPinAngleFill />
           </span>
         )}
-        <div className={styles.milestoneName}>
-          <ShinyText
-            text={milestone.name}
-            speed={3}
-            style={{ fontSize: "1rem", fontWeight: "bold" }}
-            disabled={currentDate > targetDate}
-          />
+        <div
+          className={`${styles.milestoneName} ${
+            milestone.wordsCount === milestone.targetWords
+              ? styles.milestoneReached
+              : ""
+          }`}
+        >
+          {currentDate < targetDate ? (
+            <ShinyText
+              text={milestone.name}
+              speed={3}
+              style={{ fontSize: "1rem", fontWeight: "bold" }}
+            />
+          ) : (
+            <div style={{ color: "#b5b5b5a4" }}>{milestone.name}</div>
+          )}
         </div>
         <div
           ref={ellipsisRef}
