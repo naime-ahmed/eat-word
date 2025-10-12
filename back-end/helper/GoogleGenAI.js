@@ -22,7 +22,6 @@ export async function callModel(model, apiKey, prompt, resType, resSchema) {
       console.error("AI returned empty response:", response);
       return "";
     }
-    console.log("AI response:", response);
     return response.text;
   } catch (e) {
     console.error("Gemini generation error:", e);

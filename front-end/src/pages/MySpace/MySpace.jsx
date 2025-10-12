@@ -14,8 +14,6 @@ import { useScrollRestoration } from "../../hooks/useScrollRestoration";
 import { useBringMilestonesQuery } from "../../services/milestone";
 import styles from "./MySpace.module.css";
 
-// https://dribbble.com/shots/26127078-NeuroBank-Online-Banking-Dashboard-Design
-
 const MySpace = () => {
   const [isTakingRequirements, setIsTakingRequirements] = useState(false);
   const [viewMilestone, setViewMilestone] = useState(() => {
