@@ -7,22 +7,34 @@ import styles from "./Release.module.css";
 
 const releases = [
   {
+    id: "dgfdgddsfds4355%sfd",
+    version: "v0.5.0",
+    date: "2025-11-15",
+    wanted: "1k",
+    tag: "New Feature",
+    features: [
+      "Develop an interactive and super personalized quiz feature with generative AI feature.",
+      "Addressed critical UI/UX issues in the Home page, My Words, and Milestone page",
+    ],
+    hasSeeMore: false,
+  },
+  {
     id: "dgfdgdf2125$$%%sfd",
-    version: "v1.5",
-    date: "2025-05-24",
+    version: "v0.4.0",
+    date: "2025-10-20",
     wanted: "1.5k",
     tag: "bug fix",
     features: [
       "Implemented a redesigned table header and words slider incorporating rate limit indicators",
-      "Addressed critical UI/UX issues in the My Space and Challenge pages",
+      "Addressed critical UI/UX issues in the My Words and Challenge pages",
       "Introduced a prominent notification banner for displaying important announcements on the homepage",
     ],
     hasSeeMore: false,
   },
   {
     id: "sdgdsfg3454645dfgdg",
-    version: "v1.1.5",
-    date: "2025-03-28",
+    version: "v0.3.0",
+    date: "2024-09-05",
     wanted: "2.2k",
     tag: "Core Feature",
     features: [
@@ -34,8 +46,8 @@ const releases = [
   },
   {
     id: "s;ldfjslkj343434kklk",
-    version: "v1.1.0",
-    date: "2025-03-15",
+    version: "v0.2.0",
+    date: "2024-08-25",
     wanted: "1.2k",
     tag: "Core Feature",
     features: [
@@ -47,8 +59,8 @@ const releases = [
   },
   {
     id: "sfsdlkfjslj1243kkl",
-    version: "v1.0.3",
-    date: "2025-03-08",
+    version: "v0.1.0",
+    date: "2024-07-18",
     wanted: "892",
     tag: "bug fix",
     features: [
@@ -60,8 +72,8 @@ const releases = [
   },
   {
     id: "sdfsfjksd343432",
-    version: "v1.0.0",
-    date: "2025-02-26",
+    version: "v0.0.1",
+    date: "2025-06-10",
     wanted: "2.4k",
     tag: "First release",
     features: [
