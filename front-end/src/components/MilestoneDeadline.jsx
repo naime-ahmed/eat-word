@@ -1,7 +1,8 @@
+import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 import Skeleton from "./ui/loader/Skeleton/Skeleton";
 
-const MilestoneTimer = ({ createdAt, duration }) => {
+const MilestoneTimer = ({ createdAt, duration, styles }) => {
   const [message, setMessage] = useState("");
 
   useEffect(() => {
@@ -46,13 +47,19 @@ const MilestoneTimer = ({ createdAt, duration }) => {
 
   if (message === "0") {
     return (
-      <div>
+      <div style={styles}>
         <p>Time has passed!</p>
       </div>
     );
   }
-  if (!message) return <Skeleton width={150} height={22} />;
-  return <div>{message}</div>;
+  if (!message) return <Skeleton width={140} height={18} />;
+  return <div style={styles}>{message}</div>;
+};
+
+MilestoneTimer.propTypes = {
+  createdAt: PropTypes.string.isRequired,
+  duration: PropTypes.number.isRequired,
+  styles: PropTypes.object,
 };
 
 export default MilestoneTimer;
