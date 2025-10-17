@@ -329,7 +329,11 @@ const Milestone = () => {
                 </div>
                 <div className={styles.milestoneShapeAndRecall}>
                   <div className={styles.viewAndQuiz}>
-                    <Quiz milestoneID={curMilestone._id} />
+                    <Quiz
+                      milestoneID={curMilestone._id}
+                      currentWordCount={curMilestone?.wordsCount}
+                      targetedWordCount={curMilestone?.targetWords}
+                    />
                     <div
                       className={styles.milestoneShape}
                       onClick={handleOpenShapeSelector}
