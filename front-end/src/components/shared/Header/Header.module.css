@@ -132,6 +132,17 @@
     display: block;
   }
 
+  .nav {
+    padding: 0;
+    border-bottom: 1px solid rgba(47, 72, 136, 0.363);
+  }
+  .navBar {
+    width: 100%;
+    padding: 10px 16px;
+    border: none;
+    border-radius: 0;
+  }
+
   .menu {
     position: fixed;
     height: 50vh;
@@ -143,11 +154,11 @@
     z-index: 100;
     transition: all 0.4s ease;
     background: rgba(1, 0, 31, 1);
-    border-radius: 10px;
+    border-radius: 4px;
     box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
     backdrop-filter: blur(50px);
     -webkit-backdrop-filter: blur(50px);
-    border: 1px solid rgb(47, 48, 126);
+    border: 1px solid rgb(29, 30, 73);
   }
 
   .active .menu {
@@ -194,17 +205,6 @@
   }
 }
 
-@media (min-width: 600px) and (max-width: 767.98px) {
-  .navBar {
-    max-width: 560px;
-  }
-}
-/* Medium Devices (laptops) - 768px to 999px wide: */
-@media (min-width: 768px) and (max-width: 999.98px) {
-  .navBar {
-    max-width: 750px;
-  }
-}
 /* Large Devices (desktops) - 1000px to 1199px wide: */
 @media (min-width: 1000px) and (max-width: 1199.98px) {
   .navBar {
