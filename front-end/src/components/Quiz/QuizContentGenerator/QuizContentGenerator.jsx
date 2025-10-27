@@ -7,6 +7,7 @@ import styles from "./QuizContentGenerator.module.css";
 export default function QuizContentGenerator({
   milestoneId,
   currentWordCount,
+  targetedWordCount,
   onClose,
   onGenerated,
   userSubscriptionType,
@@ -100,6 +101,15 @@ export default function QuizContentGenerator({
           </p>
         </div>
       )}
+      {currentWordCount < targetedWordCount && (
+        <div className={styles.warningUser}>
+          <p>
+            You have not completed this <strong>milestone</strong>. For a better
+            quiz experience, we recommend finishing the{" "}
+            <strong>milestone</strong>.
+          </p>
+        </div>
+      )}
       <div className={styles.actions}>
         <button className={styles.cancel} onClick={onClose}>
           Cancel
@@ -119,6 +129,7 @@ export default function QuizContentGenerator({
 QuizContentGenerator.propTypes = {
   milestoneId: PropTypes.string.isRequired,
   currentWordCount: PropTypes.number.isRequired,
+  targetedWordCount: PropTypes.number.isRequired,
   onClose: PropTypes.func.isRequired,
   onGenerated: PropTypes.func.isRequired,
   userSubscriptionType: PropTypes.string.isRequired,
