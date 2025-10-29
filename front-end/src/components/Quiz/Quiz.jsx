@@ -9,7 +9,7 @@ import styles from "./Quiz.module.css";
 import QuizContentGenerator from "./QuizContentGenerator/QuizContentGenerator";
 import QuizPlayer from "./QuizPlayer/QuizPlayer";
 
-const Quiz = ({ milestoneID, currentWordCount }) => {
+const Quiz = ({ milestoneID, currentWordCount, targetedWordCount }) => {
   const [isShowingQuiz, setIsShowingQuiz] = useState(false);
   const [quizzes, setQuizzes] = useState([]);
   const [quizMode, setQuizMode] = useState(""); // timed or practice
@@ -63,6 +63,7 @@ const Quiz = ({ milestoneID, currentWordCount }) => {
           <QuizContentGenerator
             milestoneId={milestoneID}
             currentWordCount={currentWordCount}
+            targetedWordCount={targetedWordCount}
             onClose={handleCloseQuiz}
             onGenerated={onGenerated}
             userSubscriptionType={user.subscriptionType}
@@ -84,6 +85,7 @@ const Quiz = ({ milestoneID, currentWordCount }) => {
 Quiz.propTypes = {
   milestoneID: PropTypes.string.isRequired,
   currentWordCount: PropTypes.number.isRequired,
+  targetedWordCount: PropTypes.number.isRequired,
 };
 
 export default Quiz;
