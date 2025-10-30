@@ -313,50 +313,11 @@ const MilestoneRequirements = ({ handleViewMilestone, onClose }) => {
     if (currentStep > 1) {
       setCurrentStep(currentStep - 1);
     }
+    setErrors({});
   };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-
-    // Create a consolidated error object
-    let allErrors = {};
-    for (let i = 1; i <= totalSteps; i++) {
-      const stepErrors = {};
-      switch (i) {
-        case 1:
-          if (!formData.name.trim()) stepErrors.name = "Name is required.";
-          break;
-        case 2:
-          if (!formData.milestoneType)
-            stepErrors.milestoneType = "Please select a plan.";
-          if (formData.targetWords < 10 || formData.targetWords > 100)
-            stepErrors.targetWords = "Target must be between 10 and 100.";
-          break;
-        case 3:
-          if (!formData.comfortableLang)
-            stepErrors.comfortableLang = "Please select your language.";
-          if (!formData.learningLang)
-            stepErrors.learningLang = "Please select a language to learn.";
-          break;
-        default:
-          break;
-      }
-      allErrors = { ...allErrors, ...stepErrors };
-    }
-
-    setErrors(allErrors);
-
-    if (Object.keys(allErrors).length > 0) {
-      // Find the first step with an error and navigate to it
-      if (allErrors.name) {
-        setCurrentStep(1);
-      } else if (allErrors.milestoneType || allErrors.targetWords) {
-        setCurrentStep(2);
-      } else if (allErrors.comfortableLang || allErrors.learningLang) {
-        setCurrentStep(3);
-      }
-      return;
-    }
 
     try {
       const newMilestoneData = {
