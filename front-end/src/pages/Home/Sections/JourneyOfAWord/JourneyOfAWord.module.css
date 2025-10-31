@@ -7,7 +7,7 @@
   position: absolute;
   top: -0.5px;
   left: 50%;
-  height: 1px;
+  height: 3px;
   width: 80%;
   max-width: 500px;
   transform: translate(-50%, -50%) translateZ(0);
@@ -45,15 +45,12 @@
   }
 }
 
-/* CSS for word journey head line */
 .JourneyOfAWordHeading {
   text-align: center;
-  margin-top: 40px;
+  margin-top: -40px;
 }
 .JourneyOfAWordHeading h1 {
   font-size: 44px;
-
-  /** TEXT GRADIENT */
   color: #ffffff;
   background-image: -webkit-linear-gradient(90deg, #ffffff 38%, #0037ff 100%);
   background-clip: text;

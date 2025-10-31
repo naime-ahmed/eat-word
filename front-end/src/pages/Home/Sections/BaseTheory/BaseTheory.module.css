@@ -1,16 +1,14 @@
-/* CSS for baseTheoryContainer */
 .baseTheoryContainer {
   margin-top: 140px;
   width: 1250px;
   position: relative;
 }
 
-/* CSS for gradient bg */
 .gradientLine {
   position: absolute;
   top: -0.5px;
   left: 50%;
-  height: 1px;
+  height: 3px;
   width: 80%;
   max-width: 500px;
   transform: translate(-50%, -50%) translateZ(0);
@@ -41,17 +39,17 @@
     ),
     radial-gradient(rgb(62 73 219 / 23%) 0%, transparent 70%);
 }
-/* Optional media query for responsive max-width */
+
 @media (min-width: 768px) {
   .gradientBackground {
     max-width: 600px;
   }
 }
 
-/* CSS for heading */
 .baseTheoryHeading {
   text-align: center;
-  margin-top: 40px;
+  margin-top: -35px;
+  margin-bottom: 22px;
 }
 .baseTheoryHeading h1 {
   font-size: 44px;
@@ -69,7 +67,6 @@
   font-size: 20px;
 }
 
-/* CSS for Cards */
 .baseTheoryCardsContainer {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -80,7 +77,7 @@
   padding: 20px;
   overflow: hidden;
 }
-/* Updated Card Styles */
+
 .spacedRepetition,
 .activeRecall,
 .contextualLearning,
@@ -100,17 +97,6 @@
   z-index: 1;
 }
 
-/* Hover Effects */
-.spacedRepetition:hover,
-.activeRecall:hover,
-.contextualLearning:hover,
-.fewMoreThings:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 8px 32px rgba(76, 60, 210, 0.2);
-  border-color: rgba(120, 142, 253, 0.4);
-}
-
-/* Card Content Styles */
 .spacedRepetition h2,
 .activeRecall h2,
 .contextualLearning h2,
@@ -133,7 +119,6 @@
   z-index: 2;
 }
 
-/* Gradient Blobs Fix */
 .baseTheoryContainer::after {
   content: "";
   position: absolute;
@@ -153,7 +138,6 @@
 
 .baseTheoryContainer::after {
   bottom: 20%;
-  /* margin-left: 300px; */
   background: radial-gradient(
     circle at 50% 50%,
     rgba(117, 46, 222, 0.25) 0%,
@@ -161,7 +145,6 @@
   );
 }
 
-/* Add Connection Lines Between Cards */
 .baseTheoryCardsContainer {
   position: relative;
 }
@@ -190,7 +173,6 @@
   pointer-events: none;
 }
 
-/* Add Hover Border Animation */
 .spacedRepetition:hover::after,
 .activeRecall:hover::after,
 .contextualLearning:hover::after,
@@ -221,7 +203,6 @@
   }
 }
 
-/* Image Styles */
 .spacedRepetition img,
 .activeRecall img,
 .contextualLearning img,
@@ -233,14 +214,12 @@
   transition: all 0.3s ease;
 }
 
-/* Extra Large Devices (large desktops) - 1200px and above: */
 @media (min-width: 1200px) and (max-width: 1400px) {
   .baseTheoryContainer {
     max-width: 1150px;
   }
 }
 
-/* Large Devices (desktops) - 1000px to 1199px wide: */
 @media (min-width: 1000px) and (max-width: 1199.98px) {
   .baseTheoryContainer {
     max-width: 950px;
@@ -259,7 +238,6 @@
   }
 }
 
-/* Medium Devices (laptops) - 768px to 991px wide: */
 @media (min-width: 768px) and (max-width: 999.98px) {
   .baseTheoryContainer {
     max-width: 750px;
@@ -281,7 +259,6 @@
   }
 }
 
-/* Small Devices (tablets) - 576px to 767px wide: */
 @media (min-width: 600px) and (max-width: 767.98px) {
   .baseTheoryContainer {
     max-width: 560px;
@@ -295,7 +272,7 @@
   .baseTheoryHeading p {
     font-size: 16px;
   }
-  /* Image Styles */
+
   .spacedRepetition img,
   .activeRecall img,
   .contextualLearning img,
@@ -319,7 +296,6 @@
   }
 }
 
-/* Extra Small Devices (phones) - Up to 576px wide: */
 @media (max-width: 599.98px) {
   .baseTheoryContainer {
     max-width: 340px;
@@ -333,7 +309,6 @@
   .baseTheoryHeading p {
     font-size: 16px;
   }
-  /* Image Styles */
   .spacedRepetition img,
   .activeRecall img,
   .contextualLearning img,

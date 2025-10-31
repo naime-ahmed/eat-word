@@ -35,7 +35,7 @@
   left: 50%;
   height: 200px;
   width: 100%;
-  max-width: 300px; /* Base style */
+  max-width: 300px;
   transform: translate(-50%, -50%) translateZ(0);
   pointer-events: none;
   user-select: none;
@@ -47,7 +47,6 @@
     radial-gradient(rgb(62 73 219 / 23%) 0%, transparent 70%);
 }
 
-/* Optional media query for responsive max-width */
 @media (min-width: 768px) {
   .gradientBackground {
     max-width: 600px;
@@ -61,7 +60,6 @@
 }
 .testimonialHead h1 {
   font-size: 44px;
-
   color: #ffffff;
   background-image: -webkit-linear-gradient(90deg, #ffffff 38%, #0037ff 100%);
   background-clip: text;
