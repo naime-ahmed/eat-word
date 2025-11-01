@@ -101,6 +101,7 @@
 .activeRecall h2,
 .contextualLearning h2,
 .fewMoreThings h2 {
+  text-align: start;
   color: #a5b4fc;
   font-size: 1.6rem;
   margin-bottom: 12px;
@@ -304,7 +305,7 @@
     grid-template-columns: 1fr;
   }
   .baseTheoryHeading h1 {
-    font-size: 28px;
+    font-size: 24px;
   }
   .baseTheoryHeading p {
     font-size: 16px;

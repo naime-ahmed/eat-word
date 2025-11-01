@@ -30,7 +30,7 @@ function Hero() {
     content: isLoading
       ? "wait, it's loading..."
       : isAuthenticated
-      ? "✨ You can now see the limits"
+      ? "✨ We've released Quiz feature"
       : "✨ Free 1-month Pro for you",
   };
 
@@ -75,7 +75,7 @@ function Hero() {
           </div>
         </div>
         <div className={styles.title}>
-          <span className={styles.staticText}>Eat Word—Elevate</span>
+          <span className={styles.staticText}>Eat Word-Elevate</span>
           <span>Your</span>
           <span className={styles.animatedContainer}>
             {leavingIndex !== null && (
@@ -95,8 +95,9 @@ function Hero() {
           </span>
         </div>
         <p className={styles.HeroDescription}>
-          Master vocabulary with active recall, spaced repetition, context,{" "}
-          <br className={styles.breakLine} /> and AI, so it sticks for life.
+          Master vocabulary with Active recall, Spaced repetition, Context,{" "}
+          <br className={styles.breakLine} /> and{" "}
+          <span className={styles.ai}>Ai</span> so it sticks for life.
         </p>
         {isLoading ? (
           <Skeleton width="180px" height="63px" />
@@ -104,10 +105,10 @@ function Hero() {
           <CTABtn
             handleClick={handleNavigation}
             aria-label={
-              isAuthenticated ? "Go to My Space" : "Get Started - Free"
+              isAuthenticated ? "Go to My Words" : "Get Started - Free"
             }
           >
-            {isAuthenticated ? "My Space" : "Get started - free"}
+            {isAuthenticated ? "My Words" : "Get started - free"}
           </CTABtn>
         )}
       </div>

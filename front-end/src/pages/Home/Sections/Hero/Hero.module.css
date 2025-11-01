@@ -59,19 +59,19 @@
   align-items: center;
   justify-content: center;
   padding: 0.25rem 1rem;
-  color: rgb(200 214 255);
-  animation: shiny-text 10s infinite;
+  color: rgb(155, 162, 179);
+  animation: shiny-text 8s linear infinite;
   background-image: linear-gradient(
     to right,
     transparent,
-    rgba(255, 255, 255, 1) 50%,
+    rgb(255, 255, 255) 50%,
     transparent
   );
   background-repeat: no-repeat;
   background-size: 100px 100%;
   background-clip: text;
   -webkit-background-clip: text;
-  transition: background-position 1s cubic-bezier(0.6, 0.6, 0, 1) infinite,
+  transition: background-position 4s cubic-bezier(0.6, 0.6, 0, 1) infinite,
     color 0.3s ease;
 }
 
@@ -151,10 +151,20 @@
   text-align: center;
   font-size: 1.1rem;
   line-height: 2rem;
-  color: hsl(239, 51%, 74%);
+  color: hsl(239, 62%, 83%);
 }
 .breakLine {
   display: inline;
+}
+
+.ai {
+  padding: 3px 8px;
+  border-radius: 6px;
+  background: linear-gradient(135deg, #cfccff, #4043ff);
+  color: #01021f;
+  font-size: 18px;
+  font-weight: 600;
+  margin: 0 2px;
 }
 
 .heroContent > div:not(:first-child),
@@ -265,44 +275,45 @@
   }
 }
 
-@media (min-width: 600px) and (max-width: 767.98px) {
-  .heroContent {
-    max-width: 560px;
-  }
-  .title {
-    margin-left: 0;
-    font-size: 28px;
-  }
-  .animatedText {
-    top: -38px;
-  }
-  .HeroDescription {
-    max-width: 500px;
-    font-size: 1rem;
-    line-height: 1.6rem;
-  }
-}
-
-@media (max-width: 599.98px) {
+@media (max-width: 767.98px) {
   .container {
-    margin-top: 108px;
+    width: 100%;
+    min-height: 700px;
+    margin-top: 0;
+    padding: 60px 0;
+    background: radial-gradient(
+      126% 148% at 50% 84%,
+      #ffffff00 38%,
+      #743aed 136%
+    );
   }
   .heroContent {
-    max-width: 340px;
-    gap: 10px;
-    transform: translateY(-130px);
+    max-width: 100%;
+    transform: translateY(0);
+    gap: 24px;
+    text-align: center;
+    justify-content: flex-start;
   }
+
   .shinyText {
-    font-size: 13px;
+    order: -1;
   }
+
+  .shinyTextBg {
+    border-radius: 8px;
+    border-color: rgba(128, 90, 213, 0.5);
+    background-color: rgba(128, 90, 213, 0.1);
+  }
+
   .shinyAnimatedText {
-    pad: 0.15rem 0.6rem;
+    font-size: 14px;
+    padding: 0.5rem 1rem;
   }
 
   .title {
     width: 340px;
     margin-left: 0;
-    font-size: 28px;
+    font-size: 32px;
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
@@ -320,20 +331,32 @@
     white-space: nowrap;
   }
   .staticText {
-    margin-bottom: 12px;
+    display: block;
+    margin-right: 0;
+    margin-bottom: 8px;
   }
+
   .animatedText {
     top: -21px;
     margin-left: 0;
   }
   .HeroDescription {
-    max-width: 500px;
-    font-size: 1rem;
-    line-height: 1.6rem;
-    text-align: center;
+    font-size: 16px;
+    line-height: 1.6;
+    max-width: 90%;
+    margin: 0 auto;
+    color: hsl(239, 51%, 85%);
   }
   .breakLine {
     display: none;
+  }
+
+  .curvedMask {
+    display: none;
+  }
+
+  .trustedUser {
+    bottom: 50px;
   }
 }
 
@@ -350,5 +373,10 @@
   }
   .HeroDescription {
     font-size: 15px;
+  }
+}
+@media (max-height: 899px) {
+  .container {
+    margin-top: 100px;
   }
 }
