@@ -5,21 +5,3 @@
   justify-content: center;
   background-color: #020817;
 }
-
-@media (max-width: 767.98px) {
-  .homeContainer::before {
-    content: "";
-    position: absolute;
-    top: -10%;
-    left: -10%;
-    width: 60%;
-    height: 60%;
-    background: radial-gradient(
-      circle,
-      rgba(74, 20, 140, 0.356),
-      transparent 70%
-    );
-    filter: blur(100px);
-    z-index: 0;
-  }
-}
